@@ -331,21 +331,399 @@ quality-guard check module-02-experiment-tracking/
 
 ---
 
-### Optional Enhancements
+#### 11. Kubernetes MCP Server
+**Package**: `@containers/kubernetes-mcp-server`
 
-#### 11. Puppeteer MCP Server
-**Use Case**: Web automation for research
-- Automated case study gathering
-- Tech blog scraping
+**Why Important**:
+- Kubernetes resource operations
+- YAML manifest management
+- kubectl, helm, istioctl, argocd integration
+
+**Use Cases**:
+- Kubernetes configurations in ML infrastructure projects
+- Validate Kubernetes manifests
+- Generate deployment configs
+- Test Kubernetes examples in curriculum
+
+**Configuration**:
+```json
+{
+  "mcpServers": {
+    "kubernetes": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-v", "~/.kube:/home/mcp/.kube",
+        "quay.io/containers/kubernetes-mcp-server"
+      ]
+    }
+  }
+}
+```
+
+**Impact**: Streamlined Kubernetes content creation
+
+---
+
+#### 12. Docker MCP Server
+
+**Why Important**:
+- Container operations
+- Image building
+- Docker Compose management
+
+**Use Cases**:
+- Docker configurations across all projects
+- Build and test Docker examples
+- Validate Dockerfiles
+- Docker Compose orchestration examples
+
+**Impact**: Faster Docker content development
+
+---
+
+### Priority 4: OPTIONAL - Enhanced Capabilities
+
+#### 13. MCP Server Analyzer
+**Package**: `@Anselmoo/mcp-server-analyzer`
+
+**Why Useful**:
+- RUFF + VULTURE dead code detection
+- Code quality metrics
+- Unused code identification
+
+**Use Cases**:
+- Code quality metrics and cleanup
+- Identify unused functions in examples
+- Optimize code examples
+- Generate quality reports
+
+**Impact**: Higher code quality in examples
+
+---
+
+#### 14. Puppeteer MCP Server
+
+**Why Useful**:
+- Web automation for research
+- Browser interaction
+- Screenshot capabilities
+
+**Use Cases**:
+- Automated case study gathering from tech blogs
 - Conference talk research
 - Industry example collection
+- Visual documentation capture
 
-#### 12. Brave Search MCP
-**Use Case**: Enhanced web search
+**Configuration**:
+```json
+{
+  "mcpServers": {
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    }
+  }
+}
+```
+
+**Impact**: Automated research and data gathering
+
+---
+
+#### 15. Brave Search MCP
+
+**Why Useful**:
+- Enhanced web search capabilities
+- No rate limiting
+- Privacy-focused
+
+**Use Cases**:
 - Research phase automation
 - Finding real-world examples
 - Technology trend analysis
 - Company case study discovery
+- Latest documentation and articles
+
+**Configuration**:
+```json
+{
+  "mcpServers": {
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {"BRAVE_API_KEY": "${BRAVE_API_KEY}"}
+    }
+  }
+}
+```
+
+**Impact**: Faster, more comprehensive research
+
+---
+
+#### 16. Context7 MCP
+
+**Why Useful**:
+- Up-to-date library documentation
+- Latest API references
+- Version-specific docs
+- Current best practices
+
+**Use Cases**:
+- Get latest MLflow documentation
+- Current Kubernetes APIs
+- Latest framework examples
+- Version compatibility information
+- Ensure curriculum uses current versions
+
+**Impact**: Always current technical content
+
+---
+
+#### 17. Sentry MCP
+
+**Why Useful**:
+- Error tracking integration examples
+- Production monitoring demonstrations
+
+**Use Cases**:
+- Error tracking demonstrations in curriculum
+- Production monitoring examples
+- Real-world observability patterns
+- Incident response workflows
+
+**Impact**: More realistic production examples
+
+---
+
+#### 18. Linear MCP
+
+**Why Useful**:
+- Project management integration
+- Issue tracking
+- Milestone management
+
+**Use Cases**:
+- Track curriculum development progress
+- Manage content generation tasks
+- Coordinate team efforts
+- Issue and milestone tracking
+
+**Configuration**:
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-linear"],
+      "env": {"LINEAR_API_KEY": "${LINEAR_API_KEY}"}
+    }
+  }
+}
+```
+
+**Impact**: Better project coordination
+
+---
+
+#### 19. Slack MCP
+
+**Why Useful**:
+- Team communication
+- Progress notifications
+- Collaboration
+
+**Use Cases**:
+- Send completion notifications
+- Share progress updates
+- Team collaboration
+- Automated reporting
+
+**Impact**: Improved team communication
+
+---
+
+#### 20. Sequential Thinking MCP
+
+**Why Useful**:
+- Complex problem-solving
+- Multi-step reasoning
+- Curriculum design thinking
+
+**Use Cases**:
+- Complex curriculum design decisions
+- Architecture planning
+- Problem decomposition
+- Learning path optimization
+
+**Impact**: Better curriculum design decisions
+
+---
+
+### Advanced/Specialized MCP Servers
+
+#### 21. AWS MCP Server
+
+**Why Useful**:
+- AWS service interactions
+- Cloud infrastructure examples
+
+**Use Cases**:
+- AWS examples in cloud modules
+- S3, Lambda, ECS demonstrations
+- Cloud cost optimization examples
+- Production AWS patterns
+
+---
+
+#### 22. Google Drive MCP
+
+**Why Useful**:
+- Document storage and sharing
+- Collaborative editing
+- Backup and versioning
+
+**Use Cases**:
+- Store curriculum planning docs
+- Share with team members
+- Backup content
+- Collaborative curriculum design
+
+---
+
+#### 23. Notion MCP
+
+**Why Useful**:
+- Documentation and knowledge base
+- Project planning
+- Content organization
+
+**Use Cases**:
+- Curriculum planning and design
+- Knowledge base for team
+- Content roadmaps
+- Documentation hub
+
+---
+
+#### 24. Airtable MCP
+
+**Why Useful**:
+- Structured data management
+- Curriculum tracking
+- Progress dashboards
+
+**Use Cases**:
+- Track module completion
+- Skills matrix management
+- Progress visualization
+- Curriculum database
+
+---
+
+#### 25. Jira MCP
+
+**Why Useful**:
+- Agile project management
+- Sprint planning
+- Issue tracking
+
+**Use Cases**:
+- Manage curriculum development sprints
+- Track content generation tasks
+- Bug and issue management
+- Team velocity tracking
+
+---
+
+#### 26. GitLab MCP
+
+**Why Useful**:
+- Alternative to GitHub
+- CI/CD pipelines
+- Issue tracking
+
+**Use Cases**:
+- GitLab-based curriculum hosting
+- CI/CD for content validation
+- Merge request workflows
+- Issue tracking
+
+---
+
+#### 27. Spotify MCP
+
+**Why Useful**:
+- Background music for focus
+- Productivity playlists
+
+**Use Cases**:
+- Focus music during content generation
+- Team collaboration playlists
+- Break time management
+
+**Impact**: Improved focus and productivity (optional)
+
+---
+
+#### 28. Google Maps MCP
+
+**Why Useful**:
+- Geographic data
+- Location-based examples
+
+**Use Cases**:
+- Geographic distributed systems examples
+- Location-based ML applications
+- Multi-region deployment scenarios
+
+---
+
+#### 29. Cloudflare MCP
+
+**Why Useful**:
+- CDN and edge computing
+- Performance optimization examples
+
+**Use Cases**:
+- CDN configuration examples
+- Edge computing demonstrations
+- Performance optimization patterns
+- Global content delivery
+
+---
+
+#### 30. Everything MCP (Testing/Demo)
+
+**Why Useful**:
+- Testing MCP protocol features
+- Demonstration server
+
+**Use Cases**:
+- Testing MCP integrations
+- Learning MCP protocol
+- Development and debugging
+
+**Note**: For development/testing only
+
+---
+
+### MCP Server Summary
+
+**Total Recommended**: 30 MCP servers
+
+**By Priority**:
+- Priority 1 (CRITICAL): 4 servers
+- Priority 2 (HIGH QA): 4 servers
+- Priority 3 (MEDIUM Docs): 4 servers
+- Priority 4 (OPTIONAL): 7 servers
+- Advanced/Specialized: 11 servers
+
+**Essential for Basic Operation**: Servers 1-4 (GitHub, Memory, Filesystem, Database)
+**Recommended for Quality**: Servers 5-8 (Quality Guard, Code Checker, Ruff, Analyzer)
+**Valuable for Scale**: Servers 9-12 (Docs, Kubernetes, Docker)
+**Optional Enhancements**: Servers 13-30 (various specialized tools)
 
 ---
 
