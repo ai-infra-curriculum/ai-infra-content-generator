@@ -46,11 +46,12 @@ The goal is to create high-quality, production-ready curriculum materials includ
 ```
 ai-infra-content-generator/
 ├── README.md                    # This file
-├── docs/                        # Documentation
-│   ├── getting-started.md      # Quick start guide
-│   ├── architecture.md         # System design (8-phase workflow)
-│   ├── best-practices.md       # Content generation best practices
-│   ├── tools-and-automation.md # MCP servers, agents, skills, automation
+├── docs/                        # Documentation (~92,000 words)
+│   ├── getting-started.md      # Quick start guide (8,300 words)
+│   ├── architecture.md         # System design, 8-phase workflow (12,500 words)
+│   ├── best-practices.md       # Content generation best practices (15,400 words)
+│   ├── tools-and-automation.md # 30 MCP servers, 6 skills, automation (20,500 words)
+│   ├── agent-playbook.md       # 8-phase agent orchestration (10,800 words)
 │   └── examples.md             # Usage examples
 ├── templates/                   # Content templates
 │   ├── lecture-notes/          # Lecture note templates
