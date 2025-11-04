@@ -40,6 +40,7 @@ The goal is to create high-quality, production-ready curriculum materials includ
 - **Quality Focused**: Built-in quality checks and validation
 - **Scalable**: Generate content for multiple modules in parallel
 - **Documented**: Clear processes and best practices
+- **Checkpoint System**: Save and resume work across sessions with automated progress tracking
 - **Research Toolkit**: Standardized prompts and workbooks for market research and skills mapping
 - **Multi-Role Ready**: Dedicated workflow and dashboards to coordinate curricula across roles
 - **Configurable Solutions Delivery**: Plan inline or standalone solution repositories with automated templates
@@ -78,6 +79,11 @@ ai-infra-content-generator/
 │   ├── project-generation.md   # How to generate projects
 │   ├── curriculum-design.md    # Curriculum design process
 │   └── multi-role-program.md   # Coordinating research & curriculum across roles
+├── memory/                      # Checkpoint system for saving/resuming work
+│   ├── README.md               # Checkpoint documentation
+│   ├── checkpoint-save.py      # Save progress tool
+│   ├── checkpoint-resume.py    # Resume work tool
+│   └── checkpoints/            # Saved checkpoints (local only)
 └── examples/                    # Example outputs
     ├── sample-module/          # Complete module example
     └── sample-project/         # Complete project example

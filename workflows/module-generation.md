@@ -842,6 +842,64 @@ Module is complete when:
 - **Test as you go**: Catch issues early
 - **Use checklist**: Stay on track
 
+### Using Checkpoints to Save Progress
+
+The [checkpoint system](../memory/README.md) enables you to save progress and resume work across sessions.
+
+**When to Checkpoint**:
+```bash
+# After completing planning phase (Day 1, ~2 hours in)
+python ../memory/checkpoint-save.py \
+  --name "mod-105-data-pipelines" \
+  --stage "planning-complete" \
+  --notes "Research complete, outline generated"
+
+# After foundation sections (Day 1, end of day)
+python ../memory/checkpoint-save.py \
+  --name "mod-105-data-pipelines" \
+  --stage "foundation-sections" \
+  --notes "Completed intro and sections 1-3, 6,500 words"
+
+# After code examples (Day 2, mid-day)
+python ../memory/checkpoint-save.py \
+  --name "mod-105-data-pipelines" \
+  --stage "code-complete" \
+  --notes "All 12 code examples added and tested, 9,200 words"
+
+# After case studies (Day 2, end of day)
+python ../memory/checkpoint-save.py \
+  --name "mod-105-data-pipelines" \
+  --stage "case-studies-complete" \
+  --notes "3 case studies with metrics added, 11,500 words"
+
+# Before final review (Day 3)
+python ../memory/checkpoint-save.py \
+  --name "mod-105-data-pipelines" \
+  --stage "ready-for-review" \
+  --notes "Module complete at 12,450 words, all validation passed"
+```
+
+**Resuming Work**:
+```bash
+# Resume from latest checkpoint
+python ../memory/checkpoint-resume.py \
+  --name "mod-105-data-pipelines" \
+  --latest
+
+# List available checkpoints
+python ../memory/checkpoint-resume.py \
+  --list --name "mod-105-data-pipelines"
+```
+
+**Benefits**:
+- ✅ **Never lose work** - Resume from any milestone
+- ✅ **Flexibility** - Stop and resume across days/weeks
+- ✅ **Safety** - Restore if changes go wrong
+- ✅ **Tracking** - See progress over time
+- ✅ **Collaboration** - Share checkpoints with team
+
+See [Memory & Checkpoint System](../memory/README.md) for complete documentation.
+
 ### Common Pitfalls to Avoid
 
 ❌ **Don't**: Generate entire module in one prompt
