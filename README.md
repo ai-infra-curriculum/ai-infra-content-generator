@@ -48,8 +48,9 @@ ai-infra-content-generator/
 ├── README.md                    # This file
 ├── docs/                        # Documentation
 │   ├── getting-started.md      # Quick start guide
-│   ├── architecture.md         # System design
+│   ├── architecture.md         # System design (8-phase workflow)
 │   ├── best-practices.md       # Content generation best practices
+│   ├── tools-and-automation.md # MCP servers, agents, skills, automation
 │   └── examples.md             # Usage examples
 ├── templates/                   # Content templates
 │   ├── lecture-notes/          # Lecture note templates
