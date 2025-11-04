@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - GitHub issue templates for bug reports and feature requests (`.github/ISSUE_TEMPLATE/`)
 - Curriculum project plan template (`templates/curriculum/project-plan-template.md`) and documentation references
+- AI Infrastructure Curriculum end-to-end guide (`docs/ai-infrastructure-curriculum-guide.md`)
 
 ### Changed
 - Support policy now focuses on the latest release (see `SECURITY.md`)

@@ -55,7 +55,8 @@ ai-infra-content-generator/
 │   ├── architecture.md         # System design, 8-phase workflow (12,500 words)
 │   ├── best-practices.md       # Content generation best practices (15,400 words)
 │   ├── tools-and-automation.md # 30 MCP servers, 6 skills, automation (20,500 words)
-│   └── agent-playbook.md       # 8-phase agent orchestration (10,800 words)
+│   ├── agent-playbook.md       # 8-phase agent orchestration (10,800 words)
+│   └── ai-infrastructure-curriculum-guide.md # End-to-end curriculum production playbook
 ├── templates/                   # Content templates
 │   ├── research/               # Role briefs, job analysis, interviews, skills matrix
 │   ├── curriculum/             # Master plan, module roadmaps, project plans, multi-role dashboard
@@ -109,6 +110,9 @@ ai-infra-content-generator/
 
 4. **Generate your first module**
    Follow the workflow in `workflows/module-generation.md`
+
+5. **Plan the complete program**
+   Walk through the end-to-end playbook in `docs/ai-infrastructure-curriculum-guide.md`
 
 ## Research & Curriculum Planning Starter
 
