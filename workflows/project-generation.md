@@ -298,6 +298,15 @@ async def list_users():
 
 ## Phase 4: Build Example Solution (8-12 hours)
 
+### Step 0: Align Repository & Reuse Strategy
+
+1. Review `curriculum/repository-strategy.yaml` to confirm:
+   - Whether solutions live in the same repository or a dedicated solutions repo.
+   - Single vs per-role repository mode and the destination path (e.g., `solutions/projects/project-01/`).
+2. Update the project entry in `curriculum/<role>/modules/` and `curriculum/roles/multi-role-alignment.md` with the selected placement.
+3. Identify shared components with other roles to minimize duplication (e.g., reuse libraries, infrastructure modules).
+4. If using a separate repo, set up mirrors/CI pipelines so code stays in sync with the main curriculum reference.
+
 ### Step 1: Implement Complete Solution
 
 Build the full, production-quality solution:
@@ -324,16 +333,14 @@ Build the full, production-quality solution:
 
 ### Step 3: Document Solution
 
-Create comprehensive solution documentation:
+Create comprehensive solution documentation using `templates/solutions/project-solution-template.md`:
 
-**SOLUTION.md Should Include**:
-- Architecture overview
-- Implementation notes
-- Design decisions and rationale
-- Performance characteristics
-- Security considerations
-- Common pitfalls avoided
-- Alternative approaches
+**Include**:
+- Architecture overview and design decisions
+- Implementation notes with cross-role reuse callouts
+- Performance, security, and operational considerations
+- Validation matrix and automation references
+- Links back to learning materials (module/exercise IDs)
 
 ---
 
@@ -515,7 +522,7 @@ project-name/
 │   ├── README.md
 │   ├── docker-compose.yml
 │   └── [starter files]
-├── solution/                 # Complete solution (separate repo/branch)
+├── solution/                 # Complete solution (location per repository strategy)
 │   ├── SOLUTION.md
 │   └── [complete implementation]
 └── docs/
@@ -527,9 +534,9 @@ project-name/
 ### Step 3: Publish
 
 **Publishing Checklist**:
-- [ ] Create GitHub repository
+- [ ] Create GitHub repository (single or per-role as defined in `repository-strategy.yaml`)
 - [ ] Push starter code to main branch
-- [ ] Push solution to separate branch or repo
+- [ ] Push solution to configured destination (same repo branch / separate repo)
 - [ ] Add project to curriculum index
 - [ ] Update module README with project link
 - [ ] Test clone and setup from fresh environment

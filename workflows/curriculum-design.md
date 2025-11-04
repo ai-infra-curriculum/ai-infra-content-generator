@@ -9,11 +9,11 @@ This workflow guides the design of complete technical training curricula, from i
 **Purpose**: Design comprehensive, job-ready technical curriculum
 
 **Time Investment**:
-- Research & Analysis: 20-40 hours
-- Curriculum Design: 20-30 hours
+- Research & Analysis: 20-40 hours (per role)
+- Curriculum Design: 20-30 hours (per role)
 - Content Planning: 15-25 hours
 - Validation: 10-15 hours
-- **Total**: 65-110 hours per curriculum
+- **Total**: 65-110 hours per curriculum (scale research/design effort by number of roles)
 
 **Output**: Complete curriculum design including:
 - Role requirements and competency framework
@@ -21,6 +21,7 @@ This workflow guides the design of complete technical training curricula, from i
 - Content specifications
 - Assessment strategy
 - Project portfolio requirements
+- Multi-role alignment matrix (if serving multiple roles)
 
 ---
 
@@ -68,6 +69,8 @@ This workflow guides the design of complete technical training curricula, from i
 - Number of Openings: [Estimate]
 ```
 
+> **Template Support**: Copy `templates/research/role-research-template.md` to `research/<role-slug>/role-research.md` for each role you plan to support. Populate sections as you work through Phase 1.
+
 ### Step 2: Analyze Job Postings
 
 Collect and analyze 20+ job postings:
@@ -111,6 +114,8 @@ Collect and analyze 20+ job postings:
 - 5+ years: 20%
 ```
 
+> **Template Support**: Use `templates/research/job-posting-analysis-template.md` as the capture workbook. Store under `research/<role-slug>/job-posting-analysis.md` to keep evidence organized per role.
+
 ### Step 3: Interview Industry Practitioners
 
 Conduct 5-10 informational interviews:
@@ -148,6 +153,8 @@ Conduct 5-10 informational interviews:
 - [Trend 2]: New skills needed
 ```
 
+> **Template Support**: Capture each conversation with `templates/research/practitioner-interview-template.md` (store under `research/<role-slug>/interviews/`). Summarize aggregate findings in this section.
+
 ### Step 4: Review Competing Curricula
 
 Analyze 3-5 competing training programs:
@@ -182,6 +189,26 @@ Analyze 3-5 competing training programs:
 ```
 
 **Deliverable**: Competitive Analysis Report
+
+### Step 5: Synthesize Skills Matrix
+
+Combine insights from steps 1-4 to define competencies and proficiency expectations.
+
+**Inputs**:
+- Role research brief (`research/<role-slug>/role-research.md`)
+- Job posting analysis (`research/<role-slug>/job-posting-analysis.md`)
+- Practitioner interviews (`research/<role-slug>/interviews/`)
+- Competitive analysis findings
+
+**Process**:
+1. Group recurring responsibilities into 3-5 competency domains.
+2. For each competency, list observable skills and map to proficiency levels (Awareness → Expert).
+3. Tag every statement with evidence sources (IDs like `JP-03`, `INT-01`).
+4. Identify assessment modalities that verify each proficiency.
+
+**Deliverable**: `research/<role-slug>/skills-matrix.yaml`
+
+> **Template Support**: Use `prompts/research/skills-matrix-prompt.md` to draft the matrix, then refine it using `templates/research/skills-matrix-template.yaml`.
 
 ---
 
@@ -338,6 +365,8 @@ Integration Layer (Weeks 17-20)
 └─ Capstone Project: End-to-End System
 ```
 
+> **Template Support**: Document the selected path in `curriculum/<role-slug>/master-plan.yaml` (copy from `templates/curriculum/master-plan-template.yaml`). For multi-role programs, leverage the `role_alignment_matrix` section to highlight shared and role-specific modules.
+
 ### Step 2: Design Each Module
 
 For each module, specify:
@@ -386,6 +415,8 @@ For each module, specify:
 - [Optional resource 1]
 ```
 
+> **Template Support**: Maintain each module plan in `curriculum/<role-slug>/modules/` using `templates/curriculum/module-roadmap-template.md`. Tag all applicable roles in the "Target Role(s)" field to enable reuse.
+
 ### Step 3: Plan Projects
 
 Design 3-4 major projects:
@@ -418,6 +449,21 @@ Design 3-4 major projects:
 ```
 
 **Deliverable**: Curriculum Architecture Document (20-30 pages)
+
+### Step 4: Configure Solutions & Repository Strategy
+
+1. Copy `templates/curriculum/repository-strategy-template.yaml` to `curriculum/repository-strategy.yaml` (if not already present).
+2. Select repository mode:
+   - `single_repo` when multiple roles share a mono-repo.
+   - `per_role` when roles require their own repositories.
+3. Decide solution placement (`inline` vs `separate`) and document destination paths for exercises, projects, and assessments.
+4. Update each module roadmap (`Solutions Plan` section) with the chosen locations and note reuse across roles to prevent duplication.
+5. Record cross-role progression and shared assets inside `curriculum/roles/multi-role-alignment.md`.
+6. Align CI/CD and access policies (e.g., instructor-only solutions repos) with the chosen strategy.
+
+**Deliverables**:
+- `curriculum/repository-strategy.yaml` with program-specific values
+- Multi-role alignment dashboard updated with repository and reuse decisions
 
 ---
 
@@ -553,6 +599,7 @@ Compare final design against market needs:
 - [ ] Appropriate depth for role level
 - [ ] Realistic time commitment
 - [ ] Portfolio-building opportunities
+- [ ] Multi-role alignment documented (when applicable)
 
 **Deliverable**: Market Validation Report
 

@@ -618,9 +618,37 @@ Output format:
 
 ---
 
-## Phase 5: Finalization (30 min)
+## Phase 5: Finalization (30-60 min)
 
-### 5.1 Final Validation
+### 5.1 Generate Solutions Packages (15-30 min)
+
+1. **Confirm repository strategy**
+   - Review `curriculum/repository-strategy.yaml` to determine:
+     - Solutions placement (`inline` vs `separate` repo)
+     - Repository mode (`single_repo` vs `per_role`)
+     - Destination paths for exercises, projects, assessments
+   - Update module roadmap (`Solutions Plan` section) with actual paths.
+
+2. **Draft solutions using templates**
+   - Exercises → `templates/solutions/exercise-solution-template.md`
+   - Projects → `templates/solutions/project-solution-template.md`
+   - Assessments → `templates/solutions/assessment-solution-template.md`
+   - Use `prompts/solutions/solution-generation-prompt.md` to generate first pass, then review manually.
+
+3. **Ensure cross-role progression**
+   - Reference `curriculum/roles/multi-role-alignment.md` to reuse assets and avoid duplication.
+   - Note shared components and role-specific extensions inside each solution file.
+
+4. **Validate solutions**
+   - Run code/tests in the designated repository.
+   - Log validation results in the solution template under "Evidence of Validation".
+   - If solutions live in a separate repo, mirror module/exercise structure and add a README pointing back to the source module.
+
+5. **Access control & release**
+   - Tag solutions with visibility rules (e.g., instructors only).
+   - If separate repo, create branch/tag according to governance plan.
+
+### 5.2 Final Validation
 
 Run complete quality checklist one more time:
 
@@ -639,7 +667,7 @@ Run complete quality checklist one more time:
 
 ---
 
-### 5.2 Create Accompanying Files
+### 5.3 Create Accompanying Files
 
 **Generate README.md** for the module:
 ```markdown
@@ -680,7 +708,7 @@ Run complete quality checklist one more time:
 
 ---
 
-### 5.3 Package and Deliver
+### 5.4 Package and Deliver
 
 **Organize files**:
 ```

@@ -251,40 +251,40 @@ Generate → Validate Structure → Validate Content → Validate Code → Appro
 - Learning repository structure
 - Project specifications
 - Best practices documentation
+- Repository strategy configuration (`curriculum/repository-strategy.yaml`)
 
 **Process**:
-1. Implement complete solutions for all projects
-2. Write comprehensive documentation
-3. Create step-by-step implementation guides
-4. Add CI/CD pipelines
-5. Include Docker configurations
-6. Write troubleshooting guides
-7. Add deployment scripts
+1. Confirm repository topology (inline vs separate, single vs per-role) and access policies
+2. Implement complete solutions for projects, exercises, and assessments
+3. Write comprehensive documentation using solution templates
+4. Create step-by-step implementation guides and grading resources
+5. Add CI/CD pipelines and automation for validation/sync
+6. Include Docker and infrastructure configurations
+7. Write troubleshooting guides with cross-role reuse notes
+8. Add deployment scripts and operational runbooks
 
 **Outputs**:
 ```
-{role}-solutions/
+solutions/ (inline) or {role}-solutions/ (separate repo)
 ├── projects/
 │   └── project-{N}/
-│       ├── README.md (complete overview)
-│       ├── STEP_BY_STEP.md (implementation guide)
-│       ├── ARCHITECTURE.md (detailed design)
-│       ├── src/ (complete implementation)
-│       ├── tests/ (comprehensive test suite)
+│       ├── SOLUTION.md (project-solution-template)
+│       ├── src/
+│       ├── infra/
+│       ├── tests/
 │       ├── docs/
-│       │   ├── API.md (API documentation)
-│       │   ├── DEPLOYMENT.md (deployment guide)
-│       │   └── TROUBLESHOOTING.md (common issues)
-│       ├── docker/
-│       │   ├── Dockerfile
-│       │   └── docker-compose.yml
+│       │   ├── ARCHITECTURE.md
+│       │   ├── RUNBOOK.md
+│       │   └── TROUBLESHOOTING.md
 │       └── scripts/
-│           ├── setup.sh
-│           └── deploy.sh
-└── guides/
-    ├── debugging-guide.md
-    ├── optimization-guide.md
-    └── production-readiness.md
+├── exercises/
+│   └── exercise-{N}/
+│       ├── solution.md (exercise-solution-template)
+│       └── src/
+├── assessments/
+│   └── quiz-{N}/solutions.md (assessment-solution-template)
+└── shared-components/
+    └── [libraries reused across roles]
 ```
 
 **Implementation Standards**:
@@ -298,31 +298,42 @@ Generate → Validate Structure → Validate Content → Validate Code → Appro
 
 1. **Implementation** (8-16 hours per project)
    ```
-   Use: templates/projects/solution-implementation-guide.md
+   Use: templates/solutions/project-solution-template.md
 
    For each project:
    1. Implement core functionality
-   2. Add error handling
-   3. Implement logging and monitoring
-   4. Add configuration management
-   5. Create tests (unit, integration, e2e)
-   6. Optimize performance
-   7. Add security measures
+   2. Add error handling, logging, and monitoring
+   3. Add configuration management and secrets handling
+   4. Create tests (unit, integration, e2e)
+   5. Optimize performance and cost
+   6. Add security measures
+   7. Document reuse pathways for other roles/modules
    ```
 
 2. **Documentation** (2-4 hours per project)
    ```
-   Use: prompts/lecture-generation/documentation-generation-prompt.md
+   Use: prompts/solutions/solution-generation-prompt.md
 
    Generate:
-   1. API documentation (auto-generated + manual)
-   2. Deployment guide (step-by-step)
+   1. SOLUTION.md (overview, decisions, validation evidence)
+   2. Deployment guide (step-by-step with environment notes)
    3. Architecture documentation (diagrams + explanations)
    4. Troubleshooting guide (common issues + solutions)
-   5. STEP_BY_STEP.md (implementation walkthrough)
+   5. Implementation walkthrough aligned to repository strategy
    ```
 
-3. **Infrastructure** (1-2 hours per project)
+3. **Exercise & Assessment Solutions** (1-2 hours per module)
+   ```
+   Use: templates/solutions/exercise-solution-template.md
+        templates/solutions/assessment-solution-template.md
+
+   For each exercise/assessment:
+   1. Provide step-by-step implementation with validation commands
+   2. Document troubleshooting tips and alternative approaches
+   3. Reference repository placement and cross-role reuse strategy
+   ```
+
+4. **Infrastructure** (1-2 hours per project)
    ```
    Create:
    1. Dockerfile (multi-stage, optimized)
@@ -339,6 +350,7 @@ Generate → Validate Structure → Validate Content → Validate Code → Appro
 - [ ] CI/CD passes
 - [ ] No security vulnerabilities
 - [ ] Performance benchmarked
+- [ ] Solutions reference repository strategy and avoid duplication across roles
 
 ---
 
