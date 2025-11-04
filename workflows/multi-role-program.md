@@ -27,6 +27,7 @@ This workflow orchestrates research and curriculum planning when a program must 
    cp templates/research/skills-matrix-template.yaml research/<role-slug>/skills-matrix.yaml
    cp templates/curriculum/master-plan-template.yaml curriculum/<role-slug>/master-plan.yaml
    cp templates/curriculum/module-roadmap-template.md curriculum/<role-slug>/modules/module-01-roadmap.md
+   cp templates/curriculum/project-plan-template.md curriculum/<role-slug>/projects/project-01-plan.md
    ```
 3. Initialize the multi-role dashboard:
    ```bash

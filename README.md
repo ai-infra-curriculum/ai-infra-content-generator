@@ -57,7 +57,7 @@ ai-infra-content-generator/
 │   └── agent-playbook.md       # 8-phase agent orchestration (10,800 words)
 ├── templates/                   # Content templates
 │   ├── research/               # Role briefs, job analysis, interviews, skills matrix
-│   ├── curriculum/             # Master plan, module roadmaps, multi-role dashboard
+│   ├── curriculum/             # Master plan, module roadmaps, project plans, multi-role dashboard
 │   ├── solutions/              # Solution packages for exercises/projects/assessments
 │   ├── lecture-notes/          # Lecture note templates
 │   ├── exercises/              # Exercise templates
@@ -132,8 +132,8 @@ Based on successful generation of 36,000+ words of technical content and expande
 - ✅ **Multi-Role Ready**: Coordinate curriculum across multiple job roles efficiently
 
 **Framework Stats**:
-- 📄 37 files (templates, workflows, prompts, tools)
-- 📝 ~49,000 words of documentation and guidance
+- 📄 ≈200 files (templates, workflows, prompts, tools)
+- 📝 50,000+ words of documentation and guidance
 - 🎯 15,000+ words of core documentation
 - 🛠️ 2 automated validation scripts
 - 🔧 30 documented MCP servers

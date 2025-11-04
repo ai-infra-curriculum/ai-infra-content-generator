@@ -24,6 +24,7 @@ curriculum/
    ```bash
    cp templates/curriculum/master-plan-template.yaml curriculum/<role-slug>/master-plan.yaml
    cp templates/curriculum/module-roadmap-template.md curriculum/<role-slug>/modules/module-01-roadmap.md
+   cp templates/curriculum/project-plan-template.md curriculum/<role-slug>/projects/project-01-plan.md
    cp templates/curriculum/multi-role-alignment-template.md curriculum/roles/multi-role-alignment.md
    cp templates/curriculum/repository-strategy-template.yaml curriculum/repository-strategy.yaml
    ```
@@ -36,6 +37,7 @@ curriculum/
 - **Master Plan (`master-plan.yaml`)**: Program-level overview, learning outcomes, module list, assessments, validation plan.
 - **Repository Strategy (`repository-strategy.yaml`)**: Defines repo topology, solutions placement, shared component ownership.
 - **Module Roadmaps (`modules/*.md`)**: Detailed scope for each module, including objectives, assets, and quality checklist.
+- **Project Plans (`projects/*.md`)**: Deep dive into project narrative, deliverables, assessment, and reuse strategy.
 - **Multi-Role Alignment Dashboard**: Shared vs. role-specific modules, dependencies, and owners.
 
 ## Validation Checklist

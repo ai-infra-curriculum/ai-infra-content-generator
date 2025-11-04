@@ -11,8 +11,7 @@ We provide security updates for the following versions:
 | Version | Supported          | Status |
 | ------- | ------------------ | ------ |
 | 0.2.x   | :white_check_mark: | Current release |
-| 0.1.x   | :white_check_mark: | Supported |
-| < 0.1.0 | :x:                | Not supported |
+| < 0.2.0 | :x:                | Not supported |
 
 ## Security Considerations for This Project
 
@@ -91,7 +90,7 @@ These are not security vulnerabilities:
 
 **For Security Issues** (private disclosure):
 
-1. **Email**: [INSERT SECURITY CONTACT EMAIL]
+1. **Email**: ai-infra-curriculum@joshua-ferguson.com
    - Subject: "[SECURITY] Brief description"
    - Include:
      - Description of the vulnerability
@@ -299,7 +298,7 @@ For non-security questions:
 - See SUPPORT.md for help resources
 
 For security concerns:
-- Email: [INSERT SECURITY CONTACT EMAIL]
+- Email: ai-infra-curriculum@joshua-ferguson.com
 - Subject: "[SECURITY] Your concern"
 
 ---

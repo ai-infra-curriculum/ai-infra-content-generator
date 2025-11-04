@@ -65,7 +65,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-[INSERT CONTACT EMAIL].
+ai-infra-curriculum@joshua-ferguson.com.
 
 All complaints will be reviewed and investigated promptly and fairly.
 
@@ -166,4 +166,4 @@ expectations:
 ## Questions?
 
 If you have questions about this Code of Conduct, please open an issue or
-contact the maintainers at [INSERT CONTACT EMAIL].
+contact the maintainers at ai-infra-curriculum@joshua-ferguson.com.

@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Claude Code skill for automated content generation
 - Additional validation scripts for links and formatting
 
+### Added
+- GitHub issue templates for bug reports and feature requests (`.github/ISSUE_TEMPLATE/`)
+- Curriculum project plan template (`templates/curriculum/project-plan-template.md`) and documentation references
+
+### Changed
+- Support policy now focuses on the latest release (see `SECURITY.md`)
+- README framework statistics updated to reflect current repository size
+
 ---
 
 ## [0.2.0] - 2025-01-04

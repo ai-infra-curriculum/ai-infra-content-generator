@@ -5,8 +5,8 @@ Thank you for using the AI Infrastructure Content Generator! This document provi
 ## Quick Links
 
 - 📖 [Documentation](docs/)
-- 🐛 [Report a Bug](https://github.com/ai-infra-curriculum/ai-infra-content-generator/issues/new?template=bug_report.md)
-- 💡 [Request a Feature](https://github.com/ai-infra-curriculum/ai-infra-content-generator/issues/new?template=feature_request.md)
+- 🐛 [Report a Bug](https://github.com/ai-infra-curriculum/ai-infra-content-generator/issues/new?template=bug_report.yml)
+- 💡 [Request a Feature](https://github.com/ai-infra-curriculum/ai-infra-content-generator/issues/new?template=feature_request.yml)
 - 💬 [Discussions](https://github.com/ai-infra-curriculum/ai-infra-content-generator/discussions)
 - 🔒 [Security Issues](SECURITY.md)
 

@@ -450,6 +450,8 @@ Design 3-4 major projects:
 
 **Deliverable**: Curriculum Architecture Document (20-30 pages)
 
+> **Template Support**: Capture finalized project designs with `templates/curriculum/project-plan-template.md` and store them under `curriculum/<role-slug>/projects/`.
+
 ### Step 4: Configure Solutions & Repository Strategy
 
 1. Copy `templates/curriculum/repository-strategy-template.yaml` to `curriculum/repository-strategy.yaml` (if not already present).
