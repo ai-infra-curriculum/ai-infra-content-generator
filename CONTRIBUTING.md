@@ -16,24 +16,16 @@ Thank you for your interest in contributing to this project! This framework aims
 
 ## Code of Conduct
 
-### Our Pledge
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [INSERT CONTACT EMAIL].
 
-We are committed to providing a welcoming and inclusive environment for all contributors, regardless of background or experience level.
-
-### Expected Behavior
-
+**Key Points**:
 - Be respectful and constructive in all interactions
 - Welcome newcomers and help them get started
 - Focus on what is best for the community
 - Show empathy towards other community members
 - Accept constructive criticism gracefully
 
-### Unacceptable Behavior
-
-- Harassment, discrimination, or trolling
-- Publishing others' private information
-- Unprofessional or disrespectful conduct
-- Spam or off-topic content
+For full details, see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ---
 
@@ -396,17 +388,22 @@ refactor: Reorganize template directory structure
 If you need help:
 
 1. **Check existing documentation** in the `docs/` directory
-2. **Search issues** for similar questions
-3. **Open a discussion** for general questions
-4. **Open an issue** for bugs or specific problems
-5. **Tag maintainers** if urgent
+2. **Review the [Support Guide](SUPPORT.md)** for troubleshooting and resources
+3. **Search issues** for similar questions
+4. **Open a discussion** for general questions
+5. **Open an issue** for bugs or specific problems
+6. **Tag maintainers** if urgent
+
+For detailed help resources, troubleshooting guides, and response times, see [SUPPORT.md](SUPPORT.md).
 
 ### Recognition
 
 Contributors will be:
 - Listed in CONTRIBUTORS.md
-- Credited in CHANGELOG.md for their contributions
+- Credited in [CHANGELOG.md](CHANGELOG.md) for their contributions
 - Acknowledged in release notes for significant contributions
+
+See [CHANGELOG.md](CHANGELOG.md) for the full history of contributions and releases.
 
 ---
 

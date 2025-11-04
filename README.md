@@ -155,9 +155,25 @@ Based on successful generation of 36,000+ words of technical content and expande
 4. **Transparency**: Clear disclaimers about AI-generation and verification status
 5. **Continuous Improvement**: Learn from each generation cycle
 
+## Community
+
+We're building a community around AI-assisted educational content creation:
+
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community standards and guidelines
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute to this project
+- **[Support](SUPPORT.md)** - Get help, troubleshooting, and resources
+- **[Security Policy](SECURITY.md)** - Report vulnerabilities and security concerns
+- **[Changelog](CHANGELOG.md)** - Version history and release notes
+
 ## Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
+- Improving documentation
+- Creating templates and prompts
+- Building validation tools
+- Sharing workflows and examples
+
+Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before participating.
 
 ## License
 
