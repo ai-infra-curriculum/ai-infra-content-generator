@@ -92,8 +92,6 @@ ai-infra-content-generator/
 
 ## Quick Start
 
-### For New Projects
-
 1. **Clone the repository**
    ```bash
    git clone https://github.com/ai-infra-curriculum/ai-infra-content-generator.git
@@ -115,27 +113,6 @@ ai-infra-content-generator/
 
 5. **Plan the complete program**
    Walk through the end-to-end playbook in `docs/ai-infrastructure-curriculum-guide.md`
-
-### For Existing Content Migration
-
-**Have existing curriculum content?** Migrate it to the framework:
-
-1. **Review the migration plan**
-   ```bash
-   cat docs/MIGRATION_PLAN.md
-   ```
-
-2. **Understand implementation requirements**
-   ```bash
-   cat docs/IMPLEMENTATION_RECOMMENDATIONS.md
-   ```
-
-3. **Run migration scripts**
-   ```bash
-   ./scripts/migrate-repository.sh <your-repo>
-   ```
-
-See [MIGRATION_PLAN.md](docs/MIGRATION_PLAN.md) for complete migration guide.
 
 ## Research & Curriculum Planning Starter
 
