@@ -1,3 +1,5 @@
+<!-- Prompt-Version: 1.0.0 -->
+
 # Role Research Prompt
 
 ## Purpose

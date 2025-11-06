@@ -1,0 +1,55 @@
+name: Validation tooling request
+description: Propose new automated checks or validation rules
+title: "[Validation]: "
+labels:
+  - enhancement
+  - validation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us expand the validation suite (linting, testing, security, docs quality, etc.).
+  - type: input
+    id: target
+    attributes:
+      label: Target Asset Type
+      description: Which assets would this validation cover?
+      placeholder: e.g., modules, projects, solutions, documentation
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What issue or compliance requirement does this solve?
+      placeholder: Describe the risk or quality gap.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Checks / Tools
+      description: List commands, tools, or rules to add.
+      placeholder: |
+        - bandit -r src/
+        - markdown-link-check docs/
+    validations:
+      required: false
+  - type: textarea
+    id: automation
+    attributes:
+      label: Automation Strategy
+      description: How should this run? (CI, pre-commit, CLI profile, etc.)
+      placeholder: GitHub Action, local CLI profile, etc.
+    validations:
+      required: false
+  - type: textarea
+    id: references
+    attributes:
+      label: References / Compliance Links
+      description: Standards, docs, or examples supporting the request.
+      placeholder: |
+        - Link 1
+        - Link 2
+    validations:
+      required: false

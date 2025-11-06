@@ -1,0 +1,90 @@
+# Pipeline Manifest: AI Infrastructure Curriculum (Multi-Role)
+#
+# Drives research, curriculum design, content generation, solutions, and release across multiple roles.
+
+metadata:
+  name: "ai-infra-program"
+  description: "Complete AI Infrastructure Curriculum production pipeline for multiple roles."
+  version: "0.1.0"
+  roles:
+    - platform-engineer
+    - mlops-engineer
+    - data-infrastructure-engineer
+  repository_strategy: "curriculum/repository-strategy.yaml"
+  graph: "graphs/ai-infra.graphql"
+
+phases:
+  - id: setup
+    title: "Program Setup"
+    workflow: "workflows/multi-role-program.md#phase-0"
+    tasks:
+      - "Copy templates into research/ and curriculum/ directories for each role"
+      - "Populate curriculum/repository-strategy.yaml"
+      - "Create GitHub repositories per strategy"
+
+  - id: research
+    title: "Role Research"
+    workflow: "workflows/multi-role-program.md#phase-1"
+    roles: "*"
+    prompts:
+      - "prompts/research/role-research-prompt.md"
+      - "prompts/research/skills-matrix-prompt.md"
+    outputs:
+      - "research/<role>/role-research.md"
+      - "research/<role>/skills-matrix.yaml"
+      - "research/<role>/job-posting-analysis.md"
+
+  - id: curriculum-design
+    title: "Curriculum Design"
+    workflow: "workflows/curriculum-design.md"
+    tasks:
+      - "Update master-plan.yaml for each role"
+      - "Complete module roadmaps and project plans"
+      - "Refresh curriculum/roles/multi-role-alignment.md"
+
+  - id: content-generation
+    title: "Content Generation"
+    workflow: "workflows/module-generation.md"
+    depends_on:
+      - research
+      - curriculum-design
+    manifest: "pipelines/single-module.yaml"
+    strategy: "Run for every module defined in master plans"
+
+  - id: project-builds
+    title: "Project Generation"
+    workflow: "workflows/project-generation.md"
+    inputs:
+      - "curriculum/<role>/projects/"
+    outputs:
+      - "projects/project-*/starter/"
+      - "projects/project-*/IMPLEMENTATION_GUIDE.md"
+      - "projects/project-*/ASSESSMENT.md"
+
+  - id: solutions
+    title: "Solutions Repositories"
+    workflow: "docs/architecture.md#phase-5-solutions-repository-creation"
+    prompts:
+      - "prompts/solutions/solution-generation-prompt.md"
+    outputs:
+      - "solutions/projects/"
+      - "solutions/exercises/"
+      - "solutions/assessments/"
+
+  - id: validation
+    title: "Validation & QA"
+    workflow: "docs/architecture.md#phase-6-quality-assurance"
+    validation_profiles:
+      - "python-strict"
+      - "cloud-infra"
+    commands:
+      - "python validation/completeness/check-module-completeness.py modules/"
+      - "python validation/code-validators/validate-code-examples.py modules/ --strict"
+
+  - id: release
+    title: "Release & Publishing"
+    tasks:
+      - "Update CHANGELOG.md"
+      - "Create release notes"
+      - "Publish learning and solutions repos according to repository strategy"
+      - "Open GitHub Discussions announcement"

@@ -2,6 +2,8 @@
 
 > Duplicate for each module under `curriculum/<role-slug>/modules/module-XX-roadmap.md`.
 
+> Create `metadata.yaml` alongside this file using `./tools/curriculum.py scaffold-metadata ...` or copy `templates/curriculum/module-metadata-template.yaml`.
+
 ## Module Overview
 
 - **Module ID**:  

@@ -1,0 +1,20 @@
+id: MOD-00
+type: module
+title: Sample Module (Placeholder)
+roles:
+  - sample-role
+stage: foundational
+proficiency_target: awareness
+competencies:
+  - id: sample.research
+    level: awareness
+dependencies: []
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Sample Owner
+    github: "@example"
+    role: author
+evidence:
+  - "examples/sample-module/lesson.md"
+metadata_version: "1.0.0"

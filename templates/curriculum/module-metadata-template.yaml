@@ -1,0 +1,23 @@
+# Module Metadata Template (copy alongside module content)
+# Validate with: ./tools/curriculum.py validate-metadata path/to/metadata.yaml
+
+id: "MOD-XX"
+type: "module"
+title: "Module Title"
+roles:
+  - "<role-slug>"
+stage: "core"                # foundational | core | advanced | capstone
+proficiency_target: "working" # awareness | working | proficient | expert
+competencies:
+  - id: "<competency-id>"
+    level: "working"
+dependencies: []
+validation_profile: "python-strict"
+status: "draft"              # draft | in-review | approved | released
+owners:
+  - name: "Owner Name"
+    github: "@github-handle"
+    role: "author"
+evidence:
+  - "research/<role>/skills-matrix.yaml#obs.metrics"
+metadata_version: "1.0.0"

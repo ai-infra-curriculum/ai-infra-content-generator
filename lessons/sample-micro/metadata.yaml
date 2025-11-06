@@ -1,0 +1,18 @@
+id: ML-01
+type: module
+title: Micro-Lesson – Feature Flag Rollout
+roles:
+  - sample-role
+stage: foundational
+proficiency_target: awareness
+competencies:
+  - id: sample.feature-flags
+    level: awareness
+dependencies: []
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Sample Instructor
+    github: "@example"
+    role: author
+metadata_version: "1.0.0"

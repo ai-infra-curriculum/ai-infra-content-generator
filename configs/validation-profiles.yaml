@@ -1,0 +1,45 @@
+# Validation profiles define bundles of checks that can be reused across modules, projects, and solutions.
+# Reference these profile names in metadata files or pipeline manifests.
+
+profiles:
+  python-light:
+    description: "Basic Python validation for early drafts."
+    commands:
+      - "python -m py_compile {target}"
+      - "pylint --errors-only {target}"
+    tools_required:
+      - "pylint"
+
+  python-strict:
+    description: "Comprehensive Python validation including security and typing."
+    commands:
+      - "pylint {target}"
+      - "bandit -r {target}"
+      - "mypy {target}"
+      - "pytest"
+    tools_required:
+      - "pylint"
+      - "bandit"
+      - "mypy"
+      - "pytest"
+
+  cloud-infra:
+    description: "Infrastructure-as-code validation for cloud projects."
+    commands:
+      - "terraform fmt -check"
+      - "terraform validate"
+      - "tflint"
+    tools_required:
+      - "terraform"
+      - "tflint"
+
+  docs-quality:
+    description: "Documentation quality checks."
+    commands:
+      - "markdownlint {target}"
+      - "markdown-link-check {target}"
+      - "vale {target}"
+    tools_required:
+      - "markdownlint"
+      - "markdown-link-check"
+      - "vale"

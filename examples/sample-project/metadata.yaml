@@ -1,0 +1,23 @@
+id: PROJ-00
+type: project
+title: Sample Project (Placeholder)
+roles:
+  - sample-role
+stage: core
+proficiency_target: proficient
+competencies:
+  - id: sample.project
+    level: proficient
+dependencies:
+  - MOD-00
+validation_profile: cloud-infra
+status: draft
+owners:
+  - name: Sample Owner
+    github: "@example"
+    role: author
+shared_components:
+  - shared/components/sample-library
+evidence:
+  - "examples/sample-project/guide.md"
+metadata_version: "1.0.0"

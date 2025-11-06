@@ -1,0 +1,55 @@
+# Pipeline Manifest: Micro-Learning Sprint
+#
+# Lightweight pipeline for producing short-form lessons or labs focused on a single competency.
+
+metadata:
+  name: "micro-learning"
+  description: "Produce a micro-lesson (2-4 hours seat time) with focused exercises and validation."
+  version: "0.1.0"
+  target_roles:
+    - "<role-slug>"
+  competency_focus: "<competency-id>"
+  validation_profile: "docs-quality"
+
+phases:
+  - id: scope
+    title: "Scope & Requirements"
+    instructions:
+      - "Define measurable learning objective (< 150 words)."
+      - "Identify pre-requisites and required tooling."
+    outputs:
+      - "lessons/<slug>/metadata.yaml"
+
+  - id: lesson-draft
+    title: "Lesson Drafting"
+    prompts:
+      - path: "prompts/lecture-generation/comprehensive-module-prompt.md"
+    notes:
+      - "Limit lesson body to 2,000-3,000 words."
+    outputs:
+      - "lessons/<slug>/lesson.md"
+
+  - id: exercise
+    title: "Hands-On Exercise"
+    templates:
+      - path: "templates/exercises/exercise-template.md"
+    outputs:
+      - "lessons/<slug>/exercise.md"
+
+  - id: validation
+    title: "Validation & QA"
+    commands:
+      - "markdownlint lessons/<slug>"
+      - "markdown-link-check lessons/<slug>/lesson.md"
+
+  - id: solution
+    title: "Solution (Optional)"
+    templates:
+      - path: "templates/solutions/exercise-solution-template.md"
+
+  - id: publish
+    title: "Publish & Notify"
+    checklist:
+      - "Update metadata status to released."
+      - "Add entry to CHANGELOG.md."
+      - "Announce in Discussions micro-learning category."

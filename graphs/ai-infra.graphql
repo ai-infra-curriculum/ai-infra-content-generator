@@ -1,0 +1,49 @@
+# GraphQL schema describing cross-role curriculum relationships.
+
+type Role {
+  slug: ID!
+  name: String!
+  description: String
+  progressionOrder: Int
+  modules: [Module!]!
+}
+
+type Module {
+  id: ID!
+  title: String!
+  roleSlugs: [String!]!
+  stage: String
+  dependencies: [Module!]
+  projects: [Project!]
+  assessments: [Assessment!]
+  solutions: [Solution!]
+}
+
+type Project {
+  id: ID!
+  title: String!
+  difficulty: String
+  sharedComponents: [String!]
+  buildsOn: [Project!]
+  extendedBy: [Project!]
+}
+
+type Assessment {
+  id: ID!
+  type: String!
+  linkedModules: [Module!]
+}
+
+type Solution {
+  id: ID!
+  assetType: String!
+  repository: String!
+  path: String!
+  validationProfile: String
+}
+
+type Query {
+  roles: [Role!]!
+  modules(roleSlug: String, stage: String): [Module!]!
+  projects(roleSlug: String, difficulty: String): [Project!]!
+}

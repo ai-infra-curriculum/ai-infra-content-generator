@@ -1,0 +1,18 @@
+site_name: "AI Infrastructure Curriculum"
+use_directory_urls: true
+nav:
+  - Home: README.md
+  - Examples:
+      - "Sample Module": examples/sample-module/lesson.md
+      - "Sample Project": examples/sample-project/guide.md
+theme:
+  name: "material"
+  palette:
+    scheme: slate
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+plugins:
+  - search
+  - awesome-pages

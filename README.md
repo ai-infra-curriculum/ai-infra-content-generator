@@ -56,7 +56,23 @@ ai-infra-content-generator/
 │   ├── best-practices.md       # Content generation best practices (15,400 words)
 │   ├── tools-and-automation.md # 30 MCP servers, 6 skills, automation (20,500 words)
 │   ├── agent-playbook.md       # 8-phase agent orchestration (10,800 words)
+│   ├── metadata-and-automation.md # Metadata schema, pipelines, CLI usage
+│   ├── micro-learning-guide.md   # Micro-learning sprint workflow
 │   └── ai-infrastructure-curriculum-guide.md # End-to-end curriculum production playbook
+├── configs/                     # Validation profiles and automation settings
+│   └── validation-profiles.yaml
+├── pipelines/                   # Declarative workflow manifests
+│   ├── single-module.yaml
+│   ├── micro-learning.yaml
+│   └── ai-infra-program.yaml
+├── schemas/                     # JSON schemas for metadata/validation
+│   └── asset-metadata.schema.json
+├── graphs/                      # GraphQL schema for cross-role mapping
+│   └── ai-infra.graphql
+├── tools/                       # CLI helpers and automation scripts
+│   └── curriculum.py
+├── exporters/                   # Publishing configs for docs/LMS
+│   └── README.md
 ├── templates/                   # Content templates
 │   ├── research/               # Role briefs, job analysis, interviews, skills matrix
 │   ├── curriculum/             # Master plan, module roadmaps, project plans, multi-role dashboard
@@ -64,13 +80,19 @@ ai-infra-content-generator/
 │   ├── lecture-notes/          # Lecture note templates
 │   ├── exercises/              # Exercise templates
 │   ├── projects/               # Project templates
-│   └── assessments/            # Quiz and test templates
+│   ├── assessments/            # Quiz and test templates
+│   ├── partials/               # Optional sections for reuse
+│   ├── module-metadata-template.yaml
+│   ├── project-metadata-template.yaml
+│   └── README.md               # Template usage guide
 ├── prompts/                     # AI prompts and instructions
 │   ├── research/               # Prompts for role and skills research
 │   ├── lecture-generation/     # Prompts for lecture content
 │   ├── code-generation/        # Prompts for code examples
 │   ├── solutions/              # Prompts for solution artifacts
-│   └── case-studies/           # Prompts for real-world examples
+│   ├── case-studies/           # Prompts for real-world examples
+│   ├── README.md               # Prompt usage & versioning
+│   └── version-map.yaml        # Prompt version history
 ├── validation/                  # Quality validation tools
 │   ├── content-checkers/       # Content quality checks
 │   ├── code-validators/        # Code validation
@@ -80,14 +102,11 @@ ai-infra-content-generator/
 │   ├── project-generation.md   # How to generate projects
 │   ├── curriculum-design.md    # Curriculum design process
 │   └── multi-role-program.md   # Coordinating research & curriculum across roles
-├── memory/                      # Checkpoint system for saving/resuming work
-│   ├── README.md               # Checkpoint documentation
-│   ├── checkpoint-save.py      # Save progress tool
-│   ├── checkpoint-resume.py    # Resume work tool
-│   └── checkpoints/            # Saved checkpoints (local only)
 └── examples/                    # Example outputs
     ├── sample-module/          # Complete module example
     └── sample-project/         # Complete project example
+└── lessons/                     # Micro-learning samples
+    └── sample-micro/           # Micro-lesson example
 ```
 
 ## Quick Start
@@ -114,6 +133,18 @@ ai-infra-content-generator/
 5. **Plan the complete program**
    Walk through the end-to-end playbook in `docs/ai-infrastructure-curriculum-guide.md`
 
+6. **Install optional tooling helpers**
+   ```bash
+   pip install -r requirements-tooling.txt
+   ./tools/curriculum.py pipelines
+   ./tools/curriculum.py export-graph examples/sample-module examples/sample-project lessons/sample-micro
+   ```
+
+7. **Review sample assets**
+   - Module + exercise: `examples/sample-module/`
+   - Project brief: `examples/sample-project/`
+   - Micro-lesson: `lessons/sample-micro/`
+
 ## Research & Curriculum Planning Starter
 
 - Copy research templates for each target role: `cp templates/research/* research/<role-slug>/`
@@ -121,6 +152,7 @@ ai-infra-content-generator/
 - Build curriculum plans with `templates/curriculum/master-plan-template.yaml` and `templates/curriculum/module-roadmap-template.md`
 - Coordinate overlapping roles through `workflows/multi-role-program.md` and the `templates/curriculum/multi-role-alignment-template.md` dashboard
 - Configure repository and solutions strategy via `templates/curriculum/repository-strategy-template.yaml` and align module roadmaps accordingly
+- Generate metadata stubs per asset using `templates/curriculum/*-metadata-template.yaml` or `./tools/curriculum.py scaffold-metadata ...`, then validate with `./tools/curriculum.py validate-metadata`.
 
 ## Solutions & Repository Configuration
 
@@ -128,6 +160,19 @@ ai-infra-content-generator/
 - Choose a single shared repository or one per role using `repositories.mode`.
 - Generate solution artifacts with `templates/solutions/*` and `prompts/solutions/solution-generation-prompt.md`.
 - Use `workflows/module-generation.md` and `workflows/project-generation.md` to publish solutions without duplicating content across roles.
+
+## Automation Toolkit
+
+- Pipeline manifests (`pipelines/*.yaml`) describe reusable workflows. Inspect them with `./tools/curriculum.py pipelines`.
+- Available manifests include `single-module`, `micro-learning`, and `ai-infra-program`.
+- Asset metadata should conform to `schemas/asset-metadata.schema.json`; validate via `./tools/curriculum.py validate-metadata path/to/metadata.yaml`.
+- Reuse validation bundles defined in `configs/validation-profiles.yaml` (`./tools/curriculum.py validation-profiles`).
+- Execute validation commands or scaffold metadata with `./tools/curriculum.py run-validation <profile> <path>` and `./tools/curriculum.py scaffold-metadata ...`.
+- Export graph data for dashboards using `./tools/curriculum.py export-graph modules/ projects/ --output graphs/generated.json`.
+- Cross-role relationships can be modeled with `graphs/ai-infra.graphql` for dashboards or LMS exports.
+- Template partials in `templates/partials/` let you add or swap content blocks without cloning entire templates.
+- Exporter configs in `exporters/` help publish to documentation portals or LMS platforms (`./tools/curriculum.py generate-mkdocs-nav modules/`).
+- Sample GitHub workflow (`.github/workflows/validation.yml`) demonstrates automated metadata validation and docs checks.
 
 ## What Makes This Different?
 

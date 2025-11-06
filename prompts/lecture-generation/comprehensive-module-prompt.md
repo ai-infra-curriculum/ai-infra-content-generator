@@ -1,3 +1,5 @@
+<!-- Prompt-Version: 1.0.0 -->
+
 # Comprehensive Module Generation Prompt
 
 ## Purpose

@@ -1,0 +1,19 @@
+# Maps prompts to semantic versions and brief change summaries.
+
+prompts:
+  research/role-research-prompt.md:
+    - version: "1.0.0"
+      date: "2025-01-04"
+      notes: "Initial release."
+  research/skills-matrix-prompt.md:
+    - version: "1.0.0"
+      date: "2025-01-04"
+      notes: "Initial release."
+  lecture-generation/comprehensive-module-prompt.md:
+    - version: "1.0.0"
+      date: "2025-01-03"
+      notes: "Baseline specification for 12k-word modules."
+  solutions/solution-generation-prompt.md:
+    - version: "1.0.0"
+      date: "2025-01-04"
+      notes: "Introduced with solutions framework."

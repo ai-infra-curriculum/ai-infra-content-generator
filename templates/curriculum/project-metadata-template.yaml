@@ -1,0 +1,26 @@
+# Project Metadata Template
+# Validate with: ./tools/curriculum.py validate-metadata path/to/metadata.yaml
+
+id: "PROJ-XX"
+type: "project"
+title: "Project Title"
+roles:
+  - "<role-slug>"
+stage: "core"
+proficiency_target: "proficient"
+competencies:
+  - id: "<competency-id>"
+    level: "proficient"
+dependencies:
+  - "MOD-YY"
+validation_profile: "cloud-infra"
+status: "draft"
+owners:
+  - name: "Project Owner"
+    github: "@github-handle"
+    role: "author"
+shared_components:
+  - "shared/infra/networking-module"
+evidence:
+  - "curriculum/<role>/projects/project-XX-plan.md"
+metadata_version: "1.0.0"

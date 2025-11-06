@@ -1,5 +1,7 @@
 # Project Plan
 
+> Create or update project `metadata.yaml` using `./tools/curriculum.py scaffold-metadata ... --type project` or copy `templates/curriculum/project-metadata-template.yaml`.
+
 > Store under `curriculum/<role-slug>/projects/project-XX-plan.md`. Use alongside the associated module roadmap and solutions plan.
 
 ## Project Overview

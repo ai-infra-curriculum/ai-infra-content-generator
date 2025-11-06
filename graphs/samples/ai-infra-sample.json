@@ -1,0 +1,42 @@
+{
+  "roles": [
+    {
+      "slug": "sample-role",
+      "name": "Sample Platform Engineer",
+      "progressionOrder": 1,
+      "modules": ["MOD-00", "ML-01"]
+    }
+  ],
+  "modules": [
+    {
+      "id": "MOD-00",
+      "title": "Sample Module (Placeholder)",
+      "roleSlugs": ["sample-role"],
+      "stage": "foundational",
+      "dependencies": [],
+      "projects": ["PROJ-00"],
+      "assessments": [],
+      "solutions": []
+    },
+    {
+      "id": "ML-01",
+      "title": "Micro-Lesson – Feature Flag Rollout",
+      "roleSlugs": ["sample-role"],
+      "stage": "foundational",
+      "dependencies": [],
+      "projects": [],
+      "assessments": [],
+      "solutions": []
+    }
+  ],
+  "projects": [
+    {
+      "id": "PROJ-00",
+      "title": "Sample Project (Placeholder)",
+      "difficulty": "core",
+      "sharedComponents": ["shared/components/sample-library"],
+      "buildsOn": [],
+      "extendedBy": []
+    }
+  ]
+}

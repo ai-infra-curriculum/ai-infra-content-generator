@@ -1,0 +1,22 @@
+{
+  "course_id": "ai-infrastructure-sample",
+  "modules": [
+    {
+      "id": "MOD-00",
+      "path": "examples/sample-module/lesson.md",
+      "lms_module_id": "ai-infra-sample-module"
+    },
+    {
+      "id": "ML-01",
+      "path": "lessons/sample-micro/lesson.md",
+      "lms_module_id": "ai-infra-micro-lesson"
+    }
+  ],
+  "projects": [
+    {
+      "id": "PROJ-00",
+      "path": "examples/sample-project/guide.md",
+      "lms_assignment_id": "ai-infra-sample-project"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+# Pipeline Manifest: Single Module Generation
+#
+# This manifest describes the recommended sequence for generating a single AI infrastructure module
+# using the framework. Referenced paths are relative to the repository root.
+
+metadata:
+  name: "single-module"
+  description: "End-to-end content generation for a single curriculum module."
+  version: "0.1.0"
+  target_roles:
+    - "<role-slug>"
+  repository_strategy: "curriculum/repository-strategy.yaml"
+  validation_profile: "python-strict"
+
+phases:
+  - id: research-context
+    title: "Research Context"
+    instructions:
+      - "Review research outputs: research/<role-slug>/role-research.md"
+      - "Review module roadmap: curriculum/<role-slug>/modules/module-XX-roadmap.md"
+    required: true
+
+  - id: module-drafting
+    title: "Module Drafting"
+    workflow: "workflows/module-generation.md"
+    prompts:
+      - path: "prompts/lecture-generation/comprehensive-module-prompt.md"
+    outputs:
+      - "modules/module-XX/lecture-notes.md"
+      - "modules/module-XX/resources.md"
+
+  - id: exercises
+    title: "Exercises"
+    templates:
+      - path: "templates/exercises/exercise-template.md"
+    outputs:
+      - "modules/module-XX/exercises/exercise-01.md"
+      - "modules/module-XX/exercises/exercise-02.md"
+
+  - id: assessment
+    title: "Assessment"
+    templates:
+      - path: "templates/assessments/quiz-assessment-template.md"
+    outputs:
+      - "modules/module-XX/assessments/quiz.md"
+
+  - id: validation
+    title: "Validation"
+    commands:
+      - "python validation/completeness/check-module-completeness.py modules/module-XX"
+      - "python validation/code-validators/validate-code-examples.py modules/module-XX/lecture-notes.md"
+
+  - id: solutions
+    title: "Solution Packaging"
+    templates:
+      - path: "templates/solutions/exercise-solution-template.md"
+      - path: "templates/solutions/assessment-solution-template.md"
+    prompts:
+      - path: "prompts/solutions/solution-generation-prompt.md"
+    outputs:
+      - "solutions/exercises/exercise-01/solution.md"
+      - "solutions/assessments/quiz/solutions.md"
+
+  - id: review
+    title: "Review & Handoff"
+    checklist:
+      - "Module roadmap updated (curriculum/<role-slug>/modules/module-XX-roadmap.md)"
+      - "Validation reports archived"
+      - "CHANGELOG.md entry drafted"

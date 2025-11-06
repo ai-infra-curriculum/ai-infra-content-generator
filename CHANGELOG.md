@@ -17,10 +17,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub issue templates for bug reports and feature requests (`.github/ISSUE_TEMPLATE/`)
 - Curriculum project plan template (`templates/curriculum/project-plan-template.md`) and documentation references
 - AI Infrastructure Curriculum end-to-end guide (`docs/ai-infrastructure-curriculum-guide.md`)
+- Metadata & automation guide plus CLI helper (`docs/metadata-and-automation.md`, `tools/curriculum.py`)
+- Pipeline manifests (`pipelines/`) and validation profiles (`configs/validation-profiles.yaml`)
+- Asset metadata JSON schema (`schemas/asset-metadata.schema.json`) and cross-role graph schema (`graphs/ai-infra.graphql`)
+- Template partials system and prompt version map (`templates/partials/`, `prompts/README.md`, `prompts/version-map.yaml`)
+- Tooling requirements file (`requirements-tooling.txt`) for optional dependencies
+- Sample asset metadata example (`examples/sample-module/metadata.yaml`)
+- Sample project metadata example (`examples/sample-project/metadata.yaml`)
+- Additional issue template for validation tooling requests (`.github/ISSUE_TEMPLATE/validation_tooling_request.yml`)
+- Micro-learning pipeline manifest (`pipelines/micro-learning.yaml`)
+- Exporter configuration stubs and documentation (`exporters/README.md`, `exporters/samples/*`)
+- Micro-learning production guide (`docs/micro-learning-guide.md`)
+- Sample module, project, and micro-lesson content (`examples/sample-module/*`, `examples/sample-project/*`, `lessons/sample-micro/*`)
+- Sample GitHub Actions workflow for validation (`.github/workflows/validation.yml`)
+- Graph sample dataset (`graphs/samples/ai-infra-sample.json`)
 
 ### Changed
 - Support policy now focuses on the latest release (see `SECURITY.md`)
 - README framework statistics updated to reflect current repository size
+- CLI now runs validation profiles, scaffolds metadata, generates MkDocs navigation, and exports graph JSON (`tools/curriculum.py`)
+- README, metadata guide, and graph documentation now reference exporter workflow, graph export, and automation (`README.md`, `docs/metadata-and-automation.md`, `graphs/README.md`)
 
 ---
 

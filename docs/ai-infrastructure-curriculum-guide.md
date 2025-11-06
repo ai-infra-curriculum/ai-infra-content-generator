@@ -16,6 +16,8 @@ This guide demonstrates how to generate every artifact required for the AI Infra
 | Phase 5 | Produce solutions repositories | Exercise / project / assessment solutions | `templates/solutions/*`, `prompts/solutions/solution-generation-prompt.md` |
 | Phase 6 | Validate and publish | QA reports, release notes | `validation/*`, `CHANGELOG.md`, release processes |
 
+> For targeted lessons, see the micro-learning workflow in `pipelines/micro-learning.yaml` and `docs/micro-learning-guide.md`.
+
 ---
 
 ## Role Progression Pathways
@@ -554,6 +556,8 @@ Deliverables:
 
 - **Issue tracking**: Use the GitHub issue templates (bugs, features, documentation, templates/workflows) to coordinate workstreams.
 - **Automation**: Set up GitHub Actions to run validation scripts on PRs and solutions repos.
+- **Pipelines & CLI**: Inspect and execute manifests with `./tools/curriculum.py pipeline ai-infra-program`; embed steps in your orchestration tooling.
+- **Metadata**: Store schema-compliant metadata alongside each asset and validate with `./tools/curriculum.py validate-metadata`.
 - **Metrics**: Track progress in `curriculum/roles/multi-role-alignment.md` (e.g., status columns per module/project).
 - **Review cadence**: Align with governance plan in `templates/curriculum/repository-strategy-template.yaml` (quarterly reviews, approvers).
 - **Continuous improvement**: After each module/project release, document lessons learned in `CHANGELOG.md` or a dedicated `retrospectives/` folder.
