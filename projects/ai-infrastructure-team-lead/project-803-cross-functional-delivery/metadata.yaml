@@ -1,0 +1,29 @@
+id: PROJ-803
+type: project
+title: Cross-Functional Delivery Pilot
+roles:
+- ai-infrastructure-team-lead
+stage: team-lead
+proficiency_target: advanced
+competencies:
+- id: stakeholder-management
+  level: advanced
+- id: program-coordination
+  level: advanced
+- id: executive-communication
+  level: advanced
+dependencies:
+- MOD-804
+- MOD-806
+- MOD-808
+- MOD-809
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Delivers a cross-functional initiative involving product, research, and platform teams while managing risk and communications.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/projects/project-03-cross-functional-delivery'
+metadata_version: 1.0.0

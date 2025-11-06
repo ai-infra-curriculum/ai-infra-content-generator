@@ -1,0 +1,25 @@
+id: MOD-810
+type: module
+title: Strategic Planning & Org Design for Leads
+roles:
+- ai-infrastructure-team-lead
+stage: capstone
+proficiency_target: advanced
+competencies:
+- id: strategic-planning
+  level: advanced
+- id: org-design
+  level: advanced
+dependencies:
+- MOD-806
+- MOD-808
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Teaches team leads to craft quarterly plans, staffing models, and org design proposals aligned with strategy.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-710-strategic-planning'
+metadata_version: 1.0.0

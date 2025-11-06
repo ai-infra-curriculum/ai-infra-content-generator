@@ -1,0 +1,27 @@
+id: PROJ-802
+type: project
+title: Process Optimization Sprint
+roles:
+- ai-infrastructure-team-lead
+stage: team-lead
+proficiency_target: advanced
+competencies:
+- id: process-improvement
+  level: advanced
+- id: metrics-analytics
+  level: advanced
+- id: delivery-management
+  level: advanced
+dependencies:
+- MOD-803
+- MOD-806
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Runs a data-driven improvement sprint across release, on-call, and review processes to boost delivery outcomes.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/projects/project-02-process-optimization'
+metadata_version: 1.0.0

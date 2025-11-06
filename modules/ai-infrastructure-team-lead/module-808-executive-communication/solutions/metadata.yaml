@@ -1,0 +1,23 @@
+id: SOL-808
+type: solution
+title: Solutions for MOD-808 Executive Communication for Team Leads
+roles:
+  - ai-infrastructure-team-lead
+stage: advanced
+proficiency_target: advanced
+competencies:
+  - id: executive-communication
+    level: advanced
+  - id: risk-communication
+    level: advanced
+dependencies:
+  - module-808-executive-communication/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-team-lead-solutions'
+metadata_version: 1.0.0

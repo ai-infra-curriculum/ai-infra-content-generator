@@ -1,0 +1,23 @@
+id: SOL-805
+type: solution
+title: Solutions for MOD-805 Coaching & Mentorship for Technical Growth
+roles:
+  - ai-infrastructure-team-lead
+stage: core
+proficiency_target: advanced
+competencies:
+  - id: mentorship
+    level: advanced
+  - id: talent-development
+    level: advanced
+dependencies:
+  - module-805-coaching-mentorship/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-team-lead-solutions'
+metadata_version: 1.0.0

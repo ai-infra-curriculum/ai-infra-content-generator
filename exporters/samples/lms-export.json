@@ -209,6 +209,38 @@
           "lms_assignment_id": "ai-infra-principal-engineer-proj-703"
         }
       ]
+    },
+    {
+      "role": "ai-infrastructure-team-lead",
+      "modules": [
+        {
+          "id": "MOD-801",
+          "path": "modules/ai-infrastructure-team-lead/module-801-leadership-fundamentals/README.md",
+          "lms_module_id": "ai-infra-team-lead-mod-801"
+        },
+        {
+          "id": "MOD-806",
+          "path": "modules/ai-infrastructure-team-lead/module-806-delivery-management/README.md",
+          "lms_module_id": "ai-infra-team-lead-mod-806"
+        },
+        {
+          "id": "MOD-808",
+          "path": "modules/ai-infrastructure-team-lead/module-808-executive-communication/README.md",
+          "lms_module_id": "ai-infra-team-lead-mod-808"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-801",
+          "path": "projects/ai-infrastructure-team-lead/project-801-team-leadership/README.md",
+          "lms_assignment_id": "ai-infra-team-lead-proj-801"
+        },
+        {
+          "id": "PROJ-803",
+          "path": "projects/ai-infrastructure-team-lead/project-803-cross-functional-delivery/README.md",
+          "lms_assignment_id": "ai-infra-team-lead-proj-803"
+        }
+      ]
     }
   ],
   "solutions": {
@@ -219,6 +251,7 @@
       "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/solutions/README.md",
       "modules/ai-infrastructure-principal-engineer/module-701-technical-excellence/solutions/README.md",
       "modules/ai-infrastructure-senior-architect/module-401-enterprise-ai-strategy/solutions/README.md",
+      "modules/ai-infrastructure-team-lead/module-801-leadership-fundamentals/solutions/README.md",
       "modules/junior-ai-infrastructure-engineer/module-001-python-fundamentals/solutions/README.md",
       "modules/senior-ai-infrastructure-engineer/module-201-advanced-kubernetes/solutions/README.md"
     ]

@@ -1,0 +1,25 @@
+id: MOD-804
+type: module
+title: Cross-Functional Collaboration & Stakeholder Management
+roles:
+- ai-infrastructure-team-lead
+stage: core
+proficiency_target: advanced
+competencies:
+- id: stakeholder-management
+  level: advanced
+- id: product-collaboration
+  level: advanced
+dependencies:
+- MOD-801
+- MOD-402
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Equips team leads to partner with product, research, and platform stakeholders to deliver shared outcomes.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-704-cross-functional-collaboration'
+metadata_version: 1.0.0

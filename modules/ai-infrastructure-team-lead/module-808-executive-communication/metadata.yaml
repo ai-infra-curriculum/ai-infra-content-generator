@@ -1,0 +1,25 @@
+id: MOD-808
+type: module
+title: Executive Communication for Team Leads
+roles:
+- ai-infrastructure-team-lead
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: executive-communication
+  level: advanced
+- id: risk-communication
+  level: advanced
+dependencies:
+- MOD-804
+- MOD-806
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Prepares leads to brief directors/VPs on delivery status, risks, and investment needs with clarity.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-708-executive-communication'
+metadata_version: 1.0.0

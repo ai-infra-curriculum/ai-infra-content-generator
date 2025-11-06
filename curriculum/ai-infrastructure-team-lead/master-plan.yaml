@@ -1,0 +1,241 @@
+role: AI Infrastructure Team Lead
+level: team-lead
+program_name: AI Infrastructure Team Lead Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-20'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Lead AI infrastructure squads with effective operational rhythms, delivery excellence, and inclusive culture.
+  - Coordinate cross-functional partners to deliver platform initiatives aligned to product and research goals.
+  - Develop engineers through mentorship, feedback, and performance management while safeguarding wellbeing.
+  secondary:
+  - Communicate status, risks, and investment needs to directors and executives with clarity and confidence.
+  - Establish continuous improvement programs that elevate reliability, quality, and developer experience metrics.
+program_structure:
+  total_duration_hours: 360
+  modules:
+  - id: MOD-801
+    title: Leadership Fundamentals for AI Infrastructure
+    duration_hours:
+      lecture: 18
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-210
+    - MOD-402
+    learning_objectives:
+    - Adopt servant leadership practices tailored to AI infrastructure teams.
+    - Build communication patterns, decision frameworks, and trust foundations.
+    linked_projects:
+    - PROJ-801
+  - id: MOD-802
+    title: Team Operations & Execution Rhythms
+    duration_hours:
+      lecture: 16
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-801
+    - MOD-207
+    learning_objectives:
+    - Define on-call, standup, and delivery cadences for infrastructure squads.
+    - Lead incident response, postmortem facilitation, and operational reviews.
+    linked_projects:
+    - PROJ-801
+    - PROJ-803
+  - id: MOD-803
+    title: Process Optimization & Continuous Improvement
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-802
+    learning_objectives:
+    - Implement metrics-driven retrospectives and lean improvement cycles.
+    - Prioritize tooling and process investments that improve delivery velocity.
+    linked_projects:
+    - PROJ-802
+  - id: MOD-804
+    title: Cross-Functional Collaboration & Stakeholder Management
+    duration_hours:
+      lecture: 14
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-801
+    - MOD-402
+    learning_objectives:
+    - Partner with product, research, and platform stakeholders to charter shared initiatives.
+    - Manage expectations, negotiate trade-offs, and align cross-functional roadmaps.
+    linked_projects:
+    - PROJ-803
+  - id: MOD-805
+    title: Coaching & Mentorship for Technical Growth
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-801
+    learning_objectives:
+    - Create growth plans, mentorship agreements, and feedback loops for engineers.
+    - Support staff/principal readiness and equitable advancement processes.
+    linked_projects:
+    - PROJ-801
+  - id: MOD-806
+    title: Delivery Management & Roadmap Execution
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-802
+    - MOD-804
+    learning_objectives:
+    - Build and manage roadmaps, staffing plans, and execution dashboards.
+    - Coordinate cross-squad dependencies and escalate risks effectively.
+    linked_projects:
+    - PROJ-802
+    - PROJ-803
+  - id: MOD-807
+    title: Performance Management & Culture
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-805
+    learning_objectives:
+    - Run performance reviews, calibrations, and compensation discussions with fairness.
+    - Foster psychological safety, inclusion, and sustainable pace.
+    linked_projects:
+    - PROJ-801
+  - id: MOD-808
+    title: Executive Communication for Team Leads
+    duration_hours:
+      lecture: 12
+      lab: 14
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-804
+    learning_objectives:
+    - Present concise executive updates, risk narratives, and investment requests.
+    - Translate technical context into business-aligned messages.
+    linked_projects:
+    - PROJ-803
+  - id: MOD-809
+    title: Risk & Incident Management Leadership
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-802
+    - MOD-807
+    learning_objectives:
+    - Lead incident response, coordinate crisis communications, and drive postmortem actions.
+    - Maintain risk registers and mitigation plans across squads.
+    linked_projects:
+    - PROJ-803
+  - id: MOD-810
+    title: Strategic Planning & Org Design for Leads
+    duration_hours:
+      lecture: 12
+      lab: 14
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-team-lead
+    prerequisites:
+    - MOD-806
+    - MOD-808
+    learning_objectives:
+    - Build quarterly plans, staffing models, and capability roadmaps.
+    - Propose org design changes and justify investments to leadership.
+    linked_projects:
+    - PROJ-803
+assessment_strategy:
+  formative:
+  - type: facilitation-lab
+    cadence: per module (workshop simulations, feedback sessions, stakeholder role plays)
+  - type: operational-review
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Cross-functional delivery pilot with executive presentation and incident simulation
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-801
+    summary: Team Leadership Launchpad
+    difficulty: team-lead
+    assessed_competencies:
+    - people-leadership
+    - team-operations
+    - mentorship
+    integration_notes: Synthesizes outputs from MOD-801, MOD-802, and MOD-805.
+  - id: PROJ-802
+    summary: Process Optimization Sprint
+    difficulty: team-lead
+    assessed_competencies:
+    - process-improvement
+    - delivery-management
+    - metrics-analytics
+    integration_notes: Builds on MOD-803 and MOD-806 deliverables.
+  - id: PROJ-803
+    summary: Cross-Functional Delivery Pilot
+    difficulty: team-lead
+    assessed_competencies:
+    - stakeholder-management
+    - program-coordination
+    - executive-communication
+    integration_notes: Requires artifacts from MOD-804, MOD-806, MOD-808, and MOD-809.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Director of Platform Engineering
+    focus: Delivery metrics, roadmap execution, stakeholder alignment
+    due_date: '2025-11-30'
+  - reviewer: HR Business Partner
+    focus: Performance management, mentorship practices, inclusion
+    due_date: '2025-12-07'
+  pilot_metrics:
+    completion_rate_target: 0.7
+    satisfaction_target: 4.6
+    adoption_rate_target: 0.85
+risk_register:
+- risk: Access to real incident data is restricted for leadership simulations.
+  impact: medium
+  likelihood: medium
+  mitigation: Provide redacted case studies and partner with reliability teams for anonymized datasets.
+- risk: Leads may struggle to balance course workload with on-call duties.
+  impact: medium
+  likelihood: high
+  mitigation: Offer flexible pacing, async materials, and manager alignment guidelines.

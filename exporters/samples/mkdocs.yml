@@ -17,6 +17,12 @@ nav:
       - "Module 206 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-206-roadmap.md
       - "Module 210 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-210-roadmap.md
       - "Project 303 Plan": curriculum/senior-ai-infrastructure-engineer/projects/project-303-plan.md
+  - AI Infrastructure Team Lead:
+      - "Master Plan": curriculum/ai-infrastructure-team-lead/master-plan.yaml
+      - "Module 801 Roadmap": curriculum/ai-infrastructure-team-lead/modules/module-801-roadmap.md
+      - "Module 806 Roadmap": curriculum/ai-infrastructure-team-lead/modules/module-806-roadmap.md
+      - "Module 808 Roadmap": curriculum/ai-infrastructure-team-lead/modules/module-808-roadmap.md
+      - "Project 803 Plan": curriculum/ai-infrastructure-team-lead/projects/project-803-plan.md
   - AI Infrastructure Architect:
       - "Master Plan": curriculum/ai-infrastructure-architect/master-plan.yaml
       - "Module 301 Roadmap": curriculum/ai-infrastructure-architect/modules/module-301-roadmap.md

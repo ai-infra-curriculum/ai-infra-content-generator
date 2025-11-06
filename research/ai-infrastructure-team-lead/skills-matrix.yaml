@@ -1,0 +1,132 @@
+role: "AI Infrastructure Team Lead"
+level: "team-lead"
+last_updated: "2025-10-20"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "People Leadership & Culture"
+    description: "Grow engineers, manage performance, and cultivate inclusive, sustainable team environments."
+    skills:
+      - name: "People Leadership"
+        proficiency:
+          proficient:
+            description: "Run effective 1:1s, feedback loops, and career conversations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-001"
+          advanced:
+            description: "Lead talent strategy, succession planning, and engagement programs across squads."
+            evidence_sources:
+              - type: "research"
+                id: "team-lead-analysis"
+        assessment_types:
+          - "Leadership portfolio"
+          - "Stakeholder feedback"
+      - name: "Culture & Wellbeing"
+        proficiency:
+          proficient:
+            description: "Foster psychological safety, inclusive rituals, and burnout safeguards."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-002"
+          advanced:
+            description: "Design org-level culture initiatives and measure impact across teams."
+            evidence_sources: []
+        assessment_types:
+          - "Culture initiative review"
+          - "Engagement metrics audit"
+  - name: "Operational Excellence & Reliability"
+    description: "Own on-call programs, incident leadership, and reliability metrics for AI infrastructure."
+    skills:
+      - name: "Team Operations"
+        proficiency:
+          proficient:
+            description: "Establish on-call rotations, ceremonies, and operational dashboards."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-003"
+          advanced:
+            description: "Scale operational frameworks across multiple squads and coordinate follow-the-sun coverage."
+            evidence_sources: []
+        assessment_types:
+          - "Operational review"
+          - "On-call simulation"
+      - name: "Incident Management"
+        proficiency:
+          proficient:
+            description: "Lead incident response and postmortems with cross-functional teams."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-004"
+          advanced:
+            description: "Institutionalize blameless culture, automate follow-up, and partner with execs on crisis comms."
+            evidence_sources: []
+        assessment_types:
+          - "Incident drill"
+          - "Postmortem audit"
+  - name: "Delivery & Process Leadership"
+    description: "Plan, prioritize, and execute roadmaps while driving continuous improvement."
+    skills:
+      - name: "Delivery Management"
+        proficiency:
+          proficient:
+            description: "Manage backlog, staffing, and status communications for a single squad."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-005"
+          advanced:
+            description: "Coordinate multi-squad programs, maintain risk logs, and lead steering reviews."
+            evidence_sources: []
+        assessment_types:
+          - "Roadmap review"
+          - "Steering committee simulation"
+      - name: "Process Improvement"
+        proficiency:
+          proficient:
+            description: "Facilitate retrospectives, track metrics, and implement lean improvements."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-006"
+          advanced:
+            description: "Run data-driven improvement sprints with measurable ROI across teams."
+            evidence_sources: []
+        assessment_types:
+          - "Improvement report"
+          - "Metrics analysis"
+  - name: "Stakeholder & Communication Leadership"
+    description: "Align product, research, and platform stakeholders while communicating to executives."
+    skills:
+      - name: "Stakeholder Management"
+        proficiency:
+          proficient:
+            description: "Maintain partner relationships, negotiate priorities, and manage expectations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-007"
+          advanced:
+            description: "Lead cross-functional planning, resolve conflicts, and manage upward effectively."
+            evidence_sources: []
+        assessment_types:
+          - "Stakeholder survey"
+          - "Collaboration plan review"
+      - name: "Executive Communication"
+        proficiency:
+          proficient:
+            description: "Provide concise updates, escalate risks, and present roadmap progress."
+            evidence_sources:
+              - type: "job_posting"
+                id: "TL-008"
+          advanced:
+            description: "Craft strategic narratives, respond to crises, and influence investment decisions."
+            evidence_sources: []
+        assessment_types:
+          - "Executive presentation"
+          - "Risk briefing evaluation"
+progression_map:
+  proficient: "Senior engineers moving into people leadership, owning a single squad and operational responsibilities."
+  advanced: "Seasoned team leads guiding multiple squads, influencing cross-org programs, and partnering with executives."
+notes:
+  - "Derived from 2024–2025 postings, internal role requirements, and leadership competency frameworks (updated 2025-10-20)."

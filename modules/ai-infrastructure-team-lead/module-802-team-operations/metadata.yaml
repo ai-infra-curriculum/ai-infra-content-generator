@@ -1,0 +1,25 @@
+id: MOD-802
+type: module
+title: Team Operations & Execution Rhythms
+roles:
+- ai-infrastructure-team-lead
+stage: core
+proficiency_target: advanced
+competencies:
+- id: team-operations
+  level: advanced
+- id: incident-leadership
+  level: advanced
+dependencies:
+- MOD-801
+- MOD-207
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds operational cadences, on-call programs, and collaboration workflows for multi-disciplinary AI infra teams.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-702-team-operations'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: SOL-803
+type: solution
+title: Solutions for PROJ-803 Cross-Functional Delivery Pilot
+roles:
+  - ai-infrastructure-team-lead
+stage: team-lead
+proficiency_target: advanced
+competencies:
+  - id: stakeholder-management
+    level: advanced
+  - id: program-coordination
+    level: advanced
+  - id: executive-communication
+    level: advanced
+dependencies:
+  - project-803-cross-functional-delivery/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-team-lead-solutions'
+metadata_version: 1.0.0

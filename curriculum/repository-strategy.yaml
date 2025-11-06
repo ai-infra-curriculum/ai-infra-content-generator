@@ -16,6 +16,8 @@ roles:
   slug: ai-infrastructure-principal-architect
 - name: Principal AI Infrastructure Engineer
   slug: ai-infrastructure-principal-engineer
+- name: AI Infrastructure Team Lead
+  slug: ai-infrastructure-team-lead
 repositories:
   mode: per_role
   base_repo_name: ai-infra
@@ -41,6 +43,9 @@ repositories:
     ai-infrastructure-principal-engineer:
       learning: ai-infra-principal-engineer-learning
       solutions: ai-infra-principal-engineer-solutions
+    ai-infrastructure-team-lead:
+      learning: ai-infra-team-lead-learning
+      solutions: ai-infra-team-lead-solutions
 solutions:
   placement: separate
   inline_path: null
@@ -79,6 +84,10 @@ progression_rules:
   to_role: ai-infrastructure-principal-engineer
   strategy: technical-leadership
   notes: Highlight cross-organization execution, performance optimization, and technical excellence guardianship
+- from_role: ai-infrastructure-senior-engineer
+  to_role: ai-infrastructure-team-lead
+  strategy: leadership-track
+  notes: Support transition from senior IC to people leadership with mentorship, operations, and delivery management focus
 governance:
   review_cadence: quarterly
   approvers:

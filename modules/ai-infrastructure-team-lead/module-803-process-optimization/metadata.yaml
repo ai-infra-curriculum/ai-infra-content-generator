@@ -1,0 +1,24 @@
+id: MOD-803
+type: module
+title: Process Optimization & Continuous Improvement
+roles:
+- ai-infrastructure-team-lead
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: process-improvement
+  level: advanced
+- id: metrics-analytics
+  level: advanced
+dependencies:
+- MOD-802
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implements lean practices, retrospectives, and metrics-driven improvements for infrastructure delivery pipelines.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-703-process-optimization'
+metadata_version: 1.0.0

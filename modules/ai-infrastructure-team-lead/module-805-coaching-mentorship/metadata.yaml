@@ -1,0 +1,24 @@
+id: MOD-805
+type: module
+title: Coaching & Mentorship for Technical Growth
+roles:
+- ai-infrastructure-team-lead
+stage: core
+proficiency_target: advanced
+competencies:
+- id: mentorship
+  level: advanced
+- id: talent-development
+  level: advanced
+dependencies:
+- MOD-801
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds coaching frameworks, growth plans, and feedback rituals to develop engineers toward senior/principal paths.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning/lessons/mod-705-coaching-mentorship'
+metadata_version: 1.0.0

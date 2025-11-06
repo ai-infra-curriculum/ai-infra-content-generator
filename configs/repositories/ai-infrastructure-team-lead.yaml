@@ -1,0 +1,16 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-team-lead-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-team-lead-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-team-lead/module-{num:03d}-*"
+  valid_range: [701, 710]
+projects_mapping:
+  source_pattern: "projects/project-{num:02d}-*"
+  target_pattern: "projects/ai-infrastructure-team-lead/project-{num:03d}-*"
+  valid_range: [1, 3]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:02d}-*"
+notes: |
+  Legacy modules 701-710 map to MOD-801…MOD-810 in the new framework.
+  Projects 01-03 correspond to PROJ-801…PROJ-803. Use this mapping to synchronize leadership assets while avoiding duplication.
