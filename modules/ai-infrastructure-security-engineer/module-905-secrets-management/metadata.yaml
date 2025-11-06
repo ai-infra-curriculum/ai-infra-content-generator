@@ -1,0 +1,25 @@
+id: MOD-905
+type: module
+title: Secrets & Identity Management for ML
+roles:
+- ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+- id: secrets-management
+  level: advanced
+- id: identity-access-management
+  level: advanced
+dependencies:
+- MOD-902
+- MOD-904
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds secret storage, rotation policies, and workload identity enforcement across pipelines and deployment targets.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-105-secrets-management'
+metadata_version: 1.0.0

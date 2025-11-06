@@ -17,6 +17,12 @@ nav:
       - "Module 206 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-206-roadmap.md
       - "Module 210 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-210-roadmap.md
       - "Project 303 Plan": curriculum/senior-ai-infrastructure-engineer/projects/project-303-plan.md
+  - AI Infrastructure Security Engineer:
+      - "Master Plan": curriculum/ai-infrastructure-security-engineer/master-plan.yaml
+      - "Module 901 Roadmap": curriculum/ai-infrastructure-security-engineer/modules/module-901-roadmap.md
+      - "Module 905 Roadmap": curriculum/ai-infrastructure-security-engineer/modules/module-905-roadmap.md
+      - "Module 910 Roadmap": curriculum/ai-infrastructure-security-engineer/modules/module-910-roadmap.md
+      - "Project 905 Plan": curriculum/ai-infrastructure-security-engineer/projects/project-905-plan.md
   - AI Infrastructure Team Lead:
       - "Master Plan": curriculum/ai-infrastructure-team-lead/master-plan.yaml
       - "Module 801 Roadmap": curriculum/ai-infrastructure-team-lead/modules/module-801-roadmap.md

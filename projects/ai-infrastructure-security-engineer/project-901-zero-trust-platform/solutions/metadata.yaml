@@ -1,0 +1,25 @@
+id: SOL-901
+type: solution
+title: Solutions for PROJ-901 Zero-Trust Platform Implementation
+roles:
+  - ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+  - id: zero-trust
+    level: advanced
+  - id: network-security
+    level: advanced
+  - id: identity-access-management
+    level: advanced
+dependencies:
+  - project-901-zero-trust-platform/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions'
+metadata_version: 1.0.0

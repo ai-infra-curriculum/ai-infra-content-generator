@@ -1,0 +1,25 @@
+id: SOL-902
+type: solution
+title: Solutions for PROJ-902 Compliance Automation Pipeline
+roles:
+  - ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+  - id: compliance-automation
+    level: advanced
+  - id: policy-as-code
+    level: advanced
+  - id: governance
+    level: advanced
+dependencies:
+  - project-902-compliance-automation/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions'
+metadata_version: 1.0.0

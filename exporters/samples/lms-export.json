@@ -241,6 +241,38 @@
           "lms_assignment_id": "ai-infra-team-lead-proj-803"
         }
       ]
+    },
+    {
+      "role": "ai-infrastructure-security-engineer",
+      "modules": [
+        {
+          "id": "MOD-901",
+          "path": "modules/ai-infrastructure-security-engineer/module-901-ml-security-foundations/README.md",
+          "lms_module_id": "ai-infra-security-engineer-mod-901"
+        },
+        {
+          "id": "MOD-905",
+          "path": "modules/ai-infrastructure-security-engineer/module-905-secrets-management/README.md",
+          "lms_module_id": "ai-infra-security-engineer-mod-905"
+        },
+        {
+          "id": "MOD-910",
+          "path": "modules/ai-infrastructure-security-engineer/module-910-supply-chain-security/README.md",
+          "lms_module_id": "ai-infra-security-engineer-mod-910"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-901",
+          "path": "projects/ai-infrastructure-security-engineer/project-901-zero-trust-platform/README.md",
+          "lms_assignment_id": "ai-infra-security-engineer-proj-901"
+        },
+        {
+          "id": "PROJ-905",
+          "path": "projects/ai-infrastructure-security-engineer/project-905-security-operations/README.md",
+          "lms_assignment_id": "ai-infra-security-engineer-proj-905"
+        }
+      ]
     }
   ],
   "solutions": {
@@ -250,6 +282,9 @@
       "modules/ai-infrastructure-engineer/module-110-llm-infrastructure/solutions/README.md",
       "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/solutions/README.md",
       "modules/ai-infrastructure-principal-engineer/module-701-technical-excellence/solutions/README.md",
+      "modules/ai-infrastructure-security-engineer/module-901-ml-security-foundations/solutions/README.md",
+      "modules/ai-infrastructure-security-engineer/module-905-secrets-management/solutions/README.md",
+      "modules/ai-infrastructure-security-engineer/module-910-supply-chain-security/solutions/README.md",
       "modules/ai-infrastructure-senior-architect/module-401-enterprise-ai-strategy/solutions/README.md",
       "modules/ai-infrastructure-team-lead/module-801-leadership-fundamentals/solutions/README.md",
       "modules/junior-ai-infrastructure-engineer/module-001-python-fundamentals/solutions/README.md",

@@ -1,0 +1,26 @@
+id: MOD-901
+type: module
+title: ML Security Foundations
+roles:
+- ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+- id: ml-security
+  level: advanced
+- id: threat-modeling
+  level: advanced
+dependencies:
+- MOD-201
+- MOD-206
+- MOD-207
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Introduces machine learning security principles, threat modeling, and baseline hardening techniques for AI infrastructure.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-101-ml-security-foundations'
+metadata_version: 1.0.0

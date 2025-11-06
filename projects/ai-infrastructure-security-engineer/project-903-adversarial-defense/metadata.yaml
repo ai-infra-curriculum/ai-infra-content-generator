@@ -1,0 +1,27 @@
+id: PROJ-903
+type: project
+title: Adversarial Defense Program
+roles:
+- ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+- id: adversarial-ml
+  level: advanced
+- id: ml-threat-defense
+  level: advanced
+- id: observability
+  level: advanced
+dependencies:
+- MOD-906
+- MOD-908
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implement adversarial testing harnesses, monitoring, and response playbooks for production ML services.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/projects/project-903-adversarial-defense'
+metadata_version: 1.0.0

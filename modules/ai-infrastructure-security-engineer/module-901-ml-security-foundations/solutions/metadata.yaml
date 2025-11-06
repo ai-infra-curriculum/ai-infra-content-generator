@@ -1,0 +1,23 @@
+id: SOL-901
+type: solution
+title: Solutions for MOD-901 ML Security Foundations
+roles:
+  - ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+  - id: ml-security
+    level: advanced
+  - id: threat-modeling
+    level: advanced
+dependencies:
+  - module-901-ml-security-foundations/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions'
+metadata_version: 1.0.0

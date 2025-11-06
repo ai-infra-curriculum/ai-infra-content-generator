@@ -1,0 +1,132 @@
+role: "AI Infrastructure Security Engineer"
+level: "security-engineer"
+last_updated: "2025-10-20"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Zero-Trust & Platform Architecture"
+    description: "Design identity-centric, segmented architectures safeguarding AI infrastructure."
+    skills:
+      - name: "Zero-Trust Architecture"
+        proficiency:
+          proficient:
+            description: "Implement segmentation, identity, and access controls for ML workloads."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-001"
+          advanced:
+            description: "Own enterprise zero-trust strategy with automated verification and drift correction."
+            evidence_sources:
+              - type: "research"
+                id: "security-engineer-analysis"
+        assessment_types:
+          - "Architecture review"
+          - "Policy verification report"
+      - name: "Secrets & Identity Management"
+        proficiency:
+          proficient:
+            description: "Manage secret storage, rotation, and workload identities for pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-002"
+          advanced:
+            description: "Design organization-wide secret/identity governance, anomaly detection, and automation."
+            evidence_sources: []
+        assessment_types:
+          - "Operations audit"
+          - "Automation demo"
+  - name: "ML Threat Defense & Adversarial Protection"
+    description: "Protect models, data, and pipelines from adversarial, supply-chain, and privacy threats."
+    skills:
+      - name: "Adversarial ML Defense"
+        proficiency:
+          proficient:
+            description: "Run adversarial testing and implement baseline defenses."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-003"
+          advanced:
+            description: "Lead adversarial resilience programs, integrate detection, and response automation."
+            evidence_sources: []
+        assessment_types:
+          - "Adversarial test harness review"
+          - "Defense playbook evaluation"
+      - name: "Supply Chain Security"
+        proficiency:
+          proficient:
+            description: "Integrate SBOM, signing, and attestation into ML CI/CD."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-004"
+          advanced:
+            description: "Own supply-chain risk management, continuous monitoring, and remediation strategy."
+            evidence_sources: []
+        assessment_types:
+          - "Pipeline inspection"
+          - "Incident simulation"
+  - name: "Runtime Security & Operations"
+    description: "Deploy runtime telemetry, detection, and operational response for AI workloads."
+    skills:
+      - name: "Runtime Security Engineering"
+        proficiency:
+          proficient:
+            description: "Instrument runtime agents, telemetry, and alerting for AI clusters."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-005"
+          advanced:
+            description: "Automate response workflows and integrate detections with SOC/SIEM ecosystems."
+            evidence_sources: []
+        assessment_types:
+          - "Runbook review"
+          - "Detection coverage analysis"
+      - name: "Incident Response & SOC Integration"
+        proficiency:
+          proficient:
+            description: "Coordinate incident response and postmortems for AI services."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-006"
+          advanced:
+            description: "Lead AI-specific detection engineering, threat intel, and executive communication."
+            evidence_sources: []
+        assessment_types:
+          - "Tabletop exercise"
+          - "SOC integration dossier"
+  - name: "Compliance, Governance & Policy Automation"
+    description: "Automate controls, evidence, and governance workflows for AI security."
+    skills:
+      - name: "Compliance Automation"
+        proficiency:
+          proficient:
+            description: "Map controls, capture evidence, and generate audit artifacts."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-007"
+          advanced:
+            description: "Build continuous compliance pipelines with policy-as-code and reporting."
+            evidence_sources: []
+        assessment_types:
+          - "Evidence catalog review"
+          - "Compliance pipeline demo"
+      - name: "Policy-as-Code & Guardrails"
+        proficiency:
+          proficient:
+            description: "Author guardrails for CI/CD and infrastructure enforcement."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SEC-008"
+          advanced:
+            description: "Operationalize enterprise policy-as-code frameworks with exception governance."
+            evidence_sources: []
+        assessment_types:
+          - "Policy library audit"
+          - "Exception workflow assessment"
+progression_map:
+  proficient: "Security engineers extending platform security expertise into AI/ML workloads and pipelines."
+  advanced: "Lead engineers owning AI security strategy, automation, and SOC integration across multiple product areas."
+notes:
+  - "Matrix synthesized from job postings, legacy curriculum, and security stakeholder interviews (updated 2025-10-20)."

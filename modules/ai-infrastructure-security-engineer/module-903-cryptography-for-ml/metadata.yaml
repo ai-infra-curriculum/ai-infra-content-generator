@@ -1,0 +1,25 @@
+id: MOD-903
+type: module
+title: Applied Cryptography for ML Systems
+roles:
+- ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+- id: applied-cryptography
+  level: advanced
+- id: data-protection
+  level: advanced
+dependencies:
+- MOD-901
+- MOD-902
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Covers encryption, key management, differential privacy, and secure multiparty techniques tailored to ML pipelines.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-103-cryptography-for-ml'
+metadata_version: 1.0.0

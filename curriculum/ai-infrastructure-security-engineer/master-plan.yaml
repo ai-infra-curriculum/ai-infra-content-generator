@@ -1,0 +1,295 @@
+role: AI Infrastructure Security Engineer
+level: security-engineer
+program_name: AI Infrastructure Security Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-20'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Design and implement zero-trust, identity, and network security controls tailored to AI/ML infrastructure.
+  - Harden ML pipelines, models, and runtime environments against adversarial threats, supply-chain risks, and compliance obligations.
+  - Automate security operations, policy enforcement, and incident response for large-scale AI platforms.
+  secondary:
+  - Collaborate with platform, MLOps, and compliance teams to embed security-by-design across delivery workflows.
+  - Lead adversarial testing, risk assessments, and executive communication for AI security posture.
+program_structure:
+  total_duration_hours: 420
+  modules:
+  - id: MOD-901
+    title: ML Security Foundations
+    duration_hours:
+      lecture: 16
+      lab: 18
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-206
+    - MOD-207
+    learning_objectives:
+    - Analyze ML threat models and baseline hardening strategies for AI platforms.
+    - Prioritize security controls across data, model, and pipeline components.
+    linked_projects:
+    - PROJ-901
+  - id: MOD-902
+    title: Zero-Trust Architecture for AI Platforms
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-901
+    - MOD-208
+    learning_objectives:
+    - Architect identity-centric segmentation, policy enforcement, and continuous verification for AI services.
+    - Integrate workforce and workload identity with platform automation.
+    linked_projects:
+    - PROJ-901
+  - id: MOD-903
+    title: Applied Cryptography for ML Systems
+    duration_hours:
+      lecture: 14
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-901
+    - MOD-902
+    learning_objectives:
+    - Implement encryption, key management, and privacy-preserving techniques for models and data.
+    - Evaluate secure computation approaches (homomorphic encryption, SMPC) for AI workloads.
+    linked_projects:
+    - PROJ-902
+  - id: MOD-904
+    title: Network Security & Segmentation for AI
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-901
+    learning_objectives:
+    - Build segmentation, micro-perimeters, and inspection pipelines for distributed training/serving clusters.
+    - Instrument observability and anomaly detection for network flows across environments.
+    linked_projects:
+    - PROJ-901
+  - id: MOD-905
+    title: Secrets & Identity Management for ML
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-902
+    - MOD-904
+    learning_objectives:
+    - Implement secrets storage, rotation, and workload identity for ML pipelines.
+    - Automate policy enforcement and least-privilege access across toolchains.
+    linked_projects:
+    - PROJ-901
+  - id: MOD-906
+    title: Adversarial ML Defense Engineering
+    duration_hours:
+      lecture: 16
+      lab: 20
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-901
+    - MOD-903
+    learning_objectives:
+    - Develop adversarial testing harnesses, robust training pipelines, and detection strategies.
+    - Integrate red-teaming and monitoring outputs into security operations.
+    linked_projects:
+    - PROJ-903
+  - id: MOD-907
+    title: Compliance & Governance Automation
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-905
+    learning_objectives:
+    - Automate regulatory controls, evidence collection, and policy documentation.
+    - Map AI-specific compliance requirements (EU AI Act, industry standards) to infrastructure controls.
+    linked_projects:
+    - PROJ-902
+  - id: MOD-908
+    title: Runtime Security & Monitoring for AI Workloads
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-904
+    - MOD-905
+    learning_objectives:
+    - Deploy runtime telemetry, anomaly detection, and response automation for training and inference clusters.
+    - Correlate runtime signals with SOC workflows and reliability tooling.
+    linked_projects:
+    - PROJ-903
+    - PROJ-905
+  - id: MOD-909
+    title: Policy-as-Code & Guardrails
+    duration_hours:
+      lecture: 12
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-907
+    - MOD-908
+    learning_objectives:
+    - Create policy-as-code frameworks for infrastructure, pipelines, and deployment workflows.
+    - Build automated remediation and governance reporting.
+    linked_projects:
+    - PROJ-902
+    - PROJ-904
+  - id: MOD-910
+    title: Supply Chain Security for AI Systems
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-909
+    - MOD-205
+    learning_objectives:
+    - Secure ML model, data, and software supply chains including attestations and SBOMs.
+    - Integrate provenance into CI/CD and release governance.
+    linked_projects:
+    - PROJ-904
+  - id: MOD-911
+    title: Security Operations & Incident Response for AI
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-908
+    - MOD-910
+    learning_objectives:
+    - Extend SOC processes, detections, and playbooks to AI workloads.
+    - Lead AI-specific incident response with executive communications.
+    linked_projects:
+    - PROJ-905
+  - id: MOD-912
+    title: Advanced Topics in AI Infrastructure Security
+    duration_hours:
+      lecture: 12
+      lab: 12
+      portfolio: 8
+      assessment: 6
+    role_focus:
+    - ai-infrastructure-security-engineer
+    prerequisites:
+    - MOD-906
+    - MOD-910
+    learning_objectives:
+    - Evaluate emerging AI security trends, regulations, and research directions.
+    - Publish security strategy recommendations and innovation roadmaps.
+    linked_projects:
+    - PROJ-905
+assessment_strategy:
+  formative:
+  - type: lab
+    cadence: per module (threat modeling, automation, adversarial testing)
+  - type: tabletop-exercise
+    cadence: per module cluster (incident, compliance, supply-chain drills)
+  summative:
+  - type: capstone
+    alignment: Security operations playbook integrating zero-trust, compliance, and adversarial defenses
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-901
+    summary: Zero-Trust Platform Implementation
+    difficulty: security-engineer
+    assessed_competencies:
+    - zero-trust
+    - network-security
+    - identity-access-management
+    integration_notes: Synthesizes outputs from MOD-902, MOD-904, and MOD-905.
+  - id: PROJ-902
+    summary: Compliance Automation Pipeline
+    difficulty: security-engineer
+    assessed_competencies:
+    - compliance-automation
+    - policy-as-code
+    - governance
+    integration_notes: Builds on MOD-907 and MOD-909 with evidence automation.
+  - id: PROJ-903
+    summary: Adversarial Defense Program
+    difficulty: security-engineer
+    assessed_competencies:
+    - adversarial-ml
+    - ml-threat-defense
+    - observability
+    integration_notes: Requires experimentation assets from MOD-906 and runtime detections from MOD-908.
+  - id: PROJ-904
+    summary: Secure ML CI/CD Pipeline
+    difficulty: security-engineer
+    assessed_competencies:
+    - supply-chain-security
+    - automation
+    - runtime-security
+    integration_notes: Combines guardrails from MOD-909 with supply-chain controls from MOD-910.
+  - id: PROJ-905
+    summary: AI Security Operations Playbook
+    difficulty: security-engineer
+    assessed_competencies:
+    - security-operations
+    - incident-response
+    - threat-intelligence
+    integration_notes: Aligns SOC workflows with runtime monitoring (MOD-908) and strategy insights (MOD-912).
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Head of Security Engineering
+    focus: Technical depth, zero-trust design, automation rigor
+    due_date: '2025-12-01'
+  - reviewer: Chief Compliance Officer
+    focus: Regulatory alignment, evidence automation, audit readiness
+    due_date: '2025-12-08'
+  pilot_metrics:
+    completion_rate_target: 0.68
+    satisfaction_target: 4.7
+    incident_detection_improvement_target: 0.2
+risk_register:
+- risk: Access to production-like environments or threat intel may be restricted.
+  impact: high
+  likelihood: medium
+  mitigation: Provide simulated datasets, open-source telemetry, and partnership with security lab environments.
+- risk: Adversarial testing labs require GPU resources and specialized tooling.
+  impact: medium
+  likelihood: medium
+  mitigation: Offer containerized labs, leverage cloud credits, and provide lightweight CPU-friendly alternatives.

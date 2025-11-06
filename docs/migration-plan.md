@@ -11,7 +11,8 @@
 - ✅ AI Infrastructure Architect (`research/ai-infrastructure-architect/*`)
 - ✅ Principal AI Infrastructure Architect (`research/ai-infrastructure-principal-architect/*`)
 - ✅ Principal AI Infrastructure Engineer (`research/ai-infrastructure-principal-engineer/*`)
- - ✅ AI Infrastructure Team Lead (`research/ai-infrastructure-team-lead/*`)
+- ✅ AI Infrastructure Team Lead (`research/ai-infrastructure-team-lead/*`)
+- ✅ AI Infrastructure Security Engineer (`research/ai-infrastructure-security-engineer/*`)
    - ☐ Remaining Staff+ roles (Principal Engineer, Team Lead, specialized tracks)
    - ☐ Validate migrated metadata via `./tools/curriculum.py validate-metadata` (blocked: Python tooling not yet installed)
 
@@ -23,6 +24,7 @@
 - ✅ Principal AI Infrastructure Architect master plan, roadmaps, projects
 - ✅ Principal AI Infrastructure Engineer master plan, roadmaps, projects
 - ✅ AI Infrastructure Team Lead master plan, roadmaps, projects
+- ✅ AI Infrastructure Security Engineer master plan, roadmaps, projects
    - ☐ Update remaining role plan templates once prioritised
 
 4. **Module & Lesson Content** — _Status: In progress_
@@ -32,6 +34,7 @@
 - ✅ Principal modules (MOD-601…610) migrated with metadata and solution placeholders
 - ✅ Principal engineer modules (MOD-701…706) migrated with metadata and solution placeholders
 - ✅ Team lead modules (MOD-801…810) migrated with metadata and leadership solution stubs
+- ✅ Security engineer modules (MOD-901…912) migrated with metadata and security solution placeholders
    - ☐ Run validation profiles (`./tools/curriculum.py run-validation …`) after environment setup (pip missing)
 
 5. **Projects & Solutions** — _Status: In progress_
@@ -42,6 +45,7 @@
 - ✅ Principal projects (PROJ-601…604) with metadata and solution stubs connected to legacy repos
 - ✅ Principal engineer projects (PROJ-701…703) with metadata and solution placeholders linked to legacy repos
 - ✅ Team lead projects (PROJ-801…803) with metadata and leadership solution placeholders synced to legacy repos
+- ✅ Security engineer projects (PROJ-901…905) with metadata and solution placeholders tied to legacy security repositories
    - ☐ Curate senior module solution READMEs with direct references to legacy guides
 
 6. **Exporters & Automation** — _Status: In progress_

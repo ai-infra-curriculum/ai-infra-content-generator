@@ -1,0 +1,23 @@
+id: SOL-905
+type: solution
+title: Solutions for MOD-905 Secrets & Identity Management for ML
+roles:
+  - ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+  - id: secrets-management
+    level: advanced
+  - id: identity-access-management
+    level: advanced
+dependencies:
+  - module-905-secrets-management/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: MOD-906
+type: module
+title: Adversarial ML Defense Engineering
+roles:
+- ai-infrastructure-security-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: adversarial-ml
+  level: advanced
+- id: ml-threat-defense
+  level: advanced
+dependencies:
+- MOD-901
+- MOD-903
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implements adversarial testing, robust training, and detection strategies for ML models in production.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-106-adversarial-ml'
+metadata_version: 1.0.0

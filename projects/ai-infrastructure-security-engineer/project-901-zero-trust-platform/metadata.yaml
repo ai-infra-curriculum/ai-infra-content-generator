@@ -1,0 +1,28 @@
+id: PROJ-901
+type: project
+title: Zero-Trust Platform Implementation
+roles:
+- ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+- id: zero-trust
+  level: advanced
+- id: network-security
+  level: advanced
+- id: identity-access-management
+  level: advanced
+dependencies:
+- MOD-902
+- MOD-904
+- MOD-905
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Design and deploy a zero-trust reference implementation covering identity, segmentation, and policy enforcement for AI infrastructure.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/projects/project-901-zero-trust-platform'
+metadata_version: 1.0.0

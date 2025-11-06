@@ -1,0 +1,25 @@
+id: MOD-904
+type: module
+title: Network Security & Segmentation for AI
+roles:
+- ai-infrastructure-security-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+- id: network-security
+  level: advanced
+- id: observability
+  level: advanced
+dependencies:
+- MOD-201
+- MOD-901
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implements segmentation, traffic inspection, and observability controls for distributed AI infrastructure.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-104-network-security'
+metadata_version: 1.0.0

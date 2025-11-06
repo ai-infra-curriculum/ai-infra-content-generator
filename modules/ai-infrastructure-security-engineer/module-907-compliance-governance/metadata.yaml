@@ -1,0 +1,24 @@
+id: MOD-907
+type: module
+title: Compliance & Governance Automation
+roles:
+- ai-infrastructure-security-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: compliance-automation
+  level: advanced
+- id: governance
+  level: advanced
+dependencies:
+- MOD-905
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Automates regulatory controls, audit evidence, and policy enforcement for AI infrastructure.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-107-compliance-governance'
+metadata_version: 1.0.0

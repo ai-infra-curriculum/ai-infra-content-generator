@@ -1,0 +1,25 @@
+id: MOD-912
+type: module
+title: Advanced Topics in AI Infrastructure Security
+roles:
+- ai-infrastructure-security-engineer
+stage: capstone
+proficiency_target: advanced
+competencies:
+- id: security-strategy
+  level: advanced
+- id: innovation-leadership
+  level: advanced
+dependencies:
+- MOD-906
+- MOD-910
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Explores emerging threats, governance trends, and future security architecture strategies for AI platforms.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-112-advanced-topics'
+metadata_version: 1.0.0

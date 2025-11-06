@@ -1,0 +1,16 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-security-engineer/module-{num:03d}-*"
+  valid_range: [101, 112]
+projects_mapping:
+  source_pattern: "projects/project-{num:02d}-*"
+  target_pattern: "projects/ai-infrastructure-security-engineer/project-90{num}-*"
+  valid_range: [1, 5]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:02d}-*"
+notes: |
+  Legacy modules 101-112 map to MOD-901…912 in the new framework.
+  Projects 01-05 map to PROJ-901…905. Use this mapping to synchronize security artifacts without duplicating assets.

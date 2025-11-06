@@ -20,11 +20,11 @@
    - `./tools/curriculum.py generate-mkdocs-nav --output exporters/generated/mkdocs-nav.yml`
    - `./tools/curriculum.py export-graph --output graphs/ai-infra.graph.json`
 4. Trigger project-specific validation scripts documented in each solutions folder (e.g., `make validate`, `.github/workflows/*` dry-runs).
-5. Capture benchmark outputs for senior projects (PROJ-301, PROJ-302) and attach to project directories; document leadership, optimization, and program outcomes for principal/leadership projects (PROJ-601…604, PROJ-701…703, PROJ-801…803).
-6. Review architect FinOps models, DR simulations, and governance artifacts with finance/compliance stakeholders and record approvals; extend review to principal architect, principal engineer, and team lead leadership portfolios.
+5. Capture benchmark outputs for senior projects (PROJ-301, PROJ-302) and attach to project directories; document leadership, optimization, and security outcomes for principal/leadership projects (PROJ-601…604, PROJ-701…703, PROJ-801…803, PROJ-901…905).
+6. Review architect FinOps models, DR simulations, and governance artifacts with finance/compliance stakeholders and record approvals; extend review to principal architect, principal engineer, team lead, and security engineer portfolios.
 
 ## Next Actions
 
 - [ ] Create or reuse CI job that provisions Python environment and runs metadata/exporter validation.
 - [ ] Define GPU validation strategy (cloud credits vs. simulation) and document fallback instructions in senior project READMEs.
-- [ ] Update module/project roadmaps to check off validation items once runs succeed, including team lead and principal-level roadmaps/project plans.
+- [ ] Update module/project roadmaps to check off validation items once runs succeed, including team lead, security engineer, and principal-level roadmaps/project plans.

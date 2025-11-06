@@ -1,0 +1,27 @@
+id: PROJ-902
+type: project
+title: Compliance Automation Pipeline
+roles:
+- ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+- id: compliance-automation
+  level: advanced
+- id: policy-as-code
+  level: advanced
+- id: governance
+  level: advanced
+dependencies:
+- MOD-907
+- MOD-909
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Build automated evidence collection, policy-as-code guardrails, and reporting workflows to satisfy AI compliance requirements.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/projects/project-902-compliance-automation'
+metadata_version: 1.0.0

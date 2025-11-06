@@ -1,0 +1,25 @@
+id: MOD-910
+type: module
+title: Supply Chain Security for AI Systems
+roles:
+- ai-infrastructure-security-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: supply-chain-security
+  level: advanced
+- id: software-integrity
+  level: advanced
+dependencies:
+- MOD-909
+- MOD-205
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Secures model, data, and software supply chains including SBOM, provenance, and artifact attestation.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-security-learning/lessons/mod-110-supply-chain-security'
+metadata_version: 1.0.0

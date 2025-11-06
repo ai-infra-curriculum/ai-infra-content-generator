@@ -1,0 +1,25 @@
+id: SOL-903
+type: solution
+title: Solutions for PROJ-903 Adversarial Defense Program
+roles:
+  - ai-infrastructure-security-engineer
+stage: security-engineer
+proficiency_target: advanced
+competencies:
+  - id: adversarial-ml
+    level: advanced
+  - id: ml-threat-defense
+    level: advanced
+  - id: observability
+    level: advanced
+dependencies:
+  - project-903-adversarial-defense/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-security-solutions'
+metadata_version: 1.0.0
