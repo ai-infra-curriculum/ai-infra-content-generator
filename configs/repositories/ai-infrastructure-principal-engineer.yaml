@@ -1,0 +1,16 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-engineer-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-principal-engineer/module-{num:03d}-*"
+  valid_range: [501, 506]
+projects_mapping:
+  source_pattern: "projects/project-{num:02d}-*"
+  target_pattern: "projects/ai-infrastructure-principal-engineer/project-{num:03d}-*"
+  valid_range: [1, 3]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:02d}-*"
+notes: |
+  Legacy modules are numbered 501-506 and map to MOD-701…MOD-706 in the new framework.
+  Projects 01-03 align with PROJ-701…703. Use this config when synchronizing learning and solutions repos with the new structure.

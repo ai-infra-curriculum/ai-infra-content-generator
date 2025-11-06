@@ -177,6 +177,38 @@
           "lms_assignment_id": "ai-infra-principal-architect-proj-603"
         }
       ]
+    },
+    {
+      "role": "ai-infrastructure-principal-engineer",
+      "modules": [
+        {
+          "id": "MOD-701",
+          "path": "modules/ai-infrastructure-principal-engineer/module-701-technical-excellence/README.md",
+          "lms_module_id": "ai-infra-principal-engineer-mod-701"
+        },
+        {
+          "id": "MOD-703",
+          "path": "modules/ai-infrastructure-principal-engineer/module-703-performance-at-scale/README.md",
+          "lms_module_id": "ai-infra-principal-engineer-mod-703"
+        },
+        {
+          "id": "MOD-706",
+          "path": "modules/ai-infrastructure-principal-engineer/module-706-cross-org-initiatives/README.md",
+          "lms_module_id": "ai-infra-principal-engineer-mod-706"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-701",
+          "path": "projects/ai-infrastructure-principal-engineer/project-701-technical-excellence/README.md",
+          "lms_assignment_id": "ai-infra-principal-engineer-proj-701"
+        },
+        {
+          "id": "PROJ-703",
+          "path": "projects/ai-infrastructure-principal-engineer/project-703-cross-org-initiative/README.md",
+          "lms_assignment_id": "ai-infra-principal-engineer-proj-703"
+        }
+      ]
     }
   ],
   "solutions": {
@@ -185,6 +217,7 @@
       "modules/ai-infrastructure-architect/module-301-enterprise-architecture/solutions/README.md",
       "modules/ai-infrastructure-engineer/module-110-llm-infrastructure/solutions/README.md",
       "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/solutions/README.md",
+      "modules/ai-infrastructure-principal-engineer/module-701-technical-excellence/solutions/README.md",
       "modules/ai-infrastructure-senior-architect/module-401-enterprise-ai-strategy/solutions/README.md",
       "modules/junior-ai-infrastructure-engineer/module-001-python-fundamentals/solutions/README.md",
       "modules/senior-ai-infrastructure-engineer/module-201-advanced-kubernetes/solutions/README.md"

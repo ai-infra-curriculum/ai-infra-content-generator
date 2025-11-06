@@ -1,0 +1,26 @@
+id: MOD-702
+type: module
+title: Complex Systems Design Leadership
+roles:
+- ai-infrastructure-principal-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: complex-systems-design
+  level: expert
+- id: architecture-governance
+  level: expert
+dependencies:
+- MOD-701
+- MOD-305
+- MOD-401
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Leads end-to-end design of complex AI infrastructure systems with cross-organizational influence and governance.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/lessons/mod-502-complex-systems-design'
+metadata_version: 1.0.0

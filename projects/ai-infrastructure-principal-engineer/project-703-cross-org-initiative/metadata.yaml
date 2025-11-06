@@ -1,0 +1,27 @@
+id: PROJ-703
+type: project
+title: Cross-Org Transformation Pilot
+roles:
+- ai-infrastructure-principal-engineer
+stage: principal-engineer
+proficiency_target: expert
+competencies:
+- id: cross-org-execution
+  level: expert
+- id: program-delivery
+  level: expert
+- id: stakeholder-alignment
+  level: expert
+dependencies:
+- MOD-706
+- MOD-705
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Execute a strategic cross-organization initiative aligning multiple product groups around a unified AI infrastructure roadmap.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/projects/project-03-cross-org-initiative'
+metadata_version: 1.0.0

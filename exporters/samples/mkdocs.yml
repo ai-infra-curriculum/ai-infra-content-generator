@@ -35,6 +35,12 @@ nav:
       - "Module 606 Roadmap": curriculum/ai-infrastructure-principal-architect/modules/module-606-roadmap.md
       - "Module 610 Roadmap": curriculum/ai-infrastructure-principal-architect/modules/module-610-roadmap.md
       - "Project 603 Plan": curriculum/ai-infrastructure-principal-architect/projects/project-603-plan.md
+  - Principal AI Infrastructure Engineer:
+      - "Master Plan": curriculum/ai-infrastructure-principal-engineer/master-plan.yaml
+      - "Module 701 Roadmap": curriculum/ai-infrastructure-principal-engineer/modules/module-701-roadmap.md
+      - "Module 703 Roadmap": curriculum/ai-infrastructure-principal-engineer/modules/module-703-roadmap.md
+      - "Module 706 Roadmap": curriculum/ai-infrastructure-principal-engineer/modules/module-706-roadmap.md
+      - "Project 702 Plan": curriculum/ai-infrastructure-principal-engineer/projects/project-702-plan.md
   - Reference:
       - "Repository Strategy": curriculum/repository-strategy.yaml
       - "Multi-Role Alignment": curriculum/roles/multi-role-alignment.md

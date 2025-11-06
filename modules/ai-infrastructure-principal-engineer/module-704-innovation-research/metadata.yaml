@@ -1,0 +1,25 @@
+id: MOD-704
+type: module
+title: Innovation & Applied Research Leadership
+roles:
+- ai-infrastructure-principal-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: innovation-leadership
+  level: expert
+- id: research-collaboration
+  level: expert
+dependencies:
+- MOD-404
+- MOD-410
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Drives applied research initiatives, collaborates with scientists, and incubates breakthrough infrastructure capabilities.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/lessons/mod-504-innovation-research'
+metadata_version: 1.0.0

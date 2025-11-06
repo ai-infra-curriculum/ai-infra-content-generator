@@ -1,0 +1,27 @@
+id: MOD-701
+type: module
+title: Technical Excellence at Principal Scale
+roles:
+- ai-infrastructure-principal-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: technical-excellence
+  level: expert
+- id: systems-architecture
+  level: expert
+dependencies:
+- MOD-205
+- MOD-206
+- MOD-208
+- MOD-309
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Elevates engineering craft, code quality, and architectural rigor expected from principal-level individual contributors.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/lessons/mod-501-technical-excellence'
+metadata_version: 1.0.0

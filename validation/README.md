@@ -15,13 +15,13 @@
 ## Pending Validation Tasks
 
 1. Install Python dependencies (`python -m venv .venv && source .venv/bin/activate && pip install -r requirements-tooling.txt`).
-2. Execute `./tools/curriculum.py validate-metadata` across all roles (junior through principal).
+2. Execute `./tools/curriculum.py validate-metadata` across all roles (junior through principal IC/architect tracks).
 3. Run exporter samples:
    - `./tools/curriculum.py generate-mkdocs-nav --output exporters/generated/mkdocs-nav.yml`
    - `./tools/curriculum.py export-graph --output graphs/ai-infra.graph.json`
 4. Trigger project-specific validation scripts documented in each solutions folder (e.g., `make validate`, `.github/workflows/*` dry-runs).
-5. Capture benchmark outputs for senior projects (PROJ-301, PROJ-302) and attach to project directories; document executive simulation results for principal projects (PROJ-601…604).
-6. Review architect FinOps models, DR simulations, and governance artifacts with finance/compliance stakeholders and record approvals; extend review to principal governance portfolios.
+5. Capture benchmark outputs for senior projects (PROJ-301, PROJ-302) and attach to project directories; document optimization and program outcomes for principal projects (PROJ-601…604, PROJ-701…703).
+6. Review architect FinOps models, DR simulations, and governance artifacts with finance/compliance stakeholders and record approvals; extend review to principal architect and principal engineer portfolios.
 
 ## Next Actions
 

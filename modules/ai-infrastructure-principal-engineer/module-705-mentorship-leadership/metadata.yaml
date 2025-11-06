@@ -1,0 +1,25 @@
+id: MOD-705
+type: module
+title: Mentorship & Engineering Leadership
+roles:
+- ai-infrastructure-principal-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: technical-leadership
+  level: expert
+- id: mentorship
+  level: expert
+dependencies:
+- MOD-210
+- MOD-402
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Develops principal-level mentorship practices, coaching strategies, and influence without formal authority.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/lessons/mod-505-mentorship-leadership'
+metadata_version: 1.0.0

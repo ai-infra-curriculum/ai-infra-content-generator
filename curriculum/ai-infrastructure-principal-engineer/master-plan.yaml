@@ -1,0 +1,183 @@
+role: Principal AI Infrastructure Engineer
+level: principal-engineer
+program_name: Principal AI Infrastructure Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-20'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Deliver breakthrough AI infrastructure systems with principal-level technical depth and execution ownership.
+  - Lead cross-organization initiatives that improve performance, reliability, and developer productivity at scale.
+  - Mentor senior technical leaders and grow engineering excellence across multiple product areas.
+  secondary:
+  - Partner with research, product, and platform teams to incubate innovation and applied research investments.
+  - Establish technical standards, review mechanisms, and postmortem practices that elevate engineering culture.
+program_structure:
+  total_duration_hours: 480
+  modules:
+  - id: MOD-701
+    title: Technical Excellence at Principal Scale
+    duration_hours:
+      lecture: 18
+      lab: 22
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-205
+    - MOD-206
+    - MOD-208
+    - MOD-309
+    learning_objectives:
+    - Establish principal-level engineering quality bars and review mechanisms.
+    - Define architectural guardrails, coding standards, and automation for large teams.
+    linked_projects:
+    - PROJ-701
+  - id: MOD-702
+    title: Complex Systems Design Leadership
+    duration_hours:
+      lecture: 16
+      lab: 20
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-701
+    - MOD-305
+    - MOD-401
+    learning_objectives:
+    - Lead end-to-end design reviews for multi-domain AI infrastructure programs.
+    - Manage trade-offs between cost, resilience, performance, and delivery velocity.
+    linked_projects:
+    - PROJ-702
+  - id: MOD-703
+    title: Performance Engineering at Extreme Scale
+    duration_hours:
+      lecture: 16
+      lab: 24
+      project: 12
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-107
+    - MOD-202
+    - MOD-205
+    learning_objectives:
+    - Diagnose and optimize GPU, network, and storage bottlenecks in AI workloads.
+    - Build performance observability, benchmarking, and regression automation suites.
+    linked_projects:
+    - PROJ-702
+  - id: MOD-704
+    title: Innovation & Applied Research Leadership
+    duration_hours:
+      lecture: 14
+      lab: 18
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-404
+    - MOD-410
+    learning_objectives:
+    - Evaluate emerging AI infrastructure technologies and incubate applied research pilots.
+    - Bridge research, product, and platform teams with joint experimentation roadmaps.
+    linked_projects:
+    - PROJ-702
+    - PROJ-703
+  - id: MOD-705
+    title: Mentorship & Engineering Leadership
+    duration_hours:
+      lecture: 14
+      lab: 18
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-210
+    - MOD-402
+    learning_objectives:
+    - Coach staff engineers and emerging principals through complex technical challenges.
+    - Design technical ladder expectations, promotion packets, and feedback systems.
+    linked_projects:
+    - PROJ-701
+    - PROJ-703
+  - id: MOD-706
+    title: Cross-Org Initiatives & Execution
+    duration_hours:
+      lecture: 12
+      lab: 18
+      project: 12
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-engineer
+    prerequisites:
+    - MOD-701
+    - MOD-702
+    - MOD-705
+    learning_objectives:
+    - Plan and deliver multi-quarter, cross-organization infrastructure programs.
+    - Operate executive-ready program reviews, risk escalation, and stakeholder management.
+    linked_projects:
+    - PROJ-702
+    - PROJ-703
+assessment_strategy:
+  formative:
+  - type: design-review
+    cadence: per module (architecture reviews, benchmarking labs, mentorship simulations)
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Cross-organization transformation initiative with executive review
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-701
+    summary: Technical Excellence Accelerator
+    difficulty: principal-engineer
+    assessed_competencies:
+    - technical-excellence
+    - systems-architecture
+    - technical-leadership
+    integration_notes: Synthesizes outputs from MOD-701 and MOD-705.
+  - id: PROJ-702
+    summary: Large-Scale Optimization Initiative
+    difficulty: principal-engineer
+    assessed_competencies:
+    - performance-engineering
+    - capacity-planning
+    - cross-org-execution
+    integration_notes: Requires diagnostic tooling and roadmaps from MOD-702, MOD-703, and MOD-706.
+  - id: PROJ-703
+    summary: Cross-Org Transformation Pilot
+    difficulty: principal-engineer
+    assessed_competencies:
+    - cross-org-execution
+    - program-delivery
+    - stakeholder-alignment
+    integration_notes: Builds on coaching frameworks (MOD-705) and initiative governance (MOD-706).
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Distinguished Engineer
+    focus: Technical depth, design rigor, and benchmarking methodology
+    due_date: '2025-12-08'
+  - reviewer: VP Platform Engineering
+    focus: Cross-org execution strategy, stakeholder alignment, and program KPIs
+    due_date: '2025-12-12'
+  pilot_metrics:
+    completion_rate_target: 0.62
+    satisfaction_target: 4.7
+    launch_readiness_target: 0.9
+risk_register:
+- risk: Benchmarking labs require access to GPU clusters and production-like workloads.
+  impact: high
+  likelihood: medium
+  mitigation: Provide simulated workloads, partner with performance lab for scheduled runs.
+- risk: Cross-org program simulation needs executive availability.
+  impact: medium
+  likelihood: medium
+  mitigation: Offer asynchronous review packets and recorded briefings for stakeholders.

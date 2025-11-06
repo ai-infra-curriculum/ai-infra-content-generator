@@ -14,6 +14,8 @@ roles:
   slug: ai-infrastructure-senior-architect
 - name: Principal AI Infrastructure Architect
   slug: ai-infrastructure-principal-architect
+- name: Principal AI Infrastructure Engineer
+  slug: ai-infrastructure-principal-engineer
 repositories:
   mode: per_role
   base_repo_name: ai-infra
@@ -36,6 +38,9 @@ repositories:
     ai-infrastructure-principal-architect:
       learning: ai-infra-principal-architect-learning
       solutions: ai-infra-principal-architect-solutions
+    ai-infrastructure-principal-engineer:
+      learning: ai-infra-principal-engineer-learning
+      solutions: ai-infra-principal-engineer-solutions
 solutions:
   placement: separate
   inline_path: null
@@ -70,6 +75,10 @@ progression_rules:
   to_role: ai-infrastructure-principal-architect
   strategy: portfolio-leadership
   notes: Emphasize board advisory, enterprise portfolio governance, and ecosystem orchestration
+- from_role: ai-infrastructure-senior-engineer
+  to_role: ai-infrastructure-principal-engineer
+  strategy: technical-leadership
+  notes: Highlight cross-organization execution, performance optimization, and technical excellence guardianship
 governance:
   review_cadence: quarterly
   approvers:

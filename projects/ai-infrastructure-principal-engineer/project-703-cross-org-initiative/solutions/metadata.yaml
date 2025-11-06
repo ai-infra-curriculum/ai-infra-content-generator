@@ -1,0 +1,25 @@
+id: SOL-703
+type: solution
+title: Solutions for PROJ-703 Cross-Org Transformation Pilot
+roles:
+  - ai-infrastructure-principal-engineer
+stage: principal-engineer
+proficiency_target: expert
+competencies:
+  - id: cross-org-execution
+    level: expert
+  - id: program-delivery
+    level: expert
+  - id: stakeholder-alignment
+    level: expert
+dependencies:
+  - project-703-cross-org-initiative/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-engineer-solutions'
+metadata_version: 1.0.0

@@ -1,0 +1,132 @@
+role: "Principal AI Infrastructure Engineer"
+level: "principal-engineer"
+last_updated: "2025-10-20"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Technical Excellence & Architecture"
+    description: "Deliver complex AI infrastructure systems with rigorous engineering standards and architectural oversight."
+    skills:
+      - name: "Technical Excellence"
+        proficiency:
+          proficient:
+            description: "Champion code quality, reliability, and tooling improvements across multiple teams."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-001"
+          expert:
+            description: "Set organization-wide engineering standards, reviews, and automation guardrails."
+            evidence_sources:
+              - type: "research"
+                id: "principal-engineer-analysis"
+        assessment_types:
+          - "Portfolio review"
+          - "Architecture audit"
+      - name: "Systems Architecture"
+        proficiency:
+          proficient:
+            description: "Design multi-service systems balancing performance, cost, and reliability."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-002"
+          expert:
+            description: "Lead cross-domain architecture strategy, refactoring programs, and technology roadmaps."
+            evidence_sources: []
+        assessment_types:
+          - "Design review"
+          - "Executive briefing"
+  - name: "Performance & Efficiency"
+    description: "Optimize AI infrastructure for throughput, latency, and cost at massive scale."
+    skills:
+      - name: "Performance Engineering"
+        proficiency:
+          proficient:
+            description: "Build benchmarking suites, profile workloads, and apply targeted optimizations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-003"
+          expert:
+            description: "Lead company-wide optimization programs across compute, storage, and network layers."
+            evidence_sources: []
+        assessment_types:
+          - "Benchmark review"
+          - "Optimization report"
+      - name: "Capacity Planning & FinOps"
+        proficiency:
+          proficient:
+            description: "Model growth, plan capacity, and evaluate investment options."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-004"
+          expert:
+            description: "Align hardware, cloud, and budget strategy with executive stakeholders and sustainability targets."
+            evidence_sources: []
+        assessment_types:
+          - "Financial analysis"
+          - "Steering committee presentation"
+  - name: "Cross-Org Execution & Influence"
+    description: "Drive multi-team initiatives, stakeholder alignment, and program delivery without formal authority."
+    skills:
+      - name: "Cross-Org Execution"
+        proficiency:
+          proficient:
+            description: "Coordinate multi-team delivery plans, risks, and dependencies."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-005"
+          expert:
+            description: "Run executive steering forums, negotiate priorities, and deliver enterprise-scale outcomes."
+            evidence_sources: []
+        assessment_types:
+          - "Program review"
+          - "Stakeholder feedback"
+      - name: "Stakeholder Alignment"
+        proficiency:
+          proficient:
+            description: "Communicate status, risks, and trade-offs across engineering, product, and operations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-006"
+          expert:
+            description: "Influence executives, finance, and research partners to secure resources and unblock delivery."
+            evidence_sources: []
+        assessment_types:
+          - "Executive simulation"
+          - "Communication audit"
+  - name: "Innovation & Mentorship"
+    description: "Incubate new capabilities while growing the technical talent pipeline."
+    skills:
+      - name: "Innovation Leadership"
+        proficiency:
+          proficient:
+            description: "Run applied research experiments and evaluate emerging technologies."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-007"
+          expert:
+            description: "Shape innovation portfolio, partner with research, and transition pilots into production platforms."
+            evidence_sources: []
+        assessment_types:
+          - "Innovation review"
+          - "Experiment charter"
+      - name: "Mentorship & Coaching"
+        proficiency:
+          proficient:
+            description: "Mentor staff engineers and lead communities of practice."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIE-008"
+          expert:
+            description: "Develop principal-level talent pipelines, promotion processes, and coaching frameworks."
+            evidence_sources: []
+        assessment_types:
+          - "Mentorship portfolio"
+          - "Feedback assessment"
+progression_map:
+  proficient: "Senior or staff engineers ready to lead multi-team initiatives with hands-on technical depth."
+  expert: "Principal ICs influencing enterprise strategy, performance roadmaps, and engineering culture at scale."
+notes:
+  - "Competencies derived from principal engineer job postings, legacy curriculum assets, and stakeholder interviews (2025-10-20)."

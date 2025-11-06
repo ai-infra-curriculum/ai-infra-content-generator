@@ -1,0 +1,26 @@
+id: MOD-703
+type: module
+title: Performance Engineering at Extreme Scale
+roles:
+- ai-infrastructure-principal-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: performance-engineering
+  level: expert
+- id: capacity-planning
+  level: expert
+dependencies:
+- MOD-107
+- MOD-202
+- MOD-205
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Optimizes large-scale AI infrastructure for latency, throughput, efficiency, and cost across heterogeneous hardware.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-engineer-learning/lessons/mod-503-performance-at-scale'
+metadata_version: 1.0.0
