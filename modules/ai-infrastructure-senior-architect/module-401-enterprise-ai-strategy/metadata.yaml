@@ -1,0 +1,25 @@
+id: MOD-401
+type: module
+title: Enterprise AI Strategy & Vision
+roles:
+- ai-infrastructure-senior-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: enterprise-ai-strategy
+  level: expert
+- id: executive-advisory
+  level: expert
+dependencies:
+- MOD-301
+- MOD-309
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Develops enterprise AI infrastructure strategy, multi-year roadmaps, and investment cases aligned with business objectives.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-architect-learning/lessons/mod-401-enterprise-ai-strategy'
+metadata_version: 1.0.0

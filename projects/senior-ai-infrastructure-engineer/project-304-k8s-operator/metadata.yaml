@@ -1,0 +1,29 @@
+id: PROJ-304
+type: project
+title: Custom Kubernetes Operator Suite
+roles:
+- senior-ai-infrastructure-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: kubernetes-platform-engineering
+  level: expert
+- id: platform-engineering
+  level: expert
+- id: mentorship
+  level: expert
+dependencies:
+- MOD-201
+- MOD-206
+- MOD-208
+- MOD-210
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Build operator-driven automation and enablement assets that deliver self-service ML platform capabilities.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/projects/project-204-k8s-operator'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: MOD-204
+type: module
+title: Advanced Model Optimization & Inference
+roles:
+- senior-ai-infrastructure-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: inference-optimization
+  level: expert
+- id: llm-infrastructure
+  level: proficient
+dependencies:
+- MOD-203
+- MOD-106
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Deliver high-throughput inference pipelines using TensorRT-LLM, vLLM, quantization, and advanced batching strategies.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-204-model-optimization'
+metadata_version: 1.0.0

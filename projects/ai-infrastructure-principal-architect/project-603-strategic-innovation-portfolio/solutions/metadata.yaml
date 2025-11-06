@@ -1,0 +1,25 @@
+id: SOL-603
+type: solution
+title: Solutions for project-603-strategic-innovation-portfolio
+roles:
+  - ai-infrastructure-principal-architect
+stage: principal-architect
+proficiency_target: expert
+competencies:
+  - id: innovation-leadership
+    level: expert
+  - id: executive-communication
+    level: expert
+  - id: future-sensing
+    level: expert
+dependencies:
+  - project-603-strategic-innovation-portfolio/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions/projects/project-603-strategic-innovation-portfolio'
+metadata_version: 1.0.0

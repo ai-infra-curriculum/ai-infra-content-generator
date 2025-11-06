@@ -1,0 +1,24 @@
+id: PROJ-201
+type: project
+title: Basic Model Serving System
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: infrastructure-automation
+  level: proficient
+dependencies:
+- MOD-101
+- MOD-103
+- MOD-104
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Deploy a production-ready ML inference service with containerization, Kubernetes, and basic observability.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/projects/project-101-basic-model-serving'
+metadata_version: 1.0.0

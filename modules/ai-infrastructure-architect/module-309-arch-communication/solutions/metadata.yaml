@@ -1,0 +1,21 @@
+id: "SOL-309"
+type: "solution"
+title: "Solutions for architecture-communication-leadership"
+roles:
+  - "ai-infrastructure-architect"
+stage: "advanced"
+proficiency_target: "proficient"
+competencies:
+  - id: "architecture-communication"
+    level: "expert"
+dependencies:
+  - "module-309-arch-communication/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions"
+metadata_version: "1.0.0"

@@ -1,0 +1,21 @@
+id: "SOL-301"
+type: "solution"
+title: "Solutions for enterprise-architecture-fundamentals"
+roles:
+  - "ai-infrastructure-architect"
+stage: "core"
+proficiency_target: "expert"
+competencies:
+  - id: "enterprise-architecture"
+    level: "expert"
+dependencies:
+  - "module-301-enterprise-architecture/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions"
+metadata_version: "1.0.0"

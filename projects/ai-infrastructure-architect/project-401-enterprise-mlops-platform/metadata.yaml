@@ -1,0 +1,29 @@
+id: PROJ-401
+type: project
+title: Enterprise ML Platform Architecture
+roles:
+- ai-infrastructure-architect
+stage: architect
+proficiency_target: expert
+competencies:
+- id: enterprise-architecture
+  level: expert
+- id: platform-governance
+  level: expert
+- id: finops-governance
+  level: expert
+dependencies:
+- MOD-301
+- MOD-304
+- MOD-306
+- MOD-309
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Design and communicate an enterprise MLOps platform supporting 50+ teams with governance, cost control, and adoption strategy.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/projects/project-301-enterprise-mlops-platform'
+metadata_version: 1.0.0

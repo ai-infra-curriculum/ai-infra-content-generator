@@ -1,0 +1,26 @@
+id: MOD-610
+type: module
+title: Future-Proofing & Horizon Scanning
+roles:
+- ai-infrastructure-principal-architect
+stage: capstone
+proficiency_target: expert
+competencies:
+- id: future-sensing
+  level: expert
+- id: innovation-leadership
+  level: expert
+dependencies:
+- MOD-604
+- MOD-606
+- MOD-605
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Evaluates frontier technologies, geopolitical trends, and long-horizon scenarios to evolve AI infrastructure vision.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/lessons/mod-610-future-proofing'
+metadata_version: 1.0.0

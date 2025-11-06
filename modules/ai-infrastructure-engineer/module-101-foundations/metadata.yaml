@@ -1,0 +1,28 @@
+id: MOD-101
+type: module
+title: Foundations of ML Infrastructure
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: infrastructure-automation
+  level: proficient
+- id: mlops-foundations
+  level: proficient
+- id: cloud-platform-literacy
+  level: working
+dependencies:
+- MOD-005
+- MOD-006
+- MOD-010
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Establishes ML infrastructure fundamentals, environment setup, and first production deployment.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-101-foundations'
+metadata_version: 1.0.0

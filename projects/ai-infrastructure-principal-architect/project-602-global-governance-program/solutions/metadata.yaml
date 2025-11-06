@@ -1,0 +1,25 @@
+id: SOL-602
+type: solution
+title: Solutions for project-602-global-governance-program
+roles:
+  - ai-infrastructure-principal-architect
+stage: principal-architect
+proficiency_target: expert
+competencies:
+  - id: global-governance
+    level: expert
+  - id: multi-cloud-strategy
+    level: expert
+  - id: responsible-ai
+    level: expert
+dependencies:
+  - project-602-global-governance-program/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions/projects/project-602-global-governance-program'
+metadata_version: 1.0.0

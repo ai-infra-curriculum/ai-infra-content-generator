@@ -1,22 +1,193 @@
 {
-  "course_id": "ai-infrastructure-sample",
-  "modules": [
+  "course_id": "ai-infrastructure-curriculum",
+  "roles": [
     {
-      "id": "MOD-00",
-      "path": "examples/sample-module/lesson.md",
-      "lms_module_id": "ai-infra-sample-module"
+      "role": "junior-ai-infrastructure-engineer",
+      "modules": [
+        {
+          "id": "MOD-001",
+          "path": "modules/junior-ai-infrastructure-engineer/module-001-python-fundamentals/README.md",
+          "lms_module_id": "junior-ai-infra-mod-001"
+        },
+        {
+          "id": "MOD-010",
+          "path": "modules/junior-ai-infrastructure-engineer/module-010-cloud-platforms/README.md",
+          "lms_module_id": "junior-ai-infra-mod-010"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-01",
+          "path": "projects/junior-ai-infrastructure-engineer/project-01-simple-model-api/guide.md",
+          "lms_assignment_id": "junior-ai-infra-proj-01"
+        }
+      ]
     },
     {
-      "id": "ML-01",
-      "path": "lessons/sample-micro/lesson.md",
-      "lms_module_id": "ai-infra-micro-lesson"
+      "role": "ai-infrastructure-engineer",
+      "modules": [
+        {
+          "id": "MOD-101",
+          "path": "modules/ai-infrastructure-engineer/module-101-foundations/README.md",
+          "lms_module_id": "ai-infra-engineer-mod-101"
+        },
+        {
+          "id": "MOD-110",
+          "path": "modules/ai-infrastructure-engineer/module-110-llm-infrastructure/README.md",
+          "lms_module_id": "ai-infra-engineer-mod-110"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-201",
+          "path": "projects/ai-infrastructure-engineer/project-101-basic-model-serving/README.md",
+          "lms_assignment_id": "ai-infra-engineer-proj-201"
+        },
+        {
+          "id": "PROJ-203",
+          "path": "projects/ai-infrastructure-engineer/project-103-llm-deployment/README.md",
+          "lms_assignment_id": "ai-infra-engineer-proj-203"
+        }
+      ]
+    },
+    {
+      "role": "senior-ai-infrastructure-engineer",
+      "modules": [
+        {
+          "id": "MOD-201",
+          "path": "modules/senior-ai-infrastructure-engineer/module-201-advanced-kubernetes/README.md",
+          "lms_module_id": "senior-ai-infra-mod-201"
+        },
+        {
+          "id": "MOD-205",
+          "path": "modules/senior-ai-infrastructure-engineer/module-205-multi-cloud/README.md",
+          "lms_module_id": "senior-ai-infra-mod-205"
+        },
+        {
+          "id": "MOD-210",
+          "path": "modules/senior-ai-infrastructure-engineer/module-210-technical-leadership/README.md",
+          "lms_module_id": "senior-ai-infra-mod-210"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-301",
+          "path": "projects/senior-ai-infrastructure-engineer/project-301-distributed-training/README.md",
+          "lms_assignment_id": "senior-ai-infra-proj-301"
+        },
+        {
+          "id": "PROJ-303",
+          "path": "projects/senior-ai-infrastructure-engineer/project-303-multi-region/README.md",
+          "lms_assignment_id": "senior-ai-infra-proj-303"
+        }
+      ]
+    },
+    {
+      "role": "ai-infrastructure-architect",
+      "modules": [
+        {
+          "id": "MOD-301",
+          "path": "modules/ai-infrastructure-architect/module-301-enterprise-architecture/README.md",
+          "lms_module_id": "ai-infra-architect-mod-301"
+        },
+        {
+          "id": "MOD-302",
+          "path": "modules/ai-infrastructure-architect/module-302-multicloud-hybrid/README.md",
+          "lms_module_id": "ai-infra-architect-mod-302"
+        },
+        {
+          "id": "MOD-308",
+          "path": "modules/ai-infrastructure-architect/module-308-llm-rag/README.md",
+          "lms_module_id": "ai-infra-architect-mod-308"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-401",
+          "path": "projects/ai-infrastructure-architect/project-401-enterprise-mlops-platform/README.md",
+          "lms_assignment_id": "ai-infra-architect-proj-401"
+        },
+        {
+          "id": "PROJ-403",
+          "path": "projects/ai-infrastructure-architect/project-403-llm-rag-platform/README.md",
+          "lms_assignment_id": "ai-infra-architect-proj-403"
+        }
+      ]
+    },
+    {
+      "role": "ai-infrastructure-senior-architect",
+      "modules": [
+        {
+          "id": "MOD-401",
+          "path": "modules/ai-infrastructure-senior-architect/module-401-enterprise-ai-strategy/README.md",
+          "lms_module_id": "ai-infra-senior-architect-mod-401"
+        },
+        {
+          "id": "MOD-405",
+          "path": "modules/ai-infrastructure-senior-architect/module-405-responsible-ai/README.md",
+          "lms_module_id": "ai-infra-senior-architect-mod-405"
+        },
+        {
+          "id": "MOD-410",
+          "path": "modules/ai-infrastructure-senior-architect/module-410-future-ai-infra/README.md",
+          "lms_module_id": "ai-infra-senior-architect-mod-410"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-501",
+          "path": "projects/ai-infrastructure-senior-architect/project-501-ai-transformation-strategy/README.md",
+          "lms_assignment_id": "ai-infra-senior-architect-proj-501"
+        },
+        {
+          "id": "PROJ-504",
+          "path": "projects/ai-infrastructure-senior-architect/project-504-innovation-program/README.md",
+          "lms_assignment_id": "ai-infra-senior-architect-proj-504"
+        }
+      ]
+    },
+    {
+      "role": "ai-infrastructure-principal-architect",
+      "modules": [
+        {
+          "id": "MOD-601",
+          "path": "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/README.md",
+          "lms_module_id": "ai-infra-principal-architect-mod-601"
+        },
+        {
+          "id": "MOD-606",
+          "path": "modules/ai-infrastructure-principal-architect/module-606-multi-cloud-transformation/README.md",
+          "lms_module_id": "ai-infra-principal-architect-mod-606"
+        },
+        {
+          "id": "MOD-610",
+          "path": "modules/ai-infrastructure-principal-architect/module-610-future-proofing/README.md",
+          "lms_module_id": "ai-infra-principal-architect-mod-610"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-601",
+          "path": "projects/ai-infrastructure-principal-architect/project-601-enterprise-architecture-playbook/README.md",
+          "lms_assignment_id": "ai-infra-principal-architect-proj-601"
+        },
+        {
+          "id": "PROJ-603",
+          "path": "projects/ai-infrastructure-principal-architect/project-603-strategic-innovation-portfolio/README.md",
+          "lms_assignment_id": "ai-infra-principal-architect-proj-603"
+        }
+      ]
     }
   ],
-  "projects": [
-    {
-      "id": "PROJ-00",
-      "path": "examples/sample-project/guide.md",
-      "lms_assignment_id": "ai-infra-sample-project"
-    }
-  ]
+  "solutions": {
+    "placement": "separate",
+    "paths": [
+      "modules/ai-infrastructure-architect/module-301-enterprise-architecture/solutions/README.md",
+      "modules/ai-infrastructure-engineer/module-110-llm-infrastructure/solutions/README.md",
+      "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/solutions/README.md",
+      "modules/ai-infrastructure-senior-architect/module-401-enterprise-ai-strategy/solutions/README.md",
+      "modules/junior-ai-infrastructure-engineer/module-001-python-fundamentals/solutions/README.md",
+      "modules/senior-ai-infrastructure-engineer/module-201-advanced-kubernetes/solutions/README.md"
+    ]
+  }
 }

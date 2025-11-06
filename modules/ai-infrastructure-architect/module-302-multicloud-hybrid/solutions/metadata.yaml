@@ -1,0 +1,21 @@
+id: "SOL-302"
+type: "solution"
+title: "Solutions for multi-cloud-hybrid-architecture"
+roles:
+  - "ai-infrastructure-architect"
+stage: "core"
+proficiency_target: "expert"
+competencies:
+  - id: "multi-cloud-strategy"
+    level: "expert"
+dependencies:
+  - "module-302-multicloud-hybrid/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions"
+metadata_version: "1.0.0"

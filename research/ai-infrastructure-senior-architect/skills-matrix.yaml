@@ -1,0 +1,161 @@
+role: "Senior AI Infrastructure Architect"
+level: "senior-architect"
+last_updated: "2025-10-19"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Strategic Leadership & Board Advisory"
+    description: "Define enterprise AI vision, engage executives/board, and drive organizational change."
+    skills:
+      - name: "Enterprise AI Strategy"
+        proficiency:
+          proficient:
+            description: "Develop 3-5 year AI infrastructure roadmaps aligned to business objectives."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-001"
+          expert:
+            description: "Advise C-suite/board on AI investments, manage portfolio, and report on outcomes."
+            evidence_sources:
+              - type: "research"
+                id: "senior-architect-analysis"
+        assessment_types:
+          - "Portfolio review"
+          - "Executive presentation"
+      - name: "Executive Communication & Influence"
+        proficiency:
+          proficient:
+            description: "Present architectures and investment cases to C-level stakeholders."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-002"
+          expert:
+            description: "Lead board briefings, negotiate trade-offs, and manage crises."
+            evidence_sources: []
+        assessment_types:
+          - "Presentation"
+          - "Stakeholder feedback"
+  - name: "Governance, Policy & Responsible AI"
+    description: "Establish global governance frameworks, responsible AI programs, and regulatory compliance."
+    skills:
+      - name: "Architecture Governance"
+        proficiency:
+          proficient:
+            description: "Operate architecture boards, enforce standards, and manage exceptions."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-003"
+          expert:
+            description: "Define enterprise-wide governance frameworks, KPIs, and maturity programs."
+            evidence_sources: []
+        assessment_types:
+          - "Audit"
+          - "Architecture review"
+      - name: "Responsible AI & Compliance"
+        proficiency:
+          proficient:
+            description: "Integrate responsible AI policies, risk assessments, and monitoring."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-004"
+          expert:
+            description: "Lead enterprise RAI governance, align with EU AI Act/NIST AI RMF, and report to regulators."
+            evidence_sources: []
+        assessment_types:
+          - "Policy review"
+          - "Executive briefing"
+  - name: "Global Platform & Multi-Cloud Strategy"
+    description: "Design resilient, compliant, and sustainable global AI platforms across multiple clouds."
+    skills:
+      - name: "Global Multi-Cloud Architecture"
+        proficiency:
+          proficient:
+            description: "Design sovereign, resilient architectures across multiple providers."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-005"
+          expert:
+            description: "Own global platform strategy, cost governance, and resiliency targets for AI workloads."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Tabletop exercise"
+      - name: "Advanced FinOps & Sustainability"
+        proficiency:
+          proficient:
+            description: "Model costs, carbon footprint, and optimization plans for AI platforms."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-006"
+          expert:
+            description: "Influence enterprise budgeting, sustainability strategy, and financial governance for AI."
+            evidence_sources: []
+        assessment_types:
+          - "Business case"
+          - "Financial review"
+  - name: "Innovation, Partnerships & M&A"
+    description: "Lead innovation portfolio, evaluate emerging tech, and manage partnerships/M&A."
+    skills:
+      - name: "Innovation Leadership"
+        proficiency:
+          proficient:
+            description: "Run innovation programs, technology radar, and incubation pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-007"
+          expert:
+            description: "Shape industry direction, secure patents, and align innovation with corporate strategy."
+            evidence_sources: []
+        assessment_types:
+          - "Portfolio"
+          - "Innovation review"
+      - name: "M&A Technical Due Diligence"
+        proficiency:
+          proficient:
+            description: "Lead technical assessments and integration planning for acquisitions."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-008"
+          expert:
+            description: "Advise executives on M&A strategies, synergies, and integration execution."
+            evidence_sources: []
+        assessment_types:
+          - "Case study"
+          - "Executive simulation"
+  - name: "Thought Leadership & Ecosystem Influence"
+    description: "Represent the organization externally, build ecosystems, and drive industry standards."
+    skills:
+      - name: "Thought Leadership"
+        proficiency:
+          proficient:
+            description: "Publish articles, present at conferences, contribute to standards."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-009"
+          expert:
+            description: "Shape industry narratives, chair standards committees, and lead advisory boards."
+            evidence_sources: []
+        assessment_types:
+          - "Publication"
+          - "Conference evaluation"
+      - name: "Ecosystem & Partnership Management"
+        proficiency:
+          proficient:
+            description: "Develop partnerships with hyperscalers, vendors, academia."
+            evidence_sources:
+              - type: "job_posting"
+                id: "SAIA-010"
+          expert:
+            description: "Build global partner ecosystems, negotiate strategic agreements, and govern alliances."
+            evidence_sources: []
+        assessment_types:
+          - "Partnership plan"
+          - "Stakeholder feedback"
+progression_map:
+  proficient: "Architect-level leaders taking on enterprise strategy and executive advisory responsibilities."
+  expert: "Board-level advisors influencing industry direction, innovation portfolios, and global programs."
+notes:
+  - "Competencies synthesized from enterprise job postings, legacy curriculum, and industry frameworks (2025-10-19)."

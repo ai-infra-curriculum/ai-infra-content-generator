@@ -1,0 +1,25 @@
+id: MOD-306
+type: module
+title: Enterprise MLOps Platform Architecture
+roles:
+- ai-infrastructure-architect
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: enterprise-mlops-architecture
+  level: expert
+- id: platform-governance
+  level: expert
+dependencies:
+- MOD-206
+- MOD-301
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Architects enterprise MLOps platforms with governance, experimentation, feature stores, and SLA-backed serving.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-306-enterprise-mlops'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: SOL-601
+type: solution
+title: Solutions for project-601-enterprise-architecture-playbook
+roles:
+  - ai-infrastructure-principal-architect
+stage: principal-architect
+proficiency_target: expert
+competencies:
+  - id: enterprise-ai-strategy
+    level: expert
+  - id: architecture-governance
+    level: expert
+  - id: ma-due-diligence
+    level: proficient
+dependencies:
+  - project-601-enterprise-architecture-playbook/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions/projects/project-601-enterprise-architecture-playbook'
+metadata_version: 1.0.0

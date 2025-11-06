@@ -1,0 +1,22 @@
+id: PROJ-03
+type: project
+title: ML Pipeline with Experiment Tracking
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: project-execution
+  level: proficient
+dependencies:
+- Projects 01-02
+- Modules 007-008
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

@@ -1,0 +1,21 @@
+id: "SOL-406"
+type: "solution"
+title: "Solutions for global-infrastructure-sustainability"
+roles:
+  - "ai-infrastructure-senior-architect"
+stage: "advanced"
+proficiency_target: "expert"
+competencies:
+  - id: "global-platform-architecture"
+    level: "expert"
+dependencies:
+  - "module-406-global-infrastructure/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Leadership"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions/projects/project-402-global-platform-architecture"
+metadata_version: "1.0.0"

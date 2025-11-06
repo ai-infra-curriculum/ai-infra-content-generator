@@ -1,0 +1,25 @@
+id: MOD-604
+type: module
+title: Innovation Ecosystems & Thought Leadership
+roles:
+- ai-infrastructure-principal-architect
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: innovation-leadership
+  level: expert
+- id: thought-leadership
+  level: expert
+dependencies:
+- MOD-404
+- MOD-407
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds and governs innovation pipelines, ecosystem partnerships, and public thought leadership initiatives.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/lessons/mod-604-innovation-ecosystems'
+metadata_version: 1.0.0

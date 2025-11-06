@@ -1,0 +1,29 @@
+id: PROJ-603
+type: project
+title: Strategic Innovation & Board Portfolio
+roles:
+- ai-infrastructure-principal-architect
+stage: principal-architect
+proficiency_target: expert
+competencies:
+- id: innovation-leadership
+  level: expert
+- id: executive-communication
+  level: expert
+- id: future-sensing
+  level: expert
+dependencies:
+- MOD-602
+- MOD-604
+- MOD-609
+- MOD-610
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Curate an innovation and investment portfolio with board reporting, technology radar, and strategic communication plan.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/projects/project-03-strategic-innovation'
+metadata_version: 1.0.0

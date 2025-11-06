@@ -1,0 +1,25 @@
+id: MOD-405
+type: module
+title: Responsible AI & Ethics Leadership
+roles:
+- ai-infrastructure-senior-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: responsible-ai
+  level: expert
+- id: compliance-governance
+  level: expert
+dependencies:
+- MOD-303
+- MOD-308
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Creates enterprise responsible AI frameworks, risk management processes, and regulatory alignment strategies.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-architect-learning/lessons/mod-405-responsible-ai'
+metadata_version: 1.0.0

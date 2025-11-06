@@ -1,0 +1,252 @@
+role: Principal AI Infrastructure Architect
+level: principal-architect
+program_name: Principal AI Infrastructure Architect Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-20'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Govern the enterprise AI infrastructure portfolio, aligning strategy, investments, and risk appetite with board expectations.
+  - Lead global multi-cloud modernization, responsible AI programs, and M&A integrations that deliver measurable business value.
+  - Shape innovation ecosystems, external partnerships, and thought leadership that position the company as an industry authority.
+  secondary:
+  - Mentor senior/principal architects and scale architecture operating models across global organizations.
+  - Evaluate frontier technologies, sustainability impacts, and long-horizon scenarios to future-proof AI infrastructure strategy.
+program_structure:
+  total_duration_hours: 520
+  modules:
+  - id: MOD-601
+    title: Enterprise Architecture Leadership
+    duration_hours:
+      lecture: 18
+      lab: 20
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-401
+    - MOD-403
+    learning_objectives:
+    - Build principal-level enterprise architecture playbooks, capability maps, and funding models.
+    - Establish architecture operating models and governance councils spanning global business units.
+    linked_projects:
+    - PROJ-601
+  - id: MOD-602
+    title: Strategic Alignment & Value Mapping
+    duration_hours:
+      lecture: 16
+      lab: 18
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-401
+    - MOD-402
+    learning_objectives:
+    - Translate corporate strategy into AI infrastructure investment roadmaps and KPI frameworks.
+    - Quantify value realization, benefits tracking, and funding mechanisms for principal-level programs.
+    linked_projects:
+    - PROJ-601
+    - PROJ-603
+  - id: MOD-603
+    title: Global Governance & Risk Orchestration
+    duration_hours:
+      lecture: 16
+      lab: 18
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-405
+    - MOD-406
+    learning_objectives:
+    - Design global governance operating models, policy automation, and compliance scorecards.
+    - Integrate sovereignty, security, and risk mitigation into executive oversight processes.
+    linked_projects:
+    - PROJ-602
+  - id: MOD-604
+    title: Innovation Ecosystems & Thought Leadership
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-404
+    - MOD-407
+    learning_objectives:
+    - Operate innovation portfolios, venture scouting, and co-innovation programs with strategic partners.
+    - Develop thought-leadership narratives, standards contributions, and public influence plans.
+    linked_projects:
+    - PROJ-603
+    - PROJ-604
+  - id: MOD-605
+    title: Responsible AI Programs at Enterprise Scale
+    duration_hours:
+      lecture: 14
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-405
+    - MOD-408
+    learning_objectives:
+    - Establish responsible AI portfolios, oversight councils, and audit-ready evidence pipelines.
+    - Align global regulatory obligations (EU AI Act, NIST AI RMF, ISO/IEC 42001) with enterprise policy.
+    linked_projects:
+    - PROJ-602
+  - id: MOD-606
+    title: Multi-Cloud Transformation Leadership
+    duration_hours:
+      lecture: 18
+      lab: 20
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-406
+    - MOD-503
+    learning_objectives:
+    - Architect sovereign-aware multi-cloud platforms, hardware strategy, and sustainability KPIs.
+    - Lead enterprise FinOps, cost governance, and performance optimization at board-visible scale.
+    linked_projects:
+    - PROJ-602
+  - id: MOD-607
+    title: Strategic Partnership & Ecosystem Strategy
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-404
+    - MOD-407
+    learning_objectives:
+    - Structure hyperscaler, hardware, and research partnerships with joint governance and value metrics.
+    - Negotiate strategic agreements, alliance scorecards, and exit criteria.
+    linked_projects:
+    - PROJ-604
+  - id: MOD-608
+    title: M&A Technical Due Diligence for AI
+    duration_hours:
+      lecture: 12
+      lab: 14
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-408
+    - MOD-403
+    learning_objectives:
+    - Execute principal-level diligence assessments, integration playbooks, and risk scoring.
+    - Harmonize architectures, teams, and KPIs during acquisitions, spin-outs, or joint ventures.
+    linked_projects:
+    - PROJ-601
+    - PROJ-602
+  - id: MOD-609
+    title: Executive Communication & Influence at Board Level
+    duration_hours:
+      lecture: 12
+      lab: 14
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-402
+    - MOD-409
+    learning_objectives:
+    - Craft board-ready narratives, investor briefings, and crisis-response playbooks for AI programs.
+    - Coach executive stakeholders and manage cross-functional escalation pathways.
+    linked_projects:
+    - PROJ-603
+    - PROJ-604
+  - id: MOD-610
+    title: Future-Proofing & Horizon Scanning
+    duration_hours:
+      lecture: 12
+      lab: 12
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-principal-architect
+    prerequisites:
+    - MOD-604
+    - MOD-606
+    - MOD-605
+    learning_objectives:
+    - Evaluate frontier technologies, geopolitical scenarios, and macro trends influencing AI infrastructure.
+    - Maintain technology radars, scenario portfolios, and investment option trees for long-horizon planning.
+    linked_projects:
+    - PROJ-603
+assessment_strategy:
+  formative:
+  - type: executive-simulation
+    cadence: per module (board reviews, governance audits, partner negotiations)
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Enterprise architecture portfolio + board strategy session
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-601
+    summary: Enterprise Architecture Playbook
+    difficulty: principal-architect
+    assessed_competencies:
+    - enterprise-ai-strategy
+    - architecture-governance
+    integration_notes: Synthesizes MOD-601, MOD-602, and MOD-608 outputs.
+  - id: PROJ-602
+    summary: Global Governance & Transformation Program
+    difficulty: principal-architect
+    assessed_competencies:
+    - global-governance
+    - multi-cloud-strategy
+    integration_notes: Builds on MOD-603, MOD-605, and MOD-606.
+  - id: PROJ-603
+    summary: Strategic Innovation & Board Portfolio
+    difficulty: principal-architect
+    assessed_competencies:
+    - innovation-leadership
+    - executive-communication
+    integration_notes: Requires artifacts from MOD-602, MOD-604, MOD-609, and MOD-610.
+  - id: PROJ-604
+    summary: Ecosystem Leadership & Partnership Strategy
+    difficulty: principal-architect
+    assessed_competencies:
+    - ecosystem-leadership
+    - vendor-strategy
+    integration_notes: Combines deliverables from MOD-604, MOD-607, and MOD-609.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Chief AI Officer
+    focus: Strategic alignment, investment thesis, and innovation roadmap
+    due_date: '2025-12-05'
+  - reviewer: Chief Risk & Compliance Officer
+    focus: Governance, responsible AI controls, regulatory readiness
+    due_date: '2025-12-12'
+  pilot_metrics:
+    completion_rate_target: 0.6
+    satisfaction_target: 4.7
+    board_signoff_rate_target: 0.9
+risk_register:
+- risk: Executive availability delays board simulations and validation workshops.
+  impact: high
+  likelihood: medium
+  mitigation: Secure executive sponsors early, provide asynchronous briefing packets, record sessions.
+- risk: Access to sensitive financial or M&A data is restricted.
+  impact: medium
+  likelihood: medium
+  mitigation: Use anonymized cases, partner with finance/legal for redacted datasets, add data-handling guidelines.

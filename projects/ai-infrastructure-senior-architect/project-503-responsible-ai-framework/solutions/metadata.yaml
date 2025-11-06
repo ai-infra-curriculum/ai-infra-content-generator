@@ -1,0 +1,21 @@
+id: "SOL-P503"
+type: "solution"
+title: "Solutions for responsible-ai-framework"
+roles:
+  - "ai-infrastructure-senior-architect"
+stage: "senior-architect"
+proficiency_target: "expert"
+competencies:
+  - id: "responsible-ai"
+    level: "expert"
+dependencies:
+  - "project-503-responsible-ai-framework/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Leadership"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions/projects/project-403-responsible-ai"
+metadata_version: "1.0.0"

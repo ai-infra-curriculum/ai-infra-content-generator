@@ -1,0 +1,27 @@
+id: MOD-102
+type: module
+title: Cloud Computing for ML
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: cloud-architecture
+  level: proficient
+- id: security-compliance
+  level: proficient
+- id: cost-optimization
+  level: working
+dependencies:
+- MOD-101
+- MOD-010
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Covers multi-cloud provisioning, IAM, networking, and cost governance for ML workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-102-cloud-computing'
+metadata_version: 1.0.0

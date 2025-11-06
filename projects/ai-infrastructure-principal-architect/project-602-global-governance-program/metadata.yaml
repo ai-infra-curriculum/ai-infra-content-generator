@@ -1,0 +1,28 @@
+id: PROJ-602
+type: project
+title: Global Governance & Transformation Program
+roles:
+- ai-infrastructure-principal-architect
+stage: principal-architect
+proficiency_target: expert
+competencies:
+- id: global-governance
+  level: expert
+- id: multi-cloud-strategy
+  level: expert
+- id: responsible-ai
+  level: expert
+dependencies:
+- MOD-603
+- MOD-605
+- MOD-606
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Design a global governance and transformation program covering sovereignty, responsible AI, and multi-cloud modernization across regions.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/projects/project-02-global-governance'
+metadata_version: 1.0.0

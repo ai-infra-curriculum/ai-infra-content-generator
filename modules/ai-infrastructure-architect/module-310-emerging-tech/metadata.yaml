@@ -1,0 +1,24 @@
+id: MOD-310
+type: module
+title: Emerging Technologies & Innovation
+roles:
+- ai-infrastructure-architect
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: innovation-strategy
+  level: expert
+- id: tech-evaluation
+  level: proficient
+dependencies:
+- MOD-309
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Evaluates emerging AI/ML technologies, sustainability, and innovation frameworks to sustain competitive advantage.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-310-emerging-tech'
+metadata_version: 1.0.0

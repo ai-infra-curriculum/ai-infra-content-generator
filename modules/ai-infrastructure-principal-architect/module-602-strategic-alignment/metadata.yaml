@@ -1,0 +1,25 @@
+id: MOD-602
+type: module
+title: Strategic Alignment & Value Mapping
+roles:
+- ai-infrastructure-principal-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: business-alignment
+  level: expert
+- id: value-architecture
+  level: expert
+dependencies:
+- MOD-401
+- MOD-402
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Translates corporate strategy into AI infrastructure portfolio roadmaps, investment theses, and KPI frameworks.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/lessons/mod-602-strategic-alignment'
+metadata_version: 1.0.0

@@ -1,0 +1,53 @@
+# Curriculum Migration Plan
+
+1. **Inventory & Snapshot** — _Completed 2025-10-15_
+   - Archive current state of role repositories, research assets, and planning docs.
+   - Ensure checkpoints/backups exist for rollback.
+
+2. **Research Migration** — _Status: In progress_
+- ✅ Junior AI Infrastructure Engineer (`research/junior-ai-infrastructure-engineer/*`)
+- ✅ AI Infrastructure Engineer (`research/ai-infrastructure-engineer/*`)
+- ✅ Senior AI Infrastructure Engineer (`research/senior-ai-infrastructure-engineer/*`)
+- ✅ AI Infrastructure Architect (`research/ai-infrastructure-architect/*`)
+ - ✅ Principal AI Infrastructure Architect (`research/ai-infrastructure-principal-architect/*`)
+   - ☐ Remaining Staff+ roles (Principal Engineer, Team Lead, specialized tracks)
+   - ☐ Validate migrated metadata via `./tools/curriculum.py validate-metadata` (blocked: Python tooling not yet installed)
+
+3. **Curriculum Plans** — _Status: In progress_
+- ✅ Junior master plan, module roadmaps, project plans
+- ✅ AI Infrastructure Engineer master plan, roadmaps, projects
+- ✅ Senior AI Infrastructure Engineer master plan, roadmaps, projects
+- ✅ AI Infrastructure Architect master plan, roadmaps, projects
+ - ✅ Principal AI Infrastructure Architect master plan, roadmaps, projects
+   - ☐ Update remaining role plan templates once prioritised
+
+4. **Module & Lesson Content** — _Status: In progress_
+- ✅ Junior and mid-level modules migrated with metadata
+- ✅ Senior modules (MOD-201…210) migrated with metadata and placeholder solution notes
+- ✅ Architect modules (MOD-301…310) migrated with metadata and solution stubs
+ - ✅ Principal modules (MOD-601…610) migrated with metadata and solution placeholders
+   - ☐ Run validation profiles (`./tools/curriculum.py run-validation …`) after environment setup (pip missing)
+
+5. **Projects & Solutions** — _Status: In progress_
+- ✅ Junior projects + solutions metadata
+- ✅ AI Infrastructure Engineer projects + solutions metadata
+- ✅ Senior projects (PROJ-301…304) with legacy solutions copied and metadata linked
+- ✅ Architect projects (PROJ-401…405) with legacy solutions copied and metadata linked
+ - ✅ Principal projects (PROJ-601…604) with metadata and solution stubs connected to legacy repos
+   - ☐ Curate senior module solution READMEs with direct references to legacy guides
+
+6. **Exporters & Automation** — _Status: In progress_
+   - ✅ Update LMS sample (`exporters/samples/lms-export.json`) with junior through principal coverage
+   - ✅ Update MkDocs sample (`exporters/samples/mkdocs.yml`) navigation across roles
+  - ☐ Execute automation commands (`generate-mkdocs-nav`, `export-graph`) once tooling is available
+
+7. **Verification & Sign-Off** — _Status: Pending_
+   - ☐ Install Python dependencies and run validation pipelines (metadata, exporters, graph checks)
+   - ☐ Update `CHANGELOG.md` and governance docs after validation passes
+   - ☐ Route senior curriculum for stakeholder review (Platform Architect, Reliability director)
+
+## Next Steps & Blockers
+
+- Provision Python tooling (pip/virtualenv) to run `./tools/curriculum.py validate-metadata`, exporter generation, and graph checks.
+- Backfill senior module solution documentation with curated links to legacy guides and CI instructions.
+- Align remaining advanced roles (Principal Engineer, Team Lead, specialized tracks) once priorities are confirmed.

@@ -2,9 +2,43 @@ site_name: "AI Infrastructure Curriculum"
 use_directory_urls: true
 nav:
   - Home: README.md
-  - Examples:
-      - "Sample Module": examples/sample-module/lesson.md
-      - "Sample Project": examples/sample-project/guide.md
+  - Junior AI Infrastructure Engineer:
+      - "Master Plan": curriculum/junior-ai-infrastructure-engineer/master-plan.yaml
+      - "Module 001 Roadmap": curriculum/junior-ai-infrastructure-engineer/modules/module-001-roadmap.md
+      - "Project 01 Plan": curriculum/junior-ai-infrastructure-engineer/projects/project-01-plan.md
+  - AI Infrastructure Engineer:
+      - "Master Plan": curriculum/ai-infrastructure-engineer/master-plan.yaml
+      - "Module 101 Roadmap": curriculum/ai-infrastructure-engineer/modules/module-101-roadmap.md
+      - "Module 110 Roadmap": curriculum/ai-infrastructure-engineer/modules/module-110-roadmap.md
+      - "Project 203 Plan": curriculum/ai-infrastructure-engineer/projects/project-203-plan.md
+  - Senior AI Infrastructure Engineer:
+      - "Master Plan": curriculum/senior-ai-infrastructure-engineer/master-plan.yaml
+      - "Module 201 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-201-roadmap.md
+      - "Module 206 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-206-roadmap.md
+      - "Module 210 Roadmap": curriculum/senior-ai-infrastructure-engineer/modules/module-210-roadmap.md
+      - "Project 303 Plan": curriculum/senior-ai-infrastructure-engineer/projects/project-303-plan.md
+  - AI Infrastructure Architect:
+      - "Master Plan": curriculum/ai-infrastructure-architect/master-plan.yaml
+      - "Module 301 Roadmap": curriculum/ai-infrastructure-architect/modules/module-301-roadmap.md
+      - "Module 302 Roadmap": curriculum/ai-infrastructure-architect/modules/module-302-roadmap.md
+      - "Module 308 Roadmap": curriculum/ai-infrastructure-architect/modules/module-308-roadmap.md
+      - "Project 401 Plan": curriculum/ai-infrastructure-architect/projects/project-401-plan.md
+  - Senior AI Infrastructure Architect:
+      - "Master Plan": curriculum/ai-infrastructure-senior-architect/master-plan.yaml
+      - "Module 401 Roadmap": curriculum/ai-infrastructure-senior-architect/modules/module-401-roadmap.md
+      - "Module 405 Roadmap": curriculum/ai-infrastructure-senior-architect/modules/module-405-roadmap.md
+      - "Module 410 Roadmap": curriculum/ai-infrastructure-senior-architect/modules/module-410-roadmap.md
+      - "Project 501 Plan": curriculum/ai-infrastructure-senior-architect/projects/project-501-plan.md
+  - Principal AI Infrastructure Architect:
+      - "Master Plan": curriculum/ai-infrastructure-principal-architect/master-plan.yaml
+      - "Module 601 Roadmap": curriculum/ai-infrastructure-principal-architect/modules/module-601-roadmap.md
+      - "Module 606 Roadmap": curriculum/ai-infrastructure-principal-architect/modules/module-606-roadmap.md
+      - "Module 610 Roadmap": curriculum/ai-infrastructure-principal-architect/modules/module-610-roadmap.md
+      - "Project 603 Plan": curriculum/ai-infrastructure-principal-architect/projects/project-603-plan.md
+  - Reference:
+      - "Repository Strategy": curriculum/repository-strategy.yaml
+      - "Multi-Role Alignment": curriculum/roles/multi-role-alignment.md
+      - "Migration Plan": docs/migration-plan.md
 theme:
   name: "material"
   palette:

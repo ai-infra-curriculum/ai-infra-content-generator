@@ -1,0 +1,22 @@
+id: PROJ-02
+type: project
+title: Kubernetes Model Serving
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: project-execution
+  level: working
+dependencies:
+- Project 01
+- Module 006
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

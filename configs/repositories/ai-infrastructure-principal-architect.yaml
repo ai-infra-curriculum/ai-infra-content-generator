@@ -1,0 +1,16 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-principal-architect/module-{num:03d}-*"
+  valid_range: [601, 610]
+projects_mapping:
+  source_pattern: "projects/project-{num:03d}-*"
+  target_pattern: "projects/ai-infrastructure-principal-architect/project-{num:03d}-*"
+  valid_range: [601, 604]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:03d}-*"
+notes: |
+  Modules MOD-601 through MOD-610 and projects PROJ-601 through PROJ-604 capture the principal architect curriculum.
+  Use this mapping to synchronize executive-level artifacts across legacy repositories and the new framework while minimizing duplication.

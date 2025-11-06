@@ -1,0 +1,14 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-architect-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-senior-architect/module-{num:03d}-*"
+projects_mapping:
+  source_pattern: "projects/project-{num:03d}-*"
+  target_pattern: "projects/ai-infrastructure-senior-architect/project-{num:03d}-*"
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:03d}-*"
+notes: |
+  Module IDs 401-410 and project IDs 501-505 represent the migrated senior architect curriculum.
+  Use this mapping to sync assets between legacy senior architect repositories and the new framework.

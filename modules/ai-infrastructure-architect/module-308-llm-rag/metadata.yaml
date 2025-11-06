@@ -1,0 +1,25 @@
+id: MOD-308
+type: module
+title: LLM Platform & RAG Architecture
+roles:
+- ai-infrastructure-architect
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: llm-architecture
+  level: expert
+- id: responsible-ai
+  level: proficient
+dependencies:
+- MOD-204
+- MOD-306
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Architects enterprise LLM platforms and RAG systems with governance, safety guardrails, and cost optimization.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-308-llm-rag'
+metadata_version: 1.0.0

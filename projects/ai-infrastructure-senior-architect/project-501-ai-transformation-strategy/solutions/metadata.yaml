@@ -1,0 +1,21 @@
+id: "SOL-P501"
+type: "solution"
+title: "Solutions for enterprise-ai-transformation-strategy"
+roles:
+  - "ai-infrastructure-senior-architect"
+stage: "senior-architect"
+proficiency_target: "expert"
+competencies:
+  - id: "enterprise-ai-strategy"
+    level: "expert"
+dependencies:
+  - "project-501-ai-transformation-strategy/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Leadership"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions/projects/project-401-transformation-strategy"
+metadata_version: "1.0.0"

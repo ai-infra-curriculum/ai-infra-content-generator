@@ -1,0 +1,21 @@
+id: "SOL-003"
+type: "solution"
+title: "Solutions for git-version-control"
+roles:
+  - "junior-ai-infrastructure-engineer"
+stage: "core"
+proficiency_target: "working"
+competencies:
+  - id: "solution-quality"
+    level: "working"
+dependencies:
+  - "module-003-git-version-control/metadata.yaml"
+validation_profile: "python-light"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-junior-engineer-solutions/modules"
+metadata_version: "1.0.0"

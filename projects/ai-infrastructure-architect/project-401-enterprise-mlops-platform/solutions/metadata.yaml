@@ -1,0 +1,21 @@
+id: "SOL-P401"
+type: "solution"
+title: "Solutions for enterprise-mlops-platform"
+roles:
+  - "ai-infrastructure-architect"
+stage: "architect"
+proficiency_target: "expert"
+competencies:
+  - id: "enterprise-architecture"
+    level: "expert"
+dependencies:
+  - "project-401-enterprise-mlops-platform/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions/projects/project-301-enterprise-mlops"
+metadata_version: "1.0.0"

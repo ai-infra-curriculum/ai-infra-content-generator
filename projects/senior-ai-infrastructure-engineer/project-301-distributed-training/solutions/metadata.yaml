@@ -1,0 +1,21 @@
+id: "SOL-P301"
+type: "solution"
+title: "Solutions for distributed-training-platform"
+roles:
+  - "senior-ai-infrastructure-engineer"
+stage: "core"
+proficiency_target: "expert"
+competencies:
+  - id: "distributed-training-optimization"
+    level: "expert"
+dependencies:
+  - "project-301-distributed-training/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-engineer-solutions/projects/project-201-distributed-training"
+metadata_version: "1.0.0"

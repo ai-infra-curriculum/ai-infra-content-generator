@@ -1,0 +1,21 @@
+id: MOD-008
+type: module
+title: Databases & SQL
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: database-integration
+  level: working
+dependencies:
+- Python fundamentals
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

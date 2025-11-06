@@ -1,0 +1,25 @@
+id: MOD-103
+type: module
+title: Containerization & Docker
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: container-engineering
+  level: proficient
+- id: gpu-operations
+  level: working
+dependencies:
+- MOD-005
+- MOD-101
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Teaches production-grade container builds, orchestration with Compose, and GPU integration.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-103-containerization'
+metadata_version: 1.0.0

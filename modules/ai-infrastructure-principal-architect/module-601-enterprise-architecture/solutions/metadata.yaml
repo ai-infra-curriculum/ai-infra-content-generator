@@ -1,0 +1,23 @@
+id: SOL-601
+type: solution
+title: Solutions for MOD-601 Enterprise Architecture Leadership
+roles:
+  - ai-infrastructure-principal-architect
+stage: core
+proficiency_target: expert
+competencies:
+  - id: enterprise-ai-strategy
+    level: expert
+  - id: architecture-governance
+    level: expert
+dependencies:
+  - module-601-enterprise-architecture/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions'
+metadata_version: 1.0.0

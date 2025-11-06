@@ -1,0 +1,25 @@
+id: MOD-307
+type: module
+title: Data Architecture for AI
+roles:
+- ai-infrastructure-architect
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: data-architecture
+  level: expert
+- id: data-governance
+  level: expert
+dependencies:
+- MOD-105
+- MOD-205
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Designs lakehouse, streaming, and governance architectures to supply high-quality data for enterprise AI workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-307-data-architecture'
+metadata_version: 1.0.0

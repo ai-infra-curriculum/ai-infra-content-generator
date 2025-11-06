@@ -1,0 +1,77 @@
+program_name: AI Infrastructure Curriculum
+version: 0.2.0
+last_updated: '2025-10-17'
+roles:
+- name: Junior AI Infrastructure Engineer
+  slug: junior-ai-infrastructure-engineer
+- name: AI Infrastructure Engineer
+  slug: ai-infrastructure-engineer
+- name: Senior AI Infrastructure Engineer
+  slug: senior-ai-infrastructure-engineer
+- name: AI Infrastructure Architect
+  slug: ai-infrastructure-architect
+- name: Senior AI Infrastructure Architect
+  slug: ai-infrastructure-senior-architect
+- name: Principal AI Infrastructure Architect
+  slug: ai-infrastructure-principal-architect
+repositories:
+  mode: per_role
+  base_repo_name: ai-infra
+  role_repos:
+    junior-ai-infrastructure-engineer:
+      learning: ai-infra-junior-engineer-learning
+      solutions: ai-infra-junior-engineer-solutions
+    ai-infrastructure-engineer:
+      learning: ai-infra-engineer-learning
+      solutions: ai-infra-engineer-solutions
+    senior-ai-infrastructure-engineer:
+      learning: ai-infra-senior-engineer-learning
+      solutions: ai-infra-senior-engineer-solutions
+    ai-infrastructure-architect:
+      learning: ai-infra-architect-learning
+      solutions: ai-infra-architect-solutions
+    ai-infrastructure-senior-architect:
+      learning: ai-infra-senior-architect-learning
+      solutions: ai-infra-senior-architect-solutions
+    ai-infrastructure-principal-architect:
+      learning: ai-infra-principal-architect-learning
+      solutions: ai-infra-principal-architect-solutions
+solutions:
+  placement: separate
+  inline_path: null
+  separate_repo_pattern: '{base}-{role}-solutions'
+  access_control_notes: 'Solutions repositories remain instructor-only until content
+    is reviewed.
+
+    '
+shared_assets:
+  cross_role_modules:
+  - module_id: MOD-001
+    description: Python fundamentals reused across multiple roles
+  shared_components: []
+progression_rules:
+- from_role: junior-ai-infrastructure-engineer
+  to_role: ai-infrastructure-engineer
+  strategy: scaffold
+  notes: Provide optional advanced labs for learners jumping ahead
+- from_role: ai-infrastructure-engineer
+  to_role: senior-ai-infrastructure-engineer
+  strategy: specialization
+  notes: Emphasize leadership, governance, and performance milestones during transition
+- from_role: senior-ai-infrastructure-engineer
+  to_role: ai-infrastructure-architect
+  strategy: transformation
+  notes: Focus on enterprise architecture, multi-cloud strategy, and executive communication skills
+- from_role: ai-infrastructure-architect
+  to_role: ai-infrastructure-senior-architect
+  strategy: executive
+  notes: Highlight strategic leadership, innovation, and board advisory capabilities
+- from_role: ai-infrastructure-senior-architect
+  to_role: ai-infrastructure-principal-architect
+  strategy: portfolio-leadership
+  notes: Emphasize board advisory, enterprise portfolio governance, and ecosystem orchestration
+governance:
+  review_cadence: quarterly
+  approvers:
+  - name: Program Lead
+    github: '@ai-infra-lead'

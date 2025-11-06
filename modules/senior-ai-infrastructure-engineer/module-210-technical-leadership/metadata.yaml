@@ -1,0 +1,24 @@
+id: MOD-210
+type: module
+title: Technical Leadership & Mentorship
+roles:
+- senior-ai-infrastructure-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: technical-strategy
+  level: proficient
+- id: mentorship
+  level: expert
+dependencies:
+- MOD-206
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Develop leadership, communication, and mentorship capabilities required to guide AI infrastructure programs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-210-technical-leadership'
+metadata_version: 1.0.0

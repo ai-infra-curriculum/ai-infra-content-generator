@@ -1,0 +1,25 @@
+id: MOD-402
+type: module
+title: Executive Leadership & Communication
+roles:
+- ai-infrastructure-senior-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: executive-advisory
+  level: expert
+- id: leadership-influence
+  level: expert
+dependencies:
+- MOD-401
+- MOD-210
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds executive presence, board communication skills, and organizational leadership for large-scale AI initiatives.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-architect-learning/lessons/mod-402-executive-leadership'
+metadata_version: 1.0.0

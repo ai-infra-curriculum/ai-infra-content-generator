@@ -1,0 +1,29 @@
+id: PROJ-405
+type: project
+title: Security & Compliance Framework
+roles:
+- ai-infrastructure-architect
+stage: architect
+proficiency_target: expert
+competencies:
+- id: security-architecture
+  level: expert
+- id: compliance-governance
+  level: expert
+- id: responsible-ai
+  level: proficient
+dependencies:
+- MOD-303
+- MOD-305
+- MOD-308
+- MOD-309
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Deliver an enterprise AI security and compliance framework covering policy automation, evidence, and responsible AI guardrails.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/projects/project-305-security-framework'
+metadata_version: 1.0.0

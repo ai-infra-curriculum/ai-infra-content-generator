@@ -1,0 +1,23 @@
+id: SOL-606
+type: solution
+title: Solutions for MOD-606 Multi-Cloud Transformation Leadership
+roles:
+  - ai-infrastructure-principal-architect
+stage: core
+proficiency_target: expert
+competencies:
+  - id: multi-cloud-strategy
+    level: expert
+  - id: sustainability-finops
+    level: expert
+dependencies:
+  - module-606-multi-cloud-transformation/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions'
+metadata_version: 1.0.0

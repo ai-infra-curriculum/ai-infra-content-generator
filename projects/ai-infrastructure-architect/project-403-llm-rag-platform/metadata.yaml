@@ -1,0 +1,29 @@
+id: PROJ-403
+type: project
+title: LLM Platform with RAG
+roles:
+- ai-infrastructure-architect
+stage: architect
+proficiency_target: expert
+competencies:
+- id: llm-architecture
+  level: expert
+- id: responsible-ai
+  level: proficient
+- id: data-architecture
+  level: proficient
+dependencies:
+- MOD-303
+- MOD-306
+- MOD-307
+- MOD-308
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Architect an enterprise LLM/RAG platform with safety, governance, and cost optimization aligned to business outcomes.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/projects/project-303-llm-rag-platform'
+metadata_version: 1.0.0

@@ -1,0 +1,244 @@
+{
+  "__comment__": "Grafana ML Overview Dashboard Template",
+  "__instructions__": [
+    "This is a template for creating an ML monitoring dashboard in Grafana.",
+    "TODO: Import this dashboard into Grafana and customize it for your needs.",
+    "",
+    "How to import:",
+    "1. Go to http://localhost:3000 (login: admin/admin123)",
+    "2. Click '+' → Import",
+    "3. Upload this JSON file or paste contents",
+    "4. Select 'Prometheus' as datasource",
+    "5. Click 'Import'",
+    "",
+    "Learning Objectives:",
+    "- Understand Grafana dashboard JSON structure",
+    "- Learn how to create panels with PromQL queries",
+    "- Design effective visualizations for ML metrics",
+    "- Use variables for dynamic dashboards"
+  ],
+
+  "dashboard": {
+    "title": "ML Model Monitoring - Overview",
+    "tags": ["ml", "model", "inference"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s",
+
+    "__comment_variables__": "TODO: Add template variables for model selection",
+    "templating": {
+      "list": [
+        {
+          "__comment__": "TODO: Add variable for model_name",
+          "__example__": {
+            "name": "model_name",
+            "type": "query",
+            "datasource": "Prometheus",
+            "query": "label_values(model_predictions_total, model_name)",
+            "regex": "",
+            "multi": false,
+            "includeAll": false,
+            "refresh": 1
+          }
+        }
+      ]
+    },
+
+    "__comment_panels__": "TODO: Add panels for ML metrics",
+    "panels": [
+      {
+        "__panel_type__": "Graph - Predictions per Second",
+        "__comment__": "TODO: Create a graph panel showing prediction rate",
+        "__query__": "rate(model_predictions_total{model_name=\"$model_name\"}[5m])",
+        "__instructions__": [
+          "1. In Grafana UI: Add Panel → Add new panel",
+          "2. Set visualization type: Time series",
+          "3. Query: rate(model_predictions_total{model_name=\"$model_name\"}[5m])",
+          "4. Legend: {{prediction_class}}",
+          "5. Panel title: Predictions per Second",
+          "6. Y-axis unit: requests/sec",
+          "7. Position: Top left"
+        ]
+      },
+
+      {
+        "__panel_type__": "Graph - Inference Latency Percentiles",
+        "__comment__": "TODO: Create latency percentiles graph (P50, P95, P99)",
+        "__queries__": [
+          "histogram_quantile(0.50, rate(model_inference_duration_seconds_bucket{model_name=\"$model_name\"}[5m]))",
+          "histogram_quantile(0.95, rate(model_inference_duration_seconds_bucket{model_name=\"$model_name\"}[5m]))",
+          "histogram_quantile(0.99, rate(model_inference_duration_seconds_bucket{model_name=\"$model_name\"}[5m]))"
+        ],
+        "__instructions__": [
+          "Create 3 queries in same panel:",
+          "- P50 (median): histogram_quantile(0.50, ...)",
+          "- P95: histogram_quantile(0.95, ...)",
+          "- P99: histogram_quantile(0.99, ...)",
+          "Legend: P50, P95, P99",
+          "Y-axis unit: seconds (s)",
+          "Add alert threshold line at 0.5s",
+          "Position: Top right"
+        ]
+      },
+
+      {
+        "__panel_type__": "Gauge - Model Accuracy",
+        "__comment__": "TODO: Create gauge showing current model accuracy",
+        "__query__": "model_accuracy{model_name=\"$model_name\"}",
+        "__instructions__": [
+          "Visualization: Gauge",
+          "Query: model_accuracy{model_name=\"$model_name\"}",
+          "Min: 0, Max: 1",
+          "Unit: Percent (0-1)",
+          "Thresholds:",
+          "  - Red: < 0.85",
+          "  - Yellow: 0.85 - 0.90",
+          "  - Green: > 0.90",
+          "Position: Middle left"
+        ]
+      },
+
+      {
+        "__panel_type__": "Heatmap - Prediction Confidence Distribution",
+        "__comment__": "TODO: Create heatmap showing confidence score distribution",
+        "__query__": "rate(model_prediction_confidence_bucket{model_name=\"$model_name\"}[5m])",
+        "__instructions__": [
+          "Visualization: Heatmap",
+          "Query: rate(model_prediction_confidence_bucket[5m])",
+          "Y-axis: Confidence buckets (0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99, 1.0)",
+          "X-axis: Time",
+          "Color scale: Spectral (low = cold, high = warm)",
+          "This shows if confidence distribution is changing over time",
+          "Position: Bottom left"
+        ]
+      },
+
+      {
+        "__panel_type__": "Graph - Data Drift Scores",
+        "__comment__": "TODO: Create graph showing drift scores per feature",
+        "__query__": "data_drift_score",
+        "__instructions__": [
+          "Visualization: Time series",
+          "Query: data_drift_score",
+          "Legend: {{feature_name}}",
+          "Add threshold line at 0.5 (drift threshold)",
+          "Y-axis: 0-1 (drift score)",
+          "Position: Bottom right"
+        ]
+      },
+
+      {
+        "__panel_type__": "Stat - Total Predictions Today",
+        "__comment__": "TODO: Create stat panel showing daily prediction count",
+        "__query__": "sum(increase(model_predictions_total{model_name=\"$model_name\"}[24h]))",
+        "__instructions__": [
+          "Visualization: Stat",
+          "Query: sum(increase(model_predictions_total[24h]))",
+          "Show: Value and Sparkline",
+          "Unit: Short (1.2k, 1.5M)",
+          "Color: Based on thresholds",
+          "Position: Top row"
+        ]
+      },
+
+      {
+        "__panel_type__": "Table - Recent Errors",
+        "__comment__": "TODO: Create table showing recent prediction errors",
+        "__query__": "rate(model_prediction_errors_total{model_name=\"$model_name\"}[5m])",
+        "__instructions__": [
+          "Visualization: Table",
+          "Query: rate(model_prediction_errors_total[5m])",
+          "Columns: Error Type, Rate, Last Occurrence",
+          "Sort: By rate descending",
+          "Position: Middle right"
+        ]
+      }
+    ],
+
+    "__layout_instructions__": [
+      "Recommended layout (24 columns wide):",
+      "",
+      "┌─────────────────────────────────────────────────────────────┐",
+      "│  Predictions/sec  │  Latency Percentiles │  Stats (narrow) │",
+      "│     (12 cols)     │      (8 cols)        │    (4 cols)     │",
+      "├─────────────────────────────────────────────────────────────┤",
+      "│  Model Accuracy   │  Confidence Heatmap  │  Recent Errors  │",
+      "│   (Gauge, 6 cols) │     (12 cols)        │   (6 cols)      │",
+      "├─────────────────────────────────────────────────────────────┤",
+      "│  Data Drift Scores (all features)                           │",
+      "│     (24 cols - full width)                                  │",
+      "└─────────────────────────────────────────────────────────────┘",
+      "",
+      "Use grid layout in Grafana (not fixed) for responsive design"
+    ]
+  },
+
+  "__additional_dashboards_todo__": {
+    "infrastructure_dashboard": {
+      "filename": "infrastructure.json",
+      "panels": [
+        "CPU usage per node",
+        "Memory usage per node",
+        "Disk usage (gauge)",
+        "Network traffic",
+        "Container status",
+        "Pod restarts"
+      ]
+    },
+
+    "application_dashboard": {
+      "filename": "application.json",
+      "panels": [
+        "Request rate (req/s)",
+        "Error rate (%)",
+        "P95 latency",
+        "Status code distribution (pie chart)",
+        "Endpoint performance (table)",
+        "Active connections"
+      ]
+    },
+
+    "business_dashboard": {
+      "filename": "business.json",
+      "panels": [
+        "Total requests today",
+        "Success rate (gauge)",
+        "SLA compliance",
+        "Requests by hour (bar chart)",
+        "Top users/customers",
+        "Revenue impact (if applicable)"
+      ]
+    }
+  },
+
+  "__grafana_tips__": [
+    "1. Use time range picker to zoom into specific incidents",
+    "2. Click on legend to hide/show specific series",
+    "3. Drag to zoom into specific time range",
+    "4. Use annotations to mark deployments, incidents",
+    "5. Set up alerts directly in Grafana (alternative to Prometheus alerts)",
+    "6. Share dashboards via URL or snapshot",
+    "7. Create dashboard folders to organize by team/service",
+    "8. Use dashboard links to navigate between related dashboards",
+    "9. Export dashboard JSON for version control",
+    "10. Use dashboard variables for dynamic filtering"
+  ],
+
+  "__promql_cheatsheet__": {
+    "rate": "Calculate per-second rate over time range",
+    "increase": "Total increase over time range",
+    "sum": "Sum all samples",
+    "avg": "Average of all samples",
+    "max/min": "Maximum/minimum value",
+    "histogram_quantile": "Calculate percentile from histogram",
+    "by (label)": "Aggregate by specific label",
+    "without (label)": "Aggregate by all labels except specified",
+    "rate()[5m]": "Rate over last 5 minutes",
+    "offset 1d": "Query from 1 day ago (for comparisons)"
+  }
+}

@@ -1,0 +1,13 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-junior-engineer-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-junior-engineer-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num}-{slug}"
+  target_pattern: "modules/junior-ai-infrastructure-engineer/module-{num}-{slug}"
+projects_mapping:
+  source_pattern: "projects/project-{num}-*"
+  target_pattern: "projects/junior-ai-infrastructure-engineer/project-{num}-*"
+solutions_mapping:
+  modules_pattern: "modules/mod-{num}-*"
+  projects_pattern: "projects/project-{num}-*"
+notes: |
+  Keep this mapping for reference when syncing updates from legacy repositories.

@@ -1,0 +1,28 @@
+id: PROJ-402
+type: project
+title: Multi-Cloud AI Infrastructure
+roles:
+- ai-infrastructure-architect
+stage: architect
+proficiency_target: expert
+competencies:
+- id: multi-cloud-strategy
+  level: expert
+- id: resilience-architecture
+  level: expert
+- id: finops-governance
+  level: proficient
+dependencies:
+- MOD-302
+- MOD-304
+- MOD-305
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Architect resilient multi-cloud AI infrastructure with automated DR, policy-as-code, and cost governance aligned to SLAs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/projects/project-302-multicloud-infrastructure'
+metadata_version: 1.0.0

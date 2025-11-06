@@ -1,0 +1,218 @@
+{
+  "dashboard": {
+    "title": "Model API - Kubernetes Monitoring",
+    "description": "Comprehensive monitoring dashboard for model serving API on Kubernetes",
+    "tags": ["ml", "kubernetes", "model-serving"],
+    "timezone": "browser",
+    "editable": true,
+    "graphTooltip": 1,
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s",
+
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate (RPS)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "description": "TODO: Configure panel to show request rate\nQuery: rate(model_api_requests_total[5m])\nThis shows requests per second over the last 5 minutes",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": "TODO: Add query and legend format"
+          }
+        ]
+      },
+
+      {
+        "id": 2,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "description": "TODO: Configure panel to show error rate\nQuery: rate(model_api_requests_total{status=~\"5..\"}[5m])\nShows 5xx errors per second",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": "TODO: Add query"
+          }
+        ]
+      },
+
+      {
+        "id": 3,
+        "title": "Pod Count",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 8},
+        "description": "TODO: Configure panel to show current pod count\nQuery: count(kube_pod_info{namespace=\"ml-serving\",pod=~\"model-api.*\"})\nShows number of running pods",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": ""
+          }
+        ]
+      },
+
+      {
+        "id": 4,
+        "title": "Average CPU Usage",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 8},
+        "description": "TODO: Configure panel to show CPU usage percentage\nQuery: avg(rate(container_cpu_usage_seconds_total{pod=~\"model-api.*\"}[5m])) * 100\nShows average CPU usage across all pods",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": ""
+          }
+        ]
+      },
+
+      {
+        "id": 5,
+        "title": "P95 Latency",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8},
+        "description": "TODO: Configure panel to show P95 latency\nQuery: histogram_quantile(0.95, rate(model_api_request_duration_seconds_bucket[5m])) * 1000\nShows 95th percentile latency in milliseconds",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": ""
+          }
+        ]
+      },
+
+      {
+        "id": 6,
+        "title": "Memory Usage",
+        "type": "gauge",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8},
+        "description": "TODO: Configure panel to show memory usage\nQuery: avg(container_memory_usage_bytes{pod=~\"model-api.*\"}) / (1024*1024*1024)\nShows average memory in GB",
+        "targets": [
+          {
+            "expr": "",
+            "legendFormat": ""
+          }
+        ]
+      }
+    ],
+
+    "templating": {
+      "list": [
+        {
+          "name": "namespace",
+          "label": "Namespace",
+          "description": "TODO: Add template variable for namespace filtering",
+          "query": "label_values(kube_pod_info, namespace)",
+          "current": {
+            "value": "ml-serving"
+          }
+        }
+      ]
+    }
+  },
+
+  "__comments__": [
+    "LEARNING NOTES:",
+    "",
+    "This is a TEMPLATE Grafana dashboard in JSON format.",
+    "Complete the TODOs to create a functional dashboard.",
+    "",
+    "Key Prometheus Queries for this Dashboard:",
+    "",
+    "1. Request Rate:",
+    "   rate(model_api_requests_total[5m])",
+    "   - rate() calculates per-second rate over time window",
+    "   - [5m] = 5-minute time window",
+    "",
+    "2. Error Rate:",
+    "   rate(model_api_requests_total{status=~\"5..\"}[5m])",
+    "   - {status=~\"5..\"} filters for 5xx status codes",
+    "   - Regex matches 500, 501, 502, etc.",
+    "",
+    "3. Pod Count:",
+    "   count(kube_pod_info{namespace=\"ml-serving\",pod=~\"model-api.*\"})",
+    "   - count() aggregates matching time series",
+    "   - pod=~\"model-api.*\" matches all model-api pods",
+    "",
+    "4. CPU Usage:",
+    "   avg(rate(container_cpu_usage_seconds_total{pod=~\"model-api.*\"}[5m])) * 100",
+    "   - container_cpu_usage_seconds_total is cumulative counter",
+    "   - rate() converts to CPU cores per second",
+    "   - * 100 converts to percentage",
+    "   - avg() averages across all pods",
+    "",
+    "5. P95 Latency:",
+    "   histogram_quantile(0.95, rate(model_api_request_duration_seconds_bucket[5m])) * 1000",
+    "   - histogram_quantile() calculates percentile from histogram",
+    "   - 0.95 = 95th percentile",
+    "   - * 1000 converts seconds to milliseconds",
+    "",
+    "6. Memory Usage:",
+    "   avg(container_memory_usage_bytes{pod=~\"model-api.*\"}) / (1024*1024*1024)",
+    "   - container_memory_usage_bytes is current memory",
+    "   - Division converts bytes to gigabytes",
+    "",
+    "HOW TO USE THIS TEMPLATE:",
+    "",
+    "1. Complete the TODO items above",
+    "2. Import to Grafana:",
+    "   - UI: Dashboard → Import → Paste JSON",
+    "   - CLI: Save as dashboard.json, upload via API",
+    "",
+    "3. Configure data source:",
+    "   - Set datasource to your Prometheus instance",
+    "   - Usually named 'Prometheus'",
+    "",
+    "4. Customize further:",
+    "   - Add more panels (network I/O, disk usage)",
+    "   - Create alerts on thresholds",
+    "   - Add annotations for deployments",
+    "",
+    "GRAFANA PANEL TYPES:",
+    "",
+    "- graph: Time-series line chart (classic)",
+    "- stat: Single value with optional sparkline",
+    "- gauge: Radial or linear gauge",
+    "- table: Tabular data",
+    "- heatmap: Distribution over time",
+    "- bar gauge: Horizontal/vertical bars",
+    "",
+    "PROMQL FUNCTIONS REFERENCE:",
+    "",
+    "Aggregation:",
+    "- sum() - total across time series",
+    "- avg() - average",
+    "- min() / max() - minimum / maximum",
+    "- count() - count of time series",
+    "",
+    "Rate/Increase:",
+    "- rate() - per-second rate (for counters)",
+    "- irate() - instant rate (more sensitive)",
+    "- increase() - total increase over time",
+    "",
+    "Math:",
+    "- + - * / - arithmetic",
+    "- abs() - absolute value",
+    "- ceil() / floor() - rounding",
+    "",
+    "Prediction:",
+    "- predict_linear() - linear prediction",
+    "- holt_winters() - seasonal prediction"
+  ]
+}

@@ -1,0 +1,25 @@
+id: MOD-608
+type: module
+title: M&A Technical Due Diligence for AI
+roles:
+- ai-infrastructure-principal-architect
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: ma-due-diligence
+  level: expert
+- id: integration-strategy
+  level: expert
+dependencies:
+- MOD-408
+- MOD-403
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Leads acquisitions and divestiture assessments, integration planning, and post-merger architecture harmonization.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/lessons/mod-608-ma-technical-due-diligence'
+metadata_version: 1.0.0

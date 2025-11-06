@@ -1,0 +1,104 @@
+role: "AI Infrastructure Engineer"
+level: "mid"
+last_updated: "2025-10-17"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Infrastructure Automation"
+    description: "Automate, deploy, and operate ML infrastructure at scale"
+    skills:
+      - name: "Infrastructure as Code"
+        proficiency:
+          awareness:
+            description: "Understand Terraform/Pulumi basics"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-201"
+          working:
+            description: "Author Terraform modules for ML infra"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          proficient:
+            description: "Design reusable IaC stacks across environments"
+            evidence_sources: []
+          expert:
+            description: "Lead infrastructure automation strategy"
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Code review"
+      - name: "Kubernetes Operations"
+        proficiency:
+          awareness:
+            description: "Deploy workloads using manifests and Helm"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-202"
+          working:
+            description: "Operate multi-node clusters and perform upgrades"
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "infrastructure"
+          proficient:
+            description: "Implement advanced features (HPA, service mesh)"
+            evidence_sources: []
+          expert:
+            description: "Architect multi-cluster deployments"
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Scenario assessment"
+  - name: "Observability & Reliability"
+    description: "Ensure ML services are observable and reliable"
+    skills:
+      - name: "Observability Tooling"
+        proficiency:
+          awareness:
+            description: "Instrument services with metrics/logs"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-203"
+          working:
+            description: "Design dashboards and alerting rules"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          proficient:
+            description: "Integrate tracing and SLO governance"
+            evidence_sources: []
+          expert:
+            description: "Own observability platform and tooling"
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Documentation review"
+      - name: "Incident Response"
+        proficiency:
+          awareness:
+            description: "Follow incident runbooks"
+            evidence_sources: []
+          working:
+            description: "Lead incident triage for ML services"
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "operations"
+          proficient:
+            description: "Improve runbooks, coordinate cross-team response"
+            evidence_sources: []
+          expert:
+            description: "Drive reliability programs"
+            evidence_sources: []
+        assessment_types:
+          - "Simulation"
+          - "Runbook creation"
+progression_map:
+  awareness: "Onboarding modules and labs"
+  working: "Hands-on projects and on-call shadowing"
+  proficient: "Production launches and capstones"
+  expert: "Architecture leadership (future roles)"
+notes:
+  - "Building on junior role with stronger ownership and automation capabilities"

@@ -1,0 +1,21 @@
+id: "SOL-303"
+type: "solution"
+title: "Solutions for enterprise-security-compliance"
+roles:
+  - "ai-infrastructure-architect"
+stage: "core"
+proficiency_target: "expert"
+competencies:
+  - id: "security-architecture"
+    level: "expert"
+dependencies:
+  - "module-303-security-compliance/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions"
+metadata_version: "1.0.0"

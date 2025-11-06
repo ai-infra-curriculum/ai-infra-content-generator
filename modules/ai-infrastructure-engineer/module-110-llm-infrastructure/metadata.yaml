@@ -1,0 +1,29 @@
+id: MOD-110
+type: module
+title: LLM Infrastructure
+roles:
+- ai-infrastructure-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: llm-infrastructure
+  level: proficient
+- id: performance-optimization
+  level: proficient
+- id: cost-optimization
+  level: working
+dependencies:
+- MOD-105
+- MOD-106
+- MOD-107
+- MOD-109
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Focuses on deploying, optimizing, and operating production LLM and RAG workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-110-llm-infrastructure'
+metadata_version: 1.0.0

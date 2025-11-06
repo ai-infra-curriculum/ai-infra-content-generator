@@ -1,0 +1,27 @@
+id: MOD-105
+type: module
+title: Data Pipeline Engineering
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: data-pipeline-engineering
+  level: proficient
+- id: data-governance
+  level: working
+dependencies:
+- MOD-008
+- MOD-004
+- MOD-101
+- MOD-102
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Covers Airflow orchestration, data versioning, distributed processing, and governance for ML pipelines.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-105-data-pipelines'
+metadata_version: 1.0.0

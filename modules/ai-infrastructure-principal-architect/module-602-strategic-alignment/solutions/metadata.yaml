@@ -1,0 +1,23 @@
+id: SOL-602
+type: solution
+title: Solutions for MOD-602 Strategic Alignment & Value Mapping
+roles:
+  - ai-infrastructure-principal-architect
+stage: core
+proficiency_target: expert
+competencies:
+  - id: business-alignment
+    level: expert
+  - id: value-architecture
+    level: expert
+dependencies:
+  - module-602-strategic-alignment/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-principal-architect-solutions'
+metadata_version: 1.0.0

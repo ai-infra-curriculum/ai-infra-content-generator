@@ -1,0 +1,171 @@
+role: "Senior AI Infrastructure Engineer"
+level: "senior"
+last_updated: "2025-10-17"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Platform Architecture & Automation"
+    description: "Design multi-region, secure, and scalable ML infrastructure platforms."
+    skills:
+      - name: "Advanced Infrastructure as Code"
+        proficiency:
+          working:
+            description: "Compose reusable Terraform/Pulumi modules with automated tests."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-401"
+          proficient:
+            description: "Implement GitOps pipelines, policy as code, and drift remediation across environments."
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          expert:
+            description: "Define infrastructure governance strategy and platform APIs adopted company-wide."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "senior-infra"
+        assessment_types:
+          - "Project"
+          - "Architecture review"
+      - name: "Kubernetes Platform Engineering"
+        proficiency:
+          working:
+            description: "Operate production clusters with service mesh, GPU scheduling, and HA configurations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-402"
+          proficient:
+            description: "Author custom controllers/operators and manage multi-cluster or multi-region deployments."
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          expert:
+            description: "Set platform standards, run chaos drills, and steer roadmap for company-wide cluster footprint."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Scenario assessment"
+  - name: "Distributed Systems & Performance"
+    description: "Deliver high-performance training and inference systems with measurable efficiency gains."
+    skills:
+      - name: "Distributed Training Optimization"
+        proficiency:
+          working:
+            description: "Configure Ray/Horovod/PyTorch DDP for multi-node, multi-GPU workloads."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-403"
+          proficient:
+            description: "Optimize throughput, implement fault tolerance, and profile performance bottlenecks."
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          expert:
+            description: "Architect training platforms supporting heterogeneous hardware and dynamic scaling."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Benchmark"
+      - name: "Inference & GPU Optimization"
+        proficiency:
+          working:
+            description: "Apply TensorRT/ONNX optimizations and monitor GPU utilization."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-404"
+          proficient:
+            description: "Achieve 2-3x latency or cost improvements with quantization, batching, and profiling."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "performance"
+          expert:
+            description: "Design GPU fleet strategy (MIG/vGPU) and automation that balances performance with cost."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Performance review"
+  - name: "Reliability, Security & Governance"
+    description: "Ensure ML platforms meet reliability targets, compliance requirements, and operational excellence."
+    skills:
+      - name: "Observability & Incident Leadership"
+        proficiency:
+          working:
+            description: "Define SLOs, dashboards, and on-call processes for ML/LLM services."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-405"
+          proficient:
+            description: "Lead incident response, author postmortems, and automate alert hygiene."
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          expert:
+            description: "Establish reliability programs, chaos experiments, and continuous improvement rituals."
+            evidence_sources: []
+        assessment_types:
+          - "Tabletop exercise"
+          - "Documentation review"
+      - name: "Security & Compliance for ML Platforms"
+        proficiency:
+          working:
+            description: "Implement IAM, secrets management, and data protection for ML pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-406"
+          proficient:
+            description: "Integrate policy-as-code, audit controls, and compliance reporting (SOC2, HIPAA, FedRAMP)."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "compliance"
+          expert:
+            description: "Define security architecture and governance frameworks adopted across multiple programs."
+            evidence_sources: []
+        assessment_types:
+          - "Audit"
+          - "Project"
+  - name: "Leadership & Collaboration"
+    description: "Guide teams, evangelize best practices, and align infrastructure vision with business outcomes."
+    skills:
+      - name: "Technical Strategy & Roadmapping"
+        proficiency:
+          working:
+            description: "Translate product/research needs into infrastructure backlogs and milestones."
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-407"
+          proficient:
+            description: "Own multi-quarter roadmaps, drive cross-team alignment, and measure outcomes."
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          expert:
+            description: "Influence executive direction, define KPI dashboards, and steer investment strategy."
+            evidence_sources: []
+        assessment_types:
+          - "Portfolio review"
+          - "Presentation"
+      - name: "Mentorship & Knowledge Sharing"
+        proficiency:
+          working:
+            description: "Mentor engineers through design reviews and pair sessions."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "coaching"
+          proficient:
+            description: "Build onboarding programs, run guilds, and publish best practices."
+            evidence_sources: []
+          expert:
+            description: "Create organization-wide learning paths and lead communities of practice."
+            evidence_sources: []
+        assessment_types:
+          - "Peer feedback"
+          - "Documentation review"
+progression_map:
+  working: "Advanced modules, distributed systems labs, leadership workshops."
+  proficient: "Capstone projects, production launches, cross-team initiatives."
+  expert: "Org-level strategy, open source leadership, executive advisory roles."
+notes:
+  - "Competencies derived from consolidated research dated 2025-10-17 and legacy curriculum artifacts."

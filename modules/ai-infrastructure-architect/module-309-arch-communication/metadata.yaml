@@ -1,0 +1,25 @@
+id: MOD-309
+type: module
+title: Architecture Communication & Leadership
+roles:
+- ai-infrastructure-architect
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: architecture-communication
+  level: expert
+- id: leadership-influence
+  level: expert
+dependencies:
+- MOD-301
+- MOD-210
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds executive communication, storytelling, and governance leadership capabilities for enterprise architecture programs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-309-arch-communication'
+metadata_version: 1.0.0

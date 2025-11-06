@@ -1,0 +1,25 @@
+id: MOD-107
+type: module
+title: GPU Computing & ML Acceleration
+roles:
+- ai-infrastructure-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: gpu-infrastructure
+  level: proficient
+- id: performance-optimization
+  level: working
+dependencies:
+- MOD-103
+- MOD-104
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Focuses on GPU provisioning, monitoring, optimization, and troubleshooting for ML workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-107-gpu-computing'
+metadata_version: 1.0.0

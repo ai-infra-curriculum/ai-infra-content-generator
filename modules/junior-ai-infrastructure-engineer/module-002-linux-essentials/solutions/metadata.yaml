@@ -1,0 +1,21 @@
+id: "SOL-002"
+type: "solution"
+title: "Solutions for linux-essentials"
+roles:
+  - "junior-ai-infrastructure-engineer"
+stage: "core"
+proficiency_target: "working"
+competencies:
+  - id: "solution-quality"
+    level: "working"
+dependencies:
+  - "module-002-linux-essentials/metadata.yaml"
+validation_profile: "python-light"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-junior-engineer-solutions/modules"
+metadata_version: "1.0.0"

@@ -1,0 +1,25 @@
+id: MOD-606
+type: module
+title: Multi-Cloud Transformation Leadership
+roles:
+- ai-infrastructure-principal-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: multi-cloud-strategy
+  level: expert
+- id: sustainability-finops
+  level: expert
+dependencies:
+- MOD-406
+- MOD-304
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Owns multi-cloud infrastructure modernization, FinOps, and sustainability strategy for AI workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-principal-architect-learning/lessons/mod-606-multi-cloud-transformation'
+metadata_version: 1.0.0

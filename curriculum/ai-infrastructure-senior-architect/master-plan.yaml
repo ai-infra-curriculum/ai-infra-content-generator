@@ -1,0 +1,257 @@
+role: Senior AI Infrastructure Architect
+level: senior-architect
+program_name: Senior AI Infrastructure Architect Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-19'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Define enterprise AI infrastructure strategy and advise executives and boards on investments, risk, and transformation.
+  - Lead global multi-cloud, governance, and responsible AI programs delivering measurable business impact.
+  - Build architecture practices, innovation portfolios, and ecosystem partnerships across the organization.
+  secondary:
+  - Represent the company as an industry thought leader and manage strategic partnerships/M&A due diligence.
+  - Develop sustainable, future-ready AI infrastructure roadmaps that balance cost, performance, and compliance.
+program_structure:
+  total_duration_hours: 420
+  modules:
+  - id: MOD-401
+    title: Enterprise AI Strategy & Vision
+    duration_hours:
+      lecture: 16
+      lab: 20
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-301
+    - MOD-309
+    learning_objectives:
+    - Develop 3-5 year AI infrastructure roadmaps aligned to corporate strategy.
+    - Build investment cases, risk assessments, and stakeholder alignment plans.
+    linked_projects:
+    - PROJ-501
+  - id: MOD-402
+    title: Executive Leadership & Communication
+    duration_hours:
+      lecture: 14
+      lab: 18
+      portfolio: 9
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-401
+    - MOD-210
+    learning_objectives:
+    - Communicate AI architecture strategy to C-suite and boards with executive presence.
+    - Lead organizational change and develop high-performing architecture teams.
+    linked_projects:
+    - PROJ-501
+    - PROJ-505
+  - id: MOD-403
+    title: Enterprise Architecture Governance & Standards
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 9
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-401
+    - MOD-303
+    learning_objectives:
+    - Establish architecture governance, standards, and community programs.
+    - Define metrics, maturity models, and knowledge-sharing structures.
+    linked_projects:
+    - PROJ-502
+    - PROJ-503
+  - id: MOD-404
+    title: Innovation & R&D Leadership
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 9
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-401
+    - MOD-306
+    learning_objectives:
+    - Lead technology radar, incubation, and IP strategy for AI infrastructure.
+    - Build innovation governance and portfolio management practices.
+    linked_projects:
+    - PROJ-504
+  - id: MOD-405
+    title: Responsible AI & Ethics Leadership
+    duration_hours:
+      lecture: 14
+      lab: 16
+      project: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-303
+    - MOD-308
+    learning_objectives:
+    - Design enterprise responsible AI frameworks, risk registers, and audit processes.
+    - Align AI programs with regulatory requirements and ethical principles.
+    linked_projects:
+    - PROJ-503
+  - id: MOD-406
+    title: Global Infrastructure & Sustainability
+    duration_hours:
+      lecture: 16
+      lab: 20
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-205
+    - MOD-302
+    - MOD-304
+    learning_objectives:
+    - Architect global AI platforms with sovereignty, DR, and sustainability targets.
+    - Balance cost, performance, and carbon footprint for global deployments.
+    linked_projects:
+    - PROJ-502
+  - id: MOD-407
+    title: Strategic Partnerships & Vendor Ecosystems
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-402
+    - MOD-404
+    learning_objectives:
+    - Develop partner strategies, contracts, and governance with hyperscalers and vendors.
+    - Build co-innovation ecosystems and manage joint roadmaps.
+    linked_projects:
+    - PROJ-504
+  - id: MOD-408
+    title: M&A Technical Due Diligence
+    duration_hours:
+      lecture: 12
+      lab: 14
+      project: 7
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-401
+    - MOD-403
+    learning_objectives:
+    - Lead technical assessments, integration planning, and value realization for AI-related acquisitions.
+    - Evaluate technology stacks, teams, and risk during M&A.
+    linked_projects:
+    - PROJ-501
+  - id: MOD-409
+    title: Thought Leadership & Industry Influence
+    duration_hours:
+      lecture: 12
+      lab: 14
+      portfolio: 7
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-402
+    - MOD-404
+    learning_objectives:
+    - Produce thought leadership content, contribute to standards, and represent the company externally.
+    - Build executive brand and industry influence.
+    linked_projects:
+    - PROJ-505
+  - id: MOD-410
+    title: Future of AI Infrastructure
+    duration_hours:
+      lecture: 12
+      lab: 12
+      project: 7
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-senior-architect
+    prerequisites:
+    - MOD-404
+    - MOD-406
+    learning_objectives:
+    - Evaluate emerging AI infrastructure trends (quantum, neuromorphic, AGI, green AI).
+    - Develop long-term scenarios and investment strategies.
+    linked_projects:
+    - PROJ-505
+assessment_strategy:
+  formative:
+  - type: executive-workshop
+    cadence: per module (board simulation, governance review, innovation council)
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Enterprise AI transformation strategy & board presentation
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-501
+    summary: Enterprise AI Transformation Strategy
+    difficulty: senior-architect
+    assessed_competencies:
+    - enterprise-ai-strategy
+    - executive-advisory
+    integration_notes: Synthesizes MOD-401, MOD-402, MOD-408 outputs.
+  - id: PROJ-502
+    summary: Global AI Platform Architecture
+    difficulty: senior-architect
+    assessed_competencies:
+    - global-platform-architecture
+    - governance-leadership
+    integration_notes: Builds on MOD-302, MOD-305, MOD-406.
+  - id: PROJ-503
+    summary: Responsible AI Framework
+    difficulty: senior-architect
+    assessed_competencies:
+    - responsible-ai
+    - compliance-governance
+    integration_notes: Requires artifacts from MOD-303, MOD-405, MOD-406.
+  - id: PROJ-504
+    summary: Innovation Program Design
+    difficulty: senior-architect
+    assessed_competencies:
+    - innovation-strategy
+    - partnerships-ecosystem
+    integration_notes: Combines outputs from MOD-404 and MOD-407.
+  - id: PROJ-505
+    summary: Industry Thought Leadership Portfolio
+    difficulty: senior-architect
+    assessed_competencies:
+    - thought-leadership
+    - executive-advisory
+    integration_notes: Requires deliverables from MOD-402, MOD-409, MOD-410.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Chief Strategy Officer
+    focus: Strategic alignment, investment plan
+    due_date: '2025-12-12'
+  - reviewer: Chief Risk & Compliance Officer
+    focus: Responsible AI, governance, regulatory readiness
+    due_date: '2025-12-18'
+  pilot_metrics:
+    completion_rate_target: 0.65
+    satisfaction_target: 4.6
+    board_approval_rate_target: 0.9
+risk_register:
+- risk: Executive stakeholder availability may delay simulations.
+  impact: high
+  likelihood: medium
+  mitigation: Schedule role-play sessions; capture asynchronous feedback.
+- risk: Innovation/FinOps simulations require proprietary data.
+  impact: medium
+  likelihood: medium
+  mitigation: Provide anonymized templates and scenario data sets.

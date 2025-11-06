@@ -1,0 +1,260 @@
+role: AI Infrastructure Architect
+level: architect
+program_name: AI Infrastructure Architect Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-18'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Design enterprise-scale AI/ML platform architectures spanning data, training, inference, and governance.
+  - Establish multi-cloud, secure, and cost-optimized infrastructure strategies with measurable business impact.
+  - Lead architecture governance, communication, and innovation programs across the organization.
+  secondary:
+  - Mentor senior engineers and architects, driving consistent standards and communities of practice.
+  - Evaluate emerging AI technologies and align investments with executive strategy.
+program_structure:
+  total_duration_hours: 600
+  modules:
+  - id: MOD-301
+    title: Enterprise Architecture Fundamentals
+    duration_hours:
+      lecture: 16
+      lab: 20
+      portfolio: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-210
+    - MOD-201
+    learning_objectives:
+    - Apply TOGAF/Zachman frameworks to define enterprise AI reference architectures.
+    - Establish architecture governance, ADRs, and executive communication artifacts.
+    linked_projects:
+    - PROJ-401
+  - id: MOD-302
+    title: Multi-Cloud & Hybrid Architecture
+    duration_hours:
+      lecture: 18
+      lab: 26
+      project: 12
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-205
+    - MOD-208
+    learning_objectives:
+    - Design multi-cloud/hybrid AI platforms with consistent networking, identity, and governance.
+    - Produce migration and DR strategies with quantified business impact.
+    linked_projects:
+    - PROJ-402
+  - id: MOD-303
+    title: Enterprise Security & Compliance Architecture
+    duration_hours:
+      lecture: 18
+      lab: 22
+      project: 11
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-209
+    - MOD-302
+    learning_objectives:
+    - Architect zero-trust AI platforms and automate compliance evidence.
+    - Design responsible AI policies and risk mitigation frameworks.
+    linked_projects:
+    - PROJ-405
+  - id: MOD-304
+    title: Cost Optimization & FinOps
+    duration_hours:
+      lecture: 14
+      lab: 18
+      portfolio: 9
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-302
+    - MOD-205
+    learning_objectives:
+    - Implement FinOps operating models, dashboards, and optimization playbooks.
+    - Build chargeback/showback strategies and business cases for AI investments.
+    linked_projects:
+    - PROJ-401
+  - id: MOD-305
+    title: High Availability & Disaster Recovery
+    duration_hours:
+      lecture: 16
+      lab: 20
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-205
+    - MOD-302
+    - MOD-304
+    learning_objectives:
+    - Achieve ≥99.95% availability with automated failover and chaos programs.
+    - Produce DR drills, reliability scorecards, and executive-ready reporting.
+    linked_projects:
+    - PROJ-402
+  - id: MOD-306
+    title: Enterprise MLOps Platform Architecture
+    duration_hours:
+      lecture: 18
+      lab: 24
+      project: 10
+      assessment: 3
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-301
+    - MOD-206
+    - MOD-304
+    learning_objectives:
+    - Architect multi-tenant MLOps platforms with governance and usage analytics.
+    - Productize platform APIs, SDKs, and developer experiences.
+    linked_projects:
+    - PROJ-401
+    - PROJ-404
+  - id: MOD-307
+    title: Data Architecture for AI
+    duration_hours:
+      lecture: 16
+      lab: 22
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-105
+    - MOD-205
+    - MOD-301
+    learning_objectives:
+    - Design lakehouse/data mesh platforms with governance, lineage, and quality.
+    - Support real-time streaming and feature pipelines tied to AI use cases.
+    linked_projects:
+    - PROJ-404
+  - id: MOD-308
+    title: LLM Platform & RAG Architecture
+    duration_hours:
+      lecture: 18
+      lab: 24
+      project: 9
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-204
+    - MOD-306
+    - MOD-303
+    learning_objectives:
+    - Architect enterprise LLM and RAG platforms with safety and governance.
+    - Optimize cost/performance trade-offs across training and inference.
+    linked_projects:
+    - PROJ-403
+  - id: MOD-309
+    title: Architecture Communication & Leadership
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-301
+    - MOD-210
+    learning_objectives:
+    - Communicate architecture strategy to executives and facilitate governance forums.
+    - Mentor architects and manage change across organizations.
+    linked_projects:
+    - PROJ-401
+    - PROJ-405
+  - id: MOD-310
+    title: Emerging Technologies & Innovation
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-architect
+    prerequisites:
+    - MOD-309
+    - MOD-308
+    learning_objectives:
+    - Evaluate emerging AI technologies and build innovation roadmaps.
+    - Advise executives on investments, partnerships, and sustainability.
+    linked_projects:
+    - PROJ-405
+assessment_strategy:
+  formative:
+  - type: workshop
+    cadence: per module (architecture review, board simulation, financial review)
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Enterprise AI platform blueprint & executive portfolio
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-401
+    summary: Enterprise ML Platform Architecture
+    difficulty: architect
+    assessed_competencies:
+    - enterprise-architecture
+    - platform-governance
+    integration_notes: Derives artifacts from MOD-301, MOD-304, MOD-306, MOD-309.
+  - id: PROJ-402
+    summary: Multi-Cloud AI Infrastructure
+    difficulty: architect
+    assessed_competencies:
+    - multi-cloud-strategy
+    - resilience-architecture
+    integration_notes: Builds on MOD-302, MOD-304, MOD-305 outputs.
+  - id: PROJ-403
+    summary: LLM Platform with RAG
+    difficulty: architect
+    assessed_competencies:
+    - llm-architecture
+    - responsible-ai
+    integration_notes: Requires modules MOD-306, MOD-307, MOD-308, MOD-303.
+  - id: PROJ-404
+    summary: Data Platform for AI
+    difficulty: architect
+    assessed_competencies:
+    - data-architecture
+    - data-governance
+    integration_notes: Synthesizes learnings from MOD-307, MOD-306, MOD-305.
+  - id: PROJ-405
+    summary: Security & Compliance Framework
+    difficulty: architect
+    assessed_competencies:
+    - security-architecture
+    - compliance-governance
+    integration_notes: Extends artifacts from MOD-303, MOD-308, MOD-309, MOD-310.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Chief Architecture Officer
+    focus: Strategic alignment & ROI
+    due_date: '2025-12-10'
+  - reviewer: CISO / Chief Compliance Officer
+    focus: Security, compliance, responsible AI
+    due_date: '2025-12-15'
+  pilot_metrics:
+    completion_rate_target: 0.7
+    satisfaction_target: 4.5
+    architecture_approval_rate_target: 0.9
+risk_register:
+- risk: Limited access to executive stakeholders may hinder realistic board simulations.
+  impact: medium
+  likelihood: medium
+  mitigation: Use cross-functional role-play sessions and pre-recorded executive feedback.
+- risk: Multi-cloud cost and DR simulations may require tooling beyond sandbox.
+  impact: high
+  likelihood: medium
+  mitigation: Provide financial models, automation templates, and documented assumptions for offline validation.

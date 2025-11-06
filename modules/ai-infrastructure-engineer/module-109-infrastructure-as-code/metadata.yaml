@@ -1,0 +1,27 @@
+id: MOD-109
+type: module
+title: Infrastructure As Code
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: iac-automation
+  level: proficient
+- id: security-compliance
+  level: working
+- id: platform-governance
+  level: working
+dependencies:
+- MOD-102
+- MOD-103
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Covers Terraform/Pulumi module design, policy enforcement, and GitOps workflows for ML infrastructure.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-109-infrastructure-as-code'
+metadata_version: 1.0.0

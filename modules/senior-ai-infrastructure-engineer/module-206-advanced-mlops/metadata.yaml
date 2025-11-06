@@ -1,0 +1,25 @@
+id: MOD-206
+type: module
+title: Advanced MLOps & Platform Engineering
+roles:
+- senior-ai-infrastructure-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: platform-engineering
+  level: expert
+- id: mlops-governance
+  level: proficient
+dependencies:
+- MOD-105
+- MOD-106
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Extend ML platforms with self-service APIs, feature stores, and governance workflows for enterprise-scale operations.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-206-advanced-mlops'
+metadata_version: 1.0.0

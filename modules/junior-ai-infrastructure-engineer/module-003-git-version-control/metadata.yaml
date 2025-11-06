@@ -1,0 +1,22 @@
+id: MOD-003
+type: module
+title: Git & Version Control
+roles:
+- junior-ai-infrastructure-engineer
+stage: foundational
+proficiency_target: working
+competencies:
+- id: git-collaboration
+  level: working
+dependencies:
+- Comm
+- -line familiarity
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

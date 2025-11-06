@@ -1,0 +1,208 @@
+role: "AI Infrastructure Architect"
+level: "architect"
+last_updated: "2025-10-18"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Enterprise Architecture & Governance"
+    description: "Define platform strategy, reference architectures, and governance programs for AI/ML systems."
+    skills:
+      - name: "Architecture Frameworks & Governance"
+        proficiency:
+          working:
+            description: "Apply TOGAF/Zachman to produce architecture artifacts and ADRs."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-001"
+          proficient:
+            description: "Lead architecture review boards, maintain reference architectures, drive standards adoption."
+            evidence_sources:
+              - type: "research"
+                id: "architect-role-analysis"
+          expert:
+            description: "Own enterprise architecture strategy, align technical decisions with business outcomes."
+            evidence_sources: []
+        assessment_types:
+          - "Architecture review"
+          - "Portfolio"
+      - name: "Executive Communication"
+        proficiency:
+          working:
+            description: "Create architecture briefs and present to director-level stakeholders."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-002"
+          proficient:
+            description: "Lead executive readouts, negotiate trade-offs, and secure investment."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "communication"
+          expert:
+            description: "Influence C-suite strategy, communicate ROI, and manage change across business units."
+            evidence_sources: []
+        assessment_types:
+          - "Presentation"
+          - "Peer feedback"
+  - name: "Multi-Cloud, Hybrid & Resilience"
+    description: "Architect multi-cloud ML platforms delivering high availability, DR, and compliance."
+    skills:
+      - name: "Hybrid/Multi-Cloud Strategy"
+        proficiency:
+          working:
+            description: "Design network, identity, and data foundations for multi-cloud deployments."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-003"
+          proficient:
+            description: "Build active-active architectures with DR automation, RTO/RPO guarantees."
+            evidence_sources:
+              - type: "research"
+                id: "architect-role-analysis"
+          expert:
+            description: "Own enterprise multi-cloud roadmap, negotiate vendor strategy, optimize costs."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Tabletop exercise"
+      - name: "FinOps & Cost Governance"
+        proficiency:
+          working:
+            description: "Create cost visibility dashboards and recommend optimizations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-004"
+          proficient:
+            description: "Drive FinOps practices, build chargeback/showback models for AI workloads."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "finops"
+          expert:
+            description: "Influence enterprise budgeting, model ROI, and secure investment for AI programs."
+            evidence_sources: []
+        assessment_types:
+          - "Business case"
+          - "Financial review"
+  - name: "Security, Compliance & Responsible AI"
+    description: "Ensure AI platforms meet regulatory, privacy, and ethical requirements."
+    skills:
+      - name: "Security Architecture"
+        proficiency:
+          working:
+            description: "Design zero-trust controls, IAM, and secrets management for AI workloads."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-005"
+          proficient:
+            description: "Integrate compliance (SOC2, HIPAA, GDPR) into architecture and operations."
+            evidence_sources:
+              - type: "research"
+                id: "architect-role-analysis"
+          expert:
+            description: "Lead security governance, risk management, and responsible AI frameworks."
+            evidence_sources: []
+        assessment_types:
+          - "Audit"
+          - "Architecture review"
+      - name: "Responsible AI & Governance"
+        proficiency:
+          working:
+            description: "Define model governance workflows, documentation, and monitoring."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-006"
+          proficient:
+            description: "Implement enterprise RAI frameworks, bias monitoring, and guardrails."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "responsible-ai"
+          expert:
+            description: "Advise executives on policy, ethics, and regulatory compliance for AI programs."
+            evidence_sources: []
+        assessment_types:
+          - "Policy review"
+          - "Portfolio"
+  - name: "Platform & Data Architecture"
+    description: "Design AI/ML platforms, data ecosystems, and LLM/RAG stacks for enterprise scale."
+    skills:
+      - name: "Enterprise MLOps Architecture"
+        proficiency:
+          working:
+            description: "Integrate feature stores, registries, and CI/CD for multiple product teams."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-007"
+          proficient:
+            description: "Architect end-to-end MLOps platforms with governance, experimentation, and SLAs."
+            evidence_sources:
+              - type: "research"
+                id: "architect-role-analysis"
+          expert:
+            description: "Standardize enterprise platforms supporting hundreds of models with lifecycle automation."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Architecture review"
+      - name: "Data & LLM Platform Architecture"
+        proficiency:
+          working:
+            description: "Design data lakehouse, streaming, and vector store patterns for AI workloads."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-008"
+          proficient:
+            description: "Architect LLM/RAG platforms with observability, safety guardrails, and cost controls."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "llm-architecture"
+          expert:
+            description: "Define enterprise LLM strategy, vendor evaluation, and global deployment standards."
+            evidence_sources: []
+        assessment_types:
+          - "Project"
+          - "Benchmark"
+  - name: "Leadership & Change Management"
+    description: "Influence executives, mentor architects, and incubate innovation programs."
+    skills:
+      - name: "Strategic Leadership"
+        proficiency:
+          working:
+            description: "Align architecture initiatives with product/finance roadmaps."
+            evidence_sources:
+              - type: "job_posting"
+                id: "ARCH-009"
+          proficient:
+            description: "Own multi-year AI strategy, manage cross-org transformation programs."
+            evidence_sources:
+              - type: "research"
+                id: "architect-role-analysis"
+          expert:
+            description: "Advise C-suite, drive inorganic growth (M&A integration), and measure innovation portfolio."
+            evidence_sources: []
+        assessment_types:
+          - "Portfolio"
+          - "Stakeholder feedback"
+      - name: "Mentorship & Community Building"
+        proficiency:
+          working:
+            description: "Mentor senior engineers, facilitate design reviews."
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "mentorship"
+          proficient:
+            description: "Build architecture guilds, run training programs, publish internal playbooks."
+            evidence_sources: []
+          expert:
+            description: "Develop organizational learning pathways and thought-leadership initiatives."
+            evidence_sources: []
+        assessment_types:
+          - "Peer feedback"
+          - "Documentation review"
+progression_map:
+  working: "Senior engineer stepping into architecture responsibilities with guided mentorship."
+  proficient: "Leads enterprise platform initiatives, governs architecture standards."
+  expert: "Partners with executives on AI strategy, drives innovation and governance across the organization."
+notes:
+  - "Mapped from 2024-2025 job postings and legacy curriculum plans for the architecture track."

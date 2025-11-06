@@ -1,0 +1,24 @@
+id: MOD-203
+type: module
+title: Advanced GPU Computing & Optimization
+roles:
+- senior-ai-infrastructure-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: gpu-infrastructure-advanced
+  level: expert
+- id: performance-engineering
+  level: expert
+dependencies:
+- MOD-202
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Optimize GPU workloads with CUDA, Nsight, TensorRT, and fleet management strategies to boost throughput and efficiency.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-203-gpu-computing'
+metadata_version: 1.0.0

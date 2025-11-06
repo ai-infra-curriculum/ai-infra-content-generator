@@ -1,0 +1,26 @@
+id: MOD-108
+type: module
+title: Monitoring & Observability
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: observability-engineering
+  level: proficient
+- id: incident-response
+  level: working
+dependencies:
+- MOD-009
+- MOD-104
+- MOD-103
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Builds observability stacks, ML-specific monitoring, and incident response practices.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-108-monitoring-observability'
+metadata_version: 1.0.0

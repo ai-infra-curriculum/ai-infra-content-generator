@@ -1,0 +1,21 @@
+id: "SOL-209"
+type: "solution"
+title: "Solutions for security-compliance-ml"
+roles:
+  - "senior-ai-infrastructure-engineer"
+stage: "advanced"
+proficiency_target: "expert"
+competencies:
+  - id: "ml-security"
+    level: "expert"
+dependencies:
+  - "module-209-security-compliance/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-engineer-solutions/resources"
+metadata_version: "1.0.0"

@@ -1,0 +1,250 @@
+role: Senior AI Infrastructure Engineer
+level: senior
+program_name: Senior AI Infrastructure Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-17'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Architect and operate multi-region ML/LLM infrastructure with quantified reliability and cost targets.
+  - Lead distributed training and inference platforms that maximize GPU efficiency and throughput.
+  - Establish governance for security, compliance, observability, and on-call excellence across AI platforms.
+  secondary:
+  - Mentor engineering teams, drive architectural decisions, and communicate strategy to stakeholders.
+  - Evaluate and productionize emerging AI infrastructure tooling (Ray, vLLM, policy automation).
+program_structure:
+  total_duration_hours: 525
+  modules:
+  - id: MOD-201
+    title: Advanced Kubernetes & Cloud-Native Architecture
+    duration_hours:
+      lecture: 20
+      lab: 24
+      project: 12
+      assessment: 4
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-104
+    - MOD-109
+    learning_objectives:
+    - Design and implement Kubernetes operators, CRDs, and GitOps pipelines for ML workloads.
+    - Build multi-cluster architectures with service mesh, advanced networking, and disaster recovery.
+    - Harden Kubernetes environments with security policies, audits, and chaos resilience.
+    linked_projects:
+    - PROJ-304
+  - id: MOD-202
+    title: Distributed Training at Scale
+    duration_hours:
+      lecture: 18
+      lab: 24
+      project: 10
+      assessment: 3
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-107
+    learning_objectives:
+    - Implement Ray, Horovod, and PyTorch DDP/FSDP for multi-node, multi-GPU training.
+    - Optimize networking, checkpointing, and fault tolerance for large-scale jobs.
+    - Profile distributed workloads to achieve measurable throughput improvements.
+    linked_projects:
+    - PROJ-301
+  - id: MOD-203
+    title: Advanced GPU Computing & Optimization
+    duration_hours:
+      lecture: 18
+      lab: 26
+      project: 12
+      assessment: 4
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-202
+    learning_objectives:
+    - Write and optimize CUDA kernels, leverage TensorRT, and profile GPU workloads with Nsight.
+    - Design GPU cluster strategy (MIG/vGPU) balancing performance and cost.
+    - Automate GPU fleet monitoring with DCGM and proactive remediation.
+    linked_projects:
+    - PROJ-301
+    - PROJ-302
+  - id: MOD-204
+    title: Advanced Model Optimization & Inference
+    duration_hours:
+      lecture: 16
+      lab: 24
+      project: 10
+      assessment: 5
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-203
+    - MOD-106
+    learning_objectives:
+    - Optimize LLM and deep learning inference with quantization, pruning, and batching strategies.
+    - Build high-throughput serving pipelines using TensorRT-LLM, vLLM, or Triton.
+    - Measure and document 2-3x latency or cost improvements for production workloads.
+    linked_projects:
+    - PROJ-302
+  - id: MOD-205
+    title: Multi-Cloud Architecture & Resilience
+    duration_hours:
+      lecture: 16
+      lab: 22
+      project: 9
+      assessment: 3
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-102
+    learning_objectives:
+    - Design hybrid/multi-cloud networking, IAM, and data architectures for ML platforms.
+    - Implement active-active and active-passive patterns with <1 minute failover objectives.
+    - Optimize cost, placement, and compliance across heterogeneous cloud environments.
+    linked_projects:
+    - PROJ-303
+  - id: MOD-206
+    title: Advanced MLOps & Platform Engineering
+    duration_hours:
+      lecture: 16
+      lab: 22
+      project: 10
+      assessment: 2
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-105
+    - MOD-106
+    learning_objectives:
+    - Extend ML platforms with self-service APIs, SDKs, and feature store integrations.
+    - Govern model lifecycle with approvals, guardrails, and advanced deployment automation.
+    - Instrument usage analytics and feedback loops for platform prioritization.
+    linked_projects:
+    - PROJ-302
+    - PROJ-304
+  - id: MOD-207
+    title: Advanced Observability & SRE Practices
+    duration_hours:
+      lecture: 14
+      lab: 20
+      project: 8
+      assessment: 3
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-108
+    - MOD-205
+    learning_objectives:
+    - Architect observability platforms with metric federation, tracing, and long-term storage.
+    - Define SIEM/SLO programs, run postmortems, and lead chaos engineering for ML systems.
+    - Automate alert hygiene and create executive-level observability reporting.
+    linked_projects:
+    - PROJ-303
+  - id: MOD-208
+    title: Advanced Infrastructure as Code & GitOps
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-109
+    - MOD-206
+    learning_objectives:
+    - Build enterprise IaC frameworks with automated testing, policy enforcement, and GitOps flows.
+    - Integrate OPA/Kyverno, secret automation, and compliance controls into promotion pipelines.
+    - Publish platform modules and documentation consumed across teams.
+    linked_projects:
+    - PROJ-304
+  - id: MOD-209
+    title: Security & Compliance for ML Systems
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-205
+    - MOD-208
+    learning_objectives:
+    - Implement zero-trust models, advanced IAM, and data protection for ML pipelines.
+    - Prepare audit artifacts for SOC 2, HIPAA, and sector-specific compliance.
+    - Detect and mitigate model security threats (adversarial, model theft).
+    linked_projects:
+    - PROJ-303
+  - id: MOD-210
+    title: Technical Leadership & Mentorship
+    duration_hours:
+      lecture: 10
+      lab: 12
+      project: 6
+      assessment: 2
+    role_focus:
+    - senior-ai-infrastructure-engineer
+    prerequisites:
+    - MOD-206
+    learning_objectives:
+    - Lead architecture reviews, publish ADRs, and facilitate cross-team decision making.
+    - Coach engineers, design onboarding programs, and cultivate technical writing standards.
+    - Communicate infrastructure strategy to executives and broader organizations.
+    linked_projects:
+    - PROJ-304
+assessment_strategy:
+  formative:
+  - type: architecture-review
+    cadence: per module
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Multi-region LLM platform launch
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-301
+    summary: Distributed Training Platform
+    difficulty: advanced
+    assessed_competencies:
+    - distributed-training
+    integration_notes: Builds on MOD-202 and MOD-203 with GPU performance optimizations.
+  - id: PROJ-302
+    summary: High-Performance Model Serving
+    difficulty: advanced
+    assessed_competencies:
+    - inference-optimization
+    integration_notes: Relies on MOD-203, MOD-204, and MOD-206 for automation and governance.
+  - id: PROJ-303
+    summary: Multi-Region ML Platform
+    difficulty: expert
+    assessed_competencies:
+    - platform-resilience
+    integration_notes: Extends MOD-205, MOD-207, and MOD-209 with compliance artifacts.
+  - id: PROJ-304
+    summary: Custom Kubernetes Operator Suite
+    difficulty: expert
+    assessed_competencies:
+    - platform-automation
+    integration_notes: Synthesizes MOD-201, MOD-206, and MOD-208 to deliver operator-driven workflows.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Principal Platform Architect
+    focus: Scalability, governance alignment
+    due_date: '2025-12-05'
+  pilot_metrics:
+    completion_rate_target: 0.75
+    satisfaction_target: 4.4
+    assessment_pass_rate_target: 0.8
+risk_register:
+- risk: Advanced content may require specialized hardware access.
+  impact: high
+  likelihood: medium
+  mitigation: Provide GPU lab credits, recorded demos, and local simulation guidance.
+- risk: Cross-team alignment challenges slow adoption of new operator patterns.
+  impact: medium
+  likelihood: medium
+  mitigation: Incorporate leadership module deliverables that drive stakeholder engagement early.

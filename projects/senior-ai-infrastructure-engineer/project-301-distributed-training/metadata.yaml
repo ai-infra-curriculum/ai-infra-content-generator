@@ -1,0 +1,25 @@
+id: PROJ-301
+type: project
+title: Distributed Training Platform
+roles:
+- senior-ai-infrastructure-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: distributed-training-optimization
+  level: expert
+- id: performance-engineering
+  level: expert
+dependencies:
+- MOD-202
+- MOD-203
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Build an elastic distributed training platform delivering measurable throughput gains for large-scale ML workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/projects/project-201-distributed-training'
+metadata_version: 1.0.0

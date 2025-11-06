@@ -1,0 +1,25 @@
+id: MOD-201
+type: module
+title: Advanced Kubernetes & Cloud-Native Architecture
+roles:
+- senior-ai-infrastructure-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: kubernetes-platform-engineering
+  level: expert
+- id: platform-automation
+  level: proficient
+dependencies:
+- MOD-104
+- MOD-109
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Design multi-cluster Kubernetes platforms with operators, service mesh, and resilience patterns for ML workloads.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-201-advanced-kubernetes'
+metadata_version: 1.0.0

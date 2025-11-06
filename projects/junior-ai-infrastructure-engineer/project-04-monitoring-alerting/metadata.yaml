@@ -1,0 +1,22 @@
+id: PROJ-04
+type: project
+title: Monitoring & Alerting System
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: project-execution
+  level: proficient
+dependencies:
+- Projects 01-03
+- Module 009
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

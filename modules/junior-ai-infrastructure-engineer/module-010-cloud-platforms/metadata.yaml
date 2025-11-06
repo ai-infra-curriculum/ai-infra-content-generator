@@ -1,0 +1,22 @@
+id: MOD-010
+type: module
+title: Cloud Platforms (AWS/GCP/Azure)
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: cloud-platform-literacy
+  level: working
+dependencies:
+- Docker
+- basic networking
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

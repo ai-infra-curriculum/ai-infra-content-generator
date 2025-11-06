@@ -1,0 +1,21 @@
+id: "SOL-P303"
+type: "solution"
+title: "Solutions for multi-region-ml-platform"
+roles:
+  - "senior-ai-infrastructure-engineer"
+stage: "advanced"
+proficiency_target: "expert"
+competencies:
+  - id: "platform-resilience"
+    level: "expert"
+dependencies:
+  - "project-303-multi-region/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-engineer-solutions/projects/project-203-multi-region"
+metadata_version: "1.0.0"

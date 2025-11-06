@@ -1,0 +1,21 @@
+id: MOD-005
+type: module
+title: Docker & Containerization
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: container-fundamentals
+  level: working
+dependencies:
+- Linux essentials
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: MOD-403
+type: module
+title: Enterprise Architecture Governance & Standards
+roles:
+- ai-infrastructure-senior-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: governance-leadership
+  level: expert
+- id: responsible-ai
+  level: proficient
+dependencies:
+- MOD-401
+- MOD-303
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Establishes architecture governance frameworks, standards, and communities of practice across the enterprise.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-architect-learning/lessons/mod-403-governance-standards'
+metadata_version: 1.0.0

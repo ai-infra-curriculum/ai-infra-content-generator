@@ -1,0 +1,21 @@
+id: "SOL-103"
+type: "solution"
+title: "Solutions for containerization"
+roles:
+  - "ai-infrastructure-engineer"
+stage: "core"
+proficiency_target: "proficient"
+competencies:
+  - id: "solution-quality"
+    level: "proficient"
+dependencies:
+  - "module-103-containerization/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-engineer-solutions/modules"
+metadata_version: "1.0.0"

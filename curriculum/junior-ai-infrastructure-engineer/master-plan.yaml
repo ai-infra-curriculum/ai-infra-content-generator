@@ -1,0 +1,195 @@
+role: "Junior AI Infrastructure Engineer"
+level: "junior"
+program_name: "Junior AI Infrastructure Engineer Curriculum"
+program_version: "1.0.0"
+date_updated: "2025-10-17"
+repository_config: "../repository-strategy.yaml"
+learning_outcomes:
+  primary:
+    - "Automate routine ML infrastructure tasks with Python and Bash"
+    - "Deploy and monitor containerized ML services across environments"
+    - "Collaborate with data science teams using Git, CI/CD, and documentation"
+  secondary:
+    - "Understand core cloud platform services for ML infrastructure"
+    - "Establish observability foundations for junior on-call support"
+program_structure:
+  total_duration_hours: 440
+  modules:
+    - id: "MOD-001"
+      title: "Python Fundamentals for Infrastructure"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: []
+      learning_objectives:
+        - "Write automation scripts following best practices"
+        - "Use Python tooling for packaging and testing"
+      linked_projects: []
+    - id: "MOD-002"
+      title: "Linux Essentials"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-001"]
+      learning_objectives:
+        - "Navigate and manage Linux systems"
+        - "Automate routine tasks with shell scripts"
+      linked_projects: []
+    - id: "MOD-003"
+      title: "Git & Version Control"
+      duration_hours:
+        lecture: 8
+        lab: 2
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-001"]
+      learning_objectives:
+        - "Collaborate using Git workflows"
+        - "Apply branching and pull request best practices"
+      linked_projects: []
+    - id: "MOD-004"
+      title: "ML Basics (PyTorch/TensorFlow)"
+      duration_hours:
+        lecture: 16
+        lab: 4
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-001"]
+      learning_objectives:
+        - "Understand model training workflows"
+        - "Prepare models for deployment"
+      linked_projects: ["PROJ-01"]
+    - id: "MOD-005"
+      title: "Docker & Containerization"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-002"]
+      learning_objectives:
+        - "Build and optimize Docker images"
+        - "Use Docker Compose for multi-service setups"
+      linked_projects: ["PROJ-01"]
+    - id: "MOD-006"
+      title: "Kubernetes Introduction"
+      duration_hours:
+        lecture: 16
+        lab: 4
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-005"]
+      learning_objectives:
+        - "Deploy applications on Kubernetes"
+        - "Operate clusters using kubectl and Helm"
+      linked_projects: ["PROJ-02"]
+    - id: "MOD-007"
+      title: "APIs & Web Services"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-001"]
+      learning_objectives:
+        - "Build REST APIs with FastAPI"
+        - "Implement testing and documentation"
+      linked_projects: ["PROJ-01", "PROJ-03"]
+    - id: "MOD-008"
+      title: "Databases & SQL"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-001"]
+      learning_objectives:
+        - "Design and query relational databases"
+        - "Integrate databases with Python applications"
+      linked_projects: ["PROJ-03"]
+    - id: "MOD-009"
+      title: "Monitoring & Logging Basics"
+      duration_hours:
+        lecture: 12
+        lab: 3
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-005", "MOD-006"]
+      learning_objectives:
+        - "Use Prometheus and Grafana for observability"
+        - "Design effective alerting runbooks"
+      linked_projects: ["PROJ-04"]
+    - id: "MOD-010"
+      title: "Cloud Platforms (AWS/GCP/Azure)"
+      duration_hours:
+        lecture: 16
+        lab: 4
+        assessment: 0
+      role_focus: ["junior-ai-infrastructure-engineer"]
+      prerequisites: ["MOD-005"]
+      learning_objectives:
+        - "Provision core cloud services"
+        - "Apply IAM and networking fundamentals"
+      linked_projects: ["PROJ-05"]
+assessment_strategy:
+  formative:
+    - type: "quiz"
+      cadence: "per module"
+  summative:
+    - type: "capstone"
+      alignment: "Production-ready ML system"
+project_portfolio:
+  anchor_projects:
+    - id: "PROJ-01"
+      summary: "Simple Model API Deployment"
+      difficulty: "beginner"
+      assessed_competencies:
+        - "Python Automation"
+        - "Container Fundamentals"
+      integration_notes: "Builds after Modules 001-005"
+    - id: "PROJ-02"
+      summary: "Kubernetes Model Serving"
+      difficulty: "beginner+"
+      assessed_competencies:
+        - "Kubernetes Operations"
+        - "Cloud Platform Literacy"
+      integration_notes: "Extends Project 01 using Module 006"
+    - id: "PROJ-03"
+      summary: "ML Pipeline with Experiment Tracking"
+      difficulty: "intermediate"
+      assessed_competencies:
+        - "API Development"
+        - "Experiment Tracking"
+      integration_notes: "Relies on Modules 007-008"
+    - id: "PROJ-04"
+      summary: "Monitoring & Alerting System"
+      difficulty: "intermediate"
+      assessed_competencies:
+        - "Monitoring & Alert Response"
+        - "Documentation"
+      integration_notes: "Uses Module 009"
+    - id: "PROJ-05"
+      summary: "Production-Ready ML System (Capstone)"
+      difficulty: "intermediate+"
+      assessed_competencies:
+        - "Cloud Operations"
+        - "Automation"
+      integration_notes: "Integrates all previous modules and projects"
+validation_plan:
+  stakeholder_reviews:
+    - reviewer: "Program Lead"
+      focus: "Curriculum alignment"
+      due_date: "2025-11-01"
+  pilot_metrics:
+    completion_rate_target: 0.85
+    satisfaction_target: 4.4
+    assessment_pass_rate_target: 0.8
+risk_register:
+  - risk: "High volume of new technologies may overwhelm learners"
+    impact: "medium"
+    likelihood: "high"
+    mitigation: "Provide supplemental study plans and mentorship"

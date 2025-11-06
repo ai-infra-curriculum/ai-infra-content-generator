@@ -1,0 +1,28 @@
+id: PROJ-404
+type: project
+title: Data Platform for AI
+roles:
+- ai-infrastructure-architect
+stage: architect
+proficiency_target: expert
+competencies:
+- id: data-architecture
+  level: expert
+- id: data-governance
+  level: expert
+- id: resilience-architecture
+  level: proficient
+dependencies:
+- MOD-307
+- MOD-306
+- MOD-305
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Design a unified AI data platform with lakehouse, streaming, governance, and quality patterns for regulated enterprises.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/projects/project-304-data-platform'
+metadata_version: 1.0.0

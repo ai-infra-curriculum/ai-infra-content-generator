@@ -1,0 +1,25 @@
+id: MOD-302
+type: module
+title: Multi-Cloud & Hybrid Architecture
+roles:
+- ai-infrastructure-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: multi-cloud-strategy
+  level: expert
+- id: resilience-architecture
+  level: proficient
+dependencies:
+- MOD-205
+- MOD-208
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Designs hybrid and multi-cloud AI infrastructure with vendor-neutral patterns, networking, identity, and sovereignty controls.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-302-multicloud-hybrid'
+metadata_version: 1.0.0

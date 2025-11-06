@@ -1,0 +1,20 @@
+# Python environments & caches
+.venv/
+*.py[cod]
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Packaging artifacts
+*.egg-info/
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Tooling outputs
+*.log
+*.tmp
+*.swp

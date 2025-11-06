@@ -1,0 +1,148 @@
+# Junior AI Infrastructure Engineer Skills Matrix
+role: "Junior AI Infrastructure Engineer"
+level: "junior"
+last_updated: "2025-10-17"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Foundational Engineering"
+    description: "Core scripting, Linux, Git, and software lifecycle fundamentals"
+    skills:
+      - name: "Python Automation"
+        proficiency:
+          awareness:
+            description: "Write basic scripts, follow style guides"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-001"
+          working:
+            description: "Automate routine infra tasks with Python/Bash"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          proficient:
+            description: "Build reusable tooling packages and tests"
+            evidence_sources: []
+          expert:
+            description: "Mentor others on automation best practices"
+            evidence_sources: []
+        assessment_types:
+          - "Exercise"
+          - "Hands-on project"
+      - name: "Linux & CLI Operations"
+        proficiency:
+          awareness:
+            description: "Navigate filesystem, manage processes"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-002"
+          working:
+            description: "Troubleshoot services, manage permissions"
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "foundational"
+          proficient:
+            description: "Automate environment provisioning scripts"
+            evidence_sources: []
+          expert:
+            description: "Design secure multi-user environments"
+            evidence_sources: []
+        assessment_types:
+          - "Lab"
+          - "Quiz"
+  - name: "Infrastructure Foundations"
+    description: "Containers, cloud services, CI/CD awareness"
+    skills:
+      - name: "Container Fundamentals"
+        proficiency:
+          awareness:
+            description: "Understand Docker concepts and commands"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-003"
+          working:
+            description: "Build images, write Dockerfiles, troubleshoot builds"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          proficient:
+            description: "Optimize images, integrate with CI"
+            evidence_sources: []
+          expert:
+            description: "Design container strategies for teams"
+            evidence_sources: []
+        assessment_types:
+          - "Hands-on project"
+      - name: "Cloud Platform Literacy"
+        proficiency:
+          awareness:
+            description: "Describe key AWS/GCP/Azure services"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-004"
+          working:
+            description: "Provision basic resources (compute, storage)"
+            evidence_sources:
+              - type: "skills_matrix"
+                id: "cloud"
+          proficient:
+            description: "Implement small-scale automation via CLI/SDK"
+            evidence_sources: []
+          expert:
+            description: "Architect multi-environment setups"
+            evidence_sources: []
+        assessment_types:
+          - "Quiz"
+          - "Project"
+  - name: "Operations & Monitoring"
+    description: "Observability, incident response, documentation"
+    skills:
+      - name: "Monitoring & Alert Response"
+        proficiency:
+          awareness:
+            description: "Read dashboards, recognize anomalies"
+            evidence_sources:
+              - type: "job_posting"
+                id: "JP-005"
+          working:
+            description: "Respond to alerts, escalate appropriately"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          proficient:
+            description: "Tune dashboards and write runbooks"
+            evidence_sources: []
+          expert:
+            description: "Design observability strategies"
+            evidence_sources: []
+        assessment_types:
+          - "Scenario-based assessment"
+          - "Exercise"
+      - name: "Documentation & Runbooks"
+        proficiency:
+          awareness:
+            description: "Follow existing runbooks accurately"
+            evidence_sources:
+              - type: "research"
+                id: "role-analysis"
+          working:
+            description: "Author new runbooks with guidance"
+            evidence_sources: []
+          proficient:
+            description: "Standardize documentation templates"
+            evidence_sources: []
+          expert:
+            description: "Own documentation governance"
+            evidence_sources: []
+        assessment_types:
+          - "Documentation review"
+progression_map:
+  awareness: "Introductory modules, guided labs"
+  working: "Module exercises, junior-level projects"
+  proficient: "Capstone projects, internships"
+  expert: "Not expected at junior level"
+notes:
+  - "Based on consolidated research data dated 2025-10-17"

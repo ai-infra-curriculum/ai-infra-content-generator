@@ -1,0 +1,241 @@
+role: AI Infrastructure Engineer
+level: mid
+program_name: AI Infrastructure Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-17'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Design and operate production ML infrastructure across cloud environments
+  - Automate deployments and pipelines using Kubernetes and Infrastructure as Code
+  - Implement observability, reliability, and security best practices for ML systems
+  secondary:
+  - Integrate GPU acceleration and LLM workloads into infrastructure
+  - Lead cross-functional collaboration with data science and platform teams
+program_structure:
+  total_duration_hours: 425
+  modules:
+  - id: MOD-101
+    title: Foundations of ML Infrastructure
+    duration_hours:
+      lecture: 12
+      lab: 20
+      project: 6
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-005
+    - MOD-006
+    - MOD-010
+    learning_objectives:
+    - Explain the ML lifecycle and infrastructure touchpoints across stages.
+    - Deploy a pre-trained model via FastAPI/TorchServe with automated tests.
+    - Stand up a monitored single-node deployment with health checks and logging.
+    linked_projects:
+    - PROJ-201
+  - id: MOD-102
+    title: Cloud Computing for ML
+    duration_hours:
+      lecture: 18
+      lab: 22
+      project: 8
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-101
+    - MOD-010
+    learning_objectives:
+    - Provision GPU-ready cloud environments with IAM, networking, and tagging.
+    - Automate infrastructure using Terraform and CLI tooling.
+    - Implement cost monitoring dashboards and alerting for ML workloads.
+    linked_projects:
+    - PROJ-201
+  - id: MOD-103
+    title: Containerization & Docker
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 5
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-101
+    learning_objectives:
+    - Build optimized multi-stage Docker images for ML services.
+    - Orchestrate multi-service ML stacks with Docker Compose.
+    - Enable GPU acceleration and registry automation for container workflows.
+    linked_projects:
+    - PROJ-201
+  - id: MOD-104
+    title: Kubernetes Fundamentals
+    duration_hours:
+      lecture: 20
+      lab: 24
+      project: 12
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-103
+    learning_objectives:
+    - Deploy and scale ML services on Kubernetes with Helm-managed releases.
+    - Configure ingress, storage, secrets, and GPU scheduling for production workloads.
+    - Diagnose and remediate cluster incidents using observability tooling.
+    linked_projects:
+    - PROJ-201
+    - PROJ-203
+  - id: MOD-105
+    title: Data Pipeline Engineering
+    duration_hours:
+      lecture: 15
+      lab: 20
+      project: 8
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-101
+    - MOD-102
+    learning_objectives:
+    - Author production-grade Airflow DAGs with retries, SLAs, and monitoring.
+    - Implement data versioning, lineage, and quality checks for ML features.
+    - Integrate distributed processing and streaming pipelines into ML workflows.
+    linked_projects:
+    - PROJ-202
+  - id: MOD-106
+    title: MLOps Fundamentals
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-101
+    - MOD-105
+    learning_objectives:
+    - Stand up MLflow (or equivalent) for experiment tracking and model registry.
+    - Build CI/CD pipelines with automated validation and rollback strategies.
+    - Produce governance artifacts covering approvals, drift detection, and compliance.
+    linked_projects:
+    - PROJ-202
+  - id: MOD-107
+    title: GPU Computing & ML Acceleration
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 5
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-101
+    - MOD-103
+    learning_objectives:
+    - Configure GPU drivers, CUDA toolkits, and monitoring agents for ML clusters.
+    - Optimize GPU utilization via profiling, batching, and mixed precision.
+    - Troubleshoot common GPU failures and document remediation runbooks.
+    linked_projects:
+    - PROJ-203
+  - id: MOD-108
+    title: Monitoring & Observability
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-103
+    - MOD-104
+    learning_objectives:
+    - Deploy Prometheus, Grafana, and Alertmanager for ML infrastructure.
+    - Instrument ML services with custom metrics, logs, and traces.
+    - Create runbooks and SLO dashboards supporting on-call rotations.
+    linked_projects:
+    - PROJ-202
+    - PROJ-203
+  - id: MOD-109
+    title: Infrastructure as Code
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-102
+    - MOD-103
+    learning_objectives:
+    - Develop reusable Terraform/Pulumi modules with automated testing.
+    - Implement GitOps workflows and drift detection for ML platforms.
+    - Enforce policy-as-code and secret management within IaC pipelines.
+    linked_projects:
+    - PROJ-203
+  - id: MOD-110
+    title: LLM Infrastructure
+    duration_hours:
+      lecture: 14
+      lab: 18
+      project: 6
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-engineer
+    prerequisites:
+    - MOD-106
+    - MOD-107
+    learning_objectives:
+    - Deploy LLM serving frameworks with retrieval-augmented generation pipelines.
+    - Optimize latency and cost through quantization, batching, and autoscaling.
+    - Implement safety guardrails, monitoring, and incident response for LLM workloads.
+    linked_projects:
+    - PROJ-203
+assessment_strategy:
+  formative:
+  - type: quiz
+    cadence: per module
+  - type: lab
+    cadence: per module
+  summative:
+  - type: capstone
+    alignment: Production LLM deployment
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-201
+    summary: Basic Model Serving System
+    difficulty: beginner+
+    assessed_competencies:
+    - infrastructure-automation
+    integration_notes: Relies on MOD-101, MOD-103, MOD-104
+  - id: PROJ-202
+    summary: MLOps Pipeline
+    difficulty: intermediate
+    assessed_competencies:
+    - infrastructure-automation
+    integration_notes: Relies on MOD-105, MOD-106
+  - id: PROJ-203
+    summary: Production LLM Deployment
+    difficulty: advanced
+    assessed_competencies:
+    - infrastructure-automation
+    integration_notes: Relies on MOD-104, MOD-107, MOD-109, MOD-110
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Platform Lead
+    focus: Production readiness
+    due_date: '2025-11-30'
+  pilot_metrics:
+    completion_rate_target: 0.8
+    satisfaction_target: 4.3
+    assessment_pass_rate_target: 0.82
+risk_register:
+- risk: High operational complexity may overwhelm learners
+  impact: high
+  likelihood: medium
+  mitigation: Provide optional foundations refresh and mentorship

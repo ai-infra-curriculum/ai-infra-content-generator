@@ -1,0 +1,25 @@
+id: MOD-106
+type: module
+title: MLOps Fundamentals
+roles:
+- ai-infrastructure-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: mlops-automation
+  level: proficient
+- id: governance-compliance
+  level: working
+dependencies:
+- MOD-105
+- MOD-101
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Teaches experiment tracking, model registry workflows, CI/CD automation, and governance for ML deployments.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-engineer-learning/lessons/mod-106-mlops'
+metadata_version: 1.0.0

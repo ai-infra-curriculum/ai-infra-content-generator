@@ -1,0 +1,161 @@
+role: "Principal AI Infrastructure Architect"
+level: "principal-architect"
+last_updated: "2025-10-20"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Executive Strategy & Board Advisory"
+    description: "Shape enterprise AI vision, secure investment, and influence C-suite and board stakeholders."
+    skills:
+      - name: "Enterprise AI Vision"
+        proficiency:
+          proficient:
+            description: "Produce multi-year AI infrastructure roadmaps aligned to business outcomes and risk appetite."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-001"
+          expert:
+            description: "Own corporate AI strategy, portfolio prioritization, and board investment approvals."
+            evidence_sources:
+              - type: "research"
+                id: "principal-architect-analysis"
+        assessment_types:
+          - "Executive portfolio review"
+          - "Board simulation"
+      - name: "Board Influence & Communication"
+        proficiency:
+          proficient:
+            description: "Deliver board-ready narratives, defend investment cases, and translate technical risk."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-002"
+          expert:
+            description: "Advise board committees, manage crises, and negotiate trade-offs across executives."
+            evidence_sources: []
+        assessment_types:
+          - "Executive presentation"
+          - "Stakeholder feedback"
+  - name: "Global Governance & Responsible AI"
+    description: "Establish global governance programs, regulatory compliance, and responsible AI oversight."
+    skills:
+      - name: "Global Governance Architecture"
+        proficiency:
+          proficient:
+            description: "Design governance operating models, councils, and decision frameworks."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-003"
+          expert:
+            description: "Automate compliance, align global standards, and report metrics to executives and regulators."
+            evidence_sources: []
+        assessment_types:
+          - "Governance audit"
+          - "Policy review"
+      - name: "Responsible AI Leadership"
+        proficiency:
+          proficient:
+            description: "Embed responsible AI controls, risk assessments, and monitoring into platforms."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-004"
+          expert:
+            description: "Chair responsible AI councils, align with EU AI Act/NIST AI RMF, and guide ethical decisions."
+            evidence_sources: []
+        assessment_types:
+          - "Ethics review"
+          - "Regulatory readiness assessment"
+  - name: "Platform Transformation & Economics"
+    description: "Drive multi-cloud modernization, performance, and financial stewardship for AI workloads."
+    skills:
+      - name: "Multi-Cloud & Sovereign Strategy"
+        proficiency:
+          proficient:
+            description: "Architect resilient, sovereign-aware multi-cloud platforms with automation."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-005"
+          expert:
+            description: "Own global platform portfolio, custom silicon decisions, and resiliency benchmarks."
+            evidence_sources: []
+        assessment_types:
+          - "Architecture review"
+          - "Tabletop exercise"
+      - name: "AI FinOps & Sustainability"
+        proficiency:
+          proficient:
+            description: "Model AI infrastructure cost, carbon impact, and optimization levers."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-006"
+          expert:
+            description: "Influence corporate budgeting, sustainability goals, and performance-based funding."
+            evidence_sources: []
+        assessment_types:
+          - "Business case"
+          - "Sustainability review"
+  - name: "Innovation, Partnerships & M&A"
+    description: "Cultivate innovation pipelines, manage strategic alliances, and lead M&A technical work."
+    skills:
+      - name: "Innovation Portfolio Leadership"
+        proficiency:
+          proficient:
+            description: "Operate technology radars, venture scouting, and incubation programs."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-007"
+          expert:
+            description: "Shape industry direction, secure patents, and align innovation with corporate strategy."
+            evidence_sources: []
+        assessment_types:
+          - "Innovation portfolio review"
+          - "Patent/standards contribution"
+      - name: "M&A Due Diligence & Integration"
+        proficiency:
+          proficient:
+            description: "Lead technical diligence, integration planning, and synergy assessments."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-008"
+          expert:
+            description: "Advise executives on deal strategy, post-merger execution, and risk mitigation."
+            evidence_sources: []
+        assessment_types:
+          - "M&A case study"
+          - "Integration readiness review"
+  - name: "Thought Leadership & Ecosystem Influence"
+    description: "Represent the organization externally, build alliances, and influence industry standards."
+    skills:
+      - name: "Thought Leadership"
+        proficiency:
+          proficient:
+            description: "Publish whitepapers, deliver keynotes, and participate in standards working groups."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-009"
+          expert:
+            description: "Chair industry initiatives, craft policy positions, and build public credibility."
+            evidence_sources: []
+        assessment_types:
+          - "Publication"
+          - "Conference evaluation"
+      - name: "Strategic Ecosystem Partnerships"
+        proficiency:
+          proficient:
+            description: "Negotiate alliances with hyperscalers, hardware vendors, and research institutions."
+            evidence_sources:
+              - type: "job_posting"
+                id: "PAIA-010"
+          expert:
+            description: "Structure joint ventures, co-innovation programs, and long-term partnership governance."
+            evidence_sources: []
+        assessment_types:
+          - "Partnership plan"
+          - "Stakeholder feedback"
+progression_map:
+  proficient: "Senior architects transitioning to principal scope with wider strategic responsibility."
+  expert: "Enterprise thought leaders advising board-level stakeholders and shaping industry direction."
+notes:
+  - "Derived from 2024–2025 principal architect postings, legacy curriculum data, and enterprise EA frameworks."

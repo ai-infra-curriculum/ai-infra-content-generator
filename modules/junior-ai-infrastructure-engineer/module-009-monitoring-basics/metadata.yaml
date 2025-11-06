@@ -1,0 +1,22 @@
+id: MOD-009
+type: module
+title: Monitoring & Logging Basics
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: monitoring-response
+  level: working
+dependencies:
+- Docker
+- Kubernetes
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

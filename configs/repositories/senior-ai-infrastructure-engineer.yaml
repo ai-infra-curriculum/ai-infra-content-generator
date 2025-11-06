@@ -1,0 +1,15 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-engineer-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/senior-ai-infrastructure-engineer/module-{num:03d}-*"
+projects_mapping:
+  source_pattern: "projects/project-{num:03d}-*"
+  target_pattern: "projects/senior-ai-infrastructure-engineer/project-{num:03d}-*"
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:03d}-*"
+notes: |
+  Use this mapping to synchronize the senior learning and solutions repositories with
+  the new curriculum structure. Module IDs map 201-210; project IDs map 301-304 in
+  the refreshed framework.

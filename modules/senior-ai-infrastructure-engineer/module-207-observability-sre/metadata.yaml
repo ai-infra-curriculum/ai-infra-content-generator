@@ -1,0 +1,25 @@
+id: MOD-207
+type: module
+title: Advanced Observability & SRE Practices
+roles:
+- senior-ai-infrastructure-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: observability-leadership
+  level: expert
+- id: sre-incident-response
+  level: expert
+dependencies:
+- MOD-108
+- MOD-205
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Build federated observability platforms, lead SRE programs, and institutionalize chaos engineering for ML systems.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-207-observability-sre'
+metadata_version: 1.0.0

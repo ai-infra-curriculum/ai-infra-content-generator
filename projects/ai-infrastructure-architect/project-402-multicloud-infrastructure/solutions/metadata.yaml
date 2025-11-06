@@ -1,0 +1,21 @@
+id: "SOL-P402"
+type: "solution"
+title: "Solutions for multicloud-ai-infrastructure"
+roles:
+  - "ai-infrastructure-architect"
+stage: "architect"
+proficiency_target: "expert"
+competencies:
+  - id: "multi-cloud-strategy"
+    level: "expert"
+dependencies:
+  - "project-402-multicloud-infrastructure/metadata.yaml"
+validation_profile: "python-strict"
+status: "draft"
+owners:
+  - name: "Solutions Team"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-architect-solutions/projects/project-302-multicloud-infra"
+metadata_version: "1.0.0"

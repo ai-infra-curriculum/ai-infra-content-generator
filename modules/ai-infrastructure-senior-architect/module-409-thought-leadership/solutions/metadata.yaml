@@ -1,0 +1,21 @@
+id: "SOL-409"
+type: "solution"
+title: "Solutions for thought-leadership-influence"
+roles:
+  - "ai-infrastructure-senior-architect"
+stage: "advanced"
+proficiency_target: "expert"
+competencies:
+  - id: "thought-leadership"
+    level: "expert"
+dependencies:
+  - "module-409-thought-leadership/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Leadership"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions/thought-leadership"
+metadata_version: "1.0.0"

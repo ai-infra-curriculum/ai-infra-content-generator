@@ -1,0 +1,20 @@
+id: MOD-001
+type: module
+title: Python Fundamentals for Infrastructure
+roles:
+- junior-ai-infrastructure-engineer
+stage: foundational
+proficiency_target: working
+competencies:
+- id: python-automation
+  level: working
+dependencies: []
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

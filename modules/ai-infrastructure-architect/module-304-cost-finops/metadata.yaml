@@ -1,0 +1,24 @@
+id: MOD-304
+type: module
+title: Cost Optimization & FinOps
+roles:
+- ai-infrastructure-architect
+stage: core
+proficiency_target: proficient
+competencies:
+- id: finops-governance
+  level: expert
+- id: cost-optimization
+  level: expert
+dependencies:
+- MOD-302
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implements FinOps practices, chargeback models, and GPU cost optimization to balance performance with ROI for enterprise AI.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-304-cost-finops'
+metadata_version: 1.0.0

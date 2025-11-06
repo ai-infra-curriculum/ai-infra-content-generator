@@ -1,0 +1,21 @@
+id: "SOL-405"
+type: "solution"
+title: "Solutions for responsible-ai-ethics"
+roles:
+  - "ai-infrastructure-senior-architect"
+stage: "core"
+proficiency_target: "expert"
+competencies:
+  - id: "responsible-ai"
+    level: "expert"
+dependencies:
+  - "module-405-responsible-ai/metadata.yaml"
+validation_profile: "docs-quality"
+status: "draft"
+owners:
+  - name: "Solutions Leadership"
+    github: "@ai-infra-solutions"
+    role: "author"
+evidence:
+  - "legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-senior-architect-solutions/guides"
+metadata_version: "1.0.0"

@@ -1,0 +1,21 @@
+id: PROJ-01
+type: project
+title: Simple Model API Deployment
+roles:
+- junior-ai-infrastructure-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: project-execution
+  level: working
+dependencies:
+- Modules 001-005
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+evidence:
+- 'legacy: CURRICULUM.md'
+metadata_version: 1.0.0

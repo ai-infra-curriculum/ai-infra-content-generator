@@ -1,0 +1,25 @@
+id: MOD-305
+type: module
+title: High Availability & Disaster Recovery
+roles:
+- ai-infrastructure-architect
+stage: core
+proficiency_target: expert
+competencies:
+- id: resilience-architecture
+  level: expert
+- id: chaos-engineering
+  level: proficient
+dependencies:
+- MOD-205
+- MOD-302
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Designs 99.95%+ AI platform availability with multi-region DR, chaos engineering, and self-healing automation.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-architect-learning/lessons/mod-305-ha-dr'
+metadata_version: 1.0.0

@@ -1,0 +1,25 @@
+id: MOD-209
+type: module
+title: Security & Compliance for ML Systems
+roles:
+- senior-ai-infrastructure-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: ml-security
+  level: expert
+- id: compliance-governance
+  level: proficient
+dependencies:
+- MOD-205
+- MOD-208
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Secure ML platforms with zero-trust patterns, compliance automation, and guardrails against model-specific threats.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/lessons/mod-209-security-compliance'
+metadata_version: 1.0.0

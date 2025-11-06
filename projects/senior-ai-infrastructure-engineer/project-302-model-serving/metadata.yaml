@@ -1,0 +1,26 @@
+id: PROJ-302
+type: project
+title: High-Performance Model Serving
+roles:
+- senior-ai-infrastructure-engineer
+stage: core
+proficiency_target: expert
+competencies:
+- id: inference-optimization
+  level: expert
+- id: llm-infrastructure
+  level: expert
+dependencies:
+- MOD-203
+- MOD-204
+- MOD-206
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Deliver an optimized LLM serving platform with automation, guardrails, and cost governance achieving ≥3x throughput improvements.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-senior-engineer-learning/projects/project-202-model-serving'
+metadata_version: 1.0.0
