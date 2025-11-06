@@ -4,12 +4,12 @@ title: ML Platform Developer Experience
 roles:
 - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
 - id: developer-experience
-  level: advanced
+  level: expert
 - id: product-thinking
-  level: advanced
+  level: expert
 dependencies:
 - MOD-505
 validation_profile: docs-quality
@@ -18,7 +18,7 @@ owners:
 - name: Curriculum Team
   github: '@ai-infra-team'
   role: author
-description: Delivers self-service tooling, CLI/UI, onboarding flows, and platform product experiences.
+# Delivers self-service tooling, CLI/UI, onboarding flows, and platform product experiences.
 evidence:
 - 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-007-developer-experience'
 metadata_version: 1.0.0

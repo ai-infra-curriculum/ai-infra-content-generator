@@ -4,12 +4,12 @@ title: Solutions for MOD-504 Feature Store Engineering
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: core
-proficiency_target: advanced
+proficiency_target: proficient
 competencies:
   - id: feature-platform
-    level: advanced
+    level: proficient
   - id: data-engineering
-    level: advanced
+    level: proficient
 dependencies:
   - module-504-feature-store/metadata.yaml
 validation_profile: docs-quality

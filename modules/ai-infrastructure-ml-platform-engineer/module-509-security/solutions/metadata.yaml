@@ -4,12 +4,12 @@ title: Solutions for MOD-509 Platform Security & Compliance Foundations
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
   - id: platform-security
-    level: advanced
+    level: expert
   - id: compliance
-    level: advanced
+    level: expert
 dependencies:
   - module-509-security/metadata.yaml
 validation_profile: docs-quality

@@ -1,0 +1,28 @@
+id: PROJ-555
+type: project
+title: LLMOps Reliability Program
+roles:
+- ai-infrastructure-mlops-engineer
+stage: capstone
+proficiency_target: expert
+competencies:
+- id: llmops
+  level: expert
+- id: incident-response
+  level: expert
+- id: finops
+  level: proficient
+dependencies:
+- MOD-558
+- MOD-559
+- MOD-560
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Operationalizes LLM workloads with evaluation harnesses, safety guardrails, and cost controls aligned with architect initiatives.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/projects/project-5-llmops'
+metadata_version: 1.0.0

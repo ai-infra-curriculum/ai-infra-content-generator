@@ -4,12 +4,12 @@ title: Platform Security & Compliance Foundations
 roles:
 - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
 - id: platform-security
-  level: advanced
+  level: expert
 - id: compliance
-  level: advanced
+  level: expert
 dependencies:
 - MOD-501
 - MOD-505
@@ -19,7 +19,7 @@ owners:
 - name: Curriculum Team
   github: '@ai-infra-team'
   role: author
-description: Applies security controls, access policies, and compliance guardrails to ML platforms.
+# Applies security controls, access policies, and compliance guardrails to ML platforms.
 evidence:
 - 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-009-security'
 metadata_version: 1.0.0

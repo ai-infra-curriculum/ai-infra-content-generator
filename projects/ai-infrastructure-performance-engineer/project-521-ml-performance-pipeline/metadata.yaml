@@ -1,0 +1,28 @@
+id: PROJ-521
+type: project
+title: Performance Optimization Pipeline
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: pipeline-automation
+  level: expert
+- id: model-lifecycle
+  level: proficient
+- id: responsible-ai
+  level: working
+dependencies:
+- MOD-521
+- MOD-523
+- MOD-525
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Builds an end-to-end optimization pipeline covering profiling, compression, and governance automation.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/projects/project-01-model-optimization'
+metadata_version: 1.0.0

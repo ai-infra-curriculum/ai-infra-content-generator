@@ -1,0 +1,25 @@
+id: MOD-552
+type: module
+title: CI/CD for Machine Learning
+roles:
+- ai-infrastructure-mlops-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: pipeline-automation
+  level: proficient
+- id: model-lifecycle
+  level: proficient
+dependencies:
+- MOD-551
+- MOD-109
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Standardizes ML-aware CI/CD and GitOps practices reused by platform and governance tracks.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/02-cicd-for-ml'
+metadata_version: 1.0.0

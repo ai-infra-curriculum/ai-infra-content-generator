@@ -4,12 +4,12 @@ title: Solutions for MOD-510 Platform Security Governance & Auditing
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
   - id: governance
-    level: advanced
+    level: expert
   - id: audit-automation
-    level: advanced
+    level: expert
 dependencies:
   - module-510-security-governance/metadata.yaml
 validation_profile: docs-quality

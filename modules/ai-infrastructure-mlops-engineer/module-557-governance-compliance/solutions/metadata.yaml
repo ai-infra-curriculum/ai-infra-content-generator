@@ -1,0 +1,23 @@
+id: SOL-557
+type: solution
+title: Solutions for MOD-557 Governance & Compliance for ML Pipelines
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: policy-automation
+  level: expert
+- id: governance
+  level: expert
+dependencies:
+- modules/ai-infrastructure-mlops-engineer/module-557-governance-compliance/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Solutions Leadership
+  github: '@ai-infra-solutions'
+  role: author
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-mlops-solutions'
+metadata_version: 1.0.0

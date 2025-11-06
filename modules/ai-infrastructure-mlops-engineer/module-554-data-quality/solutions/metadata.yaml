@@ -1,0 +1,23 @@
+id: SOL-554
+type: solution
+title: Solutions for MOD-554 Data Quality & Lineage Automation
+roles:
+- ai-infrastructure-mlops-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: data-governance
+  level: proficient
+- id: pipeline-automation
+  level: proficient
+dependencies:
+- modules/ai-infrastructure-mlops-engineer/module-554-data-quality/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Solutions Leadership
+  github: '@ai-infra-solutions'
+  role: author
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-mlops-solutions'
+metadata_version: 1.0.0

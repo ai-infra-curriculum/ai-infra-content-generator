@@ -4,12 +4,12 @@ title: Solutions for MOD-506 Model Registry & Lifecycle Management
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
   - id: model-lifecycle
-    level: advanced
+    level: expert
   - id: governance
-    level: advanced
+    level: expert
 dependencies:
   - module-506-model-registry/metadata.yaml
 validation_profile: docs-quality

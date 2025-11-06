@@ -1,5 +1,7 @@
 # Curriculum Migration Plan
 
+> For a consolidated execution checklist, see `docs/remaining-work-playbook.md`.
+
 1. **Inventory & Snapshot** — _Completed 2025-10-15_
    - Archive current state of role repositories, research assets, and planning docs.
    - Ensure checkpoints/backups exist for rollback.
@@ -14,7 +16,9 @@
 - ✅ AI Infrastructure Team Lead (`research/ai-infrastructure-team-lead/*`)
 - ✅ AI Infrastructure Security Engineer (`research/ai-infrastructure-security-engineer/*`)
 - ✅ AI Infrastructure ML Platform Engineer (`research/ai-infrastructure-ml-platform-engineer/*`)
-   - ☐ Remaining Staff+ roles (Principal Engineer, Team Lead, specialized tracks)
+- ✅ AI Infrastructure MLOps Engineer (`research/ai-infrastructure-mlops-engineer/*`)
+- ✅ AI Infrastructure Performance Engineer (`research/ai-infrastructure-performance-engineer/*`)
+   - ☐ Remaining leadership roles (Principal Engineer, Team Lead) for solution backfill & validation
    - ☐ Validate migrated metadata via `./tools/curriculum.py validate-metadata` (blocked: Python tooling not yet installed)
 
 3. **Curriculum Plans** — _Status: In progress_
@@ -27,6 +31,8 @@
 - ✅ AI Infrastructure Team Lead master plan, roadmaps, projects
 - ✅ AI Infrastructure Security Engineer master plan, roadmaps, projects
 - ✅ AI Infrastructure ML Platform Engineer master plan, roadmaps, projects
+- ✅ AI Infrastructure MLOps Engineer master plan, roadmaps, projects
+- ✅ AI Infrastructure Performance Engineer master plan, roadmaps, projects
    - ☐ Update remaining role plan templates once prioritised
 
 4. **Module & Lesson Content** — _Status: In progress_
@@ -38,6 +44,8 @@
 - ✅ Team lead modules (MOD-801…810) migrated with metadata and leadership solution stubs
 - ✅ Security engineer modules (MOD-901…912) migrated with metadata and security solution placeholders
 - ✅ ML platform modules (MOD-501…510) migrated with metadata and solution placeholders
+- ✅ MLOps modules (MOD-551…560) migrated with metadata and solution placeholders
+- ✅ Performance engineer modules (MOD-521…528) migrated with metadata and solution placeholders
    - ☐ Run validation profiles (`./tools/curriculum.py run-validation …`) after environment setup (pip missing)
 
 5. **Projects & Solutions** — _Status: In progress_
@@ -50,6 +58,8 @@
 - ✅ Team lead projects (PROJ-801…803) with metadata and leadership solution placeholders synced to legacy repos
 - ✅ Security engineer projects (PROJ-901…905) with metadata and solution placeholders tied to legacy security repositories
 - ✅ ML platform projects (PROJ-501…506) with metadata and solution placeholders mapped to legacy platform assets
+- ✅ MLOps projects (PROJ-551…555) with metadata and solution placeholders mapped to legacy assets
+- ✅ Performance engineer projects (PROJ-521…524) with metadata and solution placeholders mapped to legacy assets
    - ☐ Curate senior module solution READMEs with direct references to legacy guides
 
 6. **Exporters & Automation** — _Status: In progress_

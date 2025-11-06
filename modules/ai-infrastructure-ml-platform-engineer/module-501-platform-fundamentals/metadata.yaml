@@ -4,12 +4,12 @@ title: ML Platform Fundamentals
 roles:
 - ai-infrastructure-ml-platform-engineer
 stage: core
-proficiency_target: advanced
+proficiency_target: proficient
 competencies:
 - id: ml-platform-architecture
-  level: advanced
+  level: proficient
 - id: service-design
-  level: advanced
+  level: proficient
 dependencies:
 - MOD-201
 - MOD-206
@@ -19,7 +19,7 @@ owners:
 - name: Curriculum Team
   github: '@ai-infra-team'
   role: author
-description: Establishes ML platform architecture principles, shared services, and platform operating models.
+# Establishes ML platform architecture principles, shared services, and platform operating models.
 evidence:
 - 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-001-platform-fundamentals'
 metadata_version: 1.0.0

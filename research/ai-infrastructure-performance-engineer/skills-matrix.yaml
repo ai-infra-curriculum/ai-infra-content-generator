@@ -1,0 +1,157 @@
+role: "AI Infrastructure Performance Engineer"
+level: "ml-performance-engineer"
+last_updated: "2025-11-05"
+research_sources:
+  - type: "role_requirements"
+    reference: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/ROLE_REQUIREMENTS.md"
+  - type: "job_posting_analysis"
+    reference: "./job-posting-analysis.md"
+competency_domains:
+  - name: "GPU Architecture & Kernel Optimization"
+    description: "Design and optimize low-level kernels and GPU execution paths for ML workloads."
+    skills:
+      - name: "CUDA / Triton Kernel Engineering"
+        proficiency:
+          working:
+            description: "Modify existing kernels and tune launch parameters for common operators."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MPerf-CUDA-01"
+          proficient:
+            description: "Author custom fused kernels, leverage CUTLASS/FlashAttention patterns, and profile with Nsight."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-522"
+          expert:
+            description: "Design reusable kernel libraries, integrate with compiler stacks (TVM/XLA), and mentor teams on GPU micro-architecture."
+            evidence_sources: []
+        assessment_types:
+          - "Kernel review"
+          - "Profiling lab"
+      - name: "Hardware & Memory Optimization"
+        proficiency:
+          working:
+            description: "Interpret GPU utilization metrics and adjust memory/batch settings."
+            evidence_sources: []
+          proficient:
+            description: "Optimize memory hierarchy usage (shared vs global, KV cache) and handle mixed precision."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MPerf-HW-02"
+          expert:
+            description: "Architect hardware-software co-optimization across GPU generations and alternative accelerators."
+            evidence_sources: []
+        assessment_types:
+          - "Hardware tuning demo"
+          - "Performance design review"
+  - name: "Model Optimization & Compression"
+    description: "Reduce latency and cost via quantization, pruning, distillation, and architecture-level improvements."
+    skills:
+      - name: "Quantization & Pruning"
+        proficiency:
+          working:
+            description: "Apply INT8 quantization and structured pruning with off-the-shelf tools."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-525"
+          proficient:
+            description: "Evaluate trade-offs (accuracy vs latency) and deploy AWQ/GPTQ/FP8 strategies in production."
+            evidence_sources: []
+          expert:
+            description: "Design custom quantization schemes, automate validation, and collaborate with research on accuracy recovery."
+            evidence_sources: []
+        assessment_types:
+          - "Optimization case study"
+          - "Accuracy impact analysis"
+      - name: "Transformer & LLM Optimization"
+        proficiency:
+          working:
+            description: "Enable FlashAttention or continuous batching using existing libraries."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MPerf-LLM-03"
+          proficient:
+            description: "Customize KV cache strategies, sequence parallelism, and streaming inference pipelines."
+            evidence_sources: []
+          expert:
+            description: "Lead org-wide LLM performance initiatives spanning hardware, software, and FinOps reporting."
+            evidence_sources: []
+        assessment_types:
+          - "LLM optimization review"
+          - "Inference benchmark report"
+  - name: "Benchmarking & Observability"
+    description: "Build repeatable benchmarking and monitoring systems to track performance regressions."
+    skills:
+      - name: "Profiling & Benchmark Automation"
+        proficiency:
+          working:
+            description: "Run manual benchmarks and interpret profiling traces."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-523"
+          proficient:
+            description: "Automate benchmarking pipelines with regression detection and reporting."
+            evidence_sources: []
+          expert:
+            description: "Standardize benchmarking across teams/hardware, integrate with CI/CD and observability stacks."
+            evidence_sources: []
+        assessment_types:
+          - "Benchmark automation demo"
+          - "Performance regression audit"
+      - name: "Cost & FinOps Analysis"
+        proficiency:
+          working:
+            description: "Calculate per-request costs and identify obvious inefficiencies."
+            evidence_sources: []
+          proficient:
+            description: "Model cost-performance trade-offs across deployment options and recommend optimizations."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MPerf-FinOps-04"
+          expert:
+            description: "Partner with finance/leadership to produce ongoing FinOps reporting tied to optimization projects."
+            evidence_sources: []
+        assessment_types:
+          - "Cost analysis report"
+          - "Executive briefing"
+  - name: "Cross-Functional Enablement"
+    description: "Scale performance knowledge and coordinate with platform, MLOps, and leadership teams."
+    skills:
+      - name: "Optimization Enablement"
+        proficiency:
+          working:
+            description: "Document optimization steps and share with immediate team."
+            evidence_sources: []
+          proficient:
+            description: "Run workshops, create reusable playbooks, and support adoption across multiple squads."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-527"
+          expert:
+            description: "Lead a performance center-of-excellence with measurable adoption/impact metrics."
+            evidence_sources: []
+        assessment_types:
+          - "Workshop plan review"
+          - "Adoption metrics analysis"
+      - name: "Risk & Validation Management"
+        proficiency:
+          working:
+            description: "Coordinate accuracy and reliability validation after optimizations."
+            evidence_sources: []
+          proficient:
+            description: "Integrate responsible AI, security, and compliance checks into performance workflows."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MPerf-Risk-05"
+          expert:
+            description: "Design governance frameworks ensuring optimization initiatives meet policy requirements without blocking delivery."
+            evidence_sources: []
+        assessment_types:
+          - "Validation checklist review"
+          - "Governance board simulation"
+progression_map:
+  working: "Engineers optimizing specific models or pipelines with guidance."
+  proficient: "Leads cross-team optimization projects with automated benchmarking and reporting."
+  expert: "Defines organization-wide performance strategy, tooling, and governance." 
+notes:
+  - "Matrix aligns with MLOps and ML Platform tracks to share observability, governance, and developer experience assets."

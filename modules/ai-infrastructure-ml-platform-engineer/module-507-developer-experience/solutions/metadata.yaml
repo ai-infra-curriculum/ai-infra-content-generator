@@ -4,12 +4,12 @@ title: Solutions for MOD-507 ML Platform Developer Experience
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
   - id: developer-experience
-    level: advanced
+    level: expert
   - id: product-thinking
-    level: advanced
+    level: expert
 dependencies:
   - module-507-developer-experience/metadata.yaml
 validation_profile: docs-quality

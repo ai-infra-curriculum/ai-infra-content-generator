@@ -1,0 +1,25 @@
+id: MOD-558
+type: module
+title: Production Operations & SRE for ML
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: service-reliability
+  level: expert
+- id: incident-response
+  level: expert
+dependencies:
+- MOD-553
+- MOD-556
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Applies SRE practices to ML workloads and shares runbooks across platform, security, and leadership tracks.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/08-production-ops'
+metadata_version: 1.0.0

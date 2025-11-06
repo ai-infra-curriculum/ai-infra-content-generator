@@ -275,6 +275,70 @@
       ]
     },
     {
+      "role": "ai-infrastructure-mlops-engineer",
+      "modules": [
+        {
+          "id": "MOD-551",
+          "path": "modules/ai-infrastructure-mlops-engineer/module-551-mlops-foundations/README.md",
+          "lms_module_id": "ai-infra-mlops-mod-551"
+        },
+        {
+          "id": "MOD-556",
+          "path": "modules/ai-infrastructure-mlops-engineer/module-556-automation-orchestration/README.md",
+          "lms_module_id": "ai-infra-mlops-mod-556"
+        },
+        {
+          "id": "MOD-560",
+          "path": "modules/ai-infrastructure-mlops-engineer/module-560-advanced-llmops/README.md",
+          "lms_module_id": "ai-infra-mlops-mod-560"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-551",
+          "path": "projects/ai-infrastructure-mlops-engineer/project-551-ml-pipeline-modernization/README.md",
+          "lms_assignment_id": "ai-infra-mlops-proj-551"
+        },
+        {
+          "id": "PROJ-555",
+          "path": "projects/ai-infrastructure-mlops-engineer/project-555-llmops-reliability/README.md",
+          "lms_assignment_id": "ai-infra-mlops-proj-555"
+        }
+      ]
+    },
+    {
+      "role": "ai-infrastructure-performance-engineer",
+      "modules": [
+        {
+          "id": "MOD-521",
+          "path": "modules/ai-infrastructure-performance-engineer/module-521-gpu-performance-foundations/README.md",
+          "lms_module_id": "ai-infra-performance-mod-521"
+        },
+        {
+          "id": "MOD-526",
+          "path": "modules/ai-infrastructure-performance-engineer/module-526-distributed-inference/README.md",
+          "lms_module_id": "ai-infra-performance-mod-526"
+        },
+        {
+          "id": "MOD-528",
+          "path": "modules/ai-infrastructure-performance-engineer/module-528-advanced-hardware-acceleration/README.md",
+          "lms_module_id": "ai-infra-performance-mod-528"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-521",
+          "path": "projects/ai-infrastructure-performance-engineer/project-521-ml-performance-pipeline/README.md",
+          "lms_assignment_id": "ai-infra-performance-proj-521"
+        },
+        {
+          "id": "PROJ-524",
+          "path": "projects/ai-infrastructure-performance-engineer/project-524-llmops-efficiency/README.md",
+          "lms_assignment_id": "ai-infra-performance-proj-524"
+        }
+      ]
+    },
+    {
       "role": "ai-infrastructure-ml-platform-engineer",
       "modules": [
         {

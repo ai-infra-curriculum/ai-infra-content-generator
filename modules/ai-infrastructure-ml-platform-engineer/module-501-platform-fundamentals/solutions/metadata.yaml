@@ -4,12 +4,12 @@ title: Solutions for MOD-501 ML Platform Fundamentals
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: core
-proficiency_target: advanced
+proficiency_target: proficient
 competencies:
   - id: ml-platform-architecture
-    level: advanced
+    level: proficient
   - id: service-design
-    level: advanced
+    level: proficient
 dependencies:
   - module-501-platform-fundamentals/metadata.yaml
 validation_profile: docs-quality

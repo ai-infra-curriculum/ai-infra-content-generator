@@ -1,0 +1,25 @@
+id: MOD-524
+type: module
+title: Transformer & LLM Optimization
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: llmops
+  level: proficient
+- id: responsible-ai
+  level: working
+dependencies:
+- MOD-522
+- MOD-523
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Optimizes transformer/LLM workloads while maintaining responsible AI guardrails and alignment with platform tooling.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-004-transformer-optimization'
+metadata_version: 1.0.0

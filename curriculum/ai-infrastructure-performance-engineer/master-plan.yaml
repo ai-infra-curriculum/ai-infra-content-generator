@@ -1,0 +1,213 @@
+role: AI Infrastructure Performance Engineer
+level: ml-performance-engineer
+program_name: AI Infrastructure Performance Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-11-05'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Optimize ML training and inference workloads across hardware and software stacks while preserving accuracy and reliability.
+  - Build reproducible benchmarking and observability systems to quantify performance improvements and regressions.
+  - Collaborate with platform, MLOps, and leadership teams to communicate cost-performance trade-offs and drive adoption of optimizations.
+  secondary:
+  - Evaluate emerging hardware and compiler technologies for suitability within enterprise AI platforms.
+  - Lead performance enablement efforts and mentor engineering teams on best practices.
+program_structure:
+  total_duration_hours: 320
+  modules:
+  - id: MOD-521
+    title: GPU & Performance Foundations
+    duration_hours:
+      lecture: 10
+      lab: 16
+      portfolio: 4
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-202
+    learning_objectives:
+    - Explain GPU architecture, memory hierarchies, and performance metrics relevant to ML workloads.
+    - Configure baseline profiling environments and interpret key telemetry signals.
+    linked_projects:
+    - PROJ-521
+  - id: MOD-522
+    title: CUDA & Kernel Optimization
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 4
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-521
+    learning_objectives:
+    - Develop custom CUDA/Triton kernels and apply low-level optimizations using Nsight tooling.
+    - Integrate fused kernels into ML frameworks with automated testing.
+    linked_projects:
+    - PROJ-522
+  - id: MOD-523
+    title: Profiling & Benchmark Automation
+    duration_hours:
+      lecture: 10
+      lab: 16
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-521
+    - MOD-522
+    learning_objectives:
+    - Build repeatable benchmarking pipelines with regression detection and reporting.
+    - Correlate profiling traces with infrastructure and application metrics.
+    linked_projects:
+    - PROJ-521
+  - id: MOD-524
+    title: Transformer & LLM Optimization
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-522
+    - MOD-523
+    learning_objectives:
+    - Optimize attention mechanisms (FlashAttention, fused kernels) and KV cache behavior for large models.
+    - Design continuous batching and streaming inference pipelines with accuracy safeguards.
+    linked_projects:
+    - PROJ-524
+  - id: MOD-525
+    title: Model Compression & Accuracy Management
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-523
+    learning_objectives:
+    - Apply quantization, pruning, and distillation strategies with automated validation.
+    - Balance performance improvements with accuracy and responsible AI considerations.
+    linked_projects:
+    - PROJ-521
+  - id: MOD-526
+    title: Distributed Inference & Scaling
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-524
+    - MOD-525
+    learning_objectives:
+    - Architect multi-GPU/multi-node inference using tensor/sequence parallelism and NCCL.
+    - Integrate continuous batching and autoscaling policies for production deployments.
+    linked_projects:
+    - PROJ-523
+  - id: MOD-527
+    title: Production Performance Operations
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-523
+    - MOD-526
+    learning_objectives:
+    - Implement performance observability, alerting, and incident response workflows.
+    - Collaborate with MLOps and platform teams on rollout strategies and FinOps reporting.
+    linked_projects:
+    - PROJ-523
+  - id: MOD-528
+    title: Advanced Hardware & Compiler Acceleration
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-performance-engineer
+    prerequisites:
+    - MOD-526
+    learning_objectives:
+    - Evaluate alternative accelerators (Inferentia, Trainium, TPUs) and compiler stacks (TVM, XLA, Inductor).
+    - Build business cases and migration plans for adopting new hardware or software acceleration.
+    linked_projects:
+    - PROJ-524
+assessment_strategy:
+  formative:
+  - type: lab
+    cadence: per module (profiling labs, kernel tuning, benchmarking, compression experiments)
+  - type: review
+    cadence: multi-module (benchmark report critiques, performance postmortems)
+  summative:
+  - type: capstone
+    alignment: Organization-wide performance initiative combining optimization, benchmarking, and FinOps narratives
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-521
+    summary: Performance Optimization Pipeline
+    difficulty: ml-performance-engineer
+    assessed_competencies:
+    - pipeline-automation
+    - model-lifecycle
+    - data-governance
+    integration_notes: Synthesizes baseline profiling, compression, and regression automation outputs from MOD-521/523/525.
+  - id: PROJ-522
+    summary: Custom Kernel Acceleration
+    difficulty: ml-performance-engineer
+    assessed_competencies:
+    - kernel-engineering
+    - automation
+    integration_notes: Builds on MOD-522 with reusable fused kernels and benchmarking harnesses.
+  - id: PROJ-523
+    summary: Distributed Inference Platform Optimization
+    difficulty: ml-performance-engineer
+    assessed_competencies:
+    - workflow-orchestration
+    - service-reliability
+    - finops
+    integration_notes: Combines MOD-526 and MOD-527 deliverables with MLOps observability assets.
+  - id: PROJ-524
+    summary: LLM Inference Efficiency Program
+    difficulty: ml-performance-engineer
+    assessed_competencies:
+    - llmops
+    - innovation
+    - responsible-ai
+    integration_notes: Extends MOD-524 and MOD-528 while aligning with architect responsible AI initiatives.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: GPU Platform Lead
+    focus: Kernel design quality, profiling automation, and hardware readiness
+    due_date: '2025-12-10'
+  - reviewer: FinOps & MLOps Leads
+    focus: Cost reporting, observability integration, and production readiness
+    due_date: '2025-12-15'
+  pilot_metrics:
+    completion_rate_target: 0.75
+    optimization_roi_target: 0.4
+    stakeholder_satisfaction_target: 4.5
+risk_register:
+- risk: Benchmarking environments require high-end GPUs; limited availability may slow learner progress.
+  impact: high
+  likelihood: medium
+  mitigation: Provide recorded traces, synthetic benchmarks, and cloud credit guidance.
+- risk: Aggressive optimizations may reduce accuracy or violate responsible AI guidelines.
+  impact: medium
+  likelihood: medium
+  mitigation: Integrate automated accuracy validation and responsible AI checks from MLOps/Security tracks.

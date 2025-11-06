@@ -1,0 +1,24 @@
+id: MOD-528
+type: module
+title: Advanced Hardware & Compiler Acceleration
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: innovation
+  level: proficient
+- id: kernel-engineering
+  level: proficient
+dependencies:
+- MOD-526
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Evaluates emerging accelerators and compiler stacks, producing feasibility studies for org-wide adoption.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-008-hardware-acceleration'
+metadata_version: 1.0.0

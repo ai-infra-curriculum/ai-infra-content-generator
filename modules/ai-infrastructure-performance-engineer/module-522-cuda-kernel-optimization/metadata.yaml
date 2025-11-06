@@ -1,0 +1,24 @@
+id: MOD-522
+type: module
+title: CUDA & Kernel Optimization
+roles:
+- ai-infrastructure-performance-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: kernel-engineering
+  level: proficient
+- id: automation
+  level: working
+dependencies:
+- MOD-521
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Develops custom kernel optimization capabilities shared with platform and architect acceleration initiatives.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-002-cuda-programming'
+metadata_version: 1.0.0

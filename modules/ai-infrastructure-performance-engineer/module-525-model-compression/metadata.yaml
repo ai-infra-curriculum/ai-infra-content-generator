@@ -1,0 +1,24 @@
+id: MOD-525
+type: module
+title: Model Compression & Accuracy Management
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: model-lifecycle
+  level: proficient
+- id: responsible-ai
+  level: working
+dependencies:
+- MOD-523
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Applies compression techniques with automated validation and responsible AI guardrails for production deployments.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-005-model-compression'
+metadata_version: 1.0.0

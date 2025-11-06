@@ -23,12 +23,24 @@ nav:
       - "Module 905 Roadmap": curriculum/ai-infrastructure-security-engineer/modules/module-905-roadmap.md
       - "Module 910 Roadmap": curriculum/ai-infrastructure-security-engineer/modules/module-910-roadmap.md
       - "Project 905 Plan": curriculum/ai-infrastructure-security-engineer/projects/project-905-plan.md
+  - AI Infrastructure MLOps Engineer:
+      - "Master Plan": curriculum/ai-infrastructure-mlops-engineer/master-plan.yaml
+      - "Module 551 Roadmap": curriculum/ai-infrastructure-mlops-engineer/modules/module-551-roadmap.md
+      - "Module 556 Roadmap": curriculum/ai-infrastructure-mlops-engineer/modules/module-556-roadmap.md
+      - "Module 560 Roadmap": curriculum/ai-infrastructure-mlops-engineer/modules/module-560-roadmap.md
+      - "Project 555 Plan": curriculum/ai-infrastructure-mlops-engineer/projects/project-555-plan.md
   - AI Infrastructure ML Platform Engineer:
       - "Master Plan": curriculum/ai-infrastructure-ml-platform-engineer/master-plan.yaml
       - "Module 501 Roadmap": curriculum/ai-infrastructure-ml-platform-engineer/modules/module-501-roadmap.md
       - "Module 505 Roadmap": curriculum/ai-infrastructure-ml-platform-engineer/modules/module-505-roadmap.md
       - "Module 507 Roadmap": curriculum/ai-infrastructure-ml-platform-engineer/modules/module-507-roadmap.md
       - "Project 506 Plan": curriculum/ai-infrastructure-ml-platform-engineer/projects/project-506-plan.md
+  - AI Infrastructure Performance Engineer:
+      - "Master Plan": curriculum/ai-infrastructure-performance-engineer/master-plan.yaml
+      - "Module 521 Roadmap": curriculum/ai-infrastructure-performance-engineer/modules/module-521-roadmap.md
+      - "Module 526 Roadmap": curriculum/ai-infrastructure-performance-engineer/modules/module-526-roadmap.md
+      - "Module 528 Roadmap": curriculum/ai-infrastructure-performance-engineer/modules/module-528-roadmap.md
+      - "Project 524 Plan": curriculum/ai-infrastructure-performance-engineer/projects/project-524-plan.md
   - AI Infrastructure Team Lead:
       - "Master Plan": curriculum/ai-infrastructure-team-lead/master-plan.yaml
       - "Module 801 Roadmap": curriculum/ai-infrastructure-team-lead/modules/module-801-roadmap.md

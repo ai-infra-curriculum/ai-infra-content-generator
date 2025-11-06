@@ -4,12 +4,15 @@
 
 ## Program Context
 
-- **Program Name**: AI Infrastructure Curriculum
-- **Roles Covered**: Junior AI Infrastructure Engineer, AI Infrastructure Engineer, Senior AI Infrastructure Engineer, AI Infrastructure Security Engineer, AI Infrastructure Team Lead, Principal AI Infrastructure Engineer, AI Infrastructure Architect, Senior AI Infrastructure Architect, Principal AI Infrastructure Architect
-- **Version**: 1.5.0
-- **Last Updated**: 2025-10-20
-- **Repository Strategy**: per_role (see `curriculum/repository-strategy.yaml`)
+- **Program Name**: AI Infrastructure Curriculum  
+- **Roles Covered**: Junior AI Infrastructure Engineer, AI Infrastructure Engineer, Senior AI Infrastructure Engineer, AI Infrastructure Security Engineer, AI Infrastructure MLOps Engineer, AI Infrastructure Performance Engineer, AI Infrastructure ML Platform Engineer, AI Infrastructure Team Lead, Principal AI Infrastructure Engineer, AI Infrastructure Architect, Senior AI Infrastructure Architect, Principal AI Infrastructure Architect  
+- **Version**: 1.5.0  
+- **Last Updated**: 2025-10-20  
+- **Repository Strategy**: per_role (see `curriculum/repository-strategy.yaml`)  
 - **Solutions Placement**: Separate repositories (`ai-infra-<role>-solutions`)
+
+### Role Highlights
+- **AI Infrastructure Performance Engineer** bridges senior engineering foundations with specialized optimization (kernel, compression, distributed inference) and shares benchmarking/FinOps assets with the MLOps and ML Platform tracks to minimize duplication.
 
 ## Progression Ladder
 
@@ -18,128 +21,84 @@
 | 1 | Junior AI Infrastructure Engineer | Entry-level fundamentals | Python automation, Linux ops, Docker/K8s awareness | Foundational modules reused by higher roles |
 | 2 | AI Infrastructure Engineer | Junior curriculum | Production Kubernetes, IaC, observability, MLOps automation | Modules 101-110 extend junior projects with production focus |
 | 3 | Senior AI Infrastructure Engineer | AI Infrastructure Engineer specialization | Multi-region architecture, distributed training, governance, leadership | Senior modules reference mid-level artifacts for advanced extensions |
-| 4 | AI Infrastructure Security Engineer | Senior AI Infrastructure Engineer | Zero-trust architecture, policy-as-code, adversarial defense, compliance automation | Reuses senior/platform assets (pipelines, observability) and extends them with security guardrails to avoid duplicating tooling |
-| 5 | AI Infrastructure ML Platform Engineer | Senior AI Infrastructure Engineer | Feature store engineering, workflow orchestration, self-service tooling, observability/FinOps | Shares automation templates, feature assets, and developer experience tooling consumed by security, team lead, and principal tracks |
-| 6 | AI Infrastructure Team Lead | Senior AI Infrastructure Engineer | People leadership, team operations, cross-functional delivery, performance coaching | Reuses senior technical assets, incident playbooks, and mentorship frameworks to create leadership guides |
-| 7 | Principal AI Infrastructure Engineer | Senior AI Infrastructure Engineer, Team Lead partnership | Complex systems design, performance optimization, cross-org execution without authority | Shares benchmarking harnesses, excellence playbooks, and program tooling with architect tracks |
-| 8 | AI Infrastructure Architect | Senior/Principal Engineer collaboration | Enterprise architecture, multi-cloud strategy, compliance, innovation leadership | Architect modules build on principal engineer technical outputs and add governance/business focus |
-| 9 | Senior AI Infrastructure Architect | AI Infrastructure Architect | Enterprise AI strategy, executive advisory, global governance, innovation portfolio | Senior architect modules leverage architect, principal engineer, security, and team lead deliverables for executive engagements |
-| 10 | Principal AI Infrastructure Architect | Senior AI Infrastructure Architect | Enterprise portfolio governance, board advisory, innovation ecosystems, multi-cloud modernization | Reuses senior/principal engineer artifacts as executive inputs, extends with principal-level playbooks |
+| 4 | AI Infrastructure Security Engineer | Senior AI Infrastructure Engineer | Zero-trust architecture, policy-as-code, adversarial defense, compliance automation | Reuses senior/platform assets and extends them with security guardrails |
+| 5 | AI Infrastructure MLOps Engineer | Senior AI Infrastructure Engineer, Security Engineer | Lifecycle automation, monitoring, governance, and LLMOps readiness | Shares CI/CD templates, validation suites, and governance assets with security and platform tracks |
+| 6 | AI Infrastructure Performance Engineer | Senior AI Infrastructure Engineer, MLOps Engineer | Kernel optimization, model compression, distributed inference, FinOps analytics | Reuses senior/MLOps benchmarking assets and feeds platform & architect initiatives |
+| 7 | AI Infrastructure ML Platform Engineer | Senior AI Infrastructure Engineer, MLOps Engineer, Performance Engineer | Feature store engineering, workflow orchestration, self-service tooling, observability/FinOps | Shares automation templates, feature assets, and developer tooling with security, team lead, and principal tracks |
+| 8 | AI Infrastructure Team Lead | Senior AI Infrastructure Engineer | People leadership, team operations, cross-functional delivery, performance coaching | Reuses senior technical assets, incident playbooks, mentorship frameworks |
+| 9 | Principal AI Infrastructure Engineer | Senior AI Infrastructure Engineer, Team Lead partnership | Complex systems design, performance optimization, cross-org execution without authority | Shares benchmarking harnesses, excellence playbooks, and program tooling with architect tracks |
+| 10 | AI Infrastructure Architect | Senior/Principal Engineer collaboration | Enterprise architecture, multi-cloud strategy, compliance, innovation leadership | Architect modules build on principal engineer technical outputs and add governance/business focus |
+| 11 | Senior AI Infrastructure Architect | AI Infrastructure Architect | Enterprise AI strategy, executive advisory, global governance, innovation portfolio | Senior architect modules reuse architect, principal engineer, security, and team lead deliverables |
+| 12 | Principal AI Infrastructure Architect | Senior AI Infrastructure Architect | Enterprise portfolio governance, board advisory, innovation ecosystems, multi-cloud modernization | Reuses senior/principal engineer artifacts as executive inputs, extends with principal-level playbooks |
 
-## Role Comparison Matrix
+## Competency Alignment By Domain
 
-| Competency Domain | Junior AI Infrastructure Engineer | AI Infrastructure Engineer | Senior AI Infrastructure Engineer | AI Infrastructure Security Engineer | AI Infrastructure ML Platform Engineer | AI Infrastructure Team Lead | Principal AI Infrastructure Engineer | AI Infrastructure Architect | Senior AI Infrastructure Architect | Principal AI Infrastructure Architect | Shared Modules | Divergent Needs |
-|--------------------|-----------------------------------|---------------------------|----------------------------------|---------------------------------------------|----------------------------------------------|---------------------------------------------|----------------------------------------------|---------------------------|-------------------------------|-----------------------------------------------|----------------|-----------------|
-| Foundational Engineering | Python scripting, Linux CLI, Git basics | Own automation tooling and CI workflows | Drive platform-wide standards, author ADRs, mentor teams | Apply security-by-design to platforms, manage threat models, enforce guardrails | Product-driven platform design, shared services, developer empathy | Champion engineering excellence, mentor squads, translate technical direction into team execution | Set org-wide engineering bar, mentor staff/principal talent, defend technical direction | Define enterprise strategy, governance, and executive communication | Advise board/investors, lead transformation portfolios, mentor architects | Set enterprise-wide engineering vision, steward principal talent pipeline, align architecture practice with corporate strategy | MOD-001/002/003, MOD-301, MOD-401 | Security engineer maintains hands-on depth while operationalizing guardrails; team lead converts strategy into team practice; principal architect ensures global consistency |
-| Infrastructure Foundations | Docker/K8s awareness, cloud basics | Production Kubernetes, IaC, multi-cloud | Multi-region, operators, GitOps governance | Engineer zero-trust segmentation, secrets, supply-chain controls across platforms | Designs shared training/serving infrastructure, multi-tenant governance, automation | Operate squads’ platform stacks, coordinate with platform teams on upgrades and cost | Own complex systems design, hardware strategy, capacity & FinOps execution | Multi-cloud strategy, vendor management, FinOps | Global platform strategy, sovereignty, sustainability, geopolitical risk | Owns global infrastructure investments, custom hardware strategy, and sovereign compliance across regions | MOD-005/006, MOD-103/104, MOD-201, MOD-302, MOD-406 | Security engineer extends shared infrastructure with control automation; team lead balances platform constraints with velocity; principal architect balances performance vs risk globally |
-| Operations & Monitoring | Follow runbooks, respond to guided incidents | Design observability platforms, lead on-call | Establish SLO programs, chaos drills, executive reporting | Build runtime telemetry, detections, and SOAR integrations for AI workloads | Implements platform SLOs, telemetry, incident workflows, FinOps analytics | Lead on-call rotations, postmortems, and operational rituals for squads | Run incident command, automate SLO enforcement, institutionalize postmortems | Set organization-wide reliability standards and reporting | Align reliability with board risk appetite, sustainability, and crisis response | Define enterprise resilience KPIs, board-level incident governance, and sustainability accountability | MOD-009, MOD-108, MOD-207, MOD-305, MOD-406 | Security engineer operationalizes telemetry for SOC; team lead converts ops strategy into daily practice; principal architect reconciles resilience with investment pressures |
-| MLOps & Pipelines | Assist with basic pipelines | Build automated pipelines, MLflow, feature stores | Deliver self-service platforms, compliance workflows, analytics | Harden ML pipelines, automate policy-as-code, integrate supply-chain controls | Builds workflow orchestration, registry integration, self-service pipelines | Coordinate backlog with platform/product, ensure adoption of platform capabilities | Extend platform capabilities, ensure performance/compliance, partner with research | Govern enterprise MLOps product strategy, adoption, and ROI | Drive enterprise AI transformation and portfolio measurement | Govern AI investment portfolio, value realization, and cross-business capability scaling | MOD-004/007, MOD-105/106, MOD-206, MOD-306, MOD-401 | Security engineer prevents fragile custom tooling by embedding guardrails in shared pipelines; team lead enforces adoption; principal architect sets investment guardrails |
-| Data & LLM Platforms | Intro data tooling | Operate data pipelines, basic LLM serving | GPU optimization, LLM deployment | Protect data/model artifacts, encrypt pipelines, monitor for misuse | Owns feature stores, metadata governance, data contracts for ML delivery | Align squad work with data/LLM platform roadmaps, manage readiness and rollout | Optimize training & inference pipelines, orchestrate data performance at scale | Architect enterprise LLM/RAG and data platforms with governance | Govern global data/LLM strategy, responsible AI, and regulatory engagement | Shape enterprise data/LLM strategy with regulators, partners, and industry coalitions | MOD-107, MOD-203/204, MOD-307, MOD-308, MOD-405 | Security engineer ensures confidentiality/integrity; team lead ensures adoption; principal architect orchestrates external influence and policy alignment |
-| Security & Compliance | Apply baseline security guidance | Implement IAM, secrets, observability guardrails | Lead zero-trust strategy, audit automation, threat modeling | Own security automation (zero-trust, adversarial defense, compliance, SOC integration) across AI infrastructure | Embeds guardrails, policy-as-code, and audit automation across platform services | Embed security-by-design within squad workflows, coordinate audits and incident comms | Embed security-by-design, partner with compliance on critical launches | Govern enterprise compliance, responsible AI, and executive risk reporting | Advise board/regulators, integrate RAI, sustainability, and legal demands | Chair global governance, define risk appetite, and engage regulators/boards on AI compliance | MOD-208/209, MOD-303, MOD-405, MOD-503 | Security engineer prevents fragmented security efforts by centralizing guardrails; team lead keeps compliance humane; principal architect ensures unified governance |
+### Foundational Engineering & Mindset
+- **Junior AI Infrastructure Engineer** – Establishes Python, Linux, Git, networking, and container fundamentals (MOD-001…006).  
+- **AI Infrastructure Engineer** – Extends those foundations into production Kubernetes, IaC, observability, and CI/CD (MOD-101…110).  
+- **Senior AI Infrastructure Engineer** – Adds multi-region architecture, distributed training, governance, and technical leadership (MOD-201…210).  
+- **AI Infrastructure Security Engineer** – Layers security-by-design, threat modeling, and compliance automation (MOD-901…908).  
+- **AI Infrastructure MLOps Engineer** – Reframes foundations around ML lifecycle governance and validation (MOD-551).  
+- **AI Infrastructure Performance Engineer** – Builds GPU architecture, profiling, and optimization baselines (MOD-521).  
+- **AI Infrastructure ML Platform Engineer** – Synthesizes engineer/MLOps/performance outputs into platform vision and FinOps framing (MOD-501).  
+- **Leadership & Architect Tracks** – Translate these bases into coaching (Team Lead, Principal Engineer) and enterprise strategy (Architect, Senior Architect, Principal Architect).
 
-## Module Assignment by Role
+### Automation, Pipelines & Governance
+- **Engineer Tracks** – Provide scripting, IaC, and automation governance groundwork (MOD-109, MOD-206).  
+- **Security Engineer** – Wraps policy-as-code enforcement and audit evidence around automation.  
+- **MLOps Engineer** – Specializes ML-aware CI/CD, GitOps, and governance automation (MOD-552, MOD-556, MOD-557).  
+- **Performance Engineer** – Automates benchmarking, profiling regressions, and validation harnesses (MOD-523).  
+- **ML Platform Engineer** – Delivers orchestration, feature pipelines, and developer tooling to scale platform adoption (MOD-505).  
+- **Leadership & Architect Tracks** – Govern rollout strategies, review boards, and enterprise pipeline policies.
 
-| Module ID | Module Title | Junior Status | AI Engineer Status | Senior Status | ML Platform Engineer Status | Team Lead Status | Principal Engineer Status | AI Infrastructure Architect Status | Senior AI Infrastructure Architect Status | Principal AI Infrastructure Architect Status | Notes |
-|-----------|--------------|---------------|------------------------------|--------------------|---------------|-------------------|---------------------------|-------------------|-------------------------|----------------------------|-------|
-| MOD-101 – MOD-110 | AI Engineer specialization | N/A | Core | Prerequisite | Reference | Reference | Reference | Reference | Reference | Reference | Prepares learners for advanced depth |
-| MOD-201 | Advanced Kubernetes & Cloud-Native Architecture | N/A | N/A | Core | Reference | Reference | Core | Prerequisite | Reference | Reference | Operator, GitOps, multi-cluster focus |
-| MOD-202 | Distributed Training at Scale | N/A | N/A | Core | Reference | Reference | Core | Prerequisite | Reference | Reference | Builds on MOD-107 + MOD-201 |
-| MOD-203 | Advanced GPU Computing & Optimization | N/A | N/A | Core | Reference | Reference | Core | Reference | Reference | Reference | CUDA, TensorRT, fleet management |
-| MOD-204 | Advanced Model Optimization & Inference | N/A | N/A | Core | Reference | Reference | Core | Prerequisite | Reference | Reference | LLM performance optimization |
-| MOD-205 | Multi-Cloud Architecture & Resilience | N/A | N/A | Advanced | Reference | Reference | Core | Core | Core | Prerequisite | Active-active, DR, FinOps |
-| MOD-206 | Advanced MLOps & Platform Engineering | N/A | N/A | Advanced | Reference | Reference | Core | Core | Core | Prerequisite | Platform product mindset |
-| MOD-207 | Advanced Observability & SRE Practices | N/A | N/A | Advanced | Reference | Reference | Advanced | Reference | Reference | Reference | SLO programs, chaos engineering |
-| MOD-208 | Advanced IaC & GitOps | N/A | N/A | Advanced | Reference | Reference | Core | Core | Core | Prerequisite | Policy-as-code, compliance automation |
-| MOD-209 | Security & Compliance for ML Systems | N/A | N/A | Advanced | Reference | Reference | Core | Core | Core | Prerequisite | Zero-trust, audit automation |
-| MOD-210 | Technical Leadership & Mentorship | N/A | N/A | Advanced | Reference | Reference | Core | Reference | Reference | Reference | Strategy, communication, mentorship |
-| MOD-301 | Enterprise Architecture Fundamentals | N/A | N/A | Reference | Reference | Reference | Reference | Core | Prerequisite | Prerequisite | Enterprise governance, ADRs, TOGAF |
-| MOD-302 | Multi-Cloud & Hybrid Architecture | N/A | N/A | Reference | Reference | Reference | Reference | Core | Prerequisite | Prerequisite | Multi-cloud strategy, migration, sovereignty |
-| MOD-303 | Enterprise Security & Compliance Architecture | N/A | N/A | Reference | Reference | Reference | Reference | Core | Core | Prerequisite | Zero-trust, compliance automation, RAI |
-| MOD-304 | Cost Optimization & FinOps | N/A | N/A | Reference | Reference | Reference | Reference | Core | Core | Prerequisite | FinOps operating model, ROI cases |
-| MOD-305 | High Availability & Disaster Recovery | N/A | N/A | Reference | Reference | Reference | Reference | Core | Core | Prerequisite | Active-active, chaos programs |
-| MOD-306 | Enterprise MLOps Platform Architecture | N/A | N/A | Reference | Reference | Reference | Reference | Advanced | Prerequisite | Prerequisite | Platform product strategy |
-| MOD-307 | Data Architecture for AI | N/A | N/A | Reference | Reference | Reference | Reference | Advanced | Core | Prerequisite | Lakehouse, governance, lineage |
-| MOD-308 | LLM Platform & RAG Architecture | N/A | N/A | Reference | Reference | Reference | Reference | Advanced | Core | Prerequisite | Enterprise LLM/RAG, safety |
-| MOD-309 | Architecture Communication & Leadership | N/A | N/A | Reference | Reference | Reference | Reference | Advanced | Core | Prerequisite | Executive storytelling, governance boards |
-| MOD-310 | Emerging Technologies & Innovation | N/A | N/A | Reference | Reference | Reference | Reference | Advanced | Prerequisite | Reference | Technology radar, innovation strategy |
-| MOD-401 | Enterprise AI Strategy & Vision | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Enterprise AI transformation strategy |
-| MOD-402 | Executive Leadership & Communication | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Executive presence, crisis leadership |
-| MOD-403 | Enterprise Architecture Governance & Standards | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Governance operating model |
-| MOD-404 | Innovation & R&D Leadership | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Innovation portfolio leadership |
-| MOD-405 | Responsible AI & Ethics Leadership | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Responsible AI governance |
-| MOD-406 | Global Infrastructure & Sustainability | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Prerequisite | Global topology, sustainability |
-| MOD-407 | Strategic Partnerships & Vendor Ecosystems | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Prerequisite | Partnership ecosystem leadership |
-| MOD-408 | M&A Technical Due Diligence | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Prerequisite | Acquisition assessment & integration |
-| MOD-409 | Thought Leadership & Industry Influence | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Reference | Publications, standards influence |
-| MOD-410 | Future of AI Infrastructure | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Reference | Scenario planning, emerging tech strategy |
-| MOD-601 | Enterprise Architecture Leadership | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Principal-level operating model playbook |
-| MOD-602 | Strategic Alignment & Value Mapping | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Portfolio economics, funding guardrails |
-| MOD-603 | Global Governance & Risk Orchestration | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Global governance automation & reporting |
-| MOD-604 | Innovation Ecosystems & Thought Leadership | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Ecosystem orchestration, industry influence |
-| MOD-605 | Responsible AI Programs at Enterprise Scale | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Enterprise responsible AI governance |
-| MOD-606 | Multi-Cloud Transformation Leadership | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Sovereign-aware modernization & FinOps |
-| MOD-607 | Strategic Partnership & Ecosystem Strategy | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Alliance governance, commercial strategy |
-| MOD-608 | M&A Technical Due Diligence for AI | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Advanced | Enterprise M&A integration leadership |
-| MOD-609 | Executive Communication & Influence at Board Level | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Core | Board communication, crisis response |
-| MOD-610 | Future-Proofing & Horizon Scanning | N/A | N/A | N/A | Reference | Reference | Reference | Reference | Reference | Capstone | Scenario planning, foresight integration |
-| MOD-901 | ML Security Foundations | N/A | N/A | Reference | Reference | Core | Core | Reference | Reference | Reference | Threat modeling, baseline controls |
-| MOD-902 | Zero-Trust Architecture for AI Platforms | N/A | N/A | Reference | Reference | Core | Core | Reference | Reference | Reference | Identity-centric segmentation & policy enforcement |
-| MOD-903 | Applied Cryptography for ML Systems | N/A | N/A | Reference | Reference | Core | Reference | Reference | Reference | Reference | Encryption, privacy-preserving techniques for ML |
-| MOD-904 | Network Security & Segmentation for AI | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | Network guardrails and observability for AI workloads |
-| MOD-905 | Secrets & Identity Management for ML | N/A | N/A | Reference | Reference | Core | Reference | Reference | Reference | Reference | Secrets rotation, workload identity, access governance |
-| MOD-906 | Adversarial ML Defense Engineering | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | Testing harnesses, defense playbooks |
-| MOD-907 | Compliance & Governance Automation | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | Control automation, evidence pipelines |
-| MOD-908 | Runtime Security & Monitoring for AI Workloads | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | Telemetry, detections, SOAR integration |
-| MOD-909 | Policy-as-Code & Guardrails | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | Guardrails, exception workflows |
-| MOD-910 | Supply Chain Security for AI Systems | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | SBOM, attestation, provenance |
-| MOD-911 | Security Operations & Incident Response for AI | N/A | N/A | Reference | Reference | Advanced | Reference | Reference | Reference | Reference | SOC integration, incident playbooks |
-| MOD-912 | Advanced Topics in AI Infrastructure Security | N/A | N/A | Reference | Reference | Capstone | Reference | Reference | Reference | Reference | Strategic foresight, innovation in AI security |
-| MOD-701 | Technical Excellence at Principal Scale | N/A | N/A | Reference | Reference | Reference | Core | Reference | Reference | Reference | Principal IC engineering excellence playbook |
-| MOD-702 | Complex Systems Design Leadership | N/A | N/A | Reference | Reference | Reference | Core | Reference | Reference | Reference | Large-scale systems design & governance |
-| MOD-703 | Performance Engineering at Extreme Scale | N/A | N/A | Reference | Reference | Reference | Core | Reference | Reference | Reference | Benchmarking, optimization, capacity planning |
-| MOD-704 | Innovation & Applied Research Leadership | N/A | N/A | Reference | Reference | Reference | Advanced | Reference | Reference | Reference | Applied research incubation for IC track |
-| MOD-705 | Mentorship & Engineering Leadership | N/A | N/A | Reference | Reference | Reference | Core | Reference | Reference | Reference | Mentorship and talent acceleration |
-| MOD-706 | Cross-Org Initiatives & Execution | N/A | N/A | Reference | Reference | Reference | Capstone | Reference | Reference | Reference | Program leadership without direct authority |
+### Observability, Reliability & FinOps
+- **Senior Engineer** – Introduces SRE patterns, error budgets, and incident management (MOD-207).  
+- **Security Engineer** – Extends telemetry with threat detection and compliance dashboards.  
+- **MLOps Engineer** – Implements model monitoring, drift detection, and cost analytics (MOD-553, MOD-558).  
+- **Performance Engineer** – Supplies GPU/DCGM dashboards, benchmarking scorecards, and FinOps reporting (MOD-527).  
+- **ML Platform Engineer** – Adds platform service observability and developer analytics (MOD-508).  
+- **Leadership & Architect Tracks** – Consume consolidated dashboards for executive, innovation, and board-level reporting.
 
-## Shared Assets
+### Security, Responsible AI & Compliance
+- **Security Engineer** – Leads zero-trust architecture, adversarial defense, and compliance automation.  
+- **MLOps Engineer** – Embeds responsible AI guardrails and audit evidence (MOD-557, MOD-559).  
+- **Performance Engineer** – Validates optimization efforts against accuracy/safety thresholds (MOD-525, MOD-527).  
+- **ML Platform Engineer** – Integrates guardrails, RBAC, and audit workflows across shared services (MOD-509, MOD-510).  
+- **Architect & Leadership Tracks** – Scale governance frameworks to enterprise contexts, handling policy exceptions and executive accountability.
 
-- **Projects**:
-  - Junior: `projects/junior-ai-infrastructure-engineer/project-01-simple-model-api` … `project-05-production-ml-capstone`
-  - AI Engineer: `projects/ai-infrastructure-engineer/project-101-basic-model-serving` … `project-103-llm-deployment`
-  - Senior: `projects/senior-ai-infrastructure-engineer/project-301-distributed-training` … `project-304-k8s-operator`
-  - Security: `projects/ai-infrastructure-security-engineer/project-901-zero-trust-platform` … `project-905-security-operations`
-  - ML Platform: `projects/ai-infrastructure-ml-platform-engineer/project-501-self-service-platform` … `project-506-capstone-ml-platform`
-  - Principal Engineer: `projects/ai-infrastructure-principal-engineer/project-701-technical-excellence` … `project-703-cross-org-initiative`
-  - Architect: `projects/ai-infrastructure-architect/project-401-enterprise-mlops-platform` … `project-405-security-framework`
-  - Principal Architect: `projects/ai-infrastructure-principal-architect/project-601-enterprise-architecture-playbook` … `project-604-ecosystem-leadership-initiative`
-- **Solutions**: Separate repos with consistent metadata (`solutions/ai-infra-<role>-solutions`)
-- **Case Studies & Resources**: Module resource folders reused with advanced annotations
-- **Assessments**: Quizzes, architecture reviews, and leadership evaluations aligned across levels
+### Optimization & Scaling
+- **Senior Engineer** – Provides distributed training and reliability baselines.  
+- **Performance Engineer** – Owns kernel optimization (MOD-522), benchmarking automation (MOD-523), LLM efficiency (MOD-524), distributed inference (MOD-526), and hardware acceleration pilots (MOD-528).  
+- **MLOps Engineer** – Operationalizes optimizations via automated pipelines and LLMOps practices (MOD-556, MOD-560).  
+- **ML Platform Engineer** – Builds platform primitives and developer experience assets that consume performance artifacts.  
+- **Principal Engineer & Architect Tracks** – Convert optimization outputs into org-wide excellence programs, modernization roadmaps, and investment strategies.
 
-## Reuse Strategy & Anti-Duplication
+### Leadership & Enablement
+- **Senior Engineer** – Seeds mentorship and technical leadership skills relied upon by higher-level roles.  
+- **Security, MLOps, Performance, Platform Engineers** – Produce domain-specific playbooks and enablement sessions.  
+- **Team Lead & Principal Engineer** – Scale coaching, culture, and cross-functional alignment using leadership modules (MOD-801) and principal projects (PROJ-702).  
+- **Architect, Senior Architect, Principal Architect** – Craft executive narratives, governance forums, and board-level storytelling rooted in shared technical deliverables.
 
-- Junior assets scaffold core skills; AI Engineer reuses labs as refresh modules or optional warm-ups.
-- Senior modules reference mid-level codebases to extend functionality (e.g., upgrade GitOps pipelines, add policy layers) rather than duplicating artifacts.
-- Security engineer modules centralize guardrails, threat models, and automation pipelines so AI, platform, and compliance teams consume shared controls instead of reinventing them.
-- ML platform engineer modules consolidate feature stores, orchestration templates, and developer tooling that other roles reuse, reducing duplicate platform buildouts.
-- Team lead modules convert senior/principal technical standards into squad-level playbooks, incident guides, and people-development frameworks.
-- Architect modules reuse senior and principal deliverables (operators, DR automation, FinOps dashboards) as inputs to enterprise-level governance, reducing duplication.
-- Principal engineer modules consume senior artifacts (platform codebases, reliability frameworks) and extend them with performance harnesses, excellence playbooks, and cross-org tooling that architects reuse.
-- Principal architect modules consume senior and principal engineer artifacts as executive inputs (transformation strategies, governance playbooks) and extend them with board-ready portfolios instead of recreating work.
-- Repository strategy ensures cross-role synchronization through mapping files in `configs/repositories/`.
-- Solutions metadata links back to legacy repos, preventing redundant storage while migration completes.
+### Shared Assets & Reuse Highlights
+- **Foundations** – MOD-001/002/003, MOD-101, and MOD-201 appear as prerequisites across every track.  
+- **Automation** – MOD-109, MOD-206, and the MLOps automation suite (MOD-552, MOD-556, MOD-557) underpin security, performance, and platform pipelines.  
+- **Observability** – Dashboards from MOD-207 (senior), MOD-553 (MLOps), and MOD-527 (performance) feed FinOps reporting for leadership and architects.  
+- **Optimization** – Performance modules (MOD-522…528) and projects (PROJ-521…524) provide reusable assets for MLOps, ML Platform, principal engineer, and architect initiatives.  
+- **Governance** – Security modules and MLOps responsible AI tooling supply shared policy libraries consumed by performance, platform, and architect tracks.  
+- **Enablement** – Leadership modules (MOD-210, MOD-801) and cross-role projects (PROJ-803, PROJ-702) keep mentorship and executive communication consistent.
 
 ## Role-Specific Differentiators
 
-- **Junior**: Guided labs, documentation focus, supervised incident response.
-- **AI Engineer**: Leads production operations, automation, observability, and project delivery.
-- **Senior**: Owns architecture, governance, performance optimizations, and people leadership.
-- **Security Engineer**: Embeds zero-trust, adversarial defense, compliance automation, and SOC integration across AI pipelines and platforms.
-- **ML Platform Engineer**: Builds self-service ML platforms, feature infrastructure, workflow automation, and developer experiences that scale model delivery.
-- **Team Lead**: Converts technical strategy into squad execution, manages operations, culture, and cross-functional delivery.
-- **Principal Engineer**: Leads complex systems design, optimization programs, and cross-org execution while mentoring staff/principal talent.
-- **Architect**: Defines enterprise strategy, governs standards, optimizes cost/resilience, and communicates with executives.
-- **Principal Architect**: Governs enterprise AI portfolio, advises boards/investors, orchestrates innovation ecosystems, and directs multi-cloud modernization strategy.
+- **Junior** – Guided labs, documentation focus, supervised incident response.  
+- **AI Engineer** – Leads production operations, automation, observability, and project delivery.  
+- **Senior** – Owns architecture, governance, performance optimization, and people leadership.  
+- **Security Engineer** – Embeds zero-trust, adversarial defense, compliance automation, and SOC integration across AI pipelines and platforms.  
+- **MLOps Engineer** – Operationalizes the ML lifecycle with automated validation, governance, and LLMOps orchestration.  
+- **Performance Engineer** – Drives CUDA/LLM optimization, distributed inference, and benchmarking governance.  
+- **ML Platform Engineer** – Builds self-service ML platforms and developer experience tooling to accelerate delivery.  
+- **Team Lead** – Converts technical strategy into squad execution and culture.  
+- **Principal Engineer** – Leads complex systems design, cross-org execution, mentoring, and excellence programs.  
+- **Architect / Senior Architect / Principal Architect** – Define enterprise strategy, communicate with executives and boards, and steward AI portfolio governance.
 
 ## Dependencies & Timeline
 
@@ -152,6 +111,7 @@
 | Team lead curriculum launch | Team Lead | Program Lead | 2025-11-28 | In progress |
 | Security engineer curriculum launch | Security | Program Lead | 2025-11-25 | In progress |
 | ML platform engineer curriculum launch | ML Platform | Program Lead | 2025-11-22 | In progress |
+| Performance engineer curriculum launch | Performance | Curriculum Team | 2025-12-02 | In progress |
 | Validation pipeline updates | AI, Senior, Architect | QA Lead | 2025-12-15 | Pending |
 | Leadership enablement rollout | Senior, Architect | Program Lead | 2026-01-15 | Planned |
 
@@ -163,8 +123,9 @@
 | 2025-10-18 | Added AI Infrastructure Engineer role alignment | Junior, AI | Migration script |
 | 2025-10-18 | Integrated Senior AI Infrastructure Engineer role alignment | Junior, AI, Senior | Curriculum Team |
 | 2025-10-19 | Added AI Infrastructure Architect role alignment | Junior, AI, Senior, Architect | Curriculum Team |
-| 2025-10-20 | Added Principal AI Infrastructure Architect role alignment | Principal | Curriculum Team |
-| 2025-10-20 | Added Principal AI Infrastructure Engineer role alignment | Principal IC | Curriculum Team |
+| 2025-10-20 | Added Principal AI Infrastructure Architect role alignment | Principal Architect | Curriculum Team |
+| 2025-10-20 | Added Principal AI Infrastructure Engineer role alignment | Principal Engineer | Curriculum Team |
 | 2025-10-20 | Added AI Infrastructure Team Lead role alignment | Team Lead | Curriculum Team |
 | 2025-10-20 | Added AI Infrastructure Security Engineer role alignment | Security | Curriculum Team |
 | 2025-10-20 | Added AI Infrastructure ML Platform Engineer role alignment | ML Platform | Curriculum Team |
+| 2025-11-05 | Added AI Infrastructure MLOps & Performance Engineer alignment refresh | MLOps, Performance | Curriculum Team |

@@ -1,0 +1,28 @@
+id: PROJ-554
+type: project
+title: Compliance-Aware Promotion Pipeline
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: policy-automation
+  level: expert
+- id: platform-security
+  level: expert
+- id: governance
+  level: expert
+dependencies:
+- MOD-556
+- MOD-557
+- MOD-559
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Automates promotion workflows with policy enforcement and evidence capture shared across compliance and security programs.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/projects/project-4-governance'
+metadata_version: 1.0.0

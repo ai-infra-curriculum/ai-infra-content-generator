@@ -1,0 +1,25 @@
+id: MOD-551
+type: module
+title: MLOps Foundations
+roles:
+- ai-infrastructure-mlops-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: pipeline-automation
+  level: working
+- id: model-lifecycle
+  level: working
+dependencies:
+- MOD-201
+- MOD-206
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Establishes lifecycle and operating model foundations shared with senior engineer and ML platform tracks.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/01-mlops-foundations'
+metadata_version: 1.0.0

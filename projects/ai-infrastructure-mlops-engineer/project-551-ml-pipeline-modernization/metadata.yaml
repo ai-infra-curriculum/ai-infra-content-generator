@@ -1,0 +1,28 @@
+id: PROJ-551
+type: project
+title: End-to-End ML Pipeline Modernization
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: pipeline-automation
+  level: expert
+- id: experiment-tracking
+  level: proficient
+- id: model-lifecycle
+  level: proficient
+dependencies:
+- MOD-551
+- MOD-552
+- MOD-555
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Refactors the legacy ML pipeline with standardized automation, experiment tracking, and promotion workflows.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/projects/project-1-ml-pipeline'
+metadata_version: 1.0.0

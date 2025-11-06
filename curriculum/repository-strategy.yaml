@@ -22,6 +22,10 @@ roles:
   slug: ai-infrastructure-security-engineer
 - name: AI Infrastructure ML Platform Engineer
   slug: ai-infrastructure-ml-platform-engineer
+- name: AI Infrastructure MLOps Engineer
+  slug: ai-infrastructure-mlops-engineer
+- name: AI Infrastructure Performance Engineer
+  slug: ai-infrastructure-performance-engineer
 repositories:
   mode: per_role
   base_repo_name: ai-infra
@@ -56,6 +60,12 @@ repositories:
     ai-infrastructure-ml-platform-engineer:
       learning: ai-infra-ml-platform-learning
       solutions: ai-infra-ml-platform-solutions
+    ai-infrastructure-mlops-engineer:
+      learning: ai-infra-mlops-learning
+      solutions: ai-infra-mlops-solutions
+    ai-infrastructure-performance-engineer:
+      learning: ai-infra-performance-learning
+      solutions: ai-infra-performance-solutions
 solutions:
   placement: separate
   inline_path: null

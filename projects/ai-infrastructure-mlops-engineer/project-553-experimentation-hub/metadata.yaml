@@ -1,0 +1,25 @@
+id: PROJ-553
+type: project
+title: Experimentation & Data Quality Hub
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: experiment-tracking
+  level: expert
+- id: data-governance
+  level: proficient
+dependencies:
+- MOD-554
+- MOD-555
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Centralizes experiment tracking, validation, and lineage with governance-ready artefacts.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/projects/project-3-experimentation'
+metadata_version: 1.0.0

@@ -4,12 +4,12 @@ title: Solutions for MOD-505 Workflow Orchestration & Pipelines
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
   - id: workflow-orchestration
-    level: advanced
+    level: expert
   - id: automation
-    level: advanced
+    level: expert
 dependencies:
   - module-505-workflow-orchestration/metadata.yaml
 validation_profile: docs-quality

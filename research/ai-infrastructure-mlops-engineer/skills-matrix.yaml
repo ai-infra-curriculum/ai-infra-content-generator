@@ -1,0 +1,198 @@
+role: "AI Infrastructure MLOps Engineer"
+level: "mlops-engineer"
+last_updated: "2025-11-05"
+research_sources:
+  - type: "role_requirements"
+    reference: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/ROLE_REQUIREMENTS.md"
+  - type: "job_posting_analysis"
+    reference: "./job-posting-analysis.md"
+competency_domains:
+  - name: "ML Lifecycle Automation"
+    description: "Automate CI/CD, retraining, and promotion workflows that move models from experimentation to production reliably."
+    skills:
+      - name: "Pipeline Engineering"
+        proficiency:
+          working:
+            description: "Configure ML-aware CI/CD pipelines with testing, packaging, and artifact management steps."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-PIPE-01"
+          proficient:
+            description: "Design reusable pipeline templates covering training, validation, deployment, and rollback patterns."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-206"
+          expert:
+            description: "Lead organization-wide automation strategy with GitOps, approvals, and compliance guardrails."
+            evidence_sources:
+              - type: "stakeholder_interview"
+                id: "platform-director-2025"
+        assessment_types:
+          - "Pipeline architecture review"
+          - "Automation demo"
+      - name: "Model Promotion & Release Management"
+        proficiency:
+          working:
+            description: "Manage basic model versioning and manual promotion in staging/production."
+            evidence_sources: []
+          proficient:
+            description: "Automate promotion workflows with checks, canary/batch rollouts, and rollback playbooks."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-REL-02"
+          expert:
+            description: "Integrate registry, approvals, and compliance evidence into end-to-end promotion pipelines."
+            evidence_sources: []
+        assessment_types:
+          - "Release readiness review"
+          - "Operational runbook audit"
+  - name: "Model Reliability & Monitoring"
+    description: "Provide observability, drift detection, and SRE practices tailored to ML workloads."
+    skills:
+      - name: "Model Observability"
+        proficiency:
+          working:
+            description: "Collect key metrics (latency, accuracy) and basic health dashboards."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-OBS-01"
+          proficient:
+            description: "Implement drift detection, alerting, and incident workflows tied to business KPIs."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-207"
+          expert:
+            description: "Correlate data, model, and infrastructure signals to drive proactive improvement and FinOps actions."
+            evidence_sources: []
+        assessment_types:
+          - "Observability dashboard walkthrough"
+          - "Incident postmortem review"
+      - name: "Reliability Engineering for ML"
+        proficiency:
+          working:
+            description: "Apply SLO/SLA concepts to inference services and batch jobs."
+            evidence_sources: []
+          proficient:
+            description: "Integrate chaos and load testing as part of ML release pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-REL-03"
+          expert:
+            description: "Coordinate SRE practices across multiple model teams with shared tooling and governance."
+            evidence_sources: []
+        assessment_types:
+          - "SLO definition review"
+          - "Resilience test report"
+  - name: "Data Quality & Experimentation"
+    description: "Guarantee data integrity and reproducible experimentation throughout the ML lifecycle."
+    skills:
+      - name: "Data Validation & Lineage"
+        proficiency:
+          working:
+            description: "Add schema checks and validation scripts to pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-DATA-01"
+          proficient:
+            description: "Operate automated validation with alerting, quarantine, and lineage tracking."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-105"
+          expert:
+            description: "Integrate data quality, lineage, and governance evidence across enterprise data estates."
+            evidence_sources: []
+        assessment_types:
+          - "Validation pipeline demo"
+          - "Data lineage review"
+      - name: "Experiment Tracking"
+        proficiency:
+          working:
+            description: "Track experiments with MLflow/Weights & Biases and basic metadata."
+            evidence_sources: []
+          proficient:
+            description: "Automate experiment setup, comparison, and artifact promotion for teams."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-EXP-03"
+          expert:
+            description: "Standardize experimentation workflows across business units with governance/compliance tie-ins."
+            evidence_sources: []
+        assessment_types:
+          - "Experiment report review"
+          - "Reproducibility audit"
+  - name: "Governance, Security & Compliance"
+    description: "Embed policy-as-code, auditability, and responsible AI practices into operational pipelines."
+    skills:
+      - name: "Policy Automation"
+        proficiency:
+          working:
+            description: "Implement manual approvals and change controls for high-risk deployments."
+            evidence_sources: []
+          proficient:
+            description: "Automate policy checks (PII scans, fairness thresholds, approvals) in pipelines."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-GOV-01"
+          expert:
+            description: "Provide end-to-end compliance evidence packs and exception workflows integrated with GRC systems."
+            evidence_sources: []
+        assessment_types:
+          - "Governance pipeline demo"
+          - "Audit evidence review"
+      - name: "Security & Risk Mitigation"
+        proficiency:
+          working:
+            description: "Enforce RBAC, secrets management, and vulnerability scanning for ML services."
+            evidence_sources: []
+          proficient:
+            description: "Coordinate with security engineers to deploy adversarial defenses and supply-chain checks."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-209"
+          expert:
+            description: "Lead responsible AI and risk review boards with continuous monitoring and remediation plans."
+            evidence_sources: []
+        assessment_types:
+          - "Security assessment"
+          - "Risk mitigation workshop"
+  - name: "Cross-Functional Enablement"
+    description: "Bridge data science, platform, and leadership stakeholders to drive adoption and continuous improvement."
+    skills:
+      - name: "Stakeholder Orchestration"
+        proficiency:
+          working:
+            description: "Coordinate with data scientists and platform teams on pipeline enhancements."
+            evidence_sources: []
+          proficient:
+            description: "Facilitate roadmap alignment and prioritization forums with cross-functional partners."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLOPS-STAKE-02"
+          expert:
+            description: "Influence org-wide operating models spanning platform, security, and business leadership."
+            evidence_sources: []
+        assessment_types:
+          - "Stakeholder workshop retro"
+          - "Roadmap presentation"
+      - name: "Knowledge Sharing & Enablement"
+        proficiency:
+          working:
+            description: "Document runbooks and onboarding guides for model teams."
+            evidence_sources: []
+          proficient:
+            description: "Deliver enablement programs and office hours for new teams adopting pipelines."
+            evidence_sources:
+              - type: "legacy_curriculum"
+                id: "MOD-210"
+          expert:
+            description: "Create scalable community of practice and coaching frameworks measured by adoption metrics."
+            evidence_sources: []
+        assessment_types:
+          - "Enablement plan review"
+          - "Community metrics analysis"
+progression_map:
+  working: "Practitioners extending DevOps skills into ML, focusing on individual teams."
+  proficient: "Engineers leading cross-team automation, monitoring, and governance for ML programs."
+  expert: "Staff-level leaders defining organization-wide MLOps strategy, compliance, and enablement."
+notes:
+  - "Competency levels align with senior engineer (feeder) and platform/architect (next-step) tracks to minimize duplication."

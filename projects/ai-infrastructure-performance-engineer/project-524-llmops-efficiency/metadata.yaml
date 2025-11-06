@@ -1,0 +1,28 @@
+id: PROJ-524
+type: project
+title: LLM Inference Efficiency Program
+roles:
+- ai-infrastructure-performance-engineer
+stage: capstone
+proficiency_target: expert
+competencies:
+- id: llmops
+  level: expert
+- id: innovation
+  level: proficient
+- id: responsible-ai
+  level: proficient
+dependencies:
+- MOD-524
+- MOD-526
+- MOD-528
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Capstone optimization initiative covering LLM attention, caching, and hardware acceleration with responsible AI validation.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/projects/project-03-llm-inference'
+metadata_version: 1.0.0

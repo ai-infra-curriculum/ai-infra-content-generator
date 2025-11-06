@@ -1,0 +1,28 @@
+id: PROJ-552
+type: project
+title: Model Serving & Observability Platform
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: model-observability
+  level: expert
+- id: service-reliability
+  level: expert
+- id: automation
+  level: proficient
+dependencies:
+- MOD-552
+- MOD-553
+- MOD-558
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Deploys scalable serving infrastructure with shared observability and incident response assets.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/projects/project-2-model-serving'
+metadata_version: 1.0.0

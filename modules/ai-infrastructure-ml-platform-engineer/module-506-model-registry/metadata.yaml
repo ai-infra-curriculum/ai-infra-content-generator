@@ -4,12 +4,12 @@ title: Model Registry & Lifecycle Management
 roles:
 - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
 - id: model-lifecycle
-  level: advanced
+  level: expert
 - id: governance
-  level: advanced
+  level: expert
 dependencies:
 - MOD-504
 - MOD-505
@@ -19,7 +19,7 @@ owners:
 - name: Curriculum Team
   github: '@ai-infra-team'
   role: author
-description: Manages model registration, lineage, approvals, and promotion workflows across environments.
+# Manages model registration, lineage, approvals, and promotion workflows across environments.
 evidence:
 - 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-006-model-registry'
 metadata_version: 1.0.0

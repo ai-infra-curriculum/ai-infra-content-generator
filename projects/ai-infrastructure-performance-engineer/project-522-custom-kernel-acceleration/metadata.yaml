@@ -1,0 +1,27 @@
+id: PROJ-522
+type: project
+title: Custom Kernel Acceleration
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: kernel-engineering
+  level: expert
+- id: automation
+  level: proficient
+- id: innovation
+  level: working
+dependencies:
+- MOD-522
+- MOD-523
+validation_profile: python-strict
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Delivers custom kernel implementations with benchmarking and automation assets for adoption across teams.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/projects/project-02-custom-cuda-kernels'
+metadata_version: 1.0.0

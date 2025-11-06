@@ -1,0 +1,27 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-performance-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-performance-engineer/module-{dest:03d}-*"
+  rules:
+    - source_values:
+        1: 521
+        2: 522
+        3: 523
+        4: 524
+        5: 525
+        6: 526
+        7: 527
+        8: 528
+projects_mapping:
+  source_pattern: "projects/project-{num:02d}-*"
+  target_pattern: "projects/ai-infrastructure-performance-engineer/project-52{num}-*"
+  valid_range: [1, 4]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:02d}-*"
+notes: |
+  Legacy lessons include both `mod-00x-*` folders and older numbered directories. Prefer the `mod-00x-*` content and
+  archive older duplicates (e.g., `01-gpu-fundamentals`). Projects 01–03 map to PROJ-521…523; use `project-03-llm-inference`
+  for PROJ-524 and treat `project-01-model-compression`/`project-02-gpu-optimization` as historical references unless
+  additional exercises are required.

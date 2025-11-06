@@ -1,0 +1,25 @@
+id: MOD-557
+type: module
+title: Governance & Compliance for ML Pipelines
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: policy-automation
+  level: expert
+- id: governance
+  level: expert
+dependencies:
+- MOD-554
+- MOD-556
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Automates policy enforcement and evidence capture shared with security and architect governance programs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/07-governance'
+metadata_version: 1.0.0

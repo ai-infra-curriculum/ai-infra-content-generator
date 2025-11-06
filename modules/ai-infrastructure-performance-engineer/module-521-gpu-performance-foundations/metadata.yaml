@@ -1,0 +1,25 @@
+id: MOD-521
+type: module
+title: GPU & Performance Foundations
+roles:
+- ai-infrastructure-performance-engineer
+stage: core
+proficiency_target: working
+competencies:
+- id: kernel-engineering
+  level: working
+- id: pipeline-automation
+  level: working
+dependencies:
+- MOD-201
+- MOD-202
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Establishes architecture and profiling fundamentals referenced by downstream optimization modules and projects.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-001-performance-fundamentals'
+metadata_version: 1.0.0

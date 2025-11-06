@@ -1,0 +1,27 @@
+id: PROJ-523
+type: project
+title: Distributed Inference Platform Optimization
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: workflow-orchestration
+  level: expert
+- id: service-reliability
+  level: expert
+- id: finops
+  level: proficient
+dependencies:
+- MOD-526
+- MOD-527
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Optimizes distributed inference deployments with batching, autoscaling, and observability guardrails.
+evidence:
+- 'learning: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/projects/project-03-distributed-inference'
+metadata_version: 1.0.0

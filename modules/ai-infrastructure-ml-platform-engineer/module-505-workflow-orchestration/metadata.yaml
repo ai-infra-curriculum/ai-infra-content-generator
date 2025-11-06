@@ -4,12 +4,12 @@ title: Workflow Orchestration & Pipelines
 roles:
 - ai-infrastructure-ml-platform-engineer
 stage: advanced
-proficiency_target: advanced
+proficiency_target: expert
 competencies:
 - id: workflow-orchestration
-  level: advanced
+  level: expert
 - id: automation
-  level: advanced
+  level: expert
 dependencies:
 - MOD-502
 - MOD-504
@@ -19,7 +19,7 @@ owners:
 - name: Curriculum Team
   github: '@ai-infra-team'
   role: author
-description: Orchestrates ML workflows, DAGs, and automation frameworks with resilience and observability.
+# Orchestrates ML workflows, DAGs, and automation frameworks with resilience and observability.
 evidence:
 - 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-005-workflow-orchestration'
 metadata_version: 1.0.0

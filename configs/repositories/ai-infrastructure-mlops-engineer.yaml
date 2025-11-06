@@ -1,0 +1,28 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-mlops-solutions"
+modules_mapping:
+  source_pattern: "lessons/{num:02d}-*"
+  target_pattern: "modules/ai-infrastructure-mlops-engineer/module-{dest:03d}-*"
+  rules:
+    - source_range: [1, 10]
+      dest_values:
+        1: 551
+        2: 552
+        3: 553
+        4: 554
+        5: 555
+        6: 556
+        7: 557
+        8: 558
+        9: 559
+        10: 560
+projects_mapping:
+  source_pattern: "projects/project-{num}-*"
+  target_pattern: "projects/ai-infrastructure-mlops-engineer/project-55{num}-*"
+  valid_range: [1, 5]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num}-*"
+notes: |
+  Legacy lessons 01–10 map directly to MOD-551…560. Projects 1–5 align with PROJ-551…555. Earlier `project-0x-*` directories
+  remain archived and are not remapped by default.

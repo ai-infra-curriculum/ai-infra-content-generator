@@ -4,12 +4,12 @@ title: Solutions for MOD-503 Multi-Tenancy & Resource Governance
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: core
-proficiency_target: advanced
+proficiency_target: proficient
 competencies:
   - id: multi-tenancy
-    level: advanced
+    level: proficient
   - id: capacity-planning
-    level: advanced
+    level: proficient
 dependencies:
   - module-503-multi-tenancy/metadata.yaml
 validation_profile: docs-quality

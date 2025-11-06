@@ -1,0 +1,25 @@
+id: MOD-553
+type: module
+title: Model Monitoring & Drift Response
+roles:
+- ai-infrastructure-mlops-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: model-observability
+  level: proficient
+- id: service-reliability
+  level: proficient
+dependencies:
+- MOD-551
+- MOD-207
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Extends shared observability tooling with model-centric metrics and automation for drift response.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/03-model-monitoring'
+metadata_version: 1.0.0

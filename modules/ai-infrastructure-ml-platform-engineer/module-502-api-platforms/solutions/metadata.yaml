@@ -4,12 +4,12 @@ title: Solutions for MOD-502 API & Model Serving Platforms
 roles:
   - ai-infrastructure-ml-platform-engineer
 stage: core
-proficiency_target: advanced
+proficiency_target: proficient
 competencies:
   - id: api-platforms
-    level: advanced
+    level: proficient
   - id: service-reliability
-    level: advanced
+    level: proficient
 dependencies:
   - module-502-api-platforms/metadata.yaml
 validation_profile: docs-quality

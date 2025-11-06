@@ -1,0 +1,25 @@
+id: MOD-555
+type: module
+title: Experiment Tracking & Reproducibility
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: experiment-tracking
+  level: proficient
+- id: pipeline-automation
+  level: proficient
+dependencies:
+- MOD-552
+- MOD-554
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Standardizes experiment metadata and promotion workflows reused by governance and platform programs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/05-experimentation'
+metadata_version: 1.0.0

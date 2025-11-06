@@ -1,0 +1,25 @@
+id: MOD-554
+type: module
+title: Data Quality & Lineage Automation
+roles:
+- ai-infrastructure-mlops-engineer
+stage: core
+proficiency_target: proficient
+competencies:
+- id: data-governance
+  level: proficient
+- id: pipeline-automation
+  level: proficient
+dependencies:
+- MOD-105
+- MOD-552
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Automates validation and lineage capture reused across governance and architect programs.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-mlops-learning/lessons/04-data-quality'
+metadata_version: 1.0.0

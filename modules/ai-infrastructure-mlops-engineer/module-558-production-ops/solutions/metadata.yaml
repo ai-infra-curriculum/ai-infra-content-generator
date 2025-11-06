@@ -1,0 +1,23 @@
+id: SOL-558
+type: solution
+title: Solutions for MOD-558 Production Operations & SRE for ML
+roles:
+- ai-infrastructure-mlops-engineer
+stage: advanced
+proficiency_target: expert
+competencies:
+- id: service-reliability
+  level: expert
+- id: incident-response
+  level: expert
+dependencies:
+- modules/ai-infrastructure-mlops-engineer/module-558-production-ops/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Solutions Leadership
+  github: '@ai-infra-solutions'
+  role: author
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-mlops-solutions'
+metadata_version: 1.0.0

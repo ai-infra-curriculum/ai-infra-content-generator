@@ -1,0 +1,25 @@
+id: MOD-527
+type: module
+title: Production Performance Operations
+roles:
+- ai-infrastructure-performance-engineer
+stage: advanced
+proficiency_target: proficient
+competencies:
+- id: service-reliability
+  level: proficient
+- id: finops
+  level: working
+dependencies:
+- MOD-523
+- MOD-526
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+# Embeds observability, resilience, and FinOps practices ensuring performance gains persist in production.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-performance-learning/lessons/mod-007-production-deployment'
+metadata_version: 1.0.0

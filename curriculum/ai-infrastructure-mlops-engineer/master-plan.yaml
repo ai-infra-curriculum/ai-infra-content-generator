@@ -1,0 +1,261 @@
+role: AI Infrastructure MLOps Engineer
+level: mlops-engineer
+program_name: AI Infrastructure MLOps Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-11-05'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Automate the ML lifecycle end to end, from experimentation through production releases.
+  - Operate model monitoring, drift detection, and incident response with SRE-quality guardrails.
+  - Embed governance, security, and responsible AI controls into pipelines without slowing delivery.
+  secondary:
+  - Partner with platform, security, and data teams to standardize tooling and share reusable assets.
+  - Coach model teams on reproducibility, observability, and compliance best practices.
+program_structure:
+  total_duration_hours: 360
+  modules:
+  - id: MOD-551
+    title: MLOps Foundations
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 4
+      assessment: 2
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-206
+    learning_objectives:
+    - Define the ML lifecycle and operating model that bridges data science research with production teams.
+    - Map existing automation, observability, and governance assets from junior/senior tracks to avoid duplication.
+    linked_projects:
+    - PROJ-551
+  - id: MOD-552
+    title: CI/CD for Machine Learning
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 4
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-551
+    - MOD-109
+    learning_objectives:
+    - Design ML-aware CI/CD pipelines with testing, packaging, and artifact management stages.
+    - Apply GitOps patterns that integrate with senior engineer IaC and platform orchestration assets.
+    linked_projects:
+    - PROJ-551
+    - PROJ-552
+  - id: MOD-553
+    title: Model Monitoring & Drift Response
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-551
+    - MOD-207
+    learning_objectives:
+    - Instrument model observability, alerting, and incident response workflows aligned to SLOs.
+    - Integrate FinOps and cost awareness using shared dashboards from ML Platform and security tracks.
+    linked_projects:
+    - PROJ-552
+  - id: MOD-554
+    title: Data Quality & Lineage Automation
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-105
+    - MOD-552
+    learning_objectives:
+    - Automate schema validation, anomaly detection, and lineage capture across pipelines.
+    - Produce audit-ready evidence that feeds governance modules and architect deliverables.
+    linked_projects:
+    - PROJ-553
+  - id: MOD-555
+    title: Experiment Tracking & Reproducibility
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-552
+    - MOD-554
+    learning_objectives:
+    - Standardize experiment tracking, comparison, and promotion workflows for multi-team environments.
+    - Connect experimentation artefacts to platform feature stores to minimize duplicate tooling.
+    linked_projects:
+    - PROJ-553
+  - id: MOD-556
+    title: Automation & Orchestration at Scale
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-552
+    - MOD-555
+    learning_objectives:
+    - Build resilient DAGs and orchestration frameworks using Airflow, Kubeflow, and Argo.
+    - Reuse ML Platform workflow components while adding MLOps-specific policy gates.
+    linked_projects:
+    - PROJ-552
+    - PROJ-554
+  - id: MOD-557
+    title: Governance & Compliance for ML Pipelines
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-554
+    - MOD-556
+    learning_objectives:
+    - Embed policy-as-code, approvals, and evidence capture into automated pipelines.
+    - Coordinate with security modules (MOD-907+) to align controls and avoid redundant processes.
+    linked_projects:
+    - PROJ-554
+  - id: MOD-558
+    title: Production Operations & SRE for ML
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-553
+    - MOD-556
+    learning_objectives:
+    - Apply SRE practices (SLOs, chaos testing, incident command) to ML services and batch jobs.
+    - Share runbooks and dashboards with platform and security teams to eliminate duplicate tooling.
+    linked_projects:
+    - PROJ-552
+    - PROJ-555
+  - id: MOD-559
+    title: Secure & Responsible MLOps
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-557
+    - MOD-558
+    learning_objectives:
+    - Implement threat modelling, vulnerability scanning, and responsible AI guardrails for ML systems.
+    - Integrate security role assets to minimize duplication while ensuring compliance readiness.
+    linked_projects:
+    - PROJ-554
+  - id: MOD-560
+    title: Advanced Topics & LLMOps
+    duration_hours:
+      lecture: 10
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-mlops-engineer
+    prerequisites:
+    - MOD-558
+    - MOD-559
+    learning_objectives:
+    - Operationalize LLM workloads with cost management, evaluation harnesses, and safety controls.
+    - Align advanced automation with architect-level initiatives (enterprise MLOps, responsible AI governance).
+    linked_projects:
+    - PROJ-555
+assessment_strategy:
+  formative:
+  - type: lab
+    cadence: per module (pipeline development, validation checks, monitoring dashboards)
+  - type: peer-review
+    cadence: bi-module (CI/CD design reviews, incident retros)
+  summative:
+  - type: capstone
+    alignment: Integrated MLOps program combining CI/CD, monitoring, governance, and LLMOps extensions
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-551
+    summary: End-to-End ML Pipeline Modernization
+    difficulty: mlops-engineer
+    assessed_competencies:
+    - pipeline-automation
+    - model-lifecycle
+    - experimentation
+    integration_notes: Synthesizes MOD-551, MOD-552, and MOD-555 deliverables.
+  - id: PROJ-552
+    summary: Model Serving & Observability Platform
+    difficulty: mlops-engineer
+    assessed_competencies:
+    - model-observability
+    - service-reliability
+    - automation
+    integration_notes: Builds on MOD-552, MOD-553, and MOD-556 with shared dashboards from ML Platform MOD-508.
+  - id: PROJ-553
+    summary: Experimentation & Data Quality Hub
+    difficulty: mlops-engineer
+    assessed_competencies:
+    - experiment-tracking
+    - data-governance
+    integration_notes: Aligns with MOD-554 and MOD-555, referencing feature store assets from ML Platform MOD-504.
+  - id: PROJ-554
+    summary: Compliance-Aware Promotion Pipeline
+    difficulty: mlops-engineer
+    assessed_competencies:
+    - policy-automation
+    - platform-security
+    - governance
+    integration_notes: Combines MOD-556, MOD-557, and security role modules (MOD-907+).
+  - id: PROJ-555
+    summary: LLMOps Reliability Program
+    difficulty: mlops-engineer
+    assessed_competencies:
+    - llmops
+    - incident-response
+    - finops
+    integration_notes: Extends MOD-558–560 while aligning with architect LLM initiatives (PROJ-405).
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Head of MLOps Engineering
+    focus: Automation coverage, release management, and reliability practices
+    due_date: '2025-12-10'
+  - reviewer: Compliance & Responsible AI Lead
+    focus: Governance, policy automation, and audit readiness
+    due_date: '2025-12-15'
+  pilot_metrics:
+    completion_rate_target: 0.75
+    satisfaction_target: 4.5
+    deployment_frequency_target: 0.8
+risk_register:
+- risk: Heavy tooling requirements (MLflow, Kubeflow, Evidently) may exceed learner environments.
+  impact: medium
+  likelihood: medium
+  mitigation: Provide containerized sandboxes, mock services, and cloud credits where possible.
+- risk: Overlap with ML Platform track could cause duplication or confusion.
+  impact: medium
+  likelihood: low
+  mitigation: Cross-link shared assets, highlight differentiation, and reuse templates explicitly.
