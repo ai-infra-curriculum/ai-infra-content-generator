@@ -1,0 +1,23 @@
+id: SOL-502
+type: solution
+title: Solutions for MOD-502 API & Model Serving Platforms
+roles:
+  - ai-infrastructure-ml-platform-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+  - id: api-platforms
+    level: advanced
+  - id: service-reliability
+    level: advanced
+dependencies:
+  - module-502-api-platforms/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions'
+metadata_version: 1.0.0

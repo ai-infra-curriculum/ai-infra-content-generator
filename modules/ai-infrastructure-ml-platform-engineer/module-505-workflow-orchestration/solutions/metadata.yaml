@@ -1,0 +1,23 @@
+id: SOL-505
+type: solution
+title: Solutions for MOD-505 Workflow Orchestration & Pipelines
+roles:
+  - ai-infrastructure-ml-platform-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+  - id: workflow-orchestration
+    level: advanced
+  - id: automation
+    level: advanced
+dependencies:
+  - module-505-workflow-orchestration/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions'
+metadata_version: 1.0.0

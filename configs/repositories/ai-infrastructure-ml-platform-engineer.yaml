@@ -1,0 +1,23 @@
+learning_repo: "/home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning"
+solutions_repo: "/home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions"
+modules_mapping:
+  source_pattern: "lessons/mod-{num:03d}-*"
+  target_pattern: "modules/ai-infrastructure-ml-platform-engineer/module-{dest:03d}-*"
+  rules:
+    - source_range: [1, 8]
+      dest_offset: 500
+    - source_range: [9, 9]
+      dest_values:
+        - source_suffix: "security"
+          dest: 509
+        - source_suffix: "security-governance"
+          dest: 510
+projects_mapping:
+  source_pattern: "projects/project-{num:02d}-*"
+  target_pattern: "projects/ai-infrastructure-ml-platform-engineer/project-50{num}-*"
+  valid_range: [1, 6]
+solutions_mapping:
+  modules_pattern: "modules/mod-{num:03d}-*"
+  projects_pattern: "projects/project-{num:02d}-*"
+notes: |
+  Legacy modules 001-008 map to MOD-501…508; duplicate mod-009 directories map to MOD-509 (security foundations) and MOD-510 (security governance). Projects 01-06 align with PROJ-501…506. Use this mapping to synchronize ML platform learning and solutions assets with the new framework.

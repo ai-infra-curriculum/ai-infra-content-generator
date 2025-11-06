@@ -1,0 +1,264 @@
+role: AI Infrastructure ML Platform Engineer
+level: ml-platform-engineer
+program_name: AI Infrastructure ML Platform Engineer Curriculum
+program_version: 1.0.0
+date_updated: '2025-10-20'
+repository_config: ../repository-strategy.yaml
+learning_outcomes:
+  primary:
+  - Design, build, and operate multi-tenant ML platform foundations that accelerate model delivery.
+  - Deliver self-service tooling, feature stores, and workflow automation with reliability and governance baked in.
+  - Embed observability, cost controls, and security guardrails across platform services and pipelines.
+  secondary:
+  - Partner with product, security, and compliance teams to align platform roadmaps with business outcomes.
+  - Mentor platform squads on best practices for developer experience and operational excellence.
+program_structure:
+  total_duration_hours: 400
+  modules:
+  - id: MOD-501
+    title: ML Platform Fundamentals
+    duration_hours:
+      lecture: 14
+      lab: 18
+      portfolio: 6
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-201
+    - MOD-206
+    learning_objectives:
+    - Define platform architecture principles, shared services, and operating models for ML infrastructure.
+    - Establish tenancy models, service catalogs, and roadmap alignment with stakeholders.
+    linked_projects:
+    - PROJ-501
+  - id: MOD-502
+    title: API & Model Serving Platforms
+    duration_hours:
+      lecture: 12
+      lab: 18
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-501
+    - MOD-207
+    learning_objectives:
+    - Design scalable serving gateways, routing, and lifecycle management for inference workloads.
+    - Implement reliability patterns (autoscaling, caching, rollouts) aligned to SLOs.
+    linked_projects:
+    - PROJ-501
+  - id: MOD-503
+    title: Multi-Tenancy & Resource Governance
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-501
+    - MOD-502
+    learning_objectives:
+    - Implement tenant isolation, quotas, and policy enforcement for shared infrastructure.
+    - Model capacity planning, cost allocation, and reporting for stakeholders.
+    linked_projects:
+    - PROJ-502
+  - id: MOD-504
+    title: Feature Store Engineering
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-503
+    learning_objectives:
+    - Build feature ingestion, serving, and lineage capabilities with governance and QA.
+    - Integrate feature store APIs into training and serving workflows.
+    linked_projects:
+    - PROJ-502
+  - id: MOD-505
+    title: Workflow Orchestration & Pipelines
+    duration_hours:
+      lecture: 12
+      lab: 18
+      project: 10
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-502
+    - MOD-504
+    learning_objectives:
+    - Orchestrate resilient, observable ML workflows with reusable components.
+    - Automate approvals, rollbacks, and compliance gates within pipelines.
+    linked_projects:
+    - PROJ-503
+  - id: MOD-506
+    title: Model Registry & Lifecycle Management
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-504
+    - MOD-505
+    learning_objectives:
+    - Manage model registration, lineage, and deployment promotion workflows.
+    - Integrate registry controls with security, compliance, and SRE tooling.
+    linked_projects:
+    - PROJ-504
+  - id: MOD-507
+    title: ML Platform Developer Experience
+    duration_hours:
+      lecture: 12
+      lab: 16
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-505
+    learning_objectives:
+    - Deliver self-service portals, CLI/SDK tooling, and onboarding flows to drive platform adoption.
+    - Capture product feedback and platform KPIs to inform roadmap iterations.
+    linked_projects:
+    - PROJ-505
+  - id: MOD-508
+    title: Platform Observability & FinOps
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-505
+    - MOD-507
+    learning_objectives:
+    - Implement observability, cost analytics, and health dashboards for platform services.
+    - Automate alerts, budgets, and optimization workflows for stakeholders.
+    linked_projects:
+    - PROJ-503
+    - PROJ-505
+  - id: MOD-509
+    title: Platform Security & Compliance Foundations
+    duration_hours:
+      lecture: 12
+      lab: 16
+      project: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-505
+    learning_objectives:
+    - Apply security controls, access policies, and data protections across ML platform services.
+    - Coordinate with security engineers to meet compliance requirements.
+    linked_projects:
+    - PROJ-504
+  - id: MOD-510
+    title: Platform Security Governance & Auditing
+    duration_hours:
+      lecture: 10
+      lab: 14
+      portfolio: 8
+      assessment: 4
+    role_focus:
+    - ai-infrastructure-ml-platform-engineer
+    prerequisites:
+    - MOD-509
+    learning_objectives:
+    - Automate auditing, evidence collection, and governance reporting for platforms.
+    - Operate guardrails and exception workflows for regulatory readiness.
+    linked_projects:
+    - PROJ-504
+assessment_strategy:
+  formative:
+  - type: lab
+    cadence: per module (platform configuration, automation, observability exercises)
+  - type: design-review
+    cadence: per module cluster (architecture walkthroughs, product reviews)
+  summative:
+  - type: capstone
+    alignment: Unified ML platform initiative combining registry, orchestration, and developer experience outputs
+project_portfolio:
+  anchor_projects:
+  - id: PROJ-501
+    summary: Self-Service ML Platform Foundation
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - ml-platform-architecture
+    - automation
+    - service-design
+    integration_notes: Synthesizes foundational modules (MOD-501, MOD-502, MOD-505).
+  - id: PROJ-502
+    summary: Enterprise Feature Store Buildout
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - feature-platform
+    - governance
+    - data-engineering
+    integration_notes: Builds on MOD-503 and MOD-504 with compliance hooks from MOD-510.
+  - id: PROJ-503
+    summary: Workflow Orchestration Modernization
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - workflow-orchestration
+    - observability
+    - automation
+    integration_notes: Combines outputs from MOD-505 and MOD-508.
+  - id: PROJ-504
+    summary: Model Registry & Promotion Pipeline
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - model-lifecycle
+    - platform-security
+    - governance
+    integration_notes: Integrates registry (MOD-506) with security/governance modules (MOD-509/510).
+  - id: PROJ-505
+    summary: Developer Experience Portal
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - developer-experience
+    - product-thinking
+    - service-reliability
+    integration_notes: Leverages MOD-507 and MOD-508 to drive adoption.
+  - id: PROJ-506
+    summary: Capstone ML Platform Initiative
+    difficulty: ml-platform-engineer
+    assessed_competencies:
+    - ml-platform-architecture
+    - multi-tenancy
+    - governance
+    integration_notes: Synthesizes artifacts from all modules into a unified platform strategy.
+validation_plan:
+  stakeholder_reviews:
+  - reviewer: Director of ML Platform Engineering
+    focus: Architecture soundness, automation coverage, developer experience outcomes
+    due_date: '2025-11-30'
+  - reviewer: Head of Data Governance
+    focus: Compliance, lineage, and policy automation readiness
+    due_date: '2025-12-05'
+  pilot_metrics:
+    completion_rate_target: 0.7
+    satisfaction_target: 4.6
+    adoption_rate_target: 0.85
+risk_register:
+- risk: Platform labs require access to cloud infrastructure and orchestration tooling.
+  impact: medium
+  likelihood: medium
+  mitigation: Provide Terraform templates, local simulators, and sandbox accounts.
+- risk: Cross-team alignment (product, security, compliance) may delay stakeholder feedback.
+  impact: medium
+  likelihood: medium
+  mitigation: Schedule quarterly review forums and provide asynchronous review packets.

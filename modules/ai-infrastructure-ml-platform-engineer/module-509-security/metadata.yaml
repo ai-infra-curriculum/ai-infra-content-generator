@@ -1,0 +1,25 @@
+id: MOD-509
+type: module
+title: Platform Security & Compliance Foundations
+roles:
+- ai-infrastructure-ml-platform-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: platform-security
+  level: advanced
+- id: compliance
+  level: advanced
+dependencies:
+- MOD-501
+- MOD-505
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Applies security controls, access policies, and compliance guardrails to ML platforms.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-009-security'
+metadata_version: 1.0.0

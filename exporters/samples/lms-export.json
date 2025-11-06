@@ -273,6 +273,38 @@
           "lms_assignment_id": "ai-infra-security-engineer-proj-905"
         }
       ]
+    },
+    {
+      "role": "ai-infrastructure-ml-platform-engineer",
+      "modules": [
+        {
+          "id": "MOD-501",
+          "path": "modules/ai-infrastructure-ml-platform-engineer/module-501-platform-fundamentals/README.md",
+          "lms_module_id": "ai-infra-ml-platform-mod-501"
+        },
+        {
+          "id": "MOD-505",
+          "path": "modules/ai-infrastructure-ml-platform-engineer/module-505-workflow-orchestration/README.md",
+          "lms_module_id": "ai-infra-ml-platform-mod-505"
+        },
+        {
+          "id": "MOD-507",
+          "path": "modules/ai-infrastructure-ml-platform-engineer/module-507-developer-experience/README.md",
+          "lms_module_id": "ai-infra-ml-platform-mod-507"
+        }
+      ],
+      "projects": [
+        {
+          "id": "PROJ-501",
+          "path": "projects/ai-infrastructure-ml-platform-engineer/project-501-self-service-platform/README.md",
+          "lms_assignment_id": "ai-infra-ml-platform-proj-501"
+        },
+        {
+          "id": "PROJ-506",
+          "path": "projects/ai-infrastructure-ml-platform-engineer/project-506-capstone-ml-platform/README.md",
+          "lms_assignment_id": "ai-infra-ml-platform-proj-506"
+        }
+      ]
     }
   ],
   "solutions": {
@@ -280,6 +312,9 @@
     "paths": [
       "modules/ai-infrastructure-architect/module-301-enterprise-architecture/solutions/README.md",
       "modules/ai-infrastructure-engineer/module-110-llm-infrastructure/solutions/README.md",
+      "modules/ai-infrastructure-ml-platform-engineer/module-501-platform-fundamentals/solutions/README.md",
+      "modules/ai-infrastructure-ml-platform-engineer/module-505-workflow-orchestration/solutions/README.md",
+      "modules/ai-infrastructure-ml-platform-engineer/module-507-developer-experience/solutions/README.md",
       "modules/ai-infrastructure-principal-architect/module-601-enterprise-architecture/solutions/README.md",
       "modules/ai-infrastructure-principal-engineer/module-701-technical-excellence/solutions/README.md",
       "modules/ai-infrastructure-security-engineer/module-901-ml-security-foundations/solutions/README.md",

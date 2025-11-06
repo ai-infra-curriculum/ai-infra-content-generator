@@ -1,0 +1,25 @@
+id: MOD-505
+type: module
+title: Workflow Orchestration & Pipelines
+roles:
+- ai-infrastructure-ml-platform-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+- id: workflow-orchestration
+  level: advanced
+- id: automation
+  level: advanced
+dependencies:
+- MOD-502
+- MOD-504
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Orchestrates ML workflows, DAGs, and automation frameworks with resilience and observability.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-005-workflow-orchestration'
+metadata_version: 1.0.0

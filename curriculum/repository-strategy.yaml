@@ -20,6 +20,8 @@ roles:
   slug: ai-infrastructure-team-lead
 - name: AI Infrastructure Security Engineer
   slug: ai-infrastructure-security-engineer
+- name: AI Infrastructure ML Platform Engineer
+  slug: ai-infrastructure-ml-platform-engineer
 repositories:
   mode: per_role
   base_repo_name: ai-infra
@@ -51,6 +53,9 @@ repositories:
     ai-infrastructure-security-engineer:
       learning: ai-infra-security-learning
       solutions: ai-infra-security-solutions
+    ai-infrastructure-ml-platform-engineer:
+      learning: ai-infra-ml-platform-learning
+      solutions: ai-infra-ml-platform-solutions
 solutions:
   placement: separate
   inline_path: null
@@ -97,6 +102,10 @@ progression_rules:
   to_role: ai-infrastructure-security-engineer
   strategy: specialization
   notes: Provide focused path for engineers moving into AI security, compliance, and threat defense responsibilities
+- from_role: ai-infrastructure-engineer
+  to_role: ai-infrastructure-ml-platform-engineer
+  strategy: specialization
+  notes: Support engineers transitioning into platform architecture, workflow automation, and feature platform leadership
 governance:
   review_cadence: quarterly
   approvers:

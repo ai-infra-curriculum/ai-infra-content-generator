@@ -1,0 +1,30 @@
+id: PROJ-506
+type: project
+title: Capstone: Unified ML Platform Initiative
+roles:
+- ai-infrastructure-ml-platform-engineer
+stage: ml-platform-engineer
+proficiency_target: advanced
+competencies:
+- id: ml-platform-architecture
+  level: advanced
+- id: multi-tenancy
+  level: advanced
+- id: governance
+  level: advanced
+dependencies:
+- MOD-501
+- MOD-503
+- MOD-505
+- MOD-506
+- MOD-508
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Integrate platform components into a unified ML platform offering with governance, observability, and self-service outcomes.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/projects/project-506-capstone-ml-platform'
+metadata_version: 1.0.0

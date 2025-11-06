@@ -1,0 +1,25 @@
+id: MOD-503
+type: module
+title: Multi-Tenancy & Resource Governance
+roles:
+- ai-infrastructure-ml-platform-engineer
+stage: core
+proficiency_target: advanced
+competencies:
+- id: multi-tenancy
+  level: advanced
+- id: capacity-planning
+  level: advanced
+dependencies:
+- MOD-501
+- MOD-502
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Implements tenant isolation, quota management, and cost governance across ML platforms.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/lessons/mod-003-multi-tenancy'
+metadata_version: 1.0.0

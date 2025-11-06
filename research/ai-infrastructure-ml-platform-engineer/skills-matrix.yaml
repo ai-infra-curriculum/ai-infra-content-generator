@@ -1,0 +1,132 @@
+role: "AI Infrastructure ML Platform Engineer"
+level: "ml-platform-engineer"
+last_updated: "2025-10-20"
+research_sources:
+  - type: "role_analysis"
+    reference: "/home/claude/ai-infrastructure-project/research/role-analysis.json"
+  - type: "skills_matrix"
+    reference: "/home/claude/ai-infrastructure-project/research/SKILLS_MATRIX_12_ROLES.md"
+competency_domains:
+  - name: "Platform Architecture & Services"
+    description: "Design and operate core ML platform services (training, serving, registry, APIs) with scalability and reliability."
+    skills:
+      - name: "ML Platform Architecture"
+        proficiency:
+          proficient:
+            description: "Design platform components (training, serving, data) with sound distributed systems principles."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-001"
+          advanced:
+            description: "Own end-to-end platform architecture, multi-tenant strategy, and technical roadmap execution."
+            evidence_sources:
+              - type: "research"
+                id: "ml-platform-engineer-analysis"
+        assessment_types:
+          - "Architecture review"
+          - "Platform roadmap presentation"
+      - name: "Service Reliability & Observability"
+        proficiency:
+          proficient:
+            description: "Implement SLIs/SLOs, monitoring, and incident response for platform services."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-002"
+          advanced:
+            description: "Lead observability and reliability strategies across multiple platform domains with FinOps alignment."
+            evidence_sources: []
+        assessment_types:
+          - "Runbook audit"
+          - "SLO dashboard evaluation"
+  - name: "Data & Feature Infrastructure"
+    description: "Build feature stores, metadata systems, and governance patterns supporting model development."
+    skills:
+      - name: "Feature Platform Engineering"
+        proficiency:
+          proficient:
+            description: "Develop feature pipelines, serving APIs, and backfills with lineage tracking."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-003"
+          advanced:
+            description: "Lead enterprise feature platform strategy including governance, cataloging, and analytics integration."
+            evidence_sources: []
+        assessment_types:
+          - "Feature store design review"
+          - "Data governance audit"
+      - name: "Workflow Orchestration"
+        proficiency:
+          proficient:
+            description: "Author robust ML pipelines/DAGs with retries, notifications, and dependency management."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-004"
+          advanced:
+            description: "Design organization-wide orchestration frameworks with reusable components and policy gates."
+            evidence_sources: []
+        assessment_types:
+          - "Pipeline evaluation"
+          - "Automation demo"
+  - name: "Developer Experience & Product Mindset"
+    description: "Create self-service experiences, tooling, and documentation that drive platform adoption."
+    skills:
+      - name: "Developer Experience Design"
+        proficiency:
+          proficient:
+            description: "Deliver CLI/SDK/UI tooling, onboarding flows, and documentation for platform users."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-005"
+          advanced:
+            description: "Measure adoption, gather feedback, and iterate platform product experiences across orgs."
+            evidence_sources: []
+        assessment_types:
+          - "Experience review"
+          - "Adoption metric analysis"
+      - name: "Stakeholder & Product Alignment"
+        proficiency:
+          proficient:
+            description: "Collaborate with product, data, and research partners to prioritize platform investments."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-006"
+          advanced:
+            description: "Own platform product vision, investment cases, and executive communications."
+            evidence_sources: []
+        assessment_types:
+          - "Roadmap presentation"
+          - "Stakeholder survey"
+  - name: "Governance, Security & Compliance"
+    description: "Embed policy, security, and compliance automation into ML platform workflows."
+    skills:
+      - name: "Platform Security & Guardrails"
+        proficiency:
+          proficient:
+            description: "Integrate secrets, RBAC, and basic guardrails into platform services."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-007"
+          advanced:
+            description: "Automate policy-as-code, auditing, and exception workflows across platform pipelines."
+            evidence_sources: []
+        assessment_types:
+          - "Guardrail implementation review"
+          - "Security posture assessment"
+      - name: "Compliance & Governance Automation"
+        proficiency:
+          proficient:
+            description: "Capture audit evidence and enforce governance across platform components."
+            evidence_sources:
+              - type: "job_posting"
+                id: "MLP-008"
+          advanced:
+            description: "Build continuous compliance pipelines aligned with enterprise governance standards."
+            evidence_sources: []
+        assessment_types:
+          - "Compliance pipeline demo"
+          - "Audit readiness evaluation"
+progression_map:
+  proficient: "Senior ML/MLOps engineers delivering platform components and collaborating with adjacent teams."
+  advanced: "Lead platform engineers owning cross-platform strategy, adoption metrics, and governance automation."
+notes:
+  - "Matrix compiled from ML platform job postings, legacy curriculum, and platform engineering stakeholder interviews (updated 2025-10-20)."

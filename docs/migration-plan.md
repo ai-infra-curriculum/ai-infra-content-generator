@@ -13,6 +13,7 @@
 - ✅ Principal AI Infrastructure Engineer (`research/ai-infrastructure-principal-engineer/*`)
 - ✅ AI Infrastructure Team Lead (`research/ai-infrastructure-team-lead/*`)
 - ✅ AI Infrastructure Security Engineer (`research/ai-infrastructure-security-engineer/*`)
+- ✅ AI Infrastructure ML Platform Engineer (`research/ai-infrastructure-ml-platform-engineer/*`)
    - ☐ Remaining Staff+ roles (Principal Engineer, Team Lead, specialized tracks)
    - ☐ Validate migrated metadata via `./tools/curriculum.py validate-metadata` (blocked: Python tooling not yet installed)
 
@@ -25,6 +26,7 @@
 - ✅ Principal AI Infrastructure Engineer master plan, roadmaps, projects
 - ✅ AI Infrastructure Team Lead master plan, roadmaps, projects
 - ✅ AI Infrastructure Security Engineer master plan, roadmaps, projects
+- ✅ AI Infrastructure ML Platform Engineer master plan, roadmaps, projects
    - ☐ Update remaining role plan templates once prioritised
 
 4. **Module & Lesson Content** — _Status: In progress_
@@ -35,6 +37,7 @@
 - ✅ Principal engineer modules (MOD-701…706) migrated with metadata and solution placeholders
 - ✅ Team lead modules (MOD-801…810) migrated with metadata and leadership solution stubs
 - ✅ Security engineer modules (MOD-901…912) migrated with metadata and security solution placeholders
+- ✅ ML platform modules (MOD-501…510) migrated with metadata and solution placeholders
    - ☐ Run validation profiles (`./tools/curriculum.py run-validation …`) after environment setup (pip missing)
 
 5. **Projects & Solutions** — _Status: In progress_
@@ -46,6 +49,7 @@
 - ✅ Principal engineer projects (PROJ-701…703) with metadata and solution placeholders linked to legacy repos
 - ✅ Team lead projects (PROJ-801…803) with metadata and leadership solution placeholders synced to legacy repos
 - ✅ Security engineer projects (PROJ-901…905) with metadata and solution placeholders tied to legacy security repositories
+- ✅ ML platform projects (PROJ-501…506) with metadata and solution placeholders mapped to legacy platform assets
    - ☐ Curate senior module solution READMEs with direct references to legacy guides
 
 6. **Exporters & Automation** — _Status: In progress_

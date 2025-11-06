@@ -1,0 +1,23 @@
+id: SOL-508
+type: solution
+title: Solutions for MOD-508 Platform Observability & FinOps
+roles:
+  - ai-infrastructure-ml-platform-engineer
+stage: advanced
+proficiency_target: advanced
+competencies:
+  - id: observability
+    level: advanced
+  - id: finops
+    level: advanced
+dependencies:
+  - module-508-observability/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions'
+metadata_version: 1.0.0

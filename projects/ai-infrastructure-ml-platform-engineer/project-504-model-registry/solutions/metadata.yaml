@@ -1,0 +1,25 @@
+id: SOL-504
+type: solution
+title: Solutions for PROJ-504 Model Registry & Promotion Pipeline
+roles:
+  - ai-infrastructure-ml-platform-engineer
+stage: ml-platform-engineer
+proficiency_target: advanced
+competencies:
+  - id: model-lifecycle
+    level: advanced
+  - id: platform-security
+    level: advanced
+  - id: governance
+    level: advanced
+dependencies:
+  - project-504-model-registry/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions'
+metadata_version: 1.0.0

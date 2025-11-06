@@ -1,0 +1,25 @@
+id: SOL-505
+type: solution
+title: Solutions for PROJ-505 Developer Experience Portal
+roles:
+  - ai-infrastructure-ml-platform-engineer
+stage: ml-platform-engineer
+proficiency_target: advanced
+competencies:
+  - id: developer-experience
+    level: advanced
+  - id: product-thinking
+    level: advanced
+  - id: service-reliability
+    level: advanced
+dependencies:
+  - project-505-developer-portal/metadata.yaml
+validation_profile: docs-quality
+status: draft
+owners:
+  - name: Solutions Leadership
+    github: '@ai-infra-solutions'
+    role: author
+evidence:
+  - 'legacy: /home/claude/ai-infrastructure-project/repositories/solutions/ai-infra-ml-platform-solutions'
+metadata_version: 1.0.0

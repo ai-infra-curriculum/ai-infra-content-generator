@@ -1,0 +1,27 @@
+id: PROJ-505
+type: project
+title: Developer Experience Portal
+roles:
+- ai-infrastructure-ml-platform-engineer
+stage: ml-platform-engineer
+proficiency_target: advanced
+competencies:
+- id: developer-experience
+  level: advanced
+- id: product-thinking
+  level: advanced
+- id: service-reliability
+  level: advanced
+dependencies:
+- MOD-507
+- MOD-508
+validation_profile: docs-quality
+status: draft
+owners:
+- name: Curriculum Team
+  github: '@ai-infra-team'
+  role: author
+description: Deliver a developer portal with documentation, templates, and analytics to drive platform adoption.
+evidence:
+- 'legacy: /home/claude/ai-infrastructure-project/repositories/learning/ai-infra-ml-platform-learning/projects/project-505-developer-portal'
+metadata_version: 1.0.0
