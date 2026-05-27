@@ -193,15 +193,39 @@ After bootstrap, the autonomous loop picks up from there:
 
 - `aicg org research` adds the role to the monthly job-requirements
   research cycle.
-- The first `aicg org daily` after the agent lands
-  `curriculum-plan.json` should plan the initial module-skeleton work
-  items (Phase B, not yet implemented — for now author the skeletons
-  during the same agent session that wrote the plan).
-- `aicg org audit` reports the new repos and queues any unfilled
-  module / project gaps for subsequent daily cycles.
+- Once the agent lands `<learning-repo>/.aicg/curriculum-plan.json`,
+  `aicg org execute-plan --role <id>` (Phase B) scaffolds every
+  module + project as on-disk skeletons: `lessons/mod-XXX/README.md`,
+  `exercises/`, `labs/`, `quizzes/`, mirrored in
+  `modules/mod-XXX/` on the solutions side and
+  `projects/project-XXX/README.md` on both sides.
+- `aicg org audit` then reports the unfilled exercises and projects
+  as work items in the org queue.
+- Each subsequent `aicg org daily` picks the highest-priority item,
+  runs generate → verify → propagate, and surfaces the PR for the
+  steward to merge.
+
+## Content Propagation
+
+When an item passes `aicg verify`, the runner also calls
+`aicg propagate` automatically to append a row to the target repo's
+`VERSIONS.md` so the changelog records what shipped:
+
+```
+| 2026-05-27 | `fill-mod-001-…-solutions` | `mod-001-…` | Fill mod-001 solutions |
+```
+
+The row lands inside the table block for the current month (one is
+created if it doesn't exist yet). Propagation is idempotent — running
+it twice does not duplicate rows.
+
+`CURRICULUM.md` edits are *not* applied automatically because the
+schema varies per repo. The propagator emits a suggestion entry per
+work item (visible in `<repo>/.aicg/propagate-report.json`); the
+agent or operator can apply those edits as part of the same PR.
 
 ### Future work
 
-- Phase B: auto-execute `curriculum-plan.json` to create module skeletons.
 - Issue auto-update from audit/work-queue state.
 - Discussion summarization that flags items needing human judgment.
+- Optional LLM-as-judge quality grading inside `aicg verify`.

@@ -284,6 +284,15 @@ def run_daily_remediation(
         }
         if verify_report["status"] == "verified":
             item["status"] = "verified"
+            from .propagate import propagate_repo
+
+            propagate_report = propagate_repo(
+                workspace, item["repo"], work_id=item["work_id"]
+            )
+            result["propagate"] = {
+                "status": propagate_report["status"],
+                "updated_count": len(propagate_report.get("updated", [])),
+            }
         else:
             item["status"] = "verification_failed"
         item["verified_at"] = utc_now()

@@ -38,8 +38,12 @@ from .org_config import OrgManifest, state_dir_for_manifest
 from .state import utc_now, write_json
 
 BOOTSTRAP_REPORT = "bootstrap-report.json"
+EXECUTE_PLAN_REPORT = "execute-plan-report.json"
 
 _ROLE_ID_RE = re.compile(r"^[a-z][a-z0-9-]{1,40}$")
+_MOD_ID_RE = re.compile(r"^mod-\d{2,4}(?:-[a-z0-9-]+)?$")
+_EXERCISE_ID_RE = re.compile(r"^exercise-\d{2,3}$")
+_PROJECT_ID_RE = re.compile(r"^project-\d{1,4}(?:-[a-z0-9-]+)?$")
 
 
 class BootstrapError(RuntimeError):
@@ -614,4 +618,401 @@ def _build_bootstrap_prompt(
         "- Update `CURRICULUM.md`, `PREREQUISITES.md`, `VERSIONS.md`, "
         "`README.md` to reflect the planned curriculum once `curriculum-plan.json` "
         "lands.\n"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Phase B: execute a curriculum-plan.json into module skeletons
+# ---------------------------------------------------------------------------
+
+
+class CurriculumPlanError(BootstrapError):
+    """Raised when a curriculum-plan.json is missing or malformed."""
+
+
+@dataclass(frozen=True)
+class ExecutePlanResult:
+    role_id: str
+    learning_path: Path
+    solution_path: Path
+    modules_created: list[str]
+    modules_skipped: list[str]
+    projects_created: list[str]
+    projects_skipped: list[str]
+    files_written: list[str]
+
+
+def execute_curriculum_plan(
+    manifest: OrgManifest,
+    workspace: Path,
+    role_id: str,
+    plan_path: Path | None = None,
+    overwrite: bool = False,
+    state_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Read ``curriculum-plan.json`` and scaffold module + project skeletons."""
+    if not _ROLE_ID_RE.match(role_id):
+        raise CurriculumPlanError(f"Invalid role id {role_id!r}.")
+
+    role = next((item for item in manifest.roles if item.id == role_id), None)
+    if role is None:
+        raise CurriculumPlanError(
+            f"Role {role_id!r} not in manifest. Run `aicg org bootstrap-role` first."
+        )
+
+    workspace = workspace.resolve()
+    learning_path = workspace / role.learning_repo
+    solution_path = workspace / role.solution_repo
+    if not learning_path.exists() or not solution_path.exists():
+        raise CurriculumPlanError(
+            f"Paired repos for {role_id!r} are not on disk. Bootstrap them first."
+        )
+
+    plan_path = plan_path or learning_path / ".aicg" / "curriculum-plan.json"
+    if not plan_path.exists():
+        raise CurriculumPlanError(
+            f"Curriculum plan not found at {plan_path}. Author it first "
+            "(see the bootstrap prompt)."
+        )
+
+    plan = _load_curriculum_plan(plan_path)
+    if plan.get("role_id") and plan["role_id"] != role_id:
+        raise CurriculumPlanError(
+            f"Plan role_id {plan.get('role_id')!r} does not match {role_id!r}."
+        )
+
+    files_written: list[str] = []
+    modules_created: list[str] = []
+    modules_skipped: list[str] = []
+    projects_created: list[str] = []
+    projects_skipped: list[str] = []
+
+    for module in plan.get("modules", []) or []:
+        result = _scaffold_module(
+            module=module,
+            learning_path=learning_path,
+            solution_path=solution_path,
+            overwrite=overwrite,
+        )
+        files_written.extend(result["files_written"])
+        if result["created"]:
+            modules_created.append(result["module_id"])
+        else:
+            modules_skipped.append(result["module_id"])
+
+    for project in plan.get("projects", []) or []:
+        result = _scaffold_project(
+            project=project,
+            learning_path=learning_path,
+            solution_path=solution_path,
+            overwrite=overwrite,
+        )
+        files_written.extend(result["files_written"])
+        if result["created"]:
+            projects_created.append(result["project_id"])
+        else:
+            projects_skipped.append(result["project_id"])
+
+    state_root = state_dir_for_manifest(manifest, state_dir)
+    state_root.mkdir(parents=True, exist_ok=True)
+    report = {
+        "schema_version": 1,
+        "generated_at": utc_now(),
+        "operation": "execute_curriculum_plan",
+        "role_id": role_id,
+        "plan_path": str(plan_path),
+        "learning_path": str(learning_path),
+        "solution_path": str(solution_path),
+        "modules_created": modules_created,
+        "modules_skipped": modules_skipped,
+        "projects_created": projects_created,
+        "projects_skipped": projects_skipped,
+        "files_written_count": len(files_written),
+        "files_written_sample": files_written[:20],
+    }
+    write_json(state_root / EXECUTE_PLAN_REPORT, report)
+    return report
+
+
+def _load_curriculum_plan(path: Path) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise CurriculumPlanError(f"Could not parse {path}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise CurriculumPlanError(f"{path} must be a JSON object.")
+    if not isinstance(data.get("modules"), list):
+        raise CurriculumPlanError(f"{path} requires a `modules` array.")
+    return data
+
+
+def _scaffold_module(
+    module: dict[str, Any],
+    learning_path: Path,
+    solution_path: Path,
+    overwrite: bool,
+) -> dict[str, Any]:
+    module_id = module.get("id") or ""
+    if not _MOD_ID_RE.match(module_id):
+        raise CurriculumPlanError(
+            f"Module id {module_id!r} must match `mod-NNN[-slug]`."
+        )
+    title = module.get("title") or module_id
+    objectives = module.get("objectives") or []
+    exercises = module.get("exercises") or []
+    labs = module.get("labs") or []
+    hours = module.get("hours")
+
+    learning_mod = learning_path / "lessons" / module_id
+    solution_mod = solution_path / "modules" / module_id
+
+    files_written: list[str] = []
+    created = not learning_mod.exists() and not solution_mod.exists()
+    if not created and not overwrite:
+        return {
+            "module_id": module_id,
+            "created": False,
+            "files_written": [],
+        }
+
+    files_written.append(
+        _write(
+            learning_mod / "README.md",
+            _module_learning_readme(module_id, title, objectives, hours),
+        )
+    )
+    files_written.append(
+        _write(
+            learning_mod / "resources.md",
+            _module_resources_placeholder(module_id, title),
+        )
+    )
+    files_written.append(
+        _write(
+            learning_mod / "quizzes" / "README.md",
+            f"# {title} quizzes\n\nAuthored under the autonomous fill-in loop.\n",
+        )
+    )
+    files_written.append(
+        _write(
+            learning_mod / "labs" / "README.md",
+            _module_labs_placeholder(module_id, title, labs),
+        )
+    )
+
+    for exercise in exercises:
+        exercise_id = exercise.get("id") or ""
+        slug = exercise.get("slug") or ""
+        if not _EXERCISE_ID_RE.match(exercise_id):
+            raise CurriculumPlanError(
+                f"Exercise id {exercise_id!r} must match `exercise-NN`."
+            )
+        if slug and not re.match(r"^[a-z0-9-]+$", slug):
+            raise CurriculumPlanError(
+                f"Exercise slug {slug!r} must be lowercase-hyphen."
+            )
+        title_part = exercise.get("title") or slug.replace("-", " ").title() or exercise_id
+        relative_name = f"{exercise_id}-{slug}.md" if slug else f"{exercise_id}.md"
+        files_written.append(
+            _write(
+                learning_mod / "exercises" / relative_name,
+                _exercise_learning_placeholder(
+                    module_id, exercise_id, slug, title_part, exercise
+                ),
+            )
+        )
+
+    # Solutions side mirror.
+    files_written.append(
+        _write(
+            solution_mod / "README.md",
+            _module_solution_readme(module_id, title),
+        )
+    )
+    for exercise in exercises:
+        exercise_id = exercise.get("id") or ""
+        slug = exercise.get("slug") or ""
+        directory = (
+            solution_mod / f"{exercise_id}-{slug}"
+            if slug
+            else solution_mod / exercise_id
+        )
+        files_written.append(
+            _write(
+                directory / "README.md",
+                _exercise_solution_placeholder(module_id, exercise_id, slug),
+            )
+        )
+
+    return {
+        "module_id": module_id,
+        "created": True,
+        "files_written": files_written,
+    }
+
+
+def _scaffold_project(
+    project: dict[str, Any],
+    learning_path: Path,
+    solution_path: Path,
+    overwrite: bool,
+) -> dict[str, Any]:
+    project_id = project.get("id") or ""
+    if not _PROJECT_ID_RE.match(project_id):
+        raise CurriculumPlanError(
+            f"Project id {project_id!r} must match `project-N[-slug]`."
+        )
+    title = project.get("title") or project_id
+    hours = project.get("hours")
+
+    learning_proj = learning_path / "projects" / project_id
+    solution_proj = solution_path / "projects" / project_id
+
+    files_written: list[str] = []
+    created = not learning_proj.exists() and not solution_proj.exists()
+    if not created and not overwrite:
+        return {
+            "project_id": project_id,
+            "created": False,
+            "files_written": [],
+        }
+
+    files_written.append(
+        _write(
+            learning_proj / "README.md",
+            _project_learning_placeholder(project_id, title, hours, project),
+        )
+    )
+    files_written.append(
+        _write(
+            solution_proj / "README.md",
+            _project_solution_placeholder(project_id, title),
+        )
+    )
+
+    return {
+        "project_id": project_id,
+        "created": True,
+        "files_written": files_written,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Phase B content templates
+# ---------------------------------------------------------------------------
+
+
+def _module_learning_readme(
+    module_id: str, title: str, objectives: list[str], hours: Any
+) -> str:
+    bullets = "\n".join(f"- {item}" for item in objectives) or "- TBD"
+    duration = f"\n**Estimated effort:** {hours} hours\n" if hours else ""
+    return (
+        f"# {module_id}: {title}\n\n"
+        "> Scaffolded by `aicg org execute-plan`. Lecture chapters and exercise "
+        "content are authored on subsequent autonomous cycles.\n"
+        f"{duration}"
+        "\n## Learning objectives\n\n"
+        f"{bullets}\n\n"
+        "## Structure\n\n"
+        "- `01-…md` … `0N-…md`: lecture chapters.\n"
+        "- `exercises/`: per-exercise prompts.\n"
+        "- `labs/`: long-form hands-on labs.\n"
+        "- `quizzes/`: knowledge checks.\n"
+        "- `resources.md`: external references.\n"
+    )
+
+
+def _module_solution_readme(module_id: str, title: str) -> str:
+    return (
+        f"# {module_id}: {title} — Solutions\n\n"
+        "Reference implementations + per-exercise walkthroughs land here.\n\n"
+        "Run `aicg audit --repo <this-repo>` to see which exercises still need "
+        "solutions; `aicg org daily` will plan and queue work items.\n"
+    )
+
+
+def _module_resources_placeholder(module_id: str, title: str) -> str:
+    return (
+        f"# Resources for {module_id} ({title})\n\n"
+        "> Scaffolded placeholder. Curated reading + tooling links land here.\n"
+    )
+
+
+def _module_labs_placeholder(
+    module_id: str, title: str, labs: list[dict[str, Any]]
+) -> str:
+    body = f"# Labs for {module_id} ({title})\n\n"
+    if labs:
+        body += "Planned labs:\n\n"
+        for lab in labs:
+            lab_id = lab.get("id", "lab-XX")
+            lab_title = lab.get("title", lab_id)
+            body += f"- `{lab_id}` — {lab_title}\n"
+    else:
+        body += "Labs will be authored on subsequent cycles.\n"
+    return body
+
+
+def _exercise_learning_placeholder(
+    module_id: str,
+    exercise_id: str,
+    slug: str,
+    title: str,
+    exercise: dict[str, Any],
+) -> str:
+    hours = exercise.get("hours")
+    duration = f"**Estimated effort:** {hours} hours\n\n" if hours else ""
+    return (
+        f"# {exercise_id}: {title}\n\n"
+        "> Scaffolded by `aicg org execute-plan`. The exercise prompt lands "
+        "here on the next autonomous cycle.\n\n"
+        f"{duration}"
+        "## Objective\n\n"
+        "TBD.\n\n"
+        "## Prerequisites\n\n"
+        "TBD.\n\n"
+        "## Steps\n\n"
+        "TBD.\n\n"
+        "## Acceptance criteria\n\n"
+        "TBD.\n\n"
+        "## Stretch goals\n\n"
+        "TBD.\n"
+    )
+
+
+def _exercise_solution_placeholder(module_id: str, exercise_id: str, slug: str) -> str:
+    name = slug.replace("-", " ").title() if slug else exercise_id
+    return (
+        f"# {module_id}/{exercise_id} ({name}) — Solution\n\n"
+        "> Scaffolded by `aicg org execute-plan`. The reference solution lands "
+        "here on the next autonomous cycle.\n"
+    )
+
+
+def _project_learning_placeholder(
+    project_id: str, title: str, hours: Any, project: dict[str, Any]
+) -> str:
+    duration = f"\n**Estimated effort:** {hours} hours\n" if hours else ""
+    return (
+        f"# {project_id}: {title}\n\n"
+        "> Scaffolded by `aicg org execute-plan`. Project specification lands "
+        "here on the next autonomous cycle.\n"
+        f"{duration}"
+        "\n## Outcome\n\n"
+        "TBD.\n\n"
+        "## Architecture\n\n"
+        "TBD.\n\n"
+        "## Deliverables\n\n"
+        "TBD.\n\n"
+        "## Acceptance criteria\n\n"
+        "TBD.\n"
+    )
+
+
+def _project_solution_placeholder(project_id: str, title: str) -> str:
+    return (
+        f"# {project_id}: {title} — Solution\n\n"
+        "> Scaffolded by `aicg org execute-plan`. The reference walkthrough "
+        "lands here on the next autonomous cycle.\n"
     )

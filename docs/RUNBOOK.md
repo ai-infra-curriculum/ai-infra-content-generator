@@ -53,6 +53,35 @@ Work items move from `generated` to `verified` (or `verification_failed`
 with diagnostics in `.aicg/verify-report.json`). Both `aicg run` and
 `aicg org daily` call `verify` automatically after generation.
 
+### Propagate the changelog entry
+
+```bash
+aicg propagate --repo ai-infra-security-solutions
+```
+
+After verification succeeds, the runner appends a row to
+`VERSIONS.md` recording what shipped (date, work id, scope, title).
+Idempotent — re-running does not duplicate rows. Both `aicg run`
+and `aicg org daily` invoke propagate automatically after a
+successful verify. `CURRICULUM.md` edits are deliberately *not*
+applied automatically; the propagator emits per-item suggestions in
+`<repo>/.aicg/propagate-report.json` for the agent / operator to
+apply as part of the same PR.
+
+### Execute a curriculum plan
+
+```bash
+aicg org execute-plan --role data-engineer
+```
+
+After `aicg org bootstrap-role` scaffolds the role and the agent
+writes `<learning-repo>/.aicg/curriculum-plan.json`, the
+`execute-plan` step scaffolds every module and project listed in the
+plan as on-disk skeletons (`lessons/mod-XXX/README.md`,
+`exercises/`, `labs/`, `quizzes/`; mirrored under `modules/mod-XXX/`
+on the solutions side). The audit picks up the resulting gaps and
+the daily loop fills them in over subsequent runs.
+
 ## Validate
 
 ```bash

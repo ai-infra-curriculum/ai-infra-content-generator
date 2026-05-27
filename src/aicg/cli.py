@@ -8,10 +8,16 @@ from pathlib import Path
 
 from .agent_cli import AgentLimitReached
 from .audit import AuditError, audit_repo
-from .bootstrap import BootstrapError, bootstrap_role
+from .bootstrap import (
+    BootstrapError,
+    CurriculumPlanError,
+    bootstrap_role,
+    execute_curriculum_plan,
+)
 from .diff import diff_repo
 from .generator import GenerationNotConfigured, generate_all_pending, generate_from_plan
 from .gitops import GitOpsError, prepare_pr
+from .propagate import PropagateError, propagate_repo
 from .inventory import InventoryError, WorkspaceInventory, default_workspace
 from .org_config import ManifestError, load_manifest, state_dir_for_manifest
 from .org_runner import (
@@ -37,10 +43,12 @@ def main(argv: list[str] | None = None) -> int:
     except (
         AuditError,
         BootstrapError,
+        CurriculumPlanError,
         GitOpsError,
         InventoryError,
         ManifestError,
         OrgRunnerError,
+        PropagateError,
         VerifyError,
         ValueError,
     ) as exc:
@@ -91,6 +99,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Always exit 0 after writing the validation report.",
     )
     validate_parser.set_defaults(func=cmd_validate)
+
+    propagate_parser = subparsers.add_parser(
+        "propagate",
+        help="Append shipped work items to VERSIONS.md (and suggest CURRICULUM.md edits)",
+    )
+    add_repo_args(propagate_parser)
+    propagate_parser.add_argument(
+        "--work-id",
+        default=None,
+        help="Limit propagation to a single work item.",
+    )
+    propagate_parser.set_defaults(func=cmd_propagate)
 
     diff_parser = subparsers.add_parser(
         "diff",
@@ -168,6 +188,27 @@ def build_parser() -> argparse.ArgumentParser:
     org_daily = org_subparsers.add_parser("daily", help="Consume the next ready work item")
     add_org_args(org_daily)
     org_daily.set_defaults(func=cmd_org_daily)
+
+    org_execute_plan = org_subparsers.add_parser(
+        "execute-plan",
+        help="Scaffold module + project skeletons from a curriculum-plan.json",
+    )
+    add_org_args(org_execute_plan)
+    org_execute_plan.add_argument(
+        "--role", required=True, help="Role id whose plan should be executed."
+    )
+    org_execute_plan.add_argument(
+        "--plan",
+        type=Path,
+        default=None,
+        help="Optional explicit path to curriculum-plan.json (defaults to .aicg/ in the learning repo).",
+    )
+    org_execute_plan.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Re-scaffold modules/projects that already have on-disk content.",
+    )
+    org_execute_plan.set_defaults(func=cmd_org_execute_plan)
 
     org_bootstrap = org_subparsers.add_parser(
         "bootstrap-role",
@@ -374,6 +415,25 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return 0 if report["status"] == "passed" else 1
 
 
+def cmd_propagate(args: argparse.Namespace) -> int:
+    workspace = resolve_workspace(args)
+    report = propagate_repo(workspace, args.repo, work_id=args.work_id)
+    if report["status"] == "no_items":
+        print(f"Propagate noop: no verified work items in plan for {args.repo}.")
+        return 0
+    print(
+        f"Propagated {len(report['updated'])} work item(s) to "
+        f"{report['versions_path']}; {len(report['already_present'])} already present."
+    )
+    for entry in report["updated"][:8]:
+        print(f"  + {entry['date']} {entry['work_id']} ({entry.get('module') or entry.get('project') or entry.get('type')})")
+    for suggestion in report["curriculum_suggestions"][:4]:
+        scope = suggestion.get("scope")
+        if scope:
+            print(f"  ~ CURRICULUM.md: review the row for `{scope}`.")
+    return 0
+
+
 def cmd_diff(args: argparse.Namespace) -> int:
     workspace = resolve_workspace(args)
     repo_path = target_repo_path(workspace, args.repo)
@@ -460,6 +520,14 @@ def cmd_run(args: argparse.Namespace) -> int:
         workspace, args.repo, work_id=run_state.get("work_id")
     )
     print(f"Verify {verify_report['status']} ({verify_report['work_item_count']} item(s)).")
+    if verify_report["status"] == "verified":
+        propagate_report = propagate_repo(
+            workspace, args.repo, work_id=run_state.get("work_id")
+        )
+        print(
+            f"Propagate {propagate_report['status']}: "
+            f"{len(propagate_report['updated'])} VERSIONS.md row(s) added."
+        )
     return 0 if verify_report["status"] in {"verified", "no_items"} else 1
 
 
@@ -529,6 +597,33 @@ def cmd_org_daily(args: argparse.Namespace) -> int:
         print(f"- selected: {selected['repo']} {selected['work_id']}")
     if report.get("prompt_path"):
         print(f"- prompt: {report['prompt_path']}")
+    return 0
+
+
+def cmd_org_execute_plan(args: argparse.Namespace) -> int:
+    manifest = resolve_manifest(args)
+    report = execute_curriculum_plan(
+        manifest=manifest,
+        workspace=resolve_workspace(args),
+        role_id=args.role,
+        plan_path=args.plan,
+        overwrite=args.overwrite,
+        state_dir=resolve_org_state_dir(args, manifest),
+    )
+    print(
+        f"Executed curriculum plan for {report['role_id']}: "
+        f"{len(report['modules_created'])} module(s) scaffolded, "
+        f"{len(report['modules_skipped'])} skipped; "
+        f"{len(report['projects_created'])} project(s) scaffolded, "
+        f"{len(report['projects_skipped'])} skipped; "
+        f"{report['files_written_count']} file(s) written."
+    )
+    if report["modules_created"]:
+        print("Modules scaffolded:")
+        for mod in report["modules_created"][:12]:
+            print(f"  - {mod}")
+        if len(report["modules_created"]) > 12:
+            print(f"  ... {len(report['modules_created']) - 12} more")
     return 0
 
 

@@ -273,3 +273,11 @@ def test_daily_remediation_verifies_after_generate(tmp_path):
 
     assert result["status"] == "generated"
     assert result.get("verify", {}).get("status") == "verified"
+    # propagate runs after a verified item — VERSIONS.md is appended.
+    propagate = result.get("propagate", {})
+    assert propagate.get("status") == "updated"
+    assert propagate.get("updated_count", 0) >= 1
+    versions = (
+        workspace / "ai-infra-security-solutions" / "VERSIONS.md"
+    ).read_text(encoding="utf-8")
+    assert "fill-mod-001-ml-security-foundations-solutions" in versions

@@ -153,6 +153,179 @@ def test_bootstrap_no_update_manifest_leaves_file_unchanged(tmp_path: Path) -> N
     assert manifest_path.read_text(encoding="utf-8") == original
 
 
+def _curriculum_plan() -> dict:
+    return {
+        "schema_version": 1,
+        "role_id": "data-engineer",
+        "title": "Data Engineer",
+        "level": 25,
+        "modules": [
+            {
+                "id": "mod-101-foundations",
+                "title": "Foundations",
+                "hours": 10,
+                "objectives": ["Build a pipeline", "Operate a stream"],
+                "exercises": [
+                    {"id": "exercise-01", "slug": "intro", "hours": 1},
+                    {"id": "exercise-02", "slug": "containers", "hours": 2},
+                ],
+                "labs": [{"id": "lab-01", "title": "First pipeline"}],
+                "quizzes": 1,
+            },
+            {
+                "id": "mod-102-streaming",
+                "title": "Streaming",
+                "exercises": [
+                    {"id": "exercise-01", "slug": "kafka", "hours": 2},
+                ],
+            },
+        ],
+        "projects": [
+            {"id": "project-101-batch-pipeline", "title": "Batch pipeline", "hours": 20}
+        ],
+    }
+
+
+def _manifest_with_role(tmp_path: Path) -> tuple[Path, Path]:
+    """Build a manifest that already has the data-engineer role."""
+    manifest_path = write_minimal_manifest(tmp_path / "aicg-org.yaml")
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    payload["roles"].append(
+        {
+            "id": "data-engineer",
+            "title": "Data Engineer",
+            "level": 25,
+            "learning_repo": "ai-infra-data-engineer-learning",
+            "solution_repo": "ai-infra-data-engineer-solutions",
+        }
+    )
+    manifest_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return manifest_path, tmp_path / "workspace"
+
+
+def test_execute_plan_scaffolds_modules_and_projects(tmp_path: Path) -> None:
+    from aicg.bootstrap import execute_curriculum_plan
+
+    manifest_path, workspace = _manifest_with_role(tmp_path)
+    manifest = load_manifest(manifest_path)
+    bootstrap_role(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        title="Data Engineer",
+        level=25,
+        write_manifest=False,
+    )
+
+    learning = workspace / "ai-infra-data-engineer-learning"
+    plan_path = learning / ".aicg" / "curriculum-plan.json"
+    plan_path.parent.mkdir(parents=True, exist_ok=True)
+    plan_path.write_text(json.dumps(_curriculum_plan()), encoding="utf-8")
+
+    report = execute_curriculum_plan(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        state_dir=tmp_path / "state",
+    )
+
+    assert report["modules_created"] == ["mod-101-foundations", "mod-102-streaming"]
+    assert report["projects_created"] == ["project-101-batch-pipeline"]
+
+    mod1 = learning / "lessons" / "mod-101-foundations"
+    assert (mod1 / "README.md").exists()
+    assert (mod1 / "resources.md").exists()
+    assert (mod1 / "labs" / "README.md").exists()
+    assert (mod1 / "exercises" / "exercise-01-intro.md").exists()
+    assert (mod1 / "exercises" / "exercise-02-containers.md").exists()
+
+    solutions = workspace / "ai-infra-data-engineer-solutions"
+    assert (solutions / "modules" / "mod-101-foundations" / "README.md").exists()
+    assert (
+        solutions
+        / "modules"
+        / "mod-101-foundations"
+        / "exercise-01-intro"
+        / "README.md"
+    ).exists()
+
+    assert (
+        learning / "projects" / "project-101-batch-pipeline" / "README.md"
+    ).exists()
+    assert (
+        solutions / "projects" / "project-101-batch-pipeline" / "README.md"
+    ).exists()
+
+
+def test_execute_plan_idempotent_without_overwrite(tmp_path: Path) -> None:
+    from aicg.bootstrap import execute_curriculum_plan
+
+    manifest_path, workspace = _manifest_with_role(tmp_path)
+    manifest = load_manifest(manifest_path)
+    bootstrap_role(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        title="Data Engineer",
+        level=25,
+        write_manifest=False,
+    )
+    plan_path = workspace / "ai-infra-data-engineer-learning" / ".aicg" / "curriculum-plan.json"
+    plan_path.parent.mkdir(parents=True, exist_ok=True)
+    plan_path.write_text(json.dumps(_curriculum_plan()), encoding="utf-8")
+
+    first = execute_curriculum_plan(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        state_dir=tmp_path / "state",
+    )
+    second = execute_curriculum_plan(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        state_dir=tmp_path / "state",
+    )
+    assert first["modules_created"] and not first["modules_skipped"]
+    assert not second["modules_created"]
+    assert second["modules_skipped"] == ["mod-101-foundations", "mod-102-streaming"]
+
+
+def test_execute_plan_rejects_missing_plan(tmp_path: Path) -> None:
+    from aicg.bootstrap import CurriculumPlanError, execute_curriculum_plan
+
+    manifest_path, workspace = _manifest_with_role(tmp_path)
+    manifest = load_manifest(manifest_path)
+    bootstrap_role(
+        manifest=manifest,
+        workspace=workspace,
+        role_id="data-engineer",
+        title="Data Engineer",
+        level=25,
+        write_manifest=False,
+    )
+
+    with pytest.raises(CurriculumPlanError):
+        execute_curriculum_plan(
+            manifest=manifest,
+            workspace=workspace,
+            role_id="data-engineer",
+            state_dir=tmp_path / "state",
+        )
+
+
+def test_execute_plan_rejects_unknown_role(tmp_path: Path) -> None:
+    from aicg.bootstrap import CurriculumPlanError, execute_curriculum_plan
+
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    with pytest.raises(CurriculumPlanError):
+        execute_curriculum_plan(
+            manifest=manifest,
+            workspace=tmp_path / "workspace",
+            role_id="data-engineer",
+        )
+
+
 def test_bootstrap_report_written_to_state_dir(tmp_path: Path) -> None:
     manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
     workspace = tmp_path / "workspace"
