@@ -83,7 +83,9 @@ install_cron() {
 30 5 1 * * $(job_command monthly-research)
 0 3 * * 0 $(job_command weekly-audit)
 0 4 * * * $(job_command daily-remediate)
-30 4 * * * $(job_command daily-steward)
+20 4 * * * $(job_command daily-issues)
+40 4 * * * $(job_command daily-steward)
+0 5 * * * $(job_command daily-discussions)
 $marker_end"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -146,7 +148,9 @@ install_systemd() {
   write_systemd_pair "$unit_dir" "monthly-research" "monthly-research" "*-*-01 05:30:00"
   write_systemd_pair "$unit_dir" "weekly-audit" "weekly-audit" "Sun 03:00:00"
   write_systemd_pair "$unit_dir" "daily-remediate" "daily-remediate" "*-*-* 04:00:00"
-  write_systemd_pair "$unit_dir" "daily-steward" "daily-steward" "*-*-* 04:30:00"
+  write_systemd_pair "$unit_dir" "daily-issues" "daily-issues" "*-*-* 04:20:00"
+  write_systemd_pair "$unit_dir" "daily-steward" "daily-steward" "*-*-* 04:40:00"
+  write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:00:00"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     systemctl --user daemon-reload
@@ -155,7 +159,9 @@ install_systemd() {
       aicg-monthly-research.timer \
       aicg-weekly-audit.timer \
       aicg-daily-remediate.timer \
-      aicg-daily-steward.timer
+      aicg-daily-issues.timer \
+      aicg-daily-steward.timer \
+      aicg-daily-discussions.timer
     log "Installed systemd user timers."
   fi
 }

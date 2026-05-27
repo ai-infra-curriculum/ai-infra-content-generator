@@ -31,7 +31,9 @@
     "monthly_research": "30 5 1 * *",
     "weekly_audit": "0 3 * * 0",
     "daily_remediate": "0 4 * * *",
-    "daily_steward": "30 4 * * *"
+    "daily_issues": "20 4 * * *",
+    "daily_steward": "40 4 * * *",
+    "daily_discussions": "0 5 * * *"
   },
   "automation": {
     "state_dir": ".aicg/org",

@@ -32,6 +32,12 @@ from .state import (
 PROPAGATE_REPORT = "propagate-report.json"
 WORK_PLAN = "work-plan.json"
 VERSIONS_FILE = "VERSIONS.md"
+CURRICULUM_FILE = "CURRICULUM.md"
+CURRICULUM_SHIPPED_HEADING = "## Shipped (autonomous)"
+CURRICULUM_SHIPPED_PREAMBLE = (
+    "Auto-appended by the AICG runner. One row per verified work item. "
+    "Edit the rest of the document by hand; this section is additive only."
+)
 
 
 class PropagateError(RuntimeError):
@@ -117,12 +123,17 @@ def propagate_repo(
             new_content += "\n"
         versions_path.write_text(new_content, encoding="utf-8")
 
+    curriculum_appended = _append_shipped_section(
+        repo_path / CURRICULUM_FILE, summaries, today
+    )
+
     return _emit_report(
         repo_path=repo_path,
         plan_repo=plan.get("repo", {}),
         updated=updated,
         already_present=already_present,
         curriculum_suggestions=curriculum_suggestions,
+        curriculum_appended=curriculum_appended,
         write_report=write_report,
         status="updated" if updated else "noop",
         versions_path=versions_path,
@@ -267,6 +278,128 @@ def _curriculum_suggestion(summary: WorkSummary) -> dict[str, Any]:
     }
 
 
+def _append_shipped_section(
+    curriculum_path: Path,
+    summaries: list[WorkSummary],
+    today: _dt.date,
+) -> dict[str, Any]:
+    """Append shipped rows to CURRICULUM.md's auto-managed section.
+
+    Skips silently when ``CURRICULUM.md`` does not exist — we never
+    create it from nothing, only extend an authored doc. The section is
+    keyed by ``CURRICULUM_SHIPPED_HEADING`` and rows are dedup'd by
+    ``work_id`` so reruns stay idempotent.
+    """
+    if not summaries:
+        return {"present": curriculum_path.exists(), "appended": [], "already_present": []}
+    if not curriculum_path.exists():
+        return {
+            "present": False,
+            "appended": [],
+            "already_present": [],
+            "skipped_reason": (
+                "CURRICULUM.md not present; refusing to create it from scratch."
+            ),
+        }
+
+    original = curriculum_path.read_text(encoding="utf-8")
+    rows_by_work_id = {
+        summary.work_id: _format_curriculum_row(summary, today)
+        for summary in summaries
+        if summary.work_id
+    }
+    existing_ids = _existing_shipped_work_ids(original)
+    new_ids = [wid for wid in rows_by_work_id if wid not in existing_ids]
+    if not new_ids:
+        return {
+            "present": True,
+            "appended": [],
+            "already_present": sorted(rows_by_work_id),
+        }
+
+    new_rows = [rows_by_work_id[wid] for wid in new_ids]
+    if CURRICULUM_SHIPPED_HEADING in original:
+        updated = _append_rows_to_existing_section(original, new_rows)
+    else:
+        updated = _seed_shipped_section(original, new_rows)
+    if not updated.endswith("\n"):
+        updated += "\n"
+    curriculum_path.write_text(updated, encoding="utf-8")
+    return {
+        "present": True,
+        "appended": new_ids,
+        "already_present": sorted(set(rows_by_work_id) - set(new_ids)),
+    }
+
+
+def _existing_shipped_work_ids(content: str) -> set[str]:
+    if CURRICULUM_SHIPPED_HEADING not in content:
+        return set()
+    section = content.split(CURRICULUM_SHIPPED_HEADING, 1)[1]
+    # Look for backtick-wrapped work_ids in the section.
+    return set(re.findall(r"`([A-Za-z0-9_\-:./]+)`", section))
+
+
+def _format_curriculum_row(summary: WorkSummary, today: _dt.date) -> str:
+    scope = summary.module or summary.project or summary.work_type or "—"
+    title = summary.title.replace("|", "\\|")
+    return f"| {today.isoformat()} | `{summary.work_id}` | `{scope}` | {title} |"
+
+
+def _seed_shipped_section(original: str, rows: list[str]) -> str:
+    prefix = original.rstrip()
+    return (
+        f"{prefix}\n\n"
+        f"{CURRICULUM_SHIPPED_HEADING}\n\n"
+        f"{CURRICULUM_SHIPPED_PREAMBLE}\n\n"
+        "| Date | Work ID | Scope | Title |\n"
+        "|---|---|---|---|\n"
+        + "\n".join(rows)
+        + "\n"
+    )
+
+
+def _append_rows_to_existing_section(original: str, rows: list[str]) -> str:
+    lines = original.splitlines()
+    out: list[str] = []
+    i = 0
+    inserted = False
+    while i < len(lines):
+        out.append(lines[i])
+        if not inserted and lines[i].strip() == CURRICULUM_SHIPPED_HEADING:
+            i += 1
+            # Walk through the section, collecting lines until we reach
+            # the next top-level heading or EOF.
+            section_lines: list[str] = []
+            while i < len(lines) and not lines[i].startswith("## "):
+                section_lines.append(lines[i])
+                i += 1
+            # Find the last non-empty table row in the section.
+            last_row_idx = -1
+            for idx, line in enumerate(section_lines):
+                if line.lstrip().startswith("|"):
+                    last_row_idx = idx
+            if last_row_idx >= 0:
+                section_lines[last_row_idx + 1 : last_row_idx + 1] = rows
+            else:
+                # No table yet — seed header + separator + rows.
+                section_lines.extend(
+                    [
+                        "",
+                        "| Date | Work ID | Scope | Title |",
+                        "|---|---|---|---|",
+                        *rows,
+                    ]
+                )
+            out.extend(section_lines)
+            inserted = True
+            continue
+        i += 1
+    if not inserted:
+        out.extend(["", CURRICULUM_SHIPPED_HEADING, "", *rows])
+    return "\n".join(out)
+
+
 def _emit_report(
     repo_path: Path,
     plan_repo: dict[str, Any],
@@ -276,6 +409,7 @@ def _emit_report(
     write_report: bool,
     status: str,
     versions_path: Path | None = None,
+    curriculum_appended: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     report = {
         "schema_version": 1,
@@ -290,6 +424,11 @@ def _emit_report(
         "updated": updated,
         "already_present": already_present,
         "curriculum_suggestions": curriculum_suggestions,
+        "curriculum_appended": curriculum_appended or {
+            "present": False,
+            "appended": [],
+            "already_present": [],
+        },
     }
     if write_report:
         ensure_state_dir(repo_path)

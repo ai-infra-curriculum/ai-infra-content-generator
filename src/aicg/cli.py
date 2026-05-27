@@ -305,6 +305,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_steward.set_defaults(func=cmd_org_steward)
 
+    org_discussions = org_subparsers.add_parser(
+        "discussions",
+        help="Summarize open GitHub Discussions across the org (dry-run only)",
+    )
+    add_org_args(org_discussions)
+    org_discussions.set_defaults(func=cmd_org_discussions)
+
     return parser
 
 
@@ -774,6 +781,40 @@ def cmd_org_steward(args: argparse.Namespace) -> int:
             continue
         for pr in repo.get("prs", []):
             print(f"- {repo['repo']}#{pr['pr_number']}: {pr['state']} — {pr.get('title', '')}")
+    return 0
+
+
+def cmd_org_discussions(args: argparse.Namespace) -> int:
+    from .discussions import DiscussionsError, discussions_run
+
+    manifest = resolve_manifest(args)
+    try:
+        report = discussions_run(
+            manifest=manifest,
+            workspace=resolve_workspace(args),
+            state_dir=resolve_org_state_dir(args, manifest),
+        )
+    except DiscussionsError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    totals = report["totals"]
+    print(
+        f"Discussions: {totals['discussion_count']} open across "
+        f"{totals['repos_with_content']} repo(s); "
+        f"{totals['needs_attention_count']} needing attention"
+        + (
+            f"; {totals['repos_with_errors']} fetch error(s)"
+            if totals["repos_with_errors"]
+            else ""
+        )
+    )
+    for repo in report["repos"]:
+        if not repo.get("needs_attention"):
+            continue
+        print(f"- {repo['repo']}: {repo['needs_attention_count']} flagged")
+        for item in repo["needs_attention"][:5]:
+            reasons = "; ".join(item.get("reasons", []))[:160]
+            print(f"    #{item['number']} {item['title']} — {reasons}")
     return 0
 
 

@@ -93,6 +93,18 @@ Stuck-deferred items (older than `--stuck-after` hours, default 24)
 get `aicg:stuck-deferred`. Verified items close any matching open
 issue automatically.
 
+### Summarize GitHub Discussions
+
+```bash
+aicg org discussions                          # always dry-run
+```
+
+Read-only sweep across every repo: pulls open Discussions, flags
+stale Q&A without answers, Ideas threads with traction, and posts
+proposing new modules / exercises / projects. Report at
+`.aicg/org/discussions-report.json`. The runner never posts comments
+or marks discussions resolved — that's human judgment territory.
+
 ### Execute a curriculum plan
 
 ```bash

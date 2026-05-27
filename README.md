@@ -47,6 +47,7 @@ aicg org issues           # dry-run
 aicg org issues --apply   # open / comment / close tracking issues
 aicg org steward          # dry-run
 aicg org steward --apply  # real auto-merger
+aicg org discussions      # always dry-run — flags items needing humans
 ```
 
 If `--workspace` is omitted, `aicg` assumes it is running from this repo and uses

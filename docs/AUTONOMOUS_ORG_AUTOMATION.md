@@ -284,7 +284,45 @@ Tracking issues are labelled `aicg` plus an `aicg:<state>` sub-label
 runs can find and update the existing issue rather than opening
 duplicates.
 
+## Discussion Stewardship
+
+`aicg org discussions` is the read-only third leg of the stewardship
+triad. It fetches open Discussions via `gh api graphql` for every repo
+in the manifest, computes staleness and signal metrics, and flags
+items that need human judgment — stale Q&A without an accepted
+answer, Ideas threads with traction, posts proposing new
+modules/exercises/projects. It never posts comments or marks
+anything resolved.
+
+```bash
+aicg org discussions                         # always dry-run
+```
+
+Output is written to `.aicg/org/discussions-report.json` for human
+review. Tunable via the manifest's `automation.discussions` block
+(`stale_after_days`, `max_per_repo`, `flag_categories`,
+`new_module_keywords`).
+
+## CURRICULUM.md shipped-items append
+
+When `aicg propagate` records a verified work item in `VERSIONS.md`,
+it also extends `CURRICULUM.md` if (and only if) the file already
+exists. The runner appends a `## Shipped (autonomous)` section at
+the bottom of the document with one row per shipped work item:
+
+```markdown
+## Shipped (autonomous)
+
+| Date | Work ID | Scope | Title |
+|---|---|---|---|
+| 2026-05-27 | `fill-mod-001-solutions` | `mod-001` | … |
+```
+
+The section is idempotent (rows dedup by `work_id`) and additive
+only — the runner never edits the rest of the document. If
+`CURRICULUM.md` does not exist, no file is created.
+
 ### Future work
 
-- Discussion summarization that flags items needing human judgment.
-- Automatic `CURRICULUM.md` editing when work lands.
+- Promoting flagged discussions into the work queue automatically.
+- Cross-repo dependency tracking (e.g. learning↔solutions sync).

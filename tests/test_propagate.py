@@ -154,3 +154,80 @@ def test_propagate_emits_curriculum_suggestions(tmp_path: Path) -> None:
     suggestion = report["curriculum_suggestions"][0]
     assert suggestion["scope"] == "mod-001-ml-security-foundations"
     assert "CURRICULUM.md" in suggestion["suggestion"]
+
+
+def test_propagate_skips_curriculum_when_file_missing(tmp_path: Path) -> None:
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    _write_plan(solutions, _plan_with_verified_item(solutions))
+
+    report = propagate_repo(workspace, "ai-infra-security-solutions")
+
+    assert report["curriculum_appended"]["present"] is False
+    assert report["curriculum_appended"]["appended"] == []
+    # CURRICULUM.md should NOT be created.
+    assert not (solutions / "CURRICULUM.md").exists()
+
+
+def test_propagate_appends_shipped_section_when_curriculum_exists(
+    tmp_path: Path,
+) -> None:
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    (solutions / "CURRICULUM.md").write_text(
+        "# Curriculum\n\n## Modules\n\nDocs here.\n", encoding="utf-8"
+    )
+    _write_plan(solutions, _plan_with_verified_item(solutions))
+
+    report = propagate_repo(workspace, "ai-infra-security-solutions")
+
+    curriculum = (solutions / "CURRICULUM.md").read_text(encoding="utf-8")
+    assert "## Shipped (autonomous)" in curriculum
+    assert "fill-mod-001-ml-security-foundations-solutions" in curriculum
+    appended = report["curriculum_appended"]
+    assert appended["present"] is True
+    assert "fill-mod-001-ml-security-foundations-solutions" in appended["appended"]
+
+
+def test_propagate_curriculum_append_is_idempotent(tmp_path: Path) -> None:
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    (solutions / "CURRICULUM.md").write_text(
+        "# Curriculum\n\n## Modules\n\nDocs.\n", encoding="utf-8"
+    )
+    _write_plan(solutions, _plan_with_verified_item(solutions))
+
+    propagate_repo(workspace, "ai-infra-security-solutions")
+    first = (solutions / "CURRICULUM.md").read_text(encoding="utf-8")
+    second_report = propagate_repo(workspace, "ai-infra-security-solutions")
+    second = (solutions / "CURRICULUM.md").read_text(encoding="utf-8")
+
+    assert first == second
+    assert second_report["curriculum_appended"]["appended"] == []
+    assert "fill-mod-001-ml-security-foundations-solutions" in (
+        second_report["curriculum_appended"]["already_present"]
+    )
+
+
+def test_propagate_curriculum_append_extends_existing_section(
+    tmp_path: Path,
+) -> None:
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    (solutions / "CURRICULUM.md").write_text(
+        "# Curriculum\n\n## Modules\n\nDocs.\n\n"
+        "## Shipped (autonomous)\n\n"
+        "Existing preamble.\n\n"
+        "| Date | Work ID | Scope | Title |\n"
+        "|---|---|---|---|\n"
+        "| 2026-05-20 | `prior-work` | `mod-000` | Earlier row |\n",
+        encoding="utf-8",
+    )
+    _write_plan(solutions, _plan_with_verified_item(solutions))
+
+    propagate_repo(workspace, "ai-infra-security-solutions")
+    curriculum = (solutions / "CURRICULUM.md").read_text(encoding="utf-8")
+
+    assert curriculum.count("## Shipped (autonomous)") == 1
+    assert "prior-work" in curriculum
+    assert "fill-mod-001-ml-security-foundations-solutions" in curriculum

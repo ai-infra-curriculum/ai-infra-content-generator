@@ -21,7 +21,9 @@ Jobs:
   monthly-research
   weekly-audit
   daily-remediate
+  daily-issues
   daily-steward
+  daily-discussions
 
 Options:
   --workspace PATH   Curriculum workspace. Default: parent of runner repo.
@@ -118,8 +120,14 @@ main() {
     daily-remediate)
       run_aicg_org daily
       ;;
+    daily-issues)
+      run_aicg_org issues --apply
+      ;;
     daily-steward)
-      run_aicg_org steward
+      run_aicg_org steward --apply
+      ;;
+    daily-discussions)
+      run_aicg_org discussions
       ;;
     *)
       die "Unknown job: $JOB"
