@@ -36,6 +36,17 @@ def select_work_item(
     return match
 
 
+def _scope_label(work_item: dict[str, Any]) -> tuple[str, str]:
+    """Pick a human-readable scope label for the PR body."""
+    if work_item.get("module"):
+        return ("Module", str(work_item["module"]))
+    if work_item.get("project"):
+        return ("Project", str(work_item["project"]))
+    if work_item.get("path"):
+        return ("Path", str(work_item["path"]))
+    return ("Work", str(work_item.get("id", "?")))
+
+
 def prepare_pr(
     repo_path: Path,
     work_plan: dict[str, Any],
@@ -95,10 +106,11 @@ def build_pr_body(
     branch: str,
 ) -> str:
     rollback = f"git checkout main && git branch -D {branch}"
+    scope_kind, scope_value = _scope_label(work_item)
     return (
         f"## AICG Work Item\n\n"
         f"- Work ID: `{work_item['id']}`\n"
-        f"- Module: `{work_item['module']}`\n"
+        f"- {scope_kind}: `{scope_value}`\n"
         f"- Type: `{work_item['type']}`\n\n"
         "## Audit Summary\n\n"
         f"- Status: `{audit_report['summary']['status']}`\n"
