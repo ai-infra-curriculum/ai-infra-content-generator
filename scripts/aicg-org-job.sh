@@ -1,0 +1,132 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly SCRIPT_NAME="$(basename "$0")"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly RUNNER_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+WORKSPACE="${AICG_WORKSPACE:-$(cd "$RUNNER_DIR/.." && pwd)}"
+MANIFEST="${AICG_MANIFEST:-$RUNNER_DIR/config/aicg-org.yaml}"
+STATE_DIR="${AICG_STATE_DIR:-$RUNNER_DIR/.aicg/org}"
+LOG_DIR="${AICG_LOG_DIR:-$RUNNER_DIR/.aicg/logs}"
+AICG_BIN="${AICG_BIN:-$RUNNER_DIR/.venv/bin/aicg}"
+
+usage() {
+  cat <<EOF
+Usage: $SCRIPT_NAME JOB [OPTIONS]
+
+Jobs:
+  sync
+  monthly-release
+  monthly-research
+  weekly-audit
+  daily-remediate
+  daily-steward
+
+Options:
+  --workspace PATH   Curriculum workspace. Default: parent of runner repo.
+  --manifest PATH    Org manifest. Default: config/aicg-org.yaml.
+  --state-dir PATH   Org state directory. Default: .aicg/org.
+  --aicg-bin PATH    aicg executable. Default: .venv/bin/aicg.
+  -h, --help         Show this help.
+EOF
+}
+
+log() {
+  printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
+}
+
+die() {
+  log "ERROR: $*" >&2
+  exit 1
+}
+
+parse_args() {
+  if [[ $# -eq 0 ]]; then
+    usage
+    exit 2
+  fi
+
+  JOB="$1"
+  shift
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --workspace)
+        WORKSPACE="${2:-}"
+        shift 2
+        ;;
+      --manifest)
+        MANIFEST="${2:-}"
+        shift 2
+        ;;
+      --state-dir)
+        STATE_DIR="${2:-}"
+        shift 2
+        ;;
+      --aicg-bin)
+        AICG_BIN="${2:-}"
+        shift 2
+        ;;
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      *)
+        die "Unknown argument: $1"
+        ;;
+    esac
+  done
+}
+
+run_aicg_org() {
+  "$AICG_BIN" org "$@" --workspace "$WORKSPACE" --manifest "$MANIFEST" --state-dir "$STATE_DIR"
+}
+
+main() {
+  mkdir -p "$STATE_DIR" "$LOG_DIR"
+  local log_file="$LOG_DIR/${JOB}-$(date '+%Y%m%d').log"
+  exec >>"$log_file" 2>&1
+
+  [[ -x "$AICG_BIN" ]] || die "aicg executable not found or not executable: $AICG_BIN"
+  [[ -f "$MANIFEST" ]] || die "manifest not found: $MANIFEST"
+
+  local lock_dir="$STATE_DIR/aicg-org.lock"
+  if ! mkdir "$lock_dir" 2>/dev/null; then
+    log "Another AICG org job is running; exiting."
+    exit 0
+  fi
+  trap 'rmdir "$lock_dir"' EXIT
+
+  log "Starting job: $JOB"
+  case "$JOB" in
+    sync)
+      run_aicg_org sync
+      ;;
+    monthly-release)
+      run_aicg_org sync
+      run_aicg_org release --apply
+      ;;
+    monthly-research)
+      run_aicg_org research
+      run_aicg_org audit
+      ;;
+    weekly-audit)
+      run_aicg_org sync
+      run_aicg_org audit
+      ;;
+    daily-remediate)
+      run_aicg_org daily
+      ;;
+    daily-steward)
+      run_aicg_org steward
+      ;;
+    *)
+      die "Unknown job: $JOB"
+      ;;
+  esac
+  log "Completed job: $JOB"
+}
+
+parse_args "$@"
+main

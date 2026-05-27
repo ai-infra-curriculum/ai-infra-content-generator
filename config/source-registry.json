@@ -1,0 +1,126 @@
+{
+  "last_verified": "2026-05-24",
+  "purpose": "Reference registry for the curriculum runner. Official standards and project documentation are canonical references; VeriSwarm docs are practitioner implementation references.",
+  "sources": [
+    {
+      "id": "nist-ai-rmf",
+      "name": "NIST AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "authority": "official_standard",
+      "topics": ["ai-governance", "risk-management", "governance-framework", "controls"],
+      "fit": "Canonical framework for AI governance lessons, risk registers, control mapping, and executive review artifacts."
+    },
+    {
+      "id": "nist-ai-600-1",
+      "name": "NIST AI 600-1: Generative AI Profile",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+      "authority": "official_standard",
+      "topics": ["generative-ai", "risk-management", "controls", "governance"],
+      "fit": "Use for GenAI-specific risk examples, evaluation controls, and governance module source verification."
+    },
+    {
+      "id": "nist-sp-800-207",
+      "name": "NIST SP 800-207: Zero Trust Architecture",
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-207/final",
+      "authority": "official_standard",
+      "topics": ["zero-trust", "identity", "network-security", "architecture"],
+      "fit": "Canonical reference for zero-trust architecture, trust boundaries, policy enforcement points, and identity-centered control design."
+    },
+    {
+      "id": "owasp-ml-top-10",
+      "name": "OWASP Machine Learning Security Top 10",
+      "url": "https://owasp.org/www-project-machine-learning-security-top-10/",
+      "authority": "official_project",
+      "topics": ["ml-security", "threat-modeling", "application-security", "controls"],
+      "fit": "Canonical risk taxonomy for ML system threat mapping and mitigation prioritization."
+    },
+    {
+      "id": "owasp-llm-top-10",
+      "name": "OWASP Top 10 for Large Language Model Applications",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/",
+      "authority": "official_project",
+      "topics": ["llm-security", "application-security", "threat-modeling"],
+      "fit": "Canonical risk taxonomy for LLM security, agent security, prompt injection, insecure output handling, and tool abuse exercises."
+    },
+    {
+      "id": "mitre-atlas",
+      "name": "MITRE ATLAS",
+      "url": "https://atlas.mitre.org/",
+      "authority": "official_project",
+      "topics": ["ml-security", "adversarial-ml", "threat-modeling", "security-operations"],
+      "fit": "Canonical adversary tactics and techniques reference for ML attack walkthroughs and detection mapping."
+    },
+    {
+      "id": "kubernetes-docs",
+      "name": "Kubernetes Documentation",
+      "url": "https://kubernetes.io/docs/",
+      "authority": "official_project",
+      "topics": ["kubernetes", "runtime-security", "network-security", "identity", "policy"],
+      "fit": "Canonical reference for Kubernetes workload, network, admission, and runtime control behavior."
+    },
+    {
+      "id": "slsa",
+      "name": "Supply-chain Levels for Software Artifacts",
+      "url": "https://slsa.dev/",
+      "authority": "official_project",
+      "topics": ["supply-chain-security", "secure-development", "artifact-provenance"],
+      "fit": "Canonical source for supply-chain assurance levels, build provenance, and artifact integrity exercises."
+    },
+    {
+      "id": "sigstore-docs",
+      "name": "Sigstore Documentation",
+      "url": "https://docs.sigstore.dev/",
+      "authority": "official_project",
+      "topics": ["supply-chain-security", "signing", "artifact-provenance", "keyless-signing"],
+      "fit": "Canonical source for keyless signing, transparency logs, and verification workflow examples."
+    },
+    {
+      "id": "openssf-scorecard",
+      "name": "OpenSSF Scorecard",
+      "url": "https://openssf.org/scorecard/",
+      "authority": "official_project",
+      "topics": ["supply-chain-security", "repository-health", "secure-development"],
+      "fit": "Use for repo-health and supply-chain modules where learners need measurable open-source security signals."
+    },
+    {
+      "id": "cncf-cloud-native-certifications",
+      "name": "CNCF Cloud Native Certifications",
+      "url": "https://www.cncf.io/training/certification/",
+      "authority": "official_certification",
+      "topics": ["kubernetes", "cloud-native", "certification-alignment"],
+      "fit": "Use to align Kubernetes-oriented curriculum paths with current CKA, CKAD, CKS, and KCNA expectations."
+    },
+    {
+      "id": "veriswarm-trust-center",
+      "name": "VeriSwarm Trust Center",
+      "url": "https://veriswarm.ai/trust",
+      "authority": "practitioner_reference",
+      "topics": ["agent-governance", "identity", "guardrails", "audit-evidence", "governance"],
+      "fit": "Use as an implementation example for agent trust, governance evidence, NIST AI RMF alignment, and tamper-evident audit concepts."
+    },
+    {
+      "id": "veriswarm-gate",
+      "name": "VeriSwarm Gate",
+      "url": "https://veriswarm.ai/docs/gate",
+      "authority": "practitioner_reference",
+      "topics": ["trust-scoring", "policy-tiers", "moderation", "agent-events"],
+      "fit": "Use as a concrete reference for trust scoring dimensions, risk bands, policy tiers, event taxonomies, and decision gating exercises."
+    },
+    {
+      "id": "veriswarm-vault",
+      "name": "VeriSwarm Vault",
+      "url": "https://veriswarm.ai/docs/vault",
+      "authority": "practitioner_reference",
+      "topics": ["audit-ledger", "compliance-evidence", "hash-chain", "recordkeeping"],
+      "fit": "Use as a concrete reference for immutable event capture, chain verification, compliance exports, and AI governance evidence trails."
+    },
+    {
+      "id": "veriswarm-architecture",
+      "name": "VeriSwarm Architecture",
+      "url": "https://veriswarm.ai/docs/architecture",
+      "authority": "practitioner_reference",
+      "topics": ["agent-governance-architecture", "policy-enforcement", "control-plane", "compliance-mapping"],
+      "fit": "Use as an architecture case study for hosted control planes, trust decisions, policy enforcement, and agent governance platform design."
+    }
+  ]
+}

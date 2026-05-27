@@ -1,0 +1,142 @@
+"""GitHub PR operations backed by the local git and gh CLIs."""
+
+from __future__ import annotations
+
+import subprocess
+from datetime import date
+from pathlib import Path
+from typing import Any
+
+from .guardrails import evaluate_guardrails
+from .state import state_path
+
+
+class GitOpsError(RuntimeError):
+    """Raised when a git or gh operation fails."""
+
+
+def branch_name(repo_name: str, work_id: str, today: date | None = None) -> str:
+    return f"aicg/{(today or date.today()).isoformat()}/{repo_name}/{work_id}"
+
+
+def prepare_pr(
+    repo_path: Path,
+    work_plan: dict[str, Any],
+    audit_report: dict[str, Any],
+    validation_report: dict[str, Any],
+    auto_merge: bool = False,
+) -> dict[str, Any]:
+    if not work_plan.get("work_items"):
+        raise GitOpsError("No work items are available for PR creation.")
+
+    item = work_plan["work_items"][0]
+    branch = branch_name(work_plan["repo"]["name"], item["id"])
+    checkout_branch(repo_path, branch)
+
+    changed = git_changed_files(repo_path)
+    if not changed:
+        raise GitOpsError("No curriculum changes found to commit or PR.")
+
+    decision = evaluate_guardrails(
+        repo_path,
+        branch=branch,
+        changed_files=changed,
+        ci_status="unknown",
+        auto_merge=auto_merge,
+    )
+    if not decision.allowed:
+        raise GitOpsError("Guardrails blocked PR creation: " + "; ".join(decision.blockers))
+
+    title = f"Fill {work_plan['repo']['name']} {item['module']} solution gap"
+    body_path = state_path(repo_path, "pr-body.md")
+    body_path.write_text(
+        build_pr_body(item, audit_report, validation_report, branch),
+        encoding="utf-8",
+    )
+    commit_all(repo_path, title)
+    pr_url = create_pr(repo_path, title, body_path)
+    return {
+        "branch": branch,
+        "title": title,
+        "body_path": str(body_path),
+        "pr_url": pr_url,
+        "changed_files": changed,
+        "guardrails": {
+            "allowed": decision.allowed,
+            "warnings": list(decision.warnings),
+        },
+    }
+
+
+def build_pr_body(
+    work_item: dict[str, Any],
+    audit_report: dict[str, Any],
+    validation_report: dict[str, Any],
+    branch: str,
+) -> str:
+    rollback = f"git checkout main && git branch -D {branch}"
+    return (
+        f"## AICG Work Item\n\n"
+        f"- Work ID: `{work_item['id']}`\n"
+        f"- Module: `{work_item['module']}`\n"
+        f"- Type: `{work_item['type']}`\n\n"
+        "## Audit Summary\n\n"
+        f"- Status: `{audit_report['summary']['status']}`\n"
+        f"- Errors: `{audit_report['summary']['error_count']}`\n"
+        f"- Warnings: `{audit_report['summary']['warning_count']}`\n\n"
+        "## Validation Summary\n\n"
+        f"- Status: `{validation_report['status']}`\n"
+        f"- Checks: `{len(validation_report.get('checks', []))}`\n\n"
+        "## Rollback\n\n"
+        f"```bash\n{rollback}\n```\n"
+    )
+
+
+def checkout_branch(repo_path: Path, branch: str) -> None:
+    run(repo_path, ["git", "checkout", "-B", branch])
+
+
+def commit_all(repo_path: Path, message: str) -> None:
+    run(repo_path, ["git", "add", "-A", "--", ".", ":(exclude).aicg", ":(exclude).aicg/**"])
+    run(repo_path, ["git", "commit", "-m", message])
+
+
+def create_pr(repo_path: Path, title: str, body_path: Path) -> str:
+    completed = run(
+        repo_path,
+        ["gh", "pr", "create", "--base", "main", "--title", title, "--body-file", str(body_path)],
+    )
+    return completed.stdout.strip()
+
+
+def git_changed_files(repo_path: Path) -> list[str]:
+    completed = run(repo_path, ["git", "status", "--short"], check=False)
+    paths: list[str] = []
+    for line in completed.stdout.splitlines():
+        if not line.strip():
+            continue
+        path = line[3:].strip()
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        if not is_aicg_state_path(path):
+            paths.append(path)
+    return paths
+
+
+def is_aicg_state_path(path: str) -> bool:
+    return path == ".aicg" or path.startswith(".aicg/")
+
+
+def run(repo_path: Path, args: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
+    completed = subprocess.run(
+        args,
+        cwd=repo_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if check and completed.returncode != 0:
+        raise GitOpsError(
+            f"Command failed ({' '.join(args)}): {completed.stderr.strip() or completed.stdout.strip()}"
+        )
+    return completed

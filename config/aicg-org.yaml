@@ -1,0 +1,155 @@
+{
+  "org": "AI-Infra-Curriculum",
+  "default_remote": "git@github.com:AI-Infra-Curriculum/{repo}.git",
+  "release": {
+    "tag_format": "v%Y.%m",
+    "branch": "main",
+    "package_workflow": "release-package.yml"
+  },
+  "extra_repos": [
+    {
+      "name": ".github",
+      "kind": "org-profile",
+      "release": false
+    }
+  ],
+  "documentation": {
+    "format_guard_files": [
+      "CURRICULUM.md",
+      "CURRICULUM_INDEX.md",
+      "README.md",
+      "VERSIONS.md"
+    ],
+    "org_readme_repo": ".github",
+    "org_readme_files": [
+      "README.md",
+      "profile/README.md"
+    ]
+  },
+  "schedules": {
+    "monthly_release": "0 2 1 * *",
+    "monthly_research": "30 5 1 * *",
+    "weekly_audit": "0 3 * * 0",
+    "daily_remediate": "0 4 * * *",
+    "daily_steward": "30 4 * * *"
+  },
+  "automation": {
+    "state_dir": ".aicg/org",
+    "lock_name": "aicg-org.lock",
+    "auto_merge": false,
+    "max_daily_work_items": 1,
+    "agent": {
+      "provider": "openai",
+      "model": "codex-gpt-5.5",
+      "interface": "local_cli_subscription",
+      "agent_command": "{runner}/scripts/run-codex-control.sh --model codex-gpt-5.5 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}",
+      "purpose": "repo orchestration, audits, validation, PR/issue/discussion stewardship, and scheduler control"
+    }
+  },
+  "content_generation": {
+    "agent": {
+      "provider": "anthropic",
+      "model": "claude-opus-4.7",
+      "interface": "local_cli_subscription",
+      "purpose": "curriculum, solution, job-requirement, and supplemental content generation",
+      "agent_command": "{runner}/scripts/run-claude-content.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}"
+    }
+  },
+  "job_requirements": {
+    "ownership_strategy": "lowest_level_role",
+    "markdown_file": "JOB_REQUIREMENTS.md",
+    "structured_file": ".aicg/job-requirements.json",
+    "supplemental_dir": "supplemental"
+  },
+  "research": {
+    "agent_command": "{runner}/scripts/run-claude-content.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}",
+    "minimum_postings_per_role": 25,
+    "source_window_days": 45
+  },
+  "roles": [
+    {
+      "id": "junior-engineer",
+      "title": "Junior AI Infrastructure Engineer",
+      "level": 10,
+      "learning_repo": "ai-infra-junior-engineer-learning",
+      "solution_repo": "ai-infra-junior-engineer-solutions"
+    },
+    {
+      "id": "engineer",
+      "title": "AI Infrastructure Engineer",
+      "level": 20,
+      "learning_repo": "ai-infra-engineer-learning",
+      "solution_repo": "ai-infra-engineer-solutions"
+    },
+    {
+      "id": "senior-engineer",
+      "title": "Senior AI Infrastructure Engineer",
+      "level": 30,
+      "learning_repo": "ai-infra-senior-engineer-learning",
+      "solution_repo": "ai-infra-senior-engineer-solutions"
+    },
+    {
+      "id": "ml-platform",
+      "title": "AI/ML Platform Engineer",
+      "level": 30,
+      "learning_repo": "ai-infra-ml-platform-learning",
+      "solution_repo": "ai-infra-ml-platform-solutions"
+    },
+    {
+      "id": "mlops",
+      "title": "MLOps Engineer",
+      "level": 30,
+      "learning_repo": "ai-infra-mlops-learning",
+      "solution_repo": "ai-infra-mlops-solutions"
+    },
+    {
+      "id": "performance",
+      "title": "AI Infrastructure Performance Engineer",
+      "level": 35,
+      "learning_repo": "ai-infra-performance-learning",
+      "solution_repo": "ai-infra-performance-solutions"
+    },
+    {
+      "id": "security",
+      "title": "AI Infrastructure Security Engineer",
+      "level": 35,
+      "learning_repo": "ai-infra-security-learning",
+      "solution_repo": "ai-infra-security-solutions"
+    },
+    {
+      "id": "team-lead",
+      "title": "AI Infrastructure Team Lead",
+      "level": 40,
+      "learning_repo": "ai-infra-team-lead-learning",
+      "solution_repo": "ai-infra-team-lead-solutions"
+    },
+    {
+      "id": "architect",
+      "title": "AI Infrastructure Architect",
+      "level": 45,
+      "learning_repo": "ai-infra-architect-learning",
+      "solution_repo": "ai-infra-architect-solutions"
+    },
+    {
+      "id": "principal-engineer",
+      "title": "Principal AI Infrastructure Engineer",
+      "level": 50,
+      "learning_repo": "ai-infra-principal-engineer-learning",
+      "solution_repo": "ai-infra-principal-engineer-solutions"
+    },
+    {
+      "id": "senior-architect",
+      "title": "Senior AI Infrastructure Architect",
+      "level": 55,
+      "learning_repo": "ai-infra-senior-architect-learning",
+      "solution_repo": "ai-infra-senior-architect-solutions"
+    },
+    {
+      "id": "principal-architect",
+      "title": "Principal AI Infrastructure Architect",
+      "level": 60,
+      "learning_repo": "ai-infra-principal-architect-learning",
+      "solution_repo": "ai-infra-principal-architect-solutions"
+    }
+  ]
+}
