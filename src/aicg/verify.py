@@ -83,6 +83,7 @@ class ActionVerification:
     status: str  # "ok" | "missing" | "empty" | "incomplete" | "blocked"
     path: str
     findings: list[dict[str, Any]]
+    quality: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -99,9 +100,11 @@ def verify_repo(
     work_id: str | None = None,
     write_report: bool = True,
     source_registry: SourceRegistry | None = None,
+    judge_config: "JudgeConfig | None" = None,
 ) -> dict[str, Any]:
     """Verify the artifacts produced for ``work_id`` in ``repo_name``."""
     from .inventory import WorkspaceInventory
+    from .judge import JudgeConfig
 
     inventory = WorkspaceInventory(workspace)
     target = inventory.require(repo_name)
@@ -119,7 +122,9 @@ def verify_repo(
     for work_item in plan.get("work_items", []):
         if work_id is not None and work_item.get("id") != work_id:
             continue
-        items.append(verify_work_item(repo_path, work_item, registry))
+        items.append(
+            verify_work_item(repo_path, work_item, registry, judge_config=judge_config)
+        )
 
     summary_status = "verified"
     if any(item.status == "verification_failed" for item in items):
@@ -144,6 +149,7 @@ def verify_repo(
                         "path": action.path,
                         "status": action.status,
                         "findings": action.findings,
+                        "quality": action.quality,
                     }
                     for action in item.actions
                 ],
@@ -166,6 +172,7 @@ def verify_work_item(
     repo_path: Path,
     work_item: dict[str, Any],
     registry: SourceRegistry,
+    judge_config: "JudgeConfig | None" = None,
 ) -> WorkItemVerification:
     actions: list[ActionVerification] = []
     findings: list[dict[str, Any]] = []
@@ -181,6 +188,8 @@ def verify_work_item(
             required_sections=required_sections,
             required_default_sources=required_default_sources,
             registry=registry,
+            work_item=work_item,
+            judge_config=judge_config,
         )
         actions.append(verification)
         findings.extend(verification.findings)
@@ -202,6 +211,8 @@ def verify_action(
     required_sections: tuple[str, ...],
     required_default_sources: list[str],
     registry: SourceRegistry,
+    work_item: dict[str, Any] | None = None,
+    judge_config: "JudgeConfig | None" = None,
 ) -> ActionVerification:
     action_type = action.get("type")
     target = action.get("path")
@@ -229,6 +240,8 @@ def verify_action(
             required_sections=required_sections,
             required_default_sources=required_default_sources,
             registry=registry,
+            work_item=work_item or {},
+            judge_config=judge_config,
         )
     return ActionVerification(
         action=action,
@@ -279,6 +292,8 @@ def _verify_file_action(
     required_sections: tuple[str, ...],
     required_default_sources: list[str],
     registry: SourceRegistry,
+    work_item: dict[str, Any] | None = None,
+    judge_config: "JudgeConfig | None" = None,
 ) -> ActionVerification:
     full = repo_path / target
     findings: list[dict[str, Any]] = []
@@ -344,9 +359,53 @@ def _verify_file_action(
     marker_findings = _verify_marker_freedom(content, target)
     findings.extend(marker_findings)
 
+    quality_payload: dict[str, Any] | None = None
+    if judge_config is not None and judge_config.enabled and work_item is not None:
+        try:
+            from .judge import judge_action
+
+            verdict = judge_action(
+                repo_path=repo_path,
+                work_item=work_item,
+                action=action,
+                artifact_path=full,
+                config=judge_config,
+            )
+        except Exception as exc:  # pragma: no cover - defensive
+            verdict = None
+            findings.append(
+                _finding(
+                    "judge_invocation_failed",
+                    "warning",
+                    f"Quality judge raised {exc.__class__.__name__}: {exc}",
+                )
+            )
+        if verdict is not None:
+            quality_payload = verdict.as_dict()
+            if not verdict.passed:
+                findings.append(
+                    _finding(
+                        "quality_below_threshold",
+                        "error",
+                        f"Quality judge: {verdict.score}/100 (threshold "
+                        f"{verdict.threshold}); blockers="
+                        f"{verdict.blockers or '[]'}.",
+                        score=verdict.score,
+                        threshold=verdict.threshold,
+                        blockers=verdict.blockers,
+                        summary=verdict.summary,
+                    )
+                )
+
     has_error = any(item["severity"] == "error" for item in findings)
     status = "incomplete" if has_error else "ok"
-    return ActionVerification(action=action, status=status, path=target, findings=findings)
+    return ActionVerification(
+        action=action,
+        status=status,
+        path=target,
+        findings=findings,
+        quality=quality_payload,
+    )
 
 
 def _required_sections_for(work_item: dict[str, Any]) -> tuple[str, ...]:

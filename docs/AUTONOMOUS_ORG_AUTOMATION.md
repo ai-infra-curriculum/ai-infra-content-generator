@@ -224,8 +224,67 @@ schema varies per repo. The propagator emits a suggestion entry per
 work item (visible in `<repo>/.aicg/propagate-report.json`); the
 agent or operator can apply those edits as part of the same PR.
 
+## Quality Grading
+
+When the manifest enables `quality_judge`, every artifact that passes
+the structural verify step gets graded by a configured judge command:
+
+```json
+"quality_judge": {
+  "enabled": true,
+  "agent_command": "{runner}/scripts/run-claude-judge.sh --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id} --artifact {artifact}",
+  "thresholds": {"default": 70, "module_rationale_missing": 65},
+  "dimensions": ["correctness", "clarity", "source_quality", "depth"]
+}
+```
+
+The judge writes `response.json` to its output directory with the
+contract:
+
+```json
+{
+  "total": 82,
+  "dimensions": {"correctness": 22, "clarity": 20, "source_quality": 20, "depth": 20},
+  "blockers": [],
+  "summary": "Brief rationale."
+}
+```
+
+Work items move to `verification_failed` when the score sits below
+the work-type threshold *or* the judge returned any `blockers`
+(fabricated citations, unresolved markers, etc.). The verdict lands
+inside each action under `.aicg/verify-report.json` → `actions[].quality`.
+
+`aicg verify --with-quality-grade` opts into judging in dry-run /
+operator-driven mode. `aicg org daily` invokes the judge automatically
+whenever the manifest's `quality_judge.enabled` is `true`.
+
+## Issue Stewardship
+
+`aicg org issues` reconciles GitHub issues with the work queue:
+
+- `failed_permanently` items get an issue opened (or refreshed via a
+  comment when one already exists).
+- `deferred` items older than `--stuck-after` hours (default 24) get
+  an issue opened — or commented on — so the queue doesn't stall
+  silently.
+- `verified` items that have an open tracking issue get the issue
+  closed automatically with a comment.
+
+```bash
+aicg org issues                              # dry-run
+aicg org issues --apply                      # open / comment / close
+aicg org issues --apply --stuck-after 12     # tighter freshness
+```
+
+Tracking issues are labelled `aicg` plus an `aicg:<state>` sub-label
+(`aicg:failed-permanently`, `aicg:verification-failed`,
+`aicg:stuck-deferred`) so they're queryable via `gh issue list
+--label aicg`. Each issue's body carries the `work_id` so subsequent
+runs can find and update the existing issue rather than opening
+duplicates.
+
 ### Future work
 
-- Issue auto-update from audit/work-queue state.
 - Discussion summarization that flags items needing human judgment.
-- Optional LLM-as-judge quality grading inside `aicg verify`.
+- Automatic `CURRICULUM.md` editing when work lands.

@@ -40,6 +40,7 @@ class OrgManifest:
     schedules: dict[str, str]
     automation: dict[str, Any]
     content_generation: dict[str, Any]
+    quality_judge: dict[str, Any]
     job_requirements: dict[str, Any]
     research: dict[str, Any]
     path: Path
@@ -119,6 +120,7 @@ def load_manifest(path: Path | None = None) -> OrgManifest:
         schedules=raw.get("schedules", {}),
         automation=raw.get("automation", {}),
         content_generation=raw.get("content_generation", {}),
+        quality_judge=raw.get("quality_judge", {}),
         job_requirements=raw.get("job_requirements", {}),
         research=raw.get("research", {}),
         path=manifest_path,

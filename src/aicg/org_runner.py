@@ -273,10 +273,15 @@ def run_daily_remediation(
         item["retry_count"] = 0
         result["status"] = "generated"
         result["run_state"] = run_state
+        from .judge import JudgeConfig
         from .verify import verify_repo
 
+        judge_config = JudgeConfig.from_manifest(manifest)
         verify_report = verify_repo(
-            workspace, item["repo"], work_id=item["work_id"]
+            workspace,
+            item["repo"],
+            work_id=item["work_id"],
+            judge_config=judge_config if judge_config.enabled else None,
         )
         result["verify"] = {
             "status": verify_report["status"],

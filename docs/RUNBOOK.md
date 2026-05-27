@@ -68,6 +68,31 @@ applied automatically; the propagator emits per-item suggestions in
 `<repo>/.aicg/propagate-report.json` for the agent / operator to
 apply as part of the same PR.
 
+### Grade artifact quality
+
+```bash
+aicg verify --repo ai-infra-security-solutions --with-quality-grade
+```
+
+When the manifest enables `quality_judge`, the verify step invokes a
+configured judge command per artifact and parses a JSON verdict
+(`total` / `dimensions` / `blockers` / `summary`). Items that score
+below the work-type threshold or return non-empty blockers move to
+`verification_failed`. `aicg org daily` runs the judge automatically
+when `quality_judge.enabled` is `true` in the manifest.
+
+### Reconcile tracking issues
+
+```bash
+aicg org issues                              # dry-run
+aicg org issues --apply                      # open / comment / close
+```
+
+Failed-permanently items get an `aicg:failed-permanently` issue.
+Stuck-deferred items (older than `--stuck-after` hours, default 24)
+get `aicg:stuck-deferred`. Verified items close any matching open
+issue automatically.
+
 ### Execute a curriculum plan
 
 ```bash

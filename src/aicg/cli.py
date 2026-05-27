@@ -139,6 +139,17 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Verify a specific work item id; defaults to every item in the plan.",
     )
+    verify_parser.add_argument(
+        "--with-quality-grade",
+        action="store_true",
+        help="Invoke the configured judge to grade artifact quality.",
+    )
+    verify_parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=None,
+        help="Org manifest path (only needed when --with-quality-grade is set).",
+    )
     verify_parser.set_defaults(func=cmd_verify)
 
     pr_parser = subparsers.add_parser("pr", help="Create guarded branch, commit, and GitHub PR")
@@ -245,6 +256,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Create the matching GitHub repos via `gh repo create --push`.",
     )
     org_bootstrap.set_defaults(func=cmd_org_bootstrap_role)
+
+    org_issues = org_subparsers.add_parser(
+        "issues",
+        help="Reconcile GitHub issues with the work-queue state (open / comment / close)",
+    )
+    add_org_args(org_issues)
+    org_issues.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually open / comment / close issues. Omit for dry-run.",
+    )
+    org_issues.add_argument(
+        "--stuck-after",
+        type=float,
+        default=None,
+        help="Hours an item must be deferred before it gets an issue (default 24).",
+    )
+    org_issues.set_defaults(func=cmd_org_issues)
 
     org_steward = org_subparsers.add_parser(
         "steward",
@@ -465,12 +494,38 @@ def cmd_diff(args: argparse.Namespace) -> int:
 
 def cmd_verify(args: argparse.Namespace) -> int:
     workspace = resolve_workspace(args)
-    report = verify_repo(workspace, args.repo, work_id=args.work_id)
+    judge_config = None
+    if getattr(args, "with_quality_grade", False):
+        from .judge import JudgeConfig
+
+        manifest = load_manifest(args.manifest)
+        judge_config = JudgeConfig.from_manifest(manifest)
+        if not judge_config.enabled:
+            print(
+                "warning: --with-quality-grade requested but manifest's "
+                "quality_judge.enabled is false; skipping judge invocation.",
+                file=sys.stderr,
+            )
+    report = verify_repo(
+        workspace,
+        args.repo,
+        work_id=args.work_id,
+        judge_config=judge_config,
+    )
     print(f"Verify {report['status']} for {args.repo} ({report['work_item_count']} item(s))")
     for item in report["work_items"]:
         print(f"- {item['work_id']}: {item['status']} ({item['finding_count']} finding(s))")
         for action in item["actions"][:4]:
-            print(f"    {action['status']:>10}  {action['type']:<22}  {action['path']}")
+            quality = action.get("quality") or {}
+            quality_tag = (
+                f"  q={quality['score']}/100"
+                if isinstance(quality.get("score"), int)
+                else ""
+            )
+            print(
+                f"    {action['status']:>10}  {action['type']:<22}  "
+                f"{action['path']}{quality_tag}"
+            )
         if len(item["actions"]) > 4:
             print(f"    ... {len(item['actions']) - 4} more action(s) in .aicg/verify-report.json")
     return 0 if report["status"] in {"verified", "no_items"} else 1
@@ -660,6 +715,37 @@ def cmd_org_bootstrap_role(args: argparse.Namespace) -> int:
         for action in remotes.get("actions", []):
             outcome = "ok" if action["returncode"] == 0 else "failed"
             print(f"- gh repo create {action['repo']}: {outcome}")
+    return 0
+
+
+def cmd_org_issues(args: argparse.Namespace) -> int:
+    from .issues import IssuesError, issues_run
+
+    manifest = resolve_manifest(args)
+    try:
+        report = issues_run(
+            manifest=manifest,
+            workspace=resolve_workspace(args),
+            state_dir=resolve_org_state_dir(args, manifest),
+            apply=args.apply,
+            stuck_after_hours=args.stuck_after,
+        )
+    except IssuesError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    mode = "apply" if args.apply else "dry-run"
+    opened = sum(repo.get("opened", 0) for repo in report["repos"])
+    commented = sum(repo.get("commented", 0) for repo in report["repos"])
+    closed = sum(repo.get("closed", 0) for repo in report["repos"])
+    print(
+        f"Issues {mode}: {opened} opened, {commented} commented, {closed} closed."
+    )
+    for repo in report["repos"]:
+        for decision in repo.get("decisions", [])[:6]:
+            print(
+                f"- {repo['repo']}/{decision['work_id']}: "
+                f"{decision['action']} — {decision['reason']}"
+            )
     return 0
 
 

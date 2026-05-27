@@ -42,6 +42,9 @@ aicg org daily
 aicg org bootstrap-role --role data-engineer --title "Data Engineer" --level 25
 aicg org execute-plan --role data-engineer
 aicg propagate --repo ai-infra-security-solutions
+aicg verify --repo ai-infra-security-solutions --with-quality-grade
+aicg org issues           # dry-run
+aicg org issues --apply   # open / comment / close tracking issues
 aicg org steward          # dry-run
 aicg org steward --apply  # real auto-merger
 ```
