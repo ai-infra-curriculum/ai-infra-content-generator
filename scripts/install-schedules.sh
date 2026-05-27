@@ -110,12 +110,18 @@ write_systemd_pair() {
   local service="$unit_dir/aicg-$name.service"
   local timer="$unit_dir/aicg-$name.timer"
 
+  local log_dir="$HOME/.cache/aicg"
   local service_content="[Unit]
 Description=AICG org job: $job
 
 [Service]
 Type=oneshot
+Environment=PATH=$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=HOME=$HOME
+ExecStartPre=/bin/mkdir -p $log_dir
 ExecStart=$(job_command "$job")
+StandardOutput=append:$log_dir/$job.log
+StandardError=append:$log_dir/$job.log
 "
   local timer_content="[Unit]
 Description=AICG org timer: $job
