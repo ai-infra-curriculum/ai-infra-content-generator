@@ -100,6 +100,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     validate_parser.set_defaults(func=cmd_validate)
 
+    audit_links_parser = subparsers.add_parser(
+        "audit-links",
+        help="HEAD-ping every external URL in committed markdown; emit refresh_links work items",
+    )
+    add_repo_args(audit_links_parser)
+    audit_links_parser.add_argument(
+        "--timeout", type=float, default=8.0, help="Per-URL HEAD timeout seconds (default 8)."
+    )
+    audit_links_parser.add_argument(
+        "--workers", type=int, default=16, help="Concurrent HEAD requests (default 16)."
+    )
+    audit_links_parser.set_defaults(func=cmd_audit_links)
+
+    audit_versions_parser = subparsers.add_parser(
+        "audit-versions",
+        help="Scan committed markdown for stale version pins from a curated registry",
+    )
+    add_repo_args(audit_versions_parser)
+    audit_versions_parser.add_argument(
+        "--registry",
+        type=Path,
+        default=None,
+        help="Path to version-targets.yaml. Defaults to config/version-targets.yaml.",
+    )
+    audit_versions_parser.set_defaults(func=cmd_audit_versions)
+
     propagate_parser = subparsers.add_parser(
         "propagate",
         help="Append shipped work items to VERSIONS.md (and suggest CURRICULUM.md edits)",
@@ -324,6 +350,41 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_list_roles)
     org_list_roles.set_defaults(func=cmd_org_list_roles)
 
+    org_audit_links = org_subparsers.add_parser(
+        "audit-links",
+        help="Run the link checker against every solution repo in the manifest",
+    )
+    add_org_args(org_audit_links)
+    org_audit_links.add_argument("--timeout", type=float, default=8.0)
+    org_audit_links.add_argument("--workers", type=int, default=16)
+    org_audit_links.set_defaults(func=cmd_org_audit_links)
+
+    org_audit_versions = org_subparsers.add_parser(
+        "audit-versions",
+        help="Run the version-pin scanner against every solution repo in the manifest",
+    )
+    add_org_args(org_audit_versions)
+    org_audit_versions.add_argument(
+        "--registry",
+        type=Path,
+        default=None,
+        help="version-targets.yaml. Defaults to config/version-targets.yaml.",
+    )
+    org_audit_versions.set_defaults(func=cmd_org_audit_versions)
+
+    org_review = org_subparsers.add_parser(
+        "review",
+        help="LLM freshness review of committed artifacts across all solution repos",
+    )
+    add_org_args(org_review)
+    org_review.add_argument(
+        "--max-artifacts",
+        type=int,
+        default=None,
+        help="Cap per-repo artifacts reviewed in this run (default: unlimited).",
+    )
+    org_review.set_defaults(func=cmd_org_review)
+
     return parser
 
 
@@ -450,6 +511,45 @@ def cmd_generate(args: argparse.Namespace) -> int:
         return 75
     print(f"Generated work item {state['work_id']} with status {state['status']}")
     return 0
+
+
+def cmd_audit_links(args: argparse.Namespace) -> int:
+    from .freshness import audit_links
+
+    workspace = resolve_workspace(args)
+    repo_path = target_repo_path(workspace, args.repo)
+    report = audit_links(
+        repo_path,
+        timeout=args.timeout,
+        max_workers=args.workers,
+    )
+    print(
+        f"Link audit for {args.repo}: {report['broken_count']} broken / "
+        f"{report['urls_unique']} unique URLs across {report['files_scanned']} file(s)"
+    )
+    for item in report["work_items"][:8]:
+        print(f"  ! {item['severity']:>6}  {item['broken_count']:>2}  {item['path']}")
+    return 0 if report["broken_count"] == 0 else 1
+
+
+def cmd_audit_versions(args: argparse.Namespace) -> int:
+    from .freshness import audit_versions
+
+    workspace = resolve_workspace(args)
+    repo_path = target_repo_path(workspace, args.repo)
+    registry = args.registry or _default_version_registry()
+    report = audit_versions(repo_path, registry_path=registry)
+    print(
+        f"Version audit for {args.repo}: {report['finding_count']} stale ref(s) "
+        f"across {report['target_count']} target(s)"
+    )
+    for item in report["work_items"][:8]:
+        print(f"  ! {item['severity']:>6}  {item['target']:>14}  {item['path']}")
+    return 0 if report["finding_count"] == 0 else 1
+
+
+def _default_version_registry() -> Path:
+    return Path(__file__).resolve().parents[2] / "config" / "version-targets.yaml"
 
 
 def cmd_validate(args: argparse.Namespace) -> int:
@@ -835,6 +935,164 @@ def cmd_org_steward(args: argparse.Namespace) -> int:
             continue
         for pr in repo.get("prs", []):
             print(f"- {repo['repo']}#{pr['pr_number']}: {pr['state']} — {pr.get('title', '')}")
+    return 0
+
+
+def cmd_org_audit_links(args: argparse.Namespace) -> int:
+    from .freshness import audit_links
+    from .state import write_json
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    state_dir.mkdir(parents=True, exist_ok=True)
+
+    all_work_items: list = []
+    repo_summaries: list = []
+    for repo in manifest.repo_names:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        report = audit_links(
+            repo_path, timeout=args.timeout, max_workers=args.workers
+        )
+        all_work_items.extend(report["work_items"])
+        repo_summaries.append(
+            {
+                "repo": repo,
+                "files_scanned": report["files_scanned"],
+                "urls_unique": report["urls_unique"],
+                "broken_count": report["broken_count"],
+                "work_items": len(report["work_items"]),
+            }
+        )
+
+    org_report = {
+        "schema_version": 1,
+        "operation": "org_audit_links",
+        "repo_count": len(repo_summaries),
+        "broken_total": sum(r["broken_count"] for r in repo_summaries),
+        "work_item_total": len(all_work_items),
+        "repos": repo_summaries,
+        "work_items": all_work_items,
+    }
+    write_json(state_dir / "freshness-links-report.json", org_report)
+    print(
+        f"Link audit: {org_report['broken_total']} broken across "
+        f"{org_report['repo_count']} repo(s); {org_report['work_item_total']} work item(s)"
+    )
+    for repo in repo_summaries:
+        if repo["broken_count"]:
+            print(f"  ! {repo['repo']}: {repo['broken_count']} broken")
+    return 0
+
+
+def cmd_org_audit_versions(args: argparse.Namespace) -> int:
+    from .freshness import audit_versions
+    from .state import write_json
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    state_dir.mkdir(parents=True, exist_ok=True)
+    registry = args.registry or _default_version_registry()
+
+    all_work_items: list = []
+    repo_summaries: list = []
+    for repo in manifest.repo_names:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        report = audit_versions(repo_path, registry_path=registry)
+        all_work_items.extend(report["work_items"])
+        repo_summaries.append(
+            {
+                "repo": repo,
+                "finding_count": report["finding_count"],
+                "work_items": len(report["work_items"]),
+            }
+        )
+
+    org_report = {
+        "schema_version": 1,
+        "operation": "org_audit_versions",
+        "repo_count": len(repo_summaries),
+        "finding_total": sum(r["finding_count"] for r in repo_summaries),
+        "work_item_total": len(all_work_items),
+        "repos": repo_summaries,
+        "work_items": all_work_items,
+    }
+    write_json(state_dir / "freshness-versions-report.json", org_report)
+    print(
+        f"Version audit: {org_report['finding_total']} stale ref(s) across "
+        f"{org_report['repo_count']} repo(s); {org_report['work_item_total']} work item(s)"
+    )
+    for repo in repo_summaries:
+        if repo["finding_count"]:
+            print(f"  ! {repo['repo']}: {repo['finding_count']} ref(s)")
+    return 0
+
+
+def cmd_org_review(args: argparse.Namespace) -> int:
+    from .freshness import review_existing_artifacts
+    from .judge import JudgeConfig
+    from .state import write_json
+
+    manifest = resolve_manifest(args)
+    judge_config = JudgeConfig.from_manifest(manifest)
+    if not judge_config.enabled:
+        print(
+            "warning: quality_judge.enabled is false; review will mark every "
+            "artifact 'skipped'. Enable judge in the manifest to actually scan.",
+            file=sys.stderr,
+        )
+
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    state_dir.mkdir(parents=True, exist_ok=True)
+
+    all_work_items: list = []
+    repo_summaries: list = []
+    for repo in manifest.solution_repo_names:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        report = review_existing_artifacts(
+            repo_path,
+            judge_config=judge_config,
+            max_artifacts=args.max_artifacts,
+        )
+        all_work_items.extend(report["work_items"])
+        repo_summaries.append(
+            {
+                "repo": repo,
+                "artifacts_reviewed": report["artifacts_reviewed"],
+                "stale_count": report["stale_count"],
+                "deferred": bool(report.get("deferred")),
+                "work_items": len(report["work_items"]),
+            }
+        )
+
+    org_report = {
+        "schema_version": 1,
+        "operation": "org_review",
+        "repo_count": len(repo_summaries),
+        "stale_total": sum(r["stale_count"] for r in repo_summaries),
+        "work_item_total": len(all_work_items),
+        "repos": repo_summaries,
+        "work_items": all_work_items,
+    }
+    write_json(state_dir / "freshness-review-report.json", org_report)
+    print(
+        f"Freshness review: {org_report['stale_total']} stale artifact(s) across "
+        f"{org_report['repo_count']} repo(s); {org_report['work_item_total']} work item(s)"
+    )
+    for repo in repo_summaries:
+        if repo["stale_count"]:
+            print(
+                f"  ! {repo['repo']}: {repo['stale_count']} stale of "
+                f"{repo['artifacts_reviewed']} reviewed"
+            )
     return 0
 
 

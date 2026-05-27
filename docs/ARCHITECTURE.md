@@ -64,13 +64,21 @@ timeline
         04:40 : daily-steward (--apply)
         05:00 : daily-discussions (dry-run)
     section Weekly
-        Sun 03:00 : weekly-audit (sync + audit)
+        Sun 03:00 : weekly-audit (sync + audit-links + audit-versions + audit)
     section Monthly
         1st 02:00 : monthly-release (sync + release --apply)
         1st 05:30 : monthly-research (research --apply + execute-plan + audit)
+    section Quarterly
+        Mar/Jun/Sep/Dec 1st 06:00 : monthly-review (LLM freshness review across all solutions)
     section One-off override
         2026-06-15 02:00 : monthly-release shifted from June 1 to give the cold-start drain runway
 ```
+
+The freshness audits flow into the work queue alongside structural
+gaps. High-severity refresh items (broken security guidance, EOL'd
+tools, dead citations) jump above new-content gaps via a priority
+bias; medium and low severities sit below structural work and get
+worked when the queue is otherwise drained.
 
 ---
 

@@ -54,6 +54,15 @@ DEFAULT_DIMENSIONS = ("correctness", "clarity", "source_quality", "depth")
 DEFAULT_DIMENSION_MAX = 25  # 4 dimensions × 25 == 100
 DEFAULT_THRESHOLD = 70
 
+FRESHNESS_DIMENSIONS = (
+    "api_currency",         # deprecated APIs, removed methods
+    "version_currency",     # references to old versions of libraries / tools
+    "citation_validity",    # broken links, dead vendors, outdated docs
+    "hardware_currency",    # superseded hardware (V100, etc.)
+)
+FRESHNESS_DIMENSION_MAX = 25  # 4 dims × 25 == 100
+FRESHNESS_DEFAULT_THRESHOLD = 75
+
 _JSON_BLOCK_RE = re.compile(r"```(?:json)?\s*(\{.*?\})\s*```", re.DOTALL)
 
 
@@ -88,6 +97,13 @@ class JudgeConfig:
 
     def threshold_for(self, work_type: str) -> int:
         return int(self.thresholds.get(work_type, self.thresholds.get("default", DEFAULT_THRESHOLD)))
+
+    def freshness_threshold(self) -> int:
+        return int(
+            self.thresholds.get(
+                "freshness", self.thresholds.get("default", FRESHNESS_DEFAULT_THRESHOLD)
+            )
+        )
 
 
 @dataclass(frozen=True)
@@ -187,6 +203,88 @@ def judge_action(
     return verdict
 
 
+def judge_artifact_freshness(
+    repo_path: Path,
+    artifact_path: Path,
+    artifact_id: str,
+    config: JudgeConfig,
+    runner_root: Path | None = None,
+) -> JudgeVerdict | None:
+    """Invoke the judge on an *existing* artifact for freshness review.
+
+    Unlike :func:`judge_action`, this does not require a plan or a
+    work_item — it's used by ``aicg org review`` to scan committed
+    content for staleness. Returns ``None`` when the judge is disabled
+    or unconfigured.
+    """
+    if not config.enabled or not config.agent_command:
+        return None
+    if not artifact_path.exists():
+        return None
+
+    threshold = config.freshness_threshold()
+    # Freshness-specific config: same agent_command, different rubric.
+    freshness_config = JudgeConfig(
+        enabled=config.enabled,
+        agent_command=config.agent_command,
+        dimensions=FRESHNESS_DIMENSIONS,
+        thresholds={"default": threshold, "freshness": threshold},
+        timeout_seconds=config.timeout_seconds,
+    )
+    prompt_path = _write_freshness_prompt(
+        repo_path=repo_path,
+        artifact_path=artifact_path,
+        artifact_id=artifact_id,
+        config=freshness_config,
+    )
+    output_dir = repo_path / ".aicg" / "review" / _safe_slug(artifact_id)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    formatted = config.agent_command.format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=f"review:{artifact_id}",
+        artifact=str(artifact_path),
+        runner=str(runner_root or Path(__file__).resolve().parents[2]),
+    )
+    result = _run_judge_command(
+        formatted, cwd=repo_path, timeout=config.timeout_seconds
+    )
+    if result.limit_reached:
+        return JudgeVerdict(
+            score=0,
+            dimensions={dim: 0 for dim in FRESHNESS_DIMENSIONS},
+            blockers=[
+                f"Judge subscription limit reached ({result.limit_scope}); "
+                f"retry after {result.retry_after}."
+            ],
+            summary="Freshness review unavailable: subscription limit.",
+            passed=False,
+            threshold=threshold,
+            raw=result.stdout + "\n" + result.stderr,
+        )
+    if result.returncode != 0:
+        return JudgeVerdict(
+            score=0,
+            dimensions={dim: 0 for dim in FRESHNESS_DIMENSIONS},
+            blockers=[f"Freshness judge failed with exit {result.returncode}."],
+            summary="Freshness judge command failed.",
+            passed=False,
+            threshold=threshold,
+            raw=result.stdout + "\n" + result.stderr,
+        )
+
+    response_path = output_dir / "response.json"
+    raw_text = (
+        response_path.read_text(encoding="utf-8")
+        if response_path.exists()
+        else result.stdout
+    )
+    return parse_judge_response(
+        raw_text=raw_text, config=freshness_config, threshold=threshold
+    )
+
+
 def parse_judge_response(
     raw_text: str,
     config: JudgeConfig,
@@ -259,6 +357,82 @@ def _extract_json_payload(text: str) -> dict[str, Any] | None:
     except json.JSONDecodeError:
         return None
     return loaded if isinstance(loaded, dict) else None
+
+
+def _write_freshness_prompt(
+    repo_path: Path,
+    artifact_path: Path,
+    artifact_id: str,
+    config: JudgeConfig,
+) -> Path:
+    rel = (
+        artifact_path.relative_to(repo_path).as_posix()
+        if artifact_path.is_absolute()
+        else str(artifact_path)
+    )
+    dimension_rubric = "\n".join(
+        f"- `{dim}` (0-{FRESHNESS_DIMENSION_MAX}): "
+        + {
+            "api_currency": (
+                "deprecated APIs, removed methods, idioms that have been "
+                "superseded in the current library release."
+            ),
+            "version_currency": (
+                "references to old versions of libraries, tools, or platforms "
+                "where a current release is materially different."
+            ),
+            "citation_validity": (
+                "broken links, dead vendors, docs at URLs that have moved, "
+                "blog posts older than 3 years cited as 'current'."
+            ),
+            "hardware_currency": (
+                "references to hardware that has been superseded "
+                "(e.g. V100, A100 cited as 'latest')."
+            ),
+        }.get(dim, dim)
+        for dim in config.dimensions
+    )
+    content = (
+        f"# Freshness review: {artifact_id}\n\n"
+        f"You are reviewing a committed curriculum artifact for staleness.\n"
+        f"This is NOT a generation task. You may suggest changes in your\n"
+        f"summary but you MUST NOT edit the file. The runner will turn\n"
+        f"your verdict into a separate work item if a refresh is needed.\n\n"
+        f"## Artifact\n\n"
+        f"Path: `{rel}`\n\n"
+        f"Read the file at the absolute path: `{artifact_path}`\n\n"
+        f"## Rubric\n\n"
+        f"{dimension_rubric}\n\n"
+        f"List any `blockers` for anything that would mislead a learner "
+        f"into using deprecated, insecure, or no-longer-correct patterns.\n\n"
+        f"## Output contract\n\n"
+        f"Write `response.json` in the output directory with this shape:\n\n"
+        f"```json\n"
+        f"{{\n"
+        f"  \"total\": 0-100,\n"
+        f"  \"dimensions\": {{{', '.join(f'\"{d}\": 0' for d in config.dimensions)}}},\n"
+        f"  \"blockers\": [\"description of any stale claim\"],\n"
+        f"  \"summary\": \"one-paragraph note explaining specific stale references\"\n"
+        f"}}\n"
+        f"```\n"
+    )
+    return _write_prompt(
+        repo_path=repo_path,
+        artifact_id=artifact_id,
+        content=content,
+    )
+
+
+def _write_prompt(repo_path: Path, artifact_id: str, content: str) -> Path:
+    output_dir = repo_path / ".aicg" / "review" / _safe_slug(artifact_id)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = output_dir / "prompt.md"
+    prompt_path.write_text(content, encoding="utf-8")
+    return prompt_path
+
+
+def _safe_slug(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_\-]+", "-", text).strip("-").lower()[:120]
 
 
 def _write_judge_prompt(

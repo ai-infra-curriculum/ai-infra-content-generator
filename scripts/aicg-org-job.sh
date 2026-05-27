@@ -19,6 +19,7 @@ Jobs:
   sync
   monthly-release
   monthly-research
+  monthly-review
   weekly-audit
   daily-remediate
   daily-issues
@@ -126,6 +127,14 @@ main() {
       ;;
     weekly-audit)
       run_aicg_org sync
+      # Freshness checks first so their work items are picked up by audit.
+      run_aicg_org audit-links || true
+      run_aicg_org audit-versions || true
+      run_aicg_org audit
+      ;;
+    monthly-review)
+      run_aicg_org sync
+      run_aicg_org review
       run_aicg_org audit
       ;;
     daily-remediate)

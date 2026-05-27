@@ -86,6 +86,7 @@ install_cron() {
 20 4 * * * $(job_command daily-issues)
 40 4 * * * $(job_command daily-steward)
 0 5 * * * $(job_command daily-discussions)
+0 6 1 3,6,9,12 * $(job_command monthly-review)
 $marker_end"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -152,6 +153,8 @@ install_systemd() {
 
   write_systemd_pair "$unit_dir" "monthly-release" "monthly-release" "*-*-01 02:00:00"
   write_systemd_pair "$unit_dir" "monthly-research" "monthly-research" "*-*-01 05:30:00"
+  # Quarterly LLM freshness review (1st of Mar/Jun/Sep/Dec at 06:00).
+  write_systemd_pair "$unit_dir" "monthly-review" "monthly-review" "*-03,06,09,12-01 06:00:00"
   write_systemd_pair "$unit_dir" "weekly-audit" "weekly-audit" "Sun 03:00:00"
   write_systemd_pair "$unit_dir" "daily-remediate" "daily-remediate" "*-*-* *:00:00"
   write_systemd_pair "$unit_dir" "daily-issues" "daily-issues" "*-*-* 04:20:00"
@@ -163,6 +166,7 @@ install_systemd() {
     systemctl --user enable --now \
       aicg-monthly-release.timer \
       aicg-monthly-research.timer \
+      aicg-monthly-review.timer \
       aicg-weekly-audit.timer \
       aicg-daily-remediate.timer \
       aicg-daily-issues.timer \

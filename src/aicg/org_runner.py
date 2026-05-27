@@ -221,6 +221,25 @@ def run_org_audit(
                 }
             )
 
+        # Splice in freshness work items if the most recent audit-links /
+        # audit-versions / review runs left reports behind. These are
+        # additive — structural gaps remain in the queue too.
+        for refresh_item in _collect_freshness_items(repo_path):
+            queue_items.append(
+                {
+                    "id": f"{repo}:{refresh_item['id']}",
+                    "repo": repo,
+                    "work_id": refresh_item["id"],
+                    "type": refresh_item["type"],
+                    "severity": refresh_item.get("severity", "low"),
+                    "title": refresh_item.get("title", refresh_item["id"]),
+                    "path": refresh_item.get("path"),
+                    "status": "ready",
+                    "priority": queue_priority(manifest, repo, refresh_item),
+                    "created_at": utc_now(),
+                }
+            )
+
     queue_items.sort(key=lambda item: (item["priority"], item["repo"], item["work_id"]))
     queue = {
         "schema_version": 1,
@@ -521,9 +540,70 @@ def repo_action(
 
 
 def queue_priority(manifest: OrgManifest, repo: str, item: dict[str, Any]) -> int:
+    """Compute a deterministic priority for the work queue.
+
+    Lower number = higher priority (sorted ascending). The score is:
+
+        severity_bias + role_level × 1000 + item.priority
+
+    where ``severity_bias`` lets high-severity refresh items jump ahead
+    of structural gaps. The default work item gets bias = 0; a
+    high-severity refresh (broken security guidance, EOL'd tool) gets
+    a large negative bias.
+    """
     role = next((role for role in manifest.roles if role.solution_repo == repo), None)
     base = role.level if role else 100
-    return base * 1000 + int(item.get("priority", 100))
+    severity_bias = _severity_bias(item)
+    return severity_bias + base * 1000 + int(item.get("priority", 100))
+
+
+def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:
+    """Read freshness reports from the repo and return their work items.
+
+    Tolerates missing files (each report is optional) and malformed
+    JSON (logs nothing, skips silently — the audit run shouldn't blow
+    up because a stale report can't be parsed).
+    """
+    items: list[dict[str, Any]] = []
+    state_dir = repo_path / ".aicg"
+    for filename in (
+        "freshness-links-report.json",
+        "freshness-versions-report.json",
+        "freshness-review-report.json",
+    ):
+        path = state_dir / filename
+        if not path.exists():
+            continue
+        try:
+            report = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for entry in report.get("work_items", []) or []:
+            if isinstance(entry, dict) and entry.get("id"):
+                items.append(entry)
+    return items
+
+
+def _severity_bias(item: dict[str, Any]) -> int:
+    """Convert work item severity + type into a priority bias.
+
+    - High-severity refresh items: -100000 (jumps above every structural
+      gap regardless of role level).
+    - Medium-severity refresh items: +5000 (below structural gaps within
+      the same role but above other refresh).
+    - Low-severity refresh items: +20000 (deepest backlog).
+    - Structural gaps (module_solution_gap, project_solution_gap): 0.
+    """
+    severity = str(item.get("severity", "")).lower()
+    work_type = str(item.get("type", ""))
+    is_refresh = work_type.startswith("refresh_")
+    if not is_refresh:
+        return 0
+    if severity == "high":
+        return -100_000
+    if severity == "medium":
+        return 5_000
+    return 20_000
 
 
 def is_git_dirty(repo_path: Path) -> bool:
