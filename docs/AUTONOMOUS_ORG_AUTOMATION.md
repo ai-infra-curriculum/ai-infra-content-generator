@@ -120,13 +120,88 @@ learning repo's `supplemental/` directory.
 
 ## PR, Issue, And Discussion Stewardship
 
-`aicg org steward` currently writes a dry-run stewardship report. The intended
-mutation path is:
+`aicg org steward` is the autonomous PR auto-merger. By default it runs in
+dry-run mode — listing every open PR with its CI rollup, guardrail decision,
+and the would-merge verdict — without touching anything. Add `--apply` to
+make it real.
 
-- inspect open PRs and required checks
-- auto-merge only when AICG guardrails pass
-- update issues from audit and work-queue state
-- summarize discussions that require human judgment
+```bash
+aicg org steward                  # dry-run
+aicg org steward --apply          # auto-merge eligible PRs
+aicg org steward --apply \
+  --ci-timeout 1200 \
+  --ci-poll 45 \
+  --merge-method squash
+```
 
-This path should remain dry-run until the pilot PR flow proves green CI and
-guardrail behavior.
+For each open PR the steward walks the lifecycle:
+
+1. **ci_pending** — `gh pr view --json statusCheckRollup` is polled at
+   `--ci-poll` seconds (default 30) up to `--ci-timeout` seconds
+   (default 600). A check is pending while its `status` or `state` is
+   `IN_PROGRESS`/`QUEUED`/`PENDING`/`WAITING`/`EXPECTED`. Skipped /
+   neutral conclusions pass.
+2. **ci_passed** (rollup `SUCCESS`) or **ci_failed**/**ci_timeout**.
+3. **guardrails_ok** or **guardrails_blocked** — the full PR view is
+   fetched and the steward blocks drafts, `do-not-merge`/`wip` labels,
+   head ref `main`/`master`, restricted-file changes
+   (`.github/workflows/*`, `CODEOWNERS`, `SECURITY.md`,
+   `pyproject.toml`, `aicg.yaml`/`yml`), `needs-research` /
+   `manual-review` markers in changed files, and `CONFLICTING`
+   mergeable state.
+4. **would_merge** (dry-run) or **merge_requested** (`--apply`) —
+   `gh pr merge --auto --<method> --delete-branch` is invoked so
+   GitHub completes the merge once required status checks settle.
+5. **merged** when the follow-up `gh pr view` reports `MERGED`.
+
+Every transition is recorded in `<state-dir>/steward-report.json` with
+per-PR `history` (timestamp + state). Re-running the steward is safe:
+already-merged PRs no longer show up in `gh pr list --state open`, and
+dry-run runs make no mutations regardless.
+
+## Bootstrapping A New Role
+
+`aicg org bootstrap-role` scaffolds a paired learning + solutions repo
+set for a new role so the autonomous loop has somewhere to land.
+
+```bash
+aicg org bootstrap-role \
+  --role data-engineer \
+  --title "Data Engineer" \
+  --level 25 \
+  --description "Build ML-grade data pipelines."
+```
+
+This:
+
+1. Creates `ai-infra-data-engineer-learning/` and
+   `ai-infra-data-engineer-solutions/` with READMEs, LICENSE,
+   `.gitignore` (with `.aicg/` excluded), `CURRICULUM.md` placeholder,
+   per-side CI workflow, and empty `lessons/` + `projects/` (or
+   `modules/` + `projects/`) directories.
+2. Appends the role to the org manifest if it is JSON. For YAML
+   manifests it prints a snippet for the operator to paste.
+3. Writes a curriculum-bootstrap prompt packet at
+   `<state-dir>/bootstrap/<role>.md` instructing the content agent to
+   (a) research at least 25 current job postings and (b) author
+   `<learning-repo>/.aicg/curriculum-plan.json` describing modules,
+   exercises, labs, quizzes, and projects.
+4. Optionally creates the remote GitHub repos via
+   `gh repo create --push` when `--create-remotes` is passed.
+
+After bootstrap, the autonomous loop picks up from there:
+
+- `aicg org research` adds the role to the monthly job-requirements
+  research cycle.
+- The first `aicg org daily` after the agent lands
+  `curriculum-plan.json` should plan the initial module-skeleton work
+  items (Phase B, not yet implemented — for now author the skeletons
+  during the same agent session that wrote the plan).
+- `aicg org audit` reports the new repos and queues any unfilled
+  module / project gaps for subsequent daily cycles.
+
+### Future work
+
+- Phase B: auto-execute `curriculum-plan.json` to create module skeletons.
+- Issue auto-update from audit/work-queue state.
+- Discussion summarization that flags items needing human judgment.

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import shlex
 import subprocess
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -270,6 +270,7 @@ def run_daily_remediation(
         )
         item["status"] = "generated"
         item["updated_at"] = utc_now()
+        item["retry_count"] = 0
         result["status"] = "generated"
         result["run_state"] = run_state
         from .verify import verify_repo
@@ -302,9 +303,53 @@ def run_daily_remediation(
         result["defer_reason"] = "agent_subscription_limit"
         result["limit_scope"] = exc.result.limit_scope
         result["retry_after"] = exc.result.retry_after
+    except RuntimeError as exc:
+        # generate_from_plan raises RuntimeError when the agent
+        # returned a non-zero exit code and no known limit pattern
+        # matched. Treat that as a transient opaque failure and
+        # schedule a retry; surface ``failed_permanently`` after
+        # ``max_retries`` attempts.
+        retry_config = _opaque_retry_config(manifest)
+        retry_count = int(item.get("retry_count", 0)) + 1
+        if retry_count >= retry_config["max_retries"]:
+            item["status"] = "failed_permanently"
+            item["updated_at"] = utc_now()
+            item["retry_count"] = retry_count
+            item["last_failure"] = str(exc)
+            result["status"] = "failed_permanently"
+            result["retry_count"] = retry_count
+            result["error"] = str(exc)
+        else:
+            item["status"] = "deferred"
+            item["updated_at"] = utc_now()
+            item["retry_count"] = retry_count
+            item["defer_reason"] = "opaque_generator_failure"
+            item["retry_after"] = _retry_after_in_minutes(
+                retry_config["retry_delay_minutes"]
+            )
+            item["last_failure"] = str(exc)
+            result["status"] = "deferred"
+            result["defer_reason"] = "opaque_generator_failure"
+            result["retry_count"] = retry_count
+            result["retry_after"] = item["retry_after"]
+            result["error"] = str(exc)
     write_json(queue_path, queue)
     write_json(state_dir / "daily-run-state.json", result)
     return result
+
+
+def _opaque_retry_config(manifest: OrgManifest) -> dict[str, Any]:
+    automation = manifest.automation or {}
+    retry = automation.get("opaque_retry", {}) if isinstance(automation, dict) else {}
+    max_retries = int(retry.get("max_retries", 3))
+    delay_minutes = int(retry.get("retry_delay_minutes", 15))
+    return {"max_retries": max_retries, "retry_delay_minutes": delay_minutes}
+
+
+def _retry_after_in_minutes(minutes: int) -> str:
+    return (datetime.now(tz=timezone.utc) + timedelta(minutes=minutes)).isoformat(
+        timespec="seconds"
+    ).replace("+00:00", "Z")
 
 
 def refresh_deferred_items(queue: dict[str, Any]) -> None:
@@ -321,34 +366,23 @@ def steward_report(
     manifest: OrgManifest,
     workspace: Path,
     state_dir: Path | None = None,
+    apply: bool = False,
+    ci_timeout_seconds: int = 600,
+    ci_poll_seconds: int = 30,
+    merge_method: str = "squash",
 ) -> dict[str, Any]:
-    state_dir = state_dir_for_manifest(manifest, state_dir)
-    state_dir.mkdir(parents=True, exist_ok=True)
-    repos = []
-    for repo in manifest.repo_names:
-        repo_path = workspace / repo
-        repos.append(
-            {
-                "repo": repo,
-                "path": str(repo_path),
-                "present": repo_path.exists(),
-                "planned_checks": [
-                    "inspect open PRs",
-                    "merge PRs with green CI and passing AICG guardrails",
-                    "update issues from audit/work queue state",
-                    "summarize unresolved discussion items for review",
-                ],
-            }
-        )
-    report = {
-        "schema_version": 1,
-        "generated_at": utc_now(),
-        "operation": "steward",
-        "status": "dry_run",
-        "repos": repos,
-    }
-    write_json(state_dir / ORG_STEWARD_REPORT, report)
-    return report
+    """Run the PR steward (auto-merger or dry-run)."""
+    from .steward import steward_run
+
+    return steward_run(
+        manifest,
+        workspace,
+        state_dir=state_dir,
+        apply=apply,
+        ci_timeout_seconds=ci_timeout_seconds,
+        ci_poll_seconds=ci_poll_seconds,
+        merge_method=merge_method,
+    )
 
 
 def generate_supplemental_packet(

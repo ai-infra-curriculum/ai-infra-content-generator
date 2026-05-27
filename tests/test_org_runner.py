@@ -126,6 +126,89 @@ def test_aicg_state_does_not_make_repo_dirty(tmp_path):
     assert not is_git_dirty(repo)
 
 
+def test_daily_remediation_defers_opaque_failure_with_retry_count(tmp_path):
+    from aicg.org_runner import run_daily_remediation, run_org_audit
+
+    workspace = make_security_workspace(tmp_path)
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    state_dir = tmp_path / "state"
+    generator = tmp_path / "opaque.sh"
+    generator.write_text(
+        "#!/usr/bin/env bash\necho 'unknown error' >&2\nexit 1\n",
+        encoding="utf-8",
+    )
+    generator.chmod(0o755)
+
+    import aicg.org_runner as org_runner
+
+    original = org_runner.content_generation_command
+    org_runner.content_generation_command = lambda _m: str(generator)
+    try:
+        run_org_audit(manifest, workspace, state_dir=state_dir)
+        first = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+    finally:
+        org_runner.content_generation_command = original
+
+    assert first["status"] == "deferred"
+    assert first["defer_reason"] == "opaque_generator_failure"
+    assert first["retry_count"] == 1
+    assert first.get("retry_after", "").endswith("Z")
+
+    import json
+
+    queue = json.loads((state_dir / "work-queue.json").read_text())
+    item = next(item for item in queue["work_items"] if item.get("retry_count"))
+    assert item["status"] == "deferred"
+    assert item["retry_count"] == 1
+
+
+def test_daily_remediation_fails_permanently_after_max_retries(tmp_path):
+    import json
+
+    from aicg.org_runner import run_daily_remediation, run_org_audit
+
+    workspace = make_security_workspace(tmp_path)
+    manifest_path = write_minimal_manifest(tmp_path / "aicg-org.yaml")
+    payload = json.loads(manifest_path.read_text())
+    payload["automation"]["opaque_retry"] = {
+        "max_retries": 2,
+        "retry_delay_minutes": 0,
+    }
+    manifest_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    manifest = load_manifest(manifest_path)
+    state_dir = tmp_path / "state"
+    generator = tmp_path / "opaque.sh"
+    generator.write_text(
+        "#!/usr/bin/env bash\necho 'broken' >&2\nexit 1\n",
+        encoding="utf-8",
+    )
+    generator.chmod(0o755)
+
+    import aicg.org_runner as org_runner
+
+    original = org_runner.content_generation_command
+    org_runner.content_generation_command = lambda _m: str(generator)
+    try:
+        run_org_audit(manifest, workspace, state_dir=state_dir)
+        first = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+        # Manually flip the deferred item to ready so the second daily
+        # picks it up immediately (retry_after has already passed
+        # because we set retry_delay_minutes=0).
+        queue_path = state_dir / "work-queue.json"
+        queue = json.loads(queue_path.read_text())
+        for item in queue["work_items"]:
+            if item.get("status") == "deferred":
+                item["status"] = "ready"
+        queue_path.write_text(json.dumps(queue, indent=2), encoding="utf-8")
+        second = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+    finally:
+        org_runner.content_generation_command = original
+
+    assert first["status"] == "deferred"
+    assert second["status"] == "failed_permanently"
+    assert second["retry_count"] == 2
+
+
 def test_daily_remediation_verifies_after_generate(tmp_path):
     import textwrap
 

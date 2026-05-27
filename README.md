@@ -30,6 +30,7 @@ aicg plan --repo ai-infra-security-solutions
 aicg generate --repo ai-infra-security-solutions --module mod-001-ml-security-foundations
 aicg generate --repo ai-infra-security-solutions --all
 aicg verify --repo ai-infra-security-solutions
+aicg diff --repo ai-infra-security-solutions --work-id fill-mod-001-ml-security-foundations-solutions
 aicg validate --repo ai-infra-security-solutions
 aicg pr --repo ai-infra-security-solutions --work-id fill-mod-001-ml-security-foundations-solutions
 aicg run --repo ai-infra-security-solutions --mode pilot
@@ -38,7 +39,9 @@ aicg org release
 aicg org research
 aicg org audit
 aicg org daily
-aicg org steward
+aicg org bootstrap-role --role data-engineer --title "Data Engineer" --level 25
+aicg org steward          # dry-run
+aicg org steward --apply  # real auto-merger
 ```
 
 If `--workspace` is omitted, `aicg` assumes it is running from this repo and uses

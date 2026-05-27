@@ -8,6 +8,8 @@ from pathlib import Path
 
 from .agent_cli import AgentLimitReached
 from .audit import AuditError, audit_repo
+from .bootstrap import BootstrapError, bootstrap_role
+from .diff import diff_repo
 from .generator import GenerationNotConfigured, generate_all_pending, generate_from_plan
 from .gitops import GitOpsError, prepare_pr
 from .inventory import InventoryError, WorkspaceInventory, default_workspace
@@ -34,6 +36,7 @@ def main(argv: list[str] | None = None) -> int:
         return args.func(args)
     except (
         AuditError,
+        BootstrapError,
         GitOpsError,
         InventoryError,
         ManifestError,
@@ -88,6 +91,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="Always exit 0 after writing the validation report.",
     )
     validate_parser.set_defaults(func=cmd_validate)
+
+    diff_parser = subparsers.add_parser(
+        "diff",
+        help="Show what the agent changed for a work item",
+    )
+    add_repo_args(diff_parser)
+    diff_parser.add_argument(
+        "--work-id",
+        default=None,
+        help="Limit expected-path matching to one work item.",
+    )
+    diff_parser.add_argument(
+        "--full",
+        action="store_true",
+        help="Include the unified `git diff` output in the report.",
+    )
+    diff_parser.set_defaults(func=cmd_diff)
 
     verify_parser = subparsers.add_parser(
         "verify",
@@ -149,11 +169,70 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_daily)
     org_daily.set_defaults(func=cmd_org_daily)
 
+    org_bootstrap = org_subparsers.add_parser(
+        "bootstrap-role",
+        help="Scaffold a new role's learning + solutions repos and research prompt",
+    )
+    add_org_args(org_bootstrap)
+    org_bootstrap.add_argument(
+        "--role",
+        required=True,
+        help="Role id (lowercase, hyphenated, e.g. 'data-engineer').",
+    )
+    org_bootstrap.add_argument("--title", required=True, help="Human-readable role title.")
+    org_bootstrap.add_argument(
+        "--level", type=int, required=True, help="Numeric seniority level (e.g. 25)."
+    )
+    org_bootstrap.add_argument(
+        "--description",
+        default=None,
+        help="One-line description used inside the bootstrap prompt and READMEs.",
+    )
+    org_bootstrap.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Scaffold even when the target directories already exist with content.",
+    )
+    org_bootstrap.add_argument(
+        "--no-update-manifest",
+        action="store_true",
+        help="Skip appending the role to the org manifest (print a YAML snippet instead).",
+    )
+    org_bootstrap.add_argument(
+        "--create-remotes",
+        action="store_true",
+        help="Create the matching GitHub repos via `gh repo create --push`.",
+    )
+    org_bootstrap.set_defaults(func=cmd_org_bootstrap_role)
+
     org_steward = org_subparsers.add_parser(
         "steward",
-        help="Write PR/issue/discussion stewardship report",
+        help="Inspect open PRs and merge ones that clear CI + guardrails",
     )
     add_org_args(org_steward)
+    org_steward.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually merge eligible PRs. Omit for dry-run / planning.",
+    )
+    org_steward.add_argument(
+        "--ci-timeout",
+        type=int,
+        default=600,
+        help="Per-PR CI rollup timeout in seconds (default 600).",
+    )
+    org_steward.add_argument(
+        "--ci-poll",
+        type=int,
+        default=30,
+        help="Per-PR CI rollup poll interval in seconds (default 30).",
+    )
+    org_steward.add_argument(
+        "--merge-method",
+        choices=["squash", "merge", "rebase"],
+        default="squash",
+        help="Merge strategy for `gh pr merge --auto` (default squash).",
+    )
     org_steward.set_defaults(func=cmd_org_steward)
 
     return parser
@@ -295,6 +374,35 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return 0 if report["status"] == "passed" else 1
 
 
+def cmd_diff(args: argparse.Namespace) -> int:
+    workspace = resolve_workspace(args)
+    repo_path = target_repo_path(workspace, args.repo)
+    report = diff_repo(repo_path, work_id=args.work_id, show_full=args.full)
+    summary = report["summary"]
+    print(
+        f"Diff for {args.repo}: {summary['added']} added, "
+        f"{summary['modified']} modified, {summary['deleted']} deleted, "
+        f"{summary['untracked']} untracked "
+        f"({summary['unexpected']} unexpected)"
+    )
+    for entry in report["entries"][:25]:
+        tag = "  " if entry["expected"] else " !"
+        print(
+            f"{tag} {entry['status']:>9}  {entry['path']}"
+            + (f"  ({entry['line_count']} lines)" if entry['line_count'] else "")
+        )
+        for line in entry["preview_head"][:6]:
+            print(f"    | {line}")
+        if entry["preview_tail"]:
+            print("    | ...")
+            for line in entry["preview_tail"][:4]:
+                print(f"    | {line}")
+    if args.full and report.get("full_diff"):
+        print("\n--- full diff ---")
+        print(report["full_diff"])
+    return 0
+
+
 def cmd_verify(args: argparse.Namespace) -> int:
     workspace = resolve_workspace(args)
     report = verify_repo(workspace, args.repo, work_id=args.work_id)
@@ -424,14 +532,67 @@ def cmd_org_daily(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_org_bootstrap_role(args: argparse.Namespace) -> int:
+    manifest = resolve_manifest(args)
+    report = bootstrap_role(
+        manifest=manifest,
+        workspace=resolve_workspace(args),
+        role_id=args.role,
+        title=args.title,
+        level=args.level,
+        description=args.description,
+        overwrite=args.overwrite,
+        write_manifest=not args.no_update_manifest,
+        create_remotes=args.create_remotes,
+        state_dir=resolve_org_state_dir(args, manifest),
+    )
+    plan = report["plan"]
+    print(
+        f"Bootstrapped role '{plan['role_id']}' ({plan['title']}, level "
+        f"{plan['level']})"
+    )
+    print(f"- Learning repo: {plan['learning_path']}")
+    print(f"- Solutions repo: {plan['solution_path']}")
+    print(f"- Prompt packet: {plan['prompt_path']}")
+    manifest_update = report.get("manifest_update")
+    if manifest_update and manifest_update.get("status") == "yaml_manifest_manual_update_required":
+        print("Manifest is YAML; append this snippet under `roles:`:")
+        print(manifest_update["snippet"])
+    elif manifest_update and manifest_update.get("status") == "appended_json":
+        print(f"- Manifest updated: {manifest_update['manifest_path']}")
+    remotes = report.get("remotes")
+    if remotes:
+        for action in remotes.get("actions", []):
+            outcome = "ok" if action["returncode"] == 0 else "failed"
+            print(f"- gh repo create {action['repo']}: {outcome}")
+    return 0
+
+
 def cmd_org_steward(args: argparse.Namespace) -> int:
     manifest = resolve_manifest(args)
     report = steward_report(
         manifest,
         resolve_workspace(args),
         state_dir=resolve_org_state_dir(args, manifest),
+        apply=args.apply,
+        ci_timeout_seconds=args.ci_timeout,
+        ci_poll_seconds=args.ci_poll,
+        merge_method=args.merge_method,
     )
-    print(f"Steward report written for {len(report['repos'])} repo(s); status={report['status']}")
+    merged = sum(repo.get("merged_count", 0) for repo in report.get("repos", []))
+    blocked = sum(repo.get("blocked_count", 0) for repo in report.get("repos", []))
+    failed = sum(repo.get("ci_failed_count", 0) for repo in report.get("repos", []))
+    pr_count = sum(repo.get("pr_count", 0) for repo in report.get("repos", []))
+    mode = "apply" if args.apply else "dry-run"
+    print(
+        f"Steward {mode}: {pr_count} open PR(s); merged={merged} "
+        f"blocked={blocked} ci_failed={failed}"
+    )
+    for repo in report["repos"]:
+        if not repo.get("pr_count"):
+            continue
+        for pr in repo.get("prs", []):
+            print(f"- {repo['repo']}#{pr['pr_number']}: {pr['state']} — {pr.get('title', '')}")
     return 0
 
 
