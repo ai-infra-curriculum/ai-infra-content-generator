@@ -323,3 +323,55 @@ def test_steward_state_file_written(tmp_path: Path) -> None:
     payload = json.loads(report_path.read_text())
     assert payload["operation"] == "steward"
     assert payload["status"] == "dry_run"
+
+
+# ---------------------------------------------------------------------------
+# CI-absent short-circuit (wait_for_ci)
+# ---------------------------------------------------------------------------
+
+
+def test_wait_for_ci_short_circuits_when_no_rollup_after_grace(tmp_path: Path) -> None:
+    from aicg.steward import wait_for_ci
+
+    # pr_view returns empty rollup forever — simulates a repo with no CI.
+    with patch("aicg.steward.pr_view", return_value={"statusCheckRollup": []}):
+        result = wait_for_ci(
+            repo_path=tmp_path,
+            pr_number=1,
+            timeout_seconds=120,
+            poll_seconds=0,           # don't sleep in the test
+            ci_absent_grace_seconds=0,  # short-circuit immediately
+        )
+    assert result["status"] == "no_ci_present"
+
+
+def test_wait_for_ci_returns_success_when_rollup_passes(tmp_path: Path) -> None:
+    from aicg.steward import wait_for_ci
+
+    rollup = [{"status": "COMPLETED", "conclusion": "SUCCESS"}]
+    with patch(
+        "aicg.steward.pr_view", return_value={"statusCheckRollup": rollup}
+    ):
+        result = wait_for_ci(
+            repo_path=tmp_path,
+            pr_number=1,
+            timeout_seconds=10,
+            poll_seconds=0,
+        )
+    assert result["status"] == "success"
+
+
+def test_wait_for_ci_returns_failure_on_failed_check(tmp_path: Path) -> None:
+    from aicg.steward import wait_for_ci
+
+    rollup = [{"status": "COMPLETED", "conclusion": "FAILURE"}]
+    with patch(
+        "aicg.steward.pr_view", return_value={"statusCheckRollup": rollup}
+    ):
+        result = wait_for_ci(
+            repo_path=tmp_path,
+            pr_number=1,
+            timeout_seconds=10,
+            poll_seconds=0,
+        )
+    assert result["status"] == "failure"

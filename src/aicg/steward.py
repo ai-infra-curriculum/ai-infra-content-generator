@@ -263,7 +263,7 @@ def steward_pr(
             "elapsed_seconds": ci_result["elapsed_seconds"],
         }
     )
-    if ci_result["status"] != "success":
+    if ci_result["status"] not in {"success", "no_ci_present"}:
         terminal = "ci_failed" if ci_result["status"] == "failure" else "ci_timeout"
         history.append({"timestamp": utc_now(), "state": terminal})
         return {
@@ -275,7 +275,12 @@ def steward_pr(
             "ci": ci_result,
             "history": history,
         }
-    history.append({"timestamp": utc_now(), "state": "ci_passed"})
+    history.append(
+        {
+            "timestamp": utc_now(),
+            "state": "ci_passed" if ci_result["status"] == "success" else "no_ci_present",
+        }
+    )
 
     # Pull the full PR view (with file list + labels + mergeable state)
     # before evaluating guardrails. ``pr_view`` was already called by
@@ -496,30 +501,52 @@ _CI_TERMINAL_SUCCESS = {"SUCCESS"}
 _CI_TERMINAL_FAILURE = {"FAILURE", "ERROR", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED"}
 
 
+CI_ABSENT_GRACE_SECONDS = 30
+
+
 def wait_for_ci(
     repo_path: Path,
     pr_number: int,
     timeout_seconds: int,
     poll_seconds: int,
+    ci_absent_grace_seconds: int = CI_ABSENT_GRACE_SECONDS,
 ) -> dict[str, Any]:
-    """Poll ``gh pr view`` until the status-check rollup is terminal."""
-    deadline = time.monotonic() + timeout_seconds
+    """Poll ``gh pr view`` until the status-check rollup is terminal.
+
+    Repos with no CI workflow at all return an empty rollup forever.
+    Rather than hang until ``timeout_seconds`` elapses, return
+    ``no_ci_present`` after ``ci_absent_grace_seconds`` of consistently
+    empty rollups. GitHub typically registers status checks within
+    5-15 seconds of a push, so 30s grace is safe.
+    """
+    start = time.monotonic()
+    deadline = start + timeout_seconds
     last_rollup: list[dict[str, Any]] = []
     while True:
         view = pr_view(repo_path, pr_number)
         last_rollup = view.get("statusCheckRollup", []) or []
         status = classify_rollup(last_rollup)
+        elapsed = int(time.monotonic() - start)
         if status == "success":
             return {
                 "status": "success",
                 "rollup": last_rollup,
-                "elapsed_seconds": int(timeout_seconds - max(deadline - time.monotonic(), 0)),
+                "elapsed_seconds": elapsed,
             }
         if status == "failure":
             return {
                 "status": "failure",
                 "rollup": last_rollup,
-                "elapsed_seconds": int(timeout_seconds - max(deadline - time.monotonic(), 0)),
+                "elapsed_seconds": elapsed,
+            }
+        # CI-absent short-circuit: empty rollup + past grace period →
+        # there's nothing to wait for. Treat as effectively passing so
+        # the steward proceeds to guardrails + review check.
+        if not last_rollup and elapsed >= ci_absent_grace_seconds:
+            return {
+                "status": "no_ci_present",
+                "rollup": last_rollup,
+                "elapsed_seconds": elapsed,
             }
         if time.monotonic() >= deadline:
             return {
