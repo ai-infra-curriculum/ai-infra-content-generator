@@ -13,7 +13,7 @@ set -euo pipefail
 # It does NOT write the prompt's response.md (used by content gen);
 # the runner's verifier checks for the contract files directly.
 
-MODEL="claude-opus-4.7"
+MODEL="claude-opus-4-7"
 PROMPT=""
 OUTPUT_DIR=""
 REPO=""
@@ -24,7 +24,7 @@ usage() {
 Usage: $(basename "$0") --prompt PATH --output-dir DIR --repo PATH [OPTIONS]
 
 Options:
-  --model NAME       Claude model. Default: claude-opus-4.7.
+  --model NAME       Claude model. Default: claude-opus-4-7.
   --repo PATH        Target learning-repo path (the agent's working root).
   --work-id ID       AICG work item id ('research:<role>').
   -h, --help         Show this help.

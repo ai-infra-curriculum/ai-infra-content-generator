@@ -7,7 +7,7 @@ set -euo pipefail
 # to write `response.json` into the output directory matching the
 # contract documented in src/aicg/judge.py.
 
-MODEL="claude-opus-4.7"
+MODEL="claude-opus-4-7"
 PROMPT=""
 OUTPUT_DIR=""
 REPO=""
@@ -19,7 +19,7 @@ usage() {
 Usage: $(basename "$0") --prompt PATH --output-dir DIR [OPTIONS]
 
 Options:
-  --model NAME       Claude model. Default: claude-opus-4.7.
+  --model NAME       Claude model. Default: claude-opus-4-7.
   --repo PATH        Target repo path, passed through for logging.
   --work-id ID       AICG work item id, passed through for logging.
   --artifact PATH    Absolute path to the artifact being graded.

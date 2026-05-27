@@ -42,7 +42,7 @@ def _enable_research_agent(manifest_path: Path, command: str) -> None:
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
     payload["research"]["agent"] = {
         "provider": "anthropic",
-        "model": "claude-opus-4.7",
+        "model": "claude-opus-4-7",
         "interface": "local_cli_subscription",
         "agent_command": command,
     }

@@ -33,7 +33,7 @@ def test_manifest_loads_role_and_agent_policy(tmp_path):
     ]
     assert manifest.automation["agent"]["model"] == "codex-gpt-5.5"
     assert manifest.automation["agent"]["interface"] == "local_cli_subscription"
-    assert manifest.content_generation["agent"]["model"] == "claude-opus-4.7"
+    assert manifest.content_generation["agent"]["model"] == "claude-opus-4-7"
     assert manifest.content_generation["agent"]["interface"] == "local_cli_subscription"
 
 
@@ -78,7 +78,7 @@ def test_research_packets_include_claude_policy(tmp_path):
     prompt = report["packets"][0]["prompt_path"]
     assert report["packets"][0]["role"] == "security"
     with open(prompt, encoding="utf-8") as prompt_file:
-        assert "claude-opus-4.7" in prompt_file.read()
+        assert "claude-opus-4-7" in prompt_file.read()
 
 
 def test_org_audit_writes_queue_from_solution_gaps(tmp_path):

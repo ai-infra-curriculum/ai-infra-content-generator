@@ -66,9 +66,9 @@ def write_minimal_manifest(path: Path) -> Path:
         "content_generation": {
             "agent": {
                 "provider": "anthropic",
-                "model": "claude-opus-4.7",
+                "model": "claude-opus-4-7",
                 "interface": "local_cli_subscription",
-                "agent_command": "{runner}/scripts/run-claude-content.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}",
+                "agent_command": "{runner}/scripts/run-claude-content.sh --model claude-opus-4-7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}",
             }
         },
         "job_requirements": {
