@@ -134,6 +134,9 @@ def commit_all(repo_path: Path, message: str) -> None:
 
 
 def create_pr(repo_path: Path, title: str, body_path: Path) -> str:
+    # gh pr create requires the branch to exist on origin first.
+    branch = run(repo_path, ["git", "rev-parse", "--abbrev-ref", "HEAD"]).stdout.strip()
+    run(repo_path, ["git", "push", "-u", "origin", branch])
     completed = run(
         repo_path,
         ["gh", "pr", "create", "--base", "main", "--title", title, "--body-file", str(body_path)],
