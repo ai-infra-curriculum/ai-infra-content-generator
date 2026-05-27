@@ -93,12 +93,14 @@ main() {
   [[ -x "$AICG_BIN" ]] || die "aicg executable not found or not executable: $AICG_BIN"
   [[ -f "$MANIFEST" ]] || die "manifest not found: $MANIFEST"
 
-  local lock_dir="$STATE_DIR/aicg-org.lock"
-  if ! mkdir "$lock_dir" 2>/dev/null; then
+  # Lock variable is intentionally global so the EXIT trap, which fires
+  # after main() returns, can still see it under `set -u`.
+  LOCK_DIR="$STATE_DIR/aicg-org.lock"
+  if ! mkdir "$LOCK_DIR" 2>/dev/null; then
     log "Another AICG org job is running; exiting."
     exit 0
   fi
-  trap 'rmdir "$lock_dir"' EXIT
+  trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
 
   log "Starting job: $JOB"
   case "$JOB" in
