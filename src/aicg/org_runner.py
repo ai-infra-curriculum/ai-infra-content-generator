@@ -317,6 +317,15 @@ def run_daily_remediation(
                 "status": propagate_report["status"],
                 "updated_count": len(propagate_report.get("updated", [])),
             }
+            # Close the loop: commit changes and open a PR so the
+            # steward can pick it up. PR failures are recorded but do
+            # not flip the item back to failed — the on-disk content
+            # is good, just unmerged.
+            pr_outcome = _open_work_item_pr(repo_path, plan, item)
+            result["pr"] = pr_outcome
+            if pr_outcome.get("status") == "opened":
+                item["pr_url"] = pr_outcome.get("pr_url")
+                item["pr_branch"] = pr_outcome.get("branch")
         else:
             item["status"] = "verification_failed"
         item["verified_at"] = utc_now()
@@ -568,6 +577,51 @@ def queue_priority(manifest: OrgManifest, repo: str, item: dict[str, Any]) -> in
     base = role.level if role else 100
     severity_bias = _severity_bias(item)
     return severity_bias + base * 1000 + int(item.get("priority", 100))
+
+
+def _open_work_item_pr(
+    repo_path: Path, plan: dict[str, Any], item: dict[str, Any]
+) -> dict[str, Any]:
+    """Commit and open a PR for the just-verified work item.
+
+    Failures bubble up as ``status=error`` with a stderr tail — the
+    runner does not rollback the on-disk content if PR creation
+    fails. Operators can re-run ``aicg pr --repo X --work-id Y``.
+    """
+    from .gitops import GitOpsError, prepare_pr
+
+    # The audit / validation reports are inputs to the PR body. If
+    # validation has not been run for this repo yet (common — the
+    # daily flow doesn't run it), feed an empty placeholder so the
+    # PR body still renders. Audit is required.
+    try:
+        audit_report = read_state(repo_path, "audit-report.json")
+    except FileNotFoundError:
+        return {"status": "skipped", "reason": "audit-report.json missing"}
+
+    try:
+        validation_report = read_state(repo_path, "validation-report.json")
+    except FileNotFoundError:
+        validation_report = {"status": "not_run", "checks": []}
+
+    try:
+        pr_result = prepare_pr(
+            repo_path,
+            work_plan=plan,
+            audit_report=audit_report,
+            validation_report=validation_report,
+            auto_merge=False,
+            work_id=item["work_id"],
+        )
+    except GitOpsError as exc:
+        return {"status": "error", "reason": str(exc)}
+
+    return {
+        "status": "opened",
+        "pr_url": pr_result.get("pr_url"),
+        "branch": pr_result.get("branch"),
+        "changed_files": pr_result.get("changed_files", [])[:20],
+    }
 
 
 def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:

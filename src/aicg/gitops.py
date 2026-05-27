@@ -66,7 +66,8 @@ def prepare_pr(
     if not decision.allowed:
         raise GitOpsError("Guardrails blocked PR creation: " + "; ".join(decision.blockers))
 
-    title = f"Fill {work_plan['repo']['name']} {item['module']} solution gap"
+    scope = item.get("module") or item.get("project") or item.get("path") or item.get("id")
+    title = f"Fill {work_plan['repo']['name']} {scope} solution gap"
     body_path = state_path(repo_path, "pr-body.md")
     body_path.write_text(
         build_pr_body(item, audit_report, validation_report, branch),
