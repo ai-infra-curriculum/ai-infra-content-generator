@@ -68,23 +68,19 @@ Follow the schema described in the prompt above."
 # Judge is read-only by contract; deny write tools to ensure it cannot
 # mutate the artifact it is grading.
 ARTIFACT_DIR="$(dirname "$ARTIFACT")"
-ALLOWED_TOOLS=(
-  "Read"
-  "Glob"
-  "Grep"
-  "Bash(cat:*)"
-  "Bash(ls:*)"
-)
+# Single space-separated strings: claude greedily consumes positional
+# args after --allowedTools / --disallowedTools.
+ALLOWED_TOOLS="Read Glob Grep Bash(cat:*) Bash(ls:*)"
+DISALLOWED_TOOLS="Edit Write"
 
-claude \
+# Pipe the prompt via stdin to avoid positional-arg ambiguity.
+printf '%s' "$PROMPT_BODY" | claude \
   --model "$MODEL" \
   --print \
   --permission-mode default \
   --add-dir "$ARTIFACT_DIR" \
-  --allowedTools "${ALLOWED_TOOLS[@]}" \
-  --disallowedTools "Edit" "Write" \
-  "$PROMPT_BODY" \
-  </dev/null \
+  --allowedTools "$ALLOWED_TOOLS" \
+  --disallowedTools "$DISALLOWED_TOOLS" \
   >"$OUTPUT_DIR/raw-output.md"
 
 # If the agent wrote raw JSON to stdout instead of response.json,

@@ -61,28 +61,17 @@ mkdir -p "$OUTPUT_DIR"
 } >"$OUTPUT_DIR/research-run.env"
 
 # Unattended permission profile + web tools for research.
-ALLOWED_TOOLS=(
-  "Edit"
-  "Write"
-  "Read"
-  "Glob"
-  "Grep"
-  "WebFetch"
-  "WebSearch"
-  "Bash(mkdir:*)"
-  "Bash(ls:*)"
-  "Bash(cat:*)"
-  "Bash(git status:*)"
-  "Bash(git diff:*)"
-)
+# Single space-separated string — claude greedily consumes positional
+# args after --allowedTools, so an array form swallows the prompt.
+ALLOWED_TOOLS="Edit Write Read Glob Grep WebFetch WebSearch Bash(mkdir:*) Bash(ls:*) Bash(cat:*) Bash(git status:*) Bash(git diff:*)"
 
 cd "$REPO"
+# Prompt via stdin so positional-arg parsing can't mangle it.
 claude \
   --model "$MODEL" \
   --print \
   --permission-mode acceptEdits \
   --add-dir "$REPO" \
-  --allowedTools "${ALLOWED_TOOLS[@]}" \
-  "$(cat "$PROMPT")" \
-  </dev/null \
+  --allowedTools "$ALLOWED_TOOLS" \
+  <"$PROMPT" \
   >"$OUTPUT_DIR/response.md"

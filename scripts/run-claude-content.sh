@@ -74,26 +74,18 @@ mkdir -p "$OUTPUT_DIR"
 #   --add-dir <repo>               : grant tool access to the repo
 #   --allowedTools                 : narrow Bash to safe read-only ops + git status/diff
 #   stdin redirected from /dev/null: never block on prompts
-ALLOWED_TOOLS=(
-  "Edit"
-  "Write"
-  "Read"
-  "Glob"
-  "Grep"
-  "Bash(mkdir:*)"
-  "Bash(ls:*)"
-  "Bash(cat:*)"
-  "Bash(git status:*)"
-  "Bash(git diff:*)"
-)
+# --allowedTools accepts a single space-separated string (claude
+# greedily consumes positional args after the flag, so passing an
+# array swallows the prompt and breaks --print).
+ALLOWED_TOOLS="Edit Write Read Glob Grep Bash(mkdir:*) Bash(ls:*) Bash(cat:*) Bash(git status:*) Bash(git diff:*)"
 
 cd "$REPO"
+# Feed the prompt via stdin so positional-arg parsing can't mangle it.
 claude \
   --model "$MODEL" \
   --print \
   --permission-mode acceptEdits \
   --add-dir "$REPO" \
-  --allowedTools "${ALLOWED_TOOLS[@]}" \
-  "$(cat "$PROMPT")" \
-  </dev/null \
+  --allowedTools "$ALLOWED_TOOLS" \
+  <"$PROMPT" \
   >"$OUTPUT_DIR/response.md"
