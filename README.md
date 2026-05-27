@@ -28,8 +28,10 @@ The editable install exposes the `aicg` command.
 aicg audit --workspace .. --repo ai-infra-security-solutions
 aicg plan --repo ai-infra-security-solutions
 aicg generate --repo ai-infra-security-solutions --module mod-001-ml-security-foundations
+aicg generate --repo ai-infra-security-solutions --all
+aicg verify --repo ai-infra-security-solutions
 aicg validate --repo ai-infra-security-solutions
-aicg pr --repo ai-infra-security-solutions
+aicg pr --repo ai-infra-security-solutions --work-id fill-mod-001-ml-security-foundations-solutions
 aicg run --repo ai-infra-security-solutions --mode pilot
 aicg org sync
 aicg org release
@@ -45,19 +47,37 @@ the parent directory as the curriculum workspace.
 ## What The Runner Checks
 
 - Paired learning and solutions repo discovery.
-- Learning exercise to solution artifact parity.
-- Required module solution artifacts.
-- Placeholder, `# manual-review`, and `needs-research` markers.
-- Source policy warnings for practitioner references without official sources.
+- **Module-level exercise parity** — every learning exercise under
+  `lessons/<mod>/exercises/` (file or directory) is matched against
+  `modules/<mod>/exercise-NN*/{SOLUTION.md | README.md | STEP_BY_STEP.md}`.
+  Module-level `modules/<mod>/SOLUTION.md` is recognised as covering the
+  module's exercises with a warning-level depth follow-up rather than a
+  blocking error.
+- **Project-level parity** — every learning project under `projects/` is
+  matched against the paired solutions repo's `projects/` directory using
+  the same artifact rules.
+- **Post-generation verification (`aicg verify`)** — after the agent
+  writes artifacts, the runner walks each work item's actions, confirms
+  the file exists, the heading structure matches the prompt's output
+  contract (Overview, Implementation, Validation, Rubric, Common mistakes,
+  References — relaxed for module-rationale docs), citations are
+  classifiable against the source registry, and no
+  `needs-research`/`manual-review` markers remain.
+- Placeholder, `# manual-review`, and `needs-research` markers (cached
+  per-file by `(mtime_ns, size)` under `.aicg/placeholder-cache.json`).
+- Source policy warnings for practitioner references without official
+  sources.
 - Python syntax under the target repo.
-- Basic markdown hygiene.
+- Markdown hygiene including GFM table column-count and separator-row
+  validation.
 - GitHub workflow presence.
-- PR guardrails for direct main work, force-push, restricted files, unresolved
-  research, manual-review markers, and non-green CI before auto-merge.
+- PR guardrails for direct main work, force-push, restricted files,
+  unresolved research, manual-review markers, and non-green CI before
+  auto-merge.
 
-The old word-count completeness rule is retired. A solution is complete when it
-matches the learning objective, includes the required artifacts, validates, and
-has source-backed claims.
+The old word-count completeness rule is retired. A solution is complete
+when it matches the learning objective, includes the required artifacts,
+verifies, validates, and has source-backed claims.
 
 ## State Files
 

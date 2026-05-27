@@ -124,3 +124,69 @@ def test_aicg_state_does_not_make_repo_dirty(tmp_path):
     (repo / ".aicg" / "audit-report.json").write_text("{}\n", encoding="utf-8")
 
     assert not is_git_dirty(repo)
+
+
+def test_daily_remediation_verifies_after_generate(tmp_path):
+    import textwrap
+
+    from aicg.org_runner import run_daily_remediation
+
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    state_dir = tmp_path / "state"
+
+    # Configure a generator script that produces a complete SOLUTION.md.
+    generator = tmp_path / "fake-claude.sh"
+    target_file = (
+        solutions
+        / "modules"
+        / "mod-001-ml-security-foundations"
+        / "exercise-01-threat-model-a-small-ml-system"
+        / "SOLUTION.md"
+    )
+    body = textwrap.dedent(
+        """\
+        # Threat Model Solution
+
+        ## Overview
+        Brief walkthrough.
+
+        ## Implementation
+        Build it.
+
+        ## Validation
+        Run tests.
+
+        ## Rubric
+        Graded.
+
+        ## Common mistakes
+        Listed.
+
+        ## References
+        - https://www.nist.gov/itl/ai-risk-management-framework
+        """
+    )
+    target_file.parent.mkdir(parents=True, exist_ok=True)
+    generator.write_text(
+        "#!/usr/bin/env bash\n"
+        f'cat > "{target_file}" <<EOF\n{body}EOF\n',
+        encoding="utf-8",
+    )
+    generator.chmod(0o755)
+
+    # Override the manifest's configured agent command for this run.
+    import aicg.org_runner as org_runner
+
+    original = org_runner.content_generation_command
+    org_runner.content_generation_command = lambda _m: str(generator)
+    try:
+        # First run org audit to populate the work queue.
+        org_runner.run_org_audit(manifest, workspace, state_dir=state_dir)
+        result = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+    finally:
+        org_runner.content_generation_command = original
+
+    assert result["status"] == "generated"
+    assert result.get("verify", {}).get("status") == "verified"

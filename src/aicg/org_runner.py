@@ -272,6 +272,20 @@ def run_daily_remediation(
         item["updated_at"] = utc_now()
         result["status"] = "generated"
         result["run_state"] = run_state
+        from .verify import verify_repo
+
+        verify_report = verify_repo(
+            workspace, item["repo"], work_id=item["work_id"]
+        )
+        result["verify"] = {
+            "status": verify_report["status"],
+            "work_item_count": verify_report["work_item_count"],
+        }
+        if verify_report["status"] == "verified":
+            item["status"] = "verified"
+        else:
+            item["status"] = "verification_failed"
+        item["verified_at"] = utc_now()
     except GenerationNotConfigured as exc:
         item["status"] = "prompt_ready"
         item["updated_at"] = utc_now()

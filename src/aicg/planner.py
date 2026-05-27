@@ -82,6 +82,17 @@ def plan_from_audit(audit_report: dict[str, Any], repo_path: Path | None = None)
                 )
             )
 
+    for project in audit_report.get("projects", []):
+        if project.get("status") == "ok":
+            continue
+        work_items.append(
+            build_project_work_item(
+                audit_report=audit_report,
+                project=project,
+                priority=len(work_items) + 1,
+            )
+        )
+
     plan = {
         "schema_version": 2,
         "generated_at": utc_now(),
@@ -95,6 +106,47 @@ def plan_from_audit(audit_report: dict[str, Any], repo_path: Path | None = None)
     if repo_path is not None:
         write_state(repo_path, WORK_PLAN, plan)
     return plan
+
+
+def build_project_work_item(
+    audit_report: dict[str, Any],
+    project: dict[str, Any],
+    priority: int,
+) -> dict[str, Any]:
+    project_id = project["project_id"]
+    solution_dir = project.get("solution_path") or f"projects/{project_id}"
+    return {
+        "id": f"fill-{project_id}-solution",
+        "type": "project_solution_gap",
+        "repo": audit_report["repo"]["name"],
+        "project": project_id,
+        "title": f"Author solution artifact for {project_id}",
+        "severity": "error",
+        "priority": priority,
+        "status": "planned",
+        "why": (
+            "Learning repo defines a project capstone but the paired solutions "
+            "repo is missing the canonical SOLUTION.md / README.md / STEP_BY_STEP.md."
+        ),
+        "source_policy": {
+            "official_first": True,
+            "required_default_sources": [],
+            "needs_research_blocks_merge": True,
+        },
+        "exercises": [],
+        "actions": [
+            {
+                "type": "create_directory",
+                "path": solution_dir,
+            },
+            {
+                "type": "write_solution",
+                "path": f"{solution_dir.rstrip('/')}/SOLUTION.md",
+                "project_id": project_id,
+                "source_project": project.get("learning_path"),
+            },
+        ],
+    }
 
 
 def build_work_item(

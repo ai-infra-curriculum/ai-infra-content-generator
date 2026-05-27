@@ -84,6 +84,10 @@ def audit_repo(
         module_filter=module,
         registry=registry,
     )
+    projects = audit_project_parity(
+        learning_repo=learning_repo,
+        solution_repo=solution_repo,
+    )
     cache = PlaceholderCache(target.path) if use_cache else None
     placeholder_findings = scan_placeholders(target.path, cache=cache)
     if cache is not None:
@@ -92,6 +96,8 @@ def audit_repo(
 
     gaps: list[dict[str, Any]] = []
     for item in modules:
+        gaps.extend(item["gaps"])
+    for item in projects:
         gaps.extend(item["gaps"])
     gaps.extend(placeholder_findings)
     gaps.extend(repo_checks["gaps"])
@@ -117,11 +123,16 @@ def audit_repo(
             "error_count": error_count,
             "warning_count": warning_count,
             "module_count": len(modules),
+            "project_count": len(projects),
             "gap_count": len(gaps),
         },
         "checks": {
             "learning_solution_parity": {
                 "status": "fail" if any(module_item["status"] != "ok" for module_item in modules) else "pass"
+            },
+            "project_parity": {
+                "status": "fail" if any(project["status"] != "ok" for project in projects) else "pass",
+                "project_count": len(projects),
             },
             "placeholder_scan": {
                 "status": "fail"
@@ -132,6 +143,7 @@ def audit_repo(
             "repo_structure": repo_checks["summary"],
         },
         "modules": modules,
+        "projects": projects,
         "gaps": gaps,
     }
 
@@ -297,6 +309,130 @@ def audit_learning_solution_parity(
             }
         )
     return modules
+
+
+def audit_project_parity(
+    learning_repo: RepositoryInfo,
+    solution_repo: RepositoryInfo | None,
+) -> list[dict[str, Any]]:
+    """Check that every learning project has a paired solution project.
+
+    Both sides are conventionally rooted at ``projects/``. A learning
+    project at ``projects/project-XXX-name/`` is satisfied by any of
+    the standard solution artifacts (SOLUTION.md, STEP_BY_STEP.md,
+    README.md) inside the matching solutions repo directory.
+    """
+    results: list[dict[str, Any]] = []
+    learning_projects = discover_projects(learning_repo)
+    if not learning_projects:
+        return results
+
+    solution_root = solution_repo.path / "projects" if solution_repo else None
+
+    for learning_project in learning_projects:
+        project_id = learning_project.name
+        project_gaps: list[dict[str, Any]] = []
+        solution_dir: Path | None = None
+        found_artifact: Path | None = None
+
+        if solution_repo is None or solution_root is None:
+            project_gaps.append(
+                gap(
+                    "missing_paired_solutions_repo",
+                    "error",
+                    f"Learning project {project_id} has no paired solutions repo.",
+                    project_id=project_id,
+                    learning_path=relative_path(learning_project, learning_repo.path),
+                )
+            )
+        else:
+            solution_dir = find_project_solution_dir(solution_root, project_id)
+            if solution_dir is None:
+                project_gaps.append(
+                    gap(
+                        "missing_solution_project",
+                        "error",
+                        f"Missing solution project directory for {project_id}.",
+                        project_id=project_id,
+                        learning_path=relative_path(learning_project, learning_repo.path),
+                        expected_path=relative_path(
+                            solution_root / project_id, solution_repo.path
+                        ),
+                    )
+                )
+            else:
+                found_artifact = find_first_artifact(
+                    solution_dir, DEFAULT_EXERCISE_ARTIFACTS
+                )
+                if found_artifact is None:
+                    project_gaps.append(
+                        gap(
+                            "missing_project_solution_artifact",
+                            "error",
+                            f"Solution project {project_id} has no SOLUTION.md / README.md / STEP_BY_STEP.md.",
+                            project_id=project_id,
+                            expected_path=relative_path(solution_dir, solution_repo.path),
+                            accepted_artifacts=list(DEFAULT_EXERCISE_ARTIFACTS),
+                        )
+                    )
+
+        status = "ok" if not project_gaps else "gap"
+        results.append(
+            {
+                "project_id": project_id,
+                "title": extract_title(learning_project),
+                "learning_path": relative_path(learning_project, learning_repo.path),
+                "solution_path": relative_path(solution_dir, solution_repo.path)
+                if solution_dir and solution_repo
+                else None,
+                "found_artifact": relative_path(found_artifact, solution_repo.path)
+                if found_artifact and solution_repo
+                else None,
+                "status": status,
+                "gaps": project_gaps,
+            }
+        )
+    return results
+
+
+def discover_projects(repo: RepositoryInfo) -> list[Path]:
+    root = repo.path / "projects"
+    if not root.exists():
+        return []
+    return sorted(
+        path
+        for path in root.iterdir()
+        if path.is_dir() and path.name.lower().startswith("project-")
+    )
+
+
+def find_project_solution_dir(projects_root: Path, project_id: str) -> Path | None:
+    """Locate the on-disk solution project directory.
+
+    Solution projects normally share the same name as the learning
+    project, but some repos prefix differently (``project-301-`` vs
+    ``project-1-``). We accept exact match first, then any directory
+    whose first hyphen-separated token matches the learning project's
+    first token.
+    """
+    if not projects_root.exists():
+        return None
+    exact = projects_root / project_id
+    if exact.is_dir():
+        return exact
+    # Fallback: numeric / prefix match. project-101-foo -> project-101*
+    parts = project_id.split("-")
+    if len(parts) < 2:
+        return None
+    prefix = "-".join(parts[:2])
+    candidates = [
+        path
+        for path in projects_root.iterdir()
+        if path.is_dir() and path.name.startswith(prefix)
+    ]
+    if len(candidates) == 1:
+        return candidates[0]
+    return None
 
 
 def derive_module_status(

@@ -182,6 +182,68 @@ def test_placeholder_cache_reuses_results_until_file_changes(tmp_path):
     assert not any(item["type"] == "manual_review" for item in findings_after)
 
 
+def test_audit_flags_missing_project_solution(tmp_path):
+    workspace = make_security_workspace(tmp_path)
+    learning = workspace / "ai-infra-security-learning"
+    write_file(
+        learning / "projects" / "project-1-zero-trust" / "README.md",
+        "# Project 1 — Zero Trust\n\nCapstone description.\n",
+    )
+
+    report = audit_repo(workspace, "ai-infra-security-solutions", write_report=False)
+
+    assert report["summary"]["project_count"] == 1
+    assert report["projects"][0]["project_id"] == "project-1-zero-trust"
+    assert report["projects"][0]["status"] == "gap"
+    assert any(
+        gap["type"] == "missing_solution_project" for gap in report["gaps"]
+    )
+
+
+def test_audit_recognises_project_solution_with_readme(tmp_path):
+    workspace = make_security_workspace(tmp_path)
+    learning = workspace / "ai-infra-security-learning"
+    solutions = workspace / "ai-infra-security-solutions"
+    write_file(
+        learning / "projects" / "project-1-zero-trust" / "README.md",
+        "# Project 1 — Zero Trust\n",
+    )
+    write_file(
+        solutions / "projects" / "project-1-zero-trust" / "README.md",
+        "# Solution walkthrough\n",
+    )
+
+    report = audit_repo(workspace, "ai-infra-security-solutions", write_report=False)
+
+    assert report["projects"][0]["status"] == "ok"
+    assert report["projects"][0]["found_artifact"].endswith(
+        "project-1-zero-trust/README.md"
+    )
+
+
+def test_plan_emits_project_work_item(tmp_path):
+    workspace = make_security_workspace(tmp_path)
+    solutions = workspace / "ai-infra-security-solutions"
+    learning = workspace / "ai-infra-security-learning"
+    write_file(
+        learning / "projects" / "project-1-zero-trust" / "README.md",
+        "# Project 1\n",
+    )
+
+    report = audit_repo(workspace, "ai-infra-security-solutions", write_report=False)
+    plan = plan_from_audit(report, repo_path=solutions)
+
+    project_work = next(
+        (item for item in plan["work_items"] if item["type"] == "project_solution_gap"),
+        None,
+    )
+    assert project_work is not None
+    assert project_work["id"] == "fill-project-1-zero-trust-solution"
+    assert project_work["actions"][-1]["path"].endswith(
+        "projects/project-1-zero-trust/SOLUTION.md"
+    )
+
+
 def test_placeholder_scan_flags_manual_review_and_needs_research(tmp_path):
     repo = tmp_path / "repo"
     write_file(

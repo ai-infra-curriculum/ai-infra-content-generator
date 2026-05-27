@@ -8,16 +8,50 @@ Run the pilot from `ai-infra-content-generator`:
 aicg audit --workspace .. --repo ai-infra-security-solutions
 aicg plan --repo ai-infra-security-solutions
 aicg generate --repo ai-infra-security-solutions --module mod-001-ml-security-foundations
+aicg verify --repo ai-infra-security-solutions
 ```
 
 Expected first result: audit finds that `ai-infra-security-learning` has module
 exercises while `ai-infra-security-solutions/modules/` only has a placeholder
 README. Planning creates `fill-mod-001-ml-security-foundations-solutions` as the
-first work item.
+first work item. The audit also walks `projects/` and emits a
+`fill-project-XXX-solution` work item for any learning project missing a
+paired solution artifact.
 
 If no `generator_command` is configured, `generate` writes the prompt packet to
 `.aicg/prompts/<work-id>.md` in the target repo and exits before changing
 curriculum content.
+
+### Generate multiple items in one pass
+
+```bash
+aicg generate --repo ai-infra-security-solutions --all
+```
+
+Drains every pending work item in priority order. Stops early if the
+configured content agent reports a 5-hour / weekly subscription limit
+(the queue item is recorded as `deferred` with a `retry_after`
+timestamp and resumes on a later daily run).
+
+### Verify the agent's output
+
+```bash
+aicg verify --repo ai-infra-security-solutions
+```
+
+Walks each work item's `actions` array and confirms:
+
+- The target file exists, is non-empty, ends with a newline.
+- The required section headings are present (Overview / Implementation /
+  Validation / Rubric / Common mistakes / References by default; relaxed
+  for module-rationale docs).
+- Cited URLs are classifiable against `config/source-registry.json` when
+  the work item declared `required_default_sources`.
+- No `needs-research` or `manual-review` markers remain.
+
+Work items move from `generated` to `verified` (or `verification_failed`
+with diagnostics in `.aicg/verify-report.json`). Both `aicg run` and
+`aicg org daily` call `verify` automatically after generation.
 
 ## Validate
 

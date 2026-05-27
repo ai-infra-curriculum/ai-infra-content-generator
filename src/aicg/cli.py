@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .agent_cli import AgentLimitReached
 from .audit import AuditError, audit_repo
-from .generator import GenerationNotConfigured, generate_from_plan
+from .generator import GenerationNotConfigured, generate_all_pending, generate_from_plan
 from .gitops import GitOpsError, prepare_pr
 from .inventory import InventoryError, WorkspaceInventory, default_workspace
 from .org_config import ManifestError, load_manifest, state_dir_for_manifest
@@ -24,6 +24,7 @@ from .org_runner import (
 from .planner import plan_from_audit
 from .state import read_state
 from .validator import validate_repo
+from .verify import VerifyError, verify_repo
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -31,7 +32,15 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     try:
         return args.func(args)
-    except (AuditError, GitOpsError, InventoryError, ManifestError, OrgRunnerError, ValueError) as exc:
+    except (
+        AuditError,
+        GitOpsError,
+        InventoryError,
+        ManifestError,
+        OrgRunnerError,
+        VerifyError,
+        ValueError,
+    ) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
@@ -58,6 +67,11 @@ def build_parser() -> argparse.ArgumentParser:
     add_repo_args(generate_parser)
     generate_parser.add_argument("--work-id", default=None, help="Specific work item to generate")
     generate_parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Drain every pending work item. Stops on subscription-limit or missing-config.",
+    )
+    generate_parser.add_argument(
         "--config",
         type=Path,
         action="append",
@@ -74,6 +88,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Always exit 0 after writing the validation report.",
     )
     validate_parser.set_defaults(func=cmd_validate)
+
+    verify_parser = subparsers.add_parser(
+        "verify",
+        help="Confirm generated artifacts match the plan's output contract",
+    )
+    add_repo_args(verify_parser)
+    verify_parser.add_argument(
+        "--work-id",
+        default=None,
+        help="Verify a specific work item id; defaults to every item in the plan.",
+    )
+    verify_parser.set_defaults(func=cmd_verify)
 
     pr_parser = subparsers.add_parser("pr", help="Create guarded branch, commit, and GitHub PR")
     add_repo_args(pr_parser)
@@ -208,6 +234,35 @@ def cmd_generate(args: argparse.Namespace) -> int:
         audit = audit_repo(workspace, args.repo, module=args.module)
         plan = plan_from_audit(audit, repo_path=repo_path)
 
+    if args.all and args.work_id:
+        print("error: --all and --work-id are mutually exclusive", file=sys.stderr)
+        return 2
+
+    if args.all:
+        try:
+            batch = generate_all_pending(
+                repo_path,
+                plan,
+                module=args.module,
+                config_paths=args.config,
+            )
+        except GenerationNotConfigured as exc:
+            print("Prompt packet ready; no generator command configured.")
+            print(f"Prompt: {exc.prompt_path}")
+            print(f"Expected output directory: {exc.output_dir}")
+            return 2
+        print(
+            f"Generated {batch['completed_count']}/{batch['pending_count']} pending work item(s)."
+        )
+        if batch.get("deferred"):
+            print(
+                f"Stopped at {batch['deferred']['work_id']}: subscription "
+                f"limit ({batch['deferred']['limit_scope']}); retry after "
+                f"{batch['deferred']['retry_after']}."
+            )
+            return 75
+        return 0
+
     try:
         state = generate_from_plan(
             repo_path,
@@ -238,6 +293,19 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.report_only:
         return 0
     return 0 if report["status"] == "passed" else 1
+
+
+def cmd_verify(args: argparse.Namespace) -> int:
+    workspace = resolve_workspace(args)
+    report = verify_repo(workspace, args.repo, work_id=args.work_id)
+    print(f"Verify {report['status']} for {args.repo} ({report['work_item_count']} item(s))")
+    for item in report["work_items"]:
+        print(f"- {item['work_id']}: {item['status']} ({item['finding_count']} finding(s))")
+        for action in item["actions"][:4]:
+            print(f"    {action['status']:>10}  {action['type']:<22}  {action['path']}")
+        if len(item["actions"]) > 4:
+            print(f"    ... {len(item['actions']) - 4} more action(s) in .aicg/verify-report.json")
+    return 0 if report["status"] in {"verified", "no_items"} else 1
 
 
 def cmd_pr(args: argparse.Namespace) -> int:
@@ -271,7 +339,7 @@ def cmd_run(args: argparse.Namespace) -> int:
         print(f"Validation {validate_report['status']}.")
         return 0 if validate_report["status"] == "passed" else 1
     try:
-        generate_from_plan(repo_path, plan, module=args.module)
+        run_state = generate_from_plan(repo_path, plan, module=args.module)
     except AgentLimitReached as exc:
         print("Pilot stopped because the content agent hit a subscription limit.")
         print(f"Retry after: {exc.result.retry_after}")
@@ -280,7 +348,11 @@ def cmd_run(args: argparse.Namespace) -> int:
         print("Pilot stopped before content mutation because no generator command is configured.")
         print(f"Prompt: {exc.prompt_path}")
         return 2
-    return 0
+    verify_report = verify_repo(
+        workspace, args.repo, work_id=run_state.get("work_id")
+    )
+    print(f"Verify {verify_report['status']} ({verify_report['work_item_count']} item(s)).")
+    return 0 if verify_report["status"] in {"verified", "no_items"} else 1
 
 
 def cmd_org_sync(args: argparse.Namespace) -> int:

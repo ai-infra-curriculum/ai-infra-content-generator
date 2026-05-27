@@ -114,6 +114,59 @@ def select_work_item(
     return None
 
 
+def generate_all_pending(
+    repo_path: Path,
+    work_plan: dict[str, Any],
+    module: str | None = None,
+    config_paths: list[Path] | None = None,
+    registry: SourceRegistry | None = None,
+    command_override: str | None = None,
+) -> dict[str, Any]:
+    """Drain every pending work item in ``work_plan`` in order.
+
+    Stops early if the agent reports a subscription limit and surfaces
+    the partial result. Verification of each generated artifact is the
+    caller's responsibility — typically ``aicg run`` calls
+    ``verify_repo`` after this returns.
+    """
+    pending = [
+        item
+        for item in work_plan.get("work_items", [])
+        if item.get("status") in {"planned", "prompt_ready", "verification_failed"}
+        and (module is None or item.get("module") == module)
+    ]
+    results: list[dict[str, Any]] = []
+    deferred: dict[str, Any] | None = None
+    for item in pending:
+        try:
+            state = generate_from_plan(
+                repo_path,
+                work_plan,
+                module=module,
+                work_id=item["id"],
+                config_paths=config_paths,
+                registry=registry,
+                command_override=command_override,
+            )
+        except AgentLimitReached as exc:
+            deferred = {
+                "work_id": item["id"],
+                "limit_scope": exc.result.limit_scope,
+                "retry_after": exc.result.retry_after,
+            }
+            break
+        except GenerationNotConfigured:
+            raise
+        results.append(state)
+    return {
+        "schema_version": 1,
+        "completed_count": len(results),
+        "pending_count": len(pending),
+        "deferred": deferred,
+        "items": results,
+    }
+
+
 def build_prompt_packet(work_item: dict[str, Any], registry: SourceRegistry) -> str:
     source_ids = work_item.get("source_policy", {}).get("required_default_sources", [])
     source_lines = []
