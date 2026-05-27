@@ -189,11 +189,28 @@ def build_prompt_packet(work_item: dict[str, Any], registry: SourceRegistry) -> 
             )
         )
 
+    # Work items either target a module (module_solution_gap) or a
+    # project (project_solution_gap); refresh items target a path. Use
+    # whichever locator is present so we don't crash on KeyError.
+    scope_label = (
+        f"module `{work_item['module']}`"
+        if work_item.get("module")
+        else f"project `{work_item['project']}`"
+        if work_item.get("project")
+        else f"path `{work_item.get('path', '?')}`"
+    )
+    goal_lead = (
+        "Create module-level reference solutions"
+        if work_item.get("module")
+        else "Author the project solution artifact"
+        if work_item.get("project")
+        else "Refresh the artifact below"
+    )
+
     return (
         f"# AICG Work Packet: {work_item['id']}\n\n"
         f"## Goal\n\n"
-        f"Create module-level reference solutions for `{work_item['repo']}` module "
-        f"`{work_item['module']}`.\n\n"
+        f"{goal_lead} for `{work_item['repo']}` {scope_label}.\n\n"
         "## Scope\n\n"
         "- Modify only the target solutions repository.\n"
         "- Create one directory per learning exercise under the module solution directory.\n"
