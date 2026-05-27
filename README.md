@@ -146,3 +146,7 @@ Operational details are in [docs/RUNBOOK.md](docs/RUNBOOK.md).
 
 Org-level autonomous operation is described in
 [docs/AUTONOMOUS_ORG_AUTOMATION.md](docs/AUTONOMOUS_ORG_AUTOMATION.md).
+
+System architecture (Mermaid diagrams of every workflow, timer cadence,
+state files, and external surface) is in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
