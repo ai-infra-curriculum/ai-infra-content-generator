@@ -48,9 +48,15 @@ def parse_config(text: str, source: str = "<config>") -> Any:
 
     if yaml is not None:
         try:
-            return yaml.safe_load(text) or {}
+            loaded = yaml.safe_load(text) or {}
         except yaml.YAMLError as exc:  # type: ignore[union-attr]
             raise ConfigError(f"{source}: invalid YAML: {exc}") from exc
+        if not isinstance(loaded, (dict, list)):
+            raise ConfigError(
+                f"{source}: top-level YAML must be a mapping or list; "
+                f"got {type(loaded).__name__}."
+            )
+        return loaded
 
     return _parse_mini_yaml(text, source=source)
 
