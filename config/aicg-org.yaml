@@ -64,7 +64,13 @@
     "supplemental_dir": "supplemental"
   },
   "research": {
-    "agent_command": "{runner}/scripts/run-claude-content.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}",
+    "agent": {
+      "provider": "anthropic",
+      "model": "claude-opus-4.7",
+      "interface": "local_cli_subscription",
+      "purpose": "monthly job-market research with web tools enabled",
+      "agent_command": "{runner}/scripts/run-claude-research.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}"
+    },
     "minimum_postings_per_role": 25,
     "source_window_days": 45
   },

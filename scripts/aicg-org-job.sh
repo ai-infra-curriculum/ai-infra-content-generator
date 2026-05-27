@@ -112,7 +112,16 @@ main() {
       run_aicg_org release --apply
       ;;
     monthly-research)
-      run_aicg_org research
+      run_aicg_org research --apply
+      # After research apply, scaffold any new modules/projects each
+      # role's curriculum-plan-delta proposed.
+      local roles
+      roles=$("$AICG_BIN" --workspace "$WORKSPACE" org list-roles \
+        --manifest "$MANIFEST" --state-dir "$STATE_DIR" 2>/dev/null || true)
+      for role in $roles; do
+        log "execute-plan for role=$role"
+        run_aicg_org execute-plan --role "$role" 2>&1 | tail -3 || true
+      done
       run_aicg_org audit
       ;;
     weekly-audit)

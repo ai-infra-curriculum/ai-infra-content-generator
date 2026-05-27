@@ -190,6 +190,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     add_org_args(org_research)
     org_research.add_argument("--month", default=None, help="Month key such as 2026-05.")
+    org_research.add_argument(
+        "--apply",
+        action="store_true",
+        help="After writing prompts, invoke the configured agent on each role's packet so it updates JOB_REQUIREMENTS + curriculum-plan-delta in the learning repo.",
+    )
     org_research.set_defaults(func=cmd_org_research)
 
     org_audit = org_subparsers.add_parser("audit", help="Audit all solution repos and write queue")
@@ -311,6 +316,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     add_org_args(org_discussions)
     org_discussions.set_defaults(func=cmd_org_discussions)
+
+    org_list_roles = org_subparsers.add_parser(
+        "list-roles",
+        help="Print role ids from the manifest, one per line (for shell loops).",
+    )
+    add_org_args(org_list_roles)
+    org_list_roles.set_defaults(func=cmd_org_list_roles)
 
     return parser
 
@@ -620,17 +632,59 @@ def cmd_org_release(args: argparse.Namespace) -> int:
 
 
 def cmd_org_research(args: argparse.Namespace) -> int:
+    from .research import ResearchError, research_apply
+
     manifest = resolve_manifest(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    workspace = resolve_workspace(args)
     report = generate_research_packets(
         manifest,
-        resolve_workspace(args),
+        workspace,
         month=args.month,
-        state_dir=resolve_org_state_dir(args, manifest),
+        state_dir=state_dir,
     )
     print(f"Research packets ready for {report['month']}: {len(report['packets'])} role(s)")
     for packet in report["packets"]:
         print(f"- {packet['role']}: {packet['prompt_path']}")
-    return 0
+
+    if not getattr(args, "apply", False):
+        return 0
+
+    try:
+        apply_report = research_apply(
+            manifest,
+            workspace,
+            month=args.month,
+            state_dir=state_dir,
+        )
+    except ResearchError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    applied = sum(1 for r in apply_report["roles"] if r["status"] == "applied")
+    deferred = sum(1 for r in apply_report["roles"] if r["status"] == "deferred")
+    failed = sum(1 for r in apply_report["roles"] if r["status"] == "agent_failed")
+    skipped = sum(
+        1
+        for r in apply_report["roles"]
+        if r["status"] not in {"applied", "deferred", "agent_failed"}
+    )
+    print(
+        f"Research apply: {applied} applied, {deferred} deferred, "
+        f"{failed} failed, {skipped} skipped."
+    )
+    for role in apply_report["roles"]:
+        if role["status"] == "applied":
+            merge = role.get("delta_merge") or {}
+            added = len(merge.get("added", []))
+            print(f"  + {role['role']}: applied (+{added} plan additions)")
+        elif role["status"] == "deferred":
+            print(f"  ~ {role['role']}: deferred ({role.get('reason', '')})")
+        elif role["status"] == "agent_failed":
+            print(f"  ! {role['role']}: agent_failed (rc={role.get('returncode')})")
+        else:
+            print(f"  - {role['role']}: {role['status']}")
+    return 0 if failed == 0 else 1
 
 
 def cmd_org_audit(args: argparse.Namespace) -> int:
@@ -781,6 +835,13 @@ def cmd_org_steward(args: argparse.Namespace) -> int:
             continue
         for pr in repo.get("prs", []):
             print(f"- {repo['repo']}#{pr['pr_number']}: {pr['state']} — {pr.get('title', '')}")
+    return 0
+
+
+def cmd_org_list_roles(args: argparse.Namespace) -> int:
+    manifest = resolve_manifest(args)
+    for role in sorted(manifest.roles, key=lambda item: item.level):
+        print(role.id)
     return 0
 
 
