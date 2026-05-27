@@ -30,7 +30,7 @@
     "monthly_release": "0 2 1 * *",
     "monthly_research": "30 5 1 * *",
     "weekly_audit": "0 3 * * 0",
-    "daily_remediate": "0 4 * * *",
+    "daily_remediate": "0 * * * *",
     "daily_issues": "20 4 * * *",
     "daily_steward": "40 4 * * *",
     "daily_discussions": "0 5 * * *"

@@ -82,7 +82,7 @@ install_cron() {
 0 2 1 * * $(job_command monthly-release)
 30 5 1 * * $(job_command monthly-research)
 0 3 * * 0 $(job_command weekly-audit)
-0 4 * * * $(job_command daily-remediate)
+0 * * * * $(job_command daily-remediate)
 20 4 * * * $(job_command daily-issues)
 40 4 * * * $(job_command daily-steward)
 0 5 * * * $(job_command daily-discussions)
@@ -153,7 +153,7 @@ install_systemd() {
   write_systemd_pair "$unit_dir" "monthly-release" "monthly-release" "*-*-01 02:00:00"
   write_systemd_pair "$unit_dir" "monthly-research" "monthly-research" "*-*-01 05:30:00"
   write_systemd_pair "$unit_dir" "weekly-audit" "weekly-audit" "Sun 03:00:00"
-  write_systemd_pair "$unit_dir" "daily-remediate" "daily-remediate" "*-*-* 04:00:00"
+  write_systemd_pair "$unit_dir" "daily-remediate" "daily-remediate" "*-*-* *:00:00"
   write_systemd_pair "$unit_dir" "daily-issues" "daily-issues" "*-*-* 04:20:00"
   write_systemd_pair "$unit_dir" "daily-steward" "daily-steward" "*-*-* 04:40:00"
   write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:00:00"
