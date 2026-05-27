@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+from .config_loader import ConfigError, load_config
 
 
 class ManifestError(RuntimeError):
@@ -80,7 +81,14 @@ def load_manifest(path: Path | None = None) -> OrgManifest:
     manifest_path = (path or default_manifest_path()).resolve()
     if not manifest_path.exists():
         raise ManifestError(f"Org manifest not found: {manifest_path}")
-    raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+    try:
+        raw = load_config(manifest_path)
+    except ConfigError as exc:
+        raise ManifestError(str(exc)) from exc
+    if not isinstance(raw, dict):
+        raise ManifestError(
+            f"Org manifest at {manifest_path} must be a mapping; got {type(raw).__name__}."
+        )
     roles = tuple(
         RoleConfig(
             id=item["id"],

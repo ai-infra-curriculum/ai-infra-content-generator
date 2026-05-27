@@ -19,17 +19,36 @@ def branch_name(repo_name: str, work_id: str, today: date | None = None) -> str:
     return f"aicg/{(today or date.today()).isoformat()}/{repo_name}/{work_id}"
 
 
+def select_work_item(
+    work_items: list[dict[str, Any]], work_id: str | None = None
+) -> dict[str, Any]:
+    """Pick a work item by id, defaulting to the highest-priority one."""
+    if not work_items:
+        raise GitOpsError("No work items are available for PR creation.")
+    if work_id is None:
+        return work_items[0]
+    match = next((item for item in work_items if item.get("id") == work_id), None)
+    if match is None:
+        available = ", ".join(item.get("id", "?") for item in work_items)
+        raise GitOpsError(
+            f"work_id '{work_id}' not found in work plan; available: {available}"
+        )
+    return match
+
+
 def prepare_pr(
     repo_path: Path,
     work_plan: dict[str, Any],
     audit_report: dict[str, Any],
     validation_report: dict[str, Any],
     auto_merge: bool = False,
+    work_id: str | None = None,
 ) -> dict[str, Any]:
-    if not work_plan.get("work_items"):
+    work_items = work_plan.get("work_items") or []
+    if not work_items:
         raise GitOpsError("No work items are available for PR creation.")
 
-    item = work_plan["work_items"][0]
+    item = select_work_item(work_items, work_id=work_id)
     branch = branch_name(work_plan["repo"]["name"], item["id"])
     checkout_branch(repo_path, branch)
 

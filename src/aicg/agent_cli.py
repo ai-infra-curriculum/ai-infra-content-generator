@@ -31,6 +31,7 @@ class AgentCommandResult:
     limit_reached: bool
     retry_after: str | None
     limit_scope: str | None
+    limit_pattern_unmatched: bool = False
 
 
 class AgentLimitReached(RuntimeError):
@@ -51,14 +52,20 @@ def run_agent_command(command: str, cwd: Path) -> AgentCommandResult:
     )
     output = f"{completed.stdout}\n{completed.stderr}"
     limit_scope = classify_limit_scope(output)
+    limit_reached = completed.returncode != 0 and limit_scope is not None
+    # When the command failed but no known limit-pattern matched the
+    # output, surface that as a separate signal so operators can extend
+    # LIMIT_PATTERNS when vendors change their error wording.
+    limit_pattern_unmatched = completed.returncode != 0 and limit_scope is None
     return AgentCommandResult(
         command=command,
         returncode=completed.returncode,
         stdout=completed.stdout[-4000:],
         stderr=completed.stderr[-4000:],
-        limit_reached=completed.returncode != 0 and limit_scope is not None,
+        limit_reached=limit_reached,
         retry_after=retry_after_for_scope(limit_scope) if limit_scope else None,
         limit_scope=limit_scope,
+        limit_pattern_unmatched=limit_pattern_unmatched,
     )
 
 

@@ -12,7 +12,24 @@ from .state import relative_path, utc_now, write_state
 
 AUDIT_REPORT = "audit-report.json"
 TEXT_EXTENSIONS = {".md", ".py", ".yaml", ".yml", ".json", ".toml", ".txt", ".sh", ".hcl"}
-SKIP_DIRS = {".git", ".aicg", ".venv", "node_modules", "__pycache__"}
+
+# Directories we never recurse into when scanning for placeholders or
+# auditing source text. ``.aicg`` is excluded because the runner's own
+# prompt packets legitimately mention every placeholder word in the
+# instructions to the generator. ``_archive`` is excluded because
+# several solutions repos park intentional template scaffolds there.
+SKIP_DIRS = {
+    ".git",
+    ".github",
+    ".aicg",
+    ".venv",
+    "venv",
+    "node_modules",
+    "__pycache__",
+    "_archive",
+    ".scratch-trash",
+}
+
 PLACEHOLDER_PATTERNS = {
     "needs_research": re.compile(r"needs-research", re.IGNORECASE),
     "manual_review": re.compile(r"#\s*manual-review|manual-review", re.IGNORECASE),
@@ -20,6 +37,19 @@ PLACEHOLDER_PATTERNS = {
     "placeholder": re.compile(r"\bplaceholder\b|coming soon|lorem ipsum", re.IGNORECASE),
 }
 EXERCISE_ID_PATTERN = re.compile(r"^(exercise-\d+)")
+
+# Acceptable exercise-level solution artifacts. Any one of these inside
+# an exercise directory satisfies the per-exercise solution check.
+DEFAULT_EXERCISE_ARTIFACTS: tuple[str, ...] = (
+    "SOLUTION.md",
+    "STEP_BY_STEP.md",
+    "README.md",
+)
+
+# Module-level rationale artifact. When this exists at
+# ``modules/<module>/SOLUTION.md`` the module is considered to have
+# explanatory coverage even if per-exercise artifacts are not present.
+MODULE_LEVEL_ARTIFACT = "SOLUTION.md"
 
 
 class AuditError(RuntimeError):
@@ -32,6 +62,7 @@ def audit_repo(
     module: str | None = None,
     write_report: bool = True,
     source_registry: SourceRegistry | None = None,
+    use_cache: bool = True,
 ) -> dict[str, Any]:
     inventory = WorkspaceInventory(workspace)
     target = inventory.require(repo_name)
@@ -53,7 +84,10 @@ def audit_repo(
         module_filter=module,
         registry=registry,
     )
-    placeholder_findings = scan_placeholders(target.path)
+    cache = PlaceholderCache(target.path) if use_cache else None
+    placeholder_findings = scan_placeholders(target.path, cache=cache)
+    if cache is not None:
+        cache.save()
     repo_checks = audit_repo_checks(target)
 
     gaps: list[dict[str, Any]] = []
@@ -65,7 +99,7 @@ def audit_repo(
     error_count = sum(1 for gap in gaps if gap["severity"] == "error")
     warning_count = sum(1 for gap in gaps if gap["severity"] == "warning")
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "generated_at": utc_now(),
         "workspace": str(Path(workspace).resolve()),
         "repo": repo_dict(target),
@@ -119,7 +153,10 @@ def audit_learning_solution_parity(
             continue
 
         solution_module = solution_repo.path / "modules" / module_id if solution_repo else None
-        exercises = []
+        module_rationale = solution_module / MODULE_LEVEL_ARTIFACT if solution_module else None
+        has_module_rationale = bool(module_rationale and module_rationale.exists())
+
+        exercises: list[dict[str, Any]] = []
         module_gaps: list[dict[str, Any]] = []
 
         if solution_repo is None:
@@ -139,35 +176,62 @@ def audit_learning_solution_parity(
                     "error",
                     f"Missing solution module directory for {module_id}.",
                     module_id=module_id,
-                    expected_path=relative_path(solution_module, solution_repo.path),
+                    expected_path=relative_path(solution_module, solution_repo.path)
+                    if solution_module
+                    else None,
                 )
             )
 
-        for exercise_path in discover_exercise_files(learning_module):
-            exercise_id = normalize_exercise_id(exercise_path)
-            expected_dir = solution_module / exercise_id if solution_module else None
-            expected_solution = expected_dir / "SOLUTION.md" if expected_dir else None
+        for exercise_entry in discover_exercise_entries(learning_module):
+            exercise_id = normalize_exercise_id(exercise_entry)
+            slug = exercise_slug(exercise_entry)
+            solution_dir = find_exercise_solution_dir(solution_module, exercise_id) if solution_module else None
+            found_artifact = find_first_artifact(solution_dir, DEFAULT_EXERCISE_ARTIFACTS) if solution_dir else None
+
             exercise_status = "ok"
             exercise_gaps: list[dict[str, Any]] = []
 
-            if expected_solution is None or not expected_solution.exists():
-                exercise_status = "missing_solution"
-                exercise_gaps.append(
-                    gap(
-                        "missing_exercise_solution",
-                        "error",
-                        f"Missing SOLUTION.md for {module_id}/{exercise_id}.",
-                        module_id=module_id,
-                        exercise_id=exercise_id,
-                        learning_path=relative_path(exercise_path, learning_repo.path),
-                        expected_path=relative_path(expected_solution, solution_repo.path)
-                        if expected_solution and solution_repo
-                        else None,
+            if found_artifact is None:
+                if has_module_rationale:
+                    exercise_status = "module_rationale_only"
+                    exercise_gaps.append(
+                        gap(
+                            "exercise_solution_module_level_only",
+                            "warning",
+                            (
+                                f"{module_id}/{exercise_id} relies on module-level rationale "
+                                "instead of an exercise-level artifact."
+                            ),
+                            module_id=module_id,
+                            exercise_id=exercise_id,
+                            learning_path=relative_path(exercise_entry, learning_repo.path),
+                            module_rationale_path=relative_path(module_rationale, solution_repo.path)
+                            if module_rationale and solution_repo
+                            else None,
+                        )
                     )
-                )
+                else:
+                    exercise_status = "missing_solution"
+                    expected_dir_path = (
+                        relative_path(solution_module / f"{exercise_id}-{slug}" if slug else solution_module / exercise_id, solution_repo.path)
+                        if solution_module and solution_repo
+                        else None
+                    )
+                    exercise_gaps.append(
+                        gap(
+                            "missing_exercise_solution",
+                            "error",
+                            f"Missing solution artifact for {module_id}/{exercise_id}.",
+                            module_id=module_id,
+                            exercise_id=exercise_id,
+                            learning_path=relative_path(exercise_entry, learning_repo.path),
+                            expected_path=expected_dir_path,
+                            accepted_artifacts=list(DEFAULT_EXERCISE_ARTIFACTS),
+                        )
+                    )
             else:
                 source_gaps = audit_solution_sources(
-                    expected_solution,
+                    found_artifact,
                     solution_repo.path,
                     module_id,
                     exercise_id,
@@ -177,24 +241,38 @@ def audit_learning_solution_parity(
                     exercise_status = "source_gap"
                 exercise_gaps.extend(source_gaps)
 
-            exercise_title = extract_title(exercise_path)
+            exercise_title = extract_title(exercise_entry)
             exercises.append(
                 {
                     "exercise_id": exercise_id,
-                    "slug": exercise_path.stem,
+                    "slug": slug,
                     "title": exercise_title,
-                    "learning_path": relative_path(exercise_path, learning_repo.path),
-                    "expected_solution_dir": relative_path(expected_dir, solution_repo.path)
-                    if expected_dir and solution_repo
+                    "learning_path": relative_path(exercise_entry, learning_repo.path),
+                    "expected_solution_dir": relative_path(solution_dir, solution_repo.path)
+                    if solution_dir and solution_repo
+                    else (
+                        relative_path(
+                            solution_module / f"{exercise_id}-{slug}" if slug else solution_module / exercise_id,
+                            solution_repo.path,
+                        )
+                        if solution_module and solution_repo
+                        else None
+                    ),
+                    "found_artifact": relative_path(found_artifact, solution_repo.path)
+                    if found_artifact and solution_repo
                     else None,
-                    "required_artifacts": ["SOLUTION.md"],
+                    "required_artifacts": list(DEFAULT_EXERCISE_ARTIFACTS),
                     "status": exercise_status,
                     "gaps": exercise_gaps,
                 }
             )
             module_gaps.extend(exercise_gaps)
 
-        status = "ok" if not any(item["severity"] == "error" for item in module_gaps) else "gap"
+        module_status = derive_module_status(
+            exercises=exercises,
+            has_module_rationale=has_module_rationale,
+            module_gaps=module_gaps,
+        )
         modules.append(
             {
                 "module_id": module_id,
@@ -202,16 +280,40 @@ def audit_learning_solution_parity(
                 "solution_path": relative_path(solution_module, solution_repo.path)
                 if solution_module and solution_repo
                 else None,
-                "status": status,
+                "module_rationale_path": relative_path(module_rationale, solution_repo.path)
+                if module_rationale and solution_repo and has_module_rationale
+                else None,
+                "has_module_rationale": has_module_rationale,
+                "status": module_status,
                 "exercise_count": len(exercises),
                 "missing_solution_count": sum(
                     1 for exercise in exercises if exercise["status"] == "missing_solution"
+                ),
+                "module_rationale_only_count": sum(
+                    1 for exercise in exercises if exercise["status"] == "module_rationale_only"
                 ),
                 "exercises": exercises,
                 "gaps": module_gaps,
             }
         )
     return modules
+
+
+def derive_module_status(
+    exercises: list[dict[str, Any]],
+    has_module_rationale: bool,
+    module_gaps: list[dict[str, Any]],
+) -> str:
+    if any(item["severity"] == "error" for item in module_gaps):
+        return "gap"
+    if not exercises:
+        return "ok" if has_module_rationale else "empty"
+    statuses = {exercise["status"] for exercise in exercises}
+    if statuses == {"ok"}:
+        return "ok"
+    if statuses <= {"ok", "module_rationale_only"}:
+        return "module_rationale_only"
+    return "gap"
 
 
 def discover_learning_modules(repo: RepositoryInfo) -> list[Path]:
@@ -221,31 +323,104 @@ def discover_learning_modules(repo: RepositoryInfo) -> list[Path]:
     return sorted(path for path in root.iterdir() if path.is_dir() and path.name.startswith("mod-"))
 
 
-def discover_exercise_files(module_path: Path) -> list[Path]:
+def discover_exercise_entries(module_path: Path) -> list[Path]:
+    """Yield each entry under ``exercises/`` that names a learning exercise.
+
+    Entries can be either:
+        - A markdown file (e.g. ``exercise-01-threat-model.md``).
+        - A directory (e.g. ``exercise-04-python-env-manager/``).
+
+    README/index files at the root of ``exercises/`` are excluded.
+    """
     exercises_dir = module_path / "exercises"
     if not exercises_dir.exists():
         return []
-    return sorted(
-        path
-        for path in exercises_dir.iterdir()
-        if path.is_file() and path.suffix == ".md" and path.name.lower() != "readme.md"
-    )
+    entries: list[Path] = []
+    for path in sorted(exercises_dir.iterdir()):
+        if path.name.lower().startswith("readme"):
+            continue
+        if path.is_file():
+            if path.suffix.lower() == ".md" and EXERCISE_ID_PATTERN.match(path.stem):
+                entries.append(path)
+        elif path.is_dir():
+            if EXERCISE_ID_PATTERN.match(path.name):
+                entries.append(path)
+    return entries
 
 
 def normalize_exercise_id(path: Path) -> str:
-    match = EXERCISE_ID_PATTERN.match(path.stem)
-    return match.group(1) if match else path.stem
+    """Return the canonical ``exercise-NN`` id for either a file or directory."""
+    name = path.stem if path.is_file() else path.name
+    match = EXERCISE_ID_PATTERN.match(name)
+    return match.group(1) if match else name
+
+
+def exercise_slug(path: Path) -> str | None:
+    """Return the non-numeric suffix portion of the exercise id, if any."""
+    name = path.stem if path.is_file() else path.name
+    match = EXERCISE_ID_PATTERN.match(name)
+    if not match:
+        return None
+    remainder = name[match.end() :]
+    return remainder.lstrip("-") or None
+
+
+def find_exercise_solution_dir(solution_module: Path, exercise_id: str) -> Path | None:
+    """Locate the on-disk solution directory for ``exercise_id``.
+
+    Solutions repos in this curriculum use a few conventions:
+
+    - ``modules/<module>/<exercise-NN-slug>/``  (engineer + senior-engineer)
+    - ``modules/<module>/<exercise-NN>/``       (security pilot)
+
+    We accept either, glob-matching on the ``exercise-NN`` prefix.
+    """
+    if not solution_module.exists():
+        return None
+    exact = solution_module / exercise_id
+    if exact.is_dir():
+        return exact
+    # Look for sibling directories with the same numeric prefix.
+    candidates = [
+        path
+        for path in solution_module.iterdir()
+        if path.is_dir()
+        and path.name.startswith(f"{exercise_id}-")
+    ]
+    if len(candidates) == 1:
+        return candidates[0]
+    # Multiple matches (rare) — prefer the longest slug match.
+    if candidates:
+        return sorted(candidates, key=lambda item: -len(item.name))[0]
+    return None
+
+
+def find_first_artifact(directory: Path | None, names: tuple[str, ...]) -> Path | None:
+    if directory is None or not directory.is_dir():
+        return None
+    for name in names:
+        candidate = directory / name
+        if candidate.is_file():
+            return candidate
+    return None
 
 
 def extract_title(path: Path) -> str:
+    target = path
+    if path.is_dir():
+        readme = path / "README.md"
+        if readme.exists():
+            target = readme
+        else:
+            return path.name.replace("-", " ").title()
     try:
-        for line in path.read_text(encoding="utf-8").splitlines():
+        for line in target.read_text(encoding="utf-8").splitlines():
             stripped = line.strip()
             if stripped.startswith("#"):
                 return stripped.lstrip("#").strip()
-    except UnicodeDecodeError:
-        return path.stem
-    return path.stem.replace("-", " ").title()
+    except (OSError, UnicodeDecodeError):
+        return target.stem
+    return target.stem.replace("-", " ").title()
 
 
 def audit_solution_sources(
@@ -287,27 +462,38 @@ def audit_solution_sources(
     return findings
 
 
-def scan_placeholders(repo_path: Path) -> list[dict[str, Any]]:
+def scan_placeholders(
+    repo_path: Path,
+    cache: "PlaceholderCache | None" = None,
+) -> list[dict[str, Any]]:
+    if cache is not None:
+        return cache.scan(repo_path)
     findings: list[dict[str, Any]] = []
     for path in iter_text_files(repo_path):
-        try:
-            lines = path.read_text(encoding="utf-8").splitlines()
-        except UnicodeDecodeError:
-            continue
-        for line_number, line in enumerate(lines, 1):
-            for marker, pattern in PLACEHOLDER_PATTERNS.items():
-                if pattern.search(line):
-                    severity = "error" if marker in {"needs_research", "manual_review"} else "warning"
-                    findings.append(
-                        gap(
-                            marker,
-                            severity,
-                            f"Found {marker.replace('_', '-')} marker.",
-                            path=relative_path(path, repo_path),
-                            line=line_number,
-                            excerpt=line.strip()[:160],
-                        )
+        findings.extend(_scan_file_for_placeholders(path, repo_path))
+    return findings
+
+
+def _scan_file_for_placeholders(path: Path, repo_path: Path) -> list[dict[str, Any]]:
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except (OSError, UnicodeDecodeError):
+        return []
+    findings: list[dict[str, Any]] = []
+    for line_number, line in enumerate(lines, 1):
+        for marker, pattern in PLACEHOLDER_PATTERNS.items():
+            if pattern.search(line):
+                severity = "error" if marker in {"needs_research", "manual_review"} else "warning"
+                findings.append(
+                    gap(
+                        marker,
+                        severity,
+                        f"Found {marker.replace('_', '-')} marker.",
+                        path=relative_path(path, repo_path),
+                        line=line_number,
+                        excerpt=line.strip()[:160],
                     )
+                )
     return findings
 
 
@@ -365,3 +551,110 @@ def repo_dict(repo: RepositoryInfo | None) -> dict[str, Any] | None:
         "track": repo.track,
         "has_git": repo.has_git,
     }
+
+
+# ---------------------------------------------------------------------------
+# Placeholder scan cache
+# ---------------------------------------------------------------------------
+
+
+class PlaceholderCache:
+    """Cache placeholder-scan findings by file mtime+size.
+
+    Stored under ``<repo>/.aicg/placeholder-cache.json`` with the shape::
+
+        {
+            "schema_version": 1,
+            "entries": {
+                "<relative path>": {
+                    "mtime_ns": int,
+                    "size": int,
+                    "findings": [...]
+                }
+            }
+        }
+
+    Callers should construct one instance per repo, call ``scan(repo_path)``
+    once, and then ``save()`` to persist updates.
+    """
+
+    SCHEMA_VERSION = 1
+
+    def __init__(self, repo_path: Path):
+        from .state import ensure_state_dir
+
+        self._repo_path = repo_path.resolve()
+        state_dir = ensure_state_dir(self._repo_path)
+        self._cache_path = state_dir / "placeholder-cache.json"
+        self._entries: dict[str, dict[str, Any]] = self._load_entries()
+        self._dirty = False
+
+    def _load_entries(self) -> dict[str, dict[str, Any]]:
+        if not self._cache_path.exists():
+            return {}
+        try:
+            import json
+
+            payload = json.loads(self._cache_path.read_text(encoding="utf-8"))
+            if int(payload.get("schema_version", 0)) != self.SCHEMA_VERSION:
+                return {}
+            entries = payload.get("entries")
+            return entries if isinstance(entries, dict) else {}
+        except (OSError, ValueError):
+            return {}
+
+    def scan(self, repo_path: Path) -> list[dict[str, Any]]:
+        repo_path = repo_path.resolve()
+        if repo_path != self._repo_path:
+            # Caller mismatch — fall back to non-cached scan to stay
+            # correct.
+            return scan_placeholders(repo_path)
+
+        findings: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for path in iter_text_files(repo_path):
+            relative = relative_path(path, repo_path)
+            seen.add(relative)
+            try:
+                stat = path.stat()
+            except OSError:
+                continue
+            entry = self._entries.get(relative)
+            if (
+                entry
+                and entry.get("mtime_ns") == stat.st_mtime_ns
+                and entry.get("size") == stat.st_size
+            ):
+                findings.extend(entry.get("findings", []))
+                continue
+            file_findings = _scan_file_for_placeholders(path, repo_path)
+            self._entries[relative] = {
+                "mtime_ns": stat.st_mtime_ns,
+                "size": stat.st_size,
+                "findings": file_findings,
+            }
+            self._dirty = True
+            findings.extend(file_findings)
+
+        # Drop cache rows for files that no longer exist.
+        stale = [key for key in self._entries if key not in seen]
+        if stale:
+            for key in stale:
+                self._entries.pop(key, None)
+            self._dirty = True
+
+        return findings
+
+    def save(self) -> Path | None:
+        if not self._dirty:
+            return None
+        from .state import write_json
+
+        payload = {
+            "schema_version": self.SCHEMA_VERSION,
+            "generated_at": utc_now(),
+            "entries": self._entries,
+        }
+        write_json(self._cache_path, payload)
+        self._dirty = False
+        return self._cache_path

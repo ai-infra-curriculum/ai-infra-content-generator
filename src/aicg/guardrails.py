@@ -7,7 +7,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from .audit import scan_placeholders
+from .audit import PlaceholderCache, scan_placeholders
 
 RESTRICTED_AUTO_MERGE_PATTERNS = (
     ".github/workflows/*",
@@ -45,7 +45,9 @@ def evaluate_guardrails(
     if force_push:
         blockers.append("Force-push is not allowed by AICG guardrails.")
 
-    marker_findings = scan_placeholders(repo_path)
+    cache = PlaceholderCache(repo_path)
+    marker_findings = scan_placeholders(repo_path, cache=cache)
+    cache.save()
     if any(item["type"] == "manual_review" for item in marker_findings):
         blockers.append("Manual-review markers are present.")
     if any(item["type"] == "needs_research" for item in marker_findings):

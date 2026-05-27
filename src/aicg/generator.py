@@ -90,6 +90,7 @@ def generate_from_plan(
             "returncode": result.returncode,
             "stdout": result.stdout,
             "stderr": result.stderr,
+            "limit_pattern_unmatched": result.limit_pattern_unmatched,
             "updated_at": utc_now(),
         }
     )
@@ -169,6 +170,15 @@ def build_prompt_packet(work_item: dict[str, Any], registry: SourceRegistry) -> 
 
 
 def load_generator_command(repo_path: Path, config_paths: list[Path]) -> str | None:
+    """Locate the configured generator command for ``repo_path``.
+
+    The runner first looks beside the target repo (``aicg.yaml`` /
+    ``aicg.yml`` / ``aicg.json``) and then falls through to any
+    additional configs supplied via the CLI. Files can be JSON or YAML;
+    the loader is tolerant of both.
+    """
+    from .config_loader import ConfigError, load_config
+
     candidate_paths = [
         repo_path / "aicg.yaml",
         repo_path / "aicg.yml",
@@ -178,25 +188,13 @@ def load_generator_command(repo_path: Path, config_paths: list[Path]) -> str | N
     for path in candidate_paths:
         if not path.exists():
             continue
-        if path.suffix == ".json":
-            import json
-
-            raw = json.loads(path.read_text(encoding="utf-8"))
-            return raw.get("generator_command") or raw.get("agent_command")
-        parsed = parse_simple_yaml(path.read_text(encoding="utf-8"))
+        try:
+            parsed = load_config(path)
+        except ConfigError:
+            continue
+        if not isinstance(parsed, dict):
+            continue
         command = parsed.get("generator_command") or parsed.get("agent_command")
         if command:
-            return command
+            return str(command)
     return None
-
-
-def parse_simple_yaml(content: str) -> dict[str, str]:
-    data: dict[str, str] = {}
-    for raw_line in content.splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#") or ":" not in line:
-            continue
-        key, value = line.split(":", 1)
-        value = value.strip().strip("'\"")
-        data[key.strip()] = value
-    return data

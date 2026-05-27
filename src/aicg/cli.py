@@ -77,6 +77,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     pr_parser = subparsers.add_parser("pr", help="Create guarded branch, commit, and GitHub PR")
     add_repo_args(pr_parser)
+    pr_parser.add_argument(
+        "--work-id",
+        default=None,
+        help="Specific work item id to PR. Defaults to the highest-priority item.",
+    )
     pr_parser.add_argument("--auto-merge", action="store_true", help="Require auto-merge guardrails")
     pr_parser.set_defaults(func=cmd_pr)
 
@@ -247,6 +252,7 @@ def cmd_pr(args: argparse.Namespace) -> int:
         audit_report=audit,
         validation_report=validation,
         auto_merge=args.auto_merge,
+        work_id=args.work_id,
     )
     print(f"Created PR: {result['pr_url']}")
     print(f"Branch: {result['branch']}")

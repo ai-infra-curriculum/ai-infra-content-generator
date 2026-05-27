@@ -25,6 +25,37 @@ def test_ignores_non_limit_errors():
     assert classify_limit_scope("command not found") is None
 
 
+def test_generator_records_limit_pattern_unmatched_when_failure_is_opaque(tmp_path):
+    """When the agent fails for unknown reasons, surface a tunable signal."""
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    script = tmp_path / "opaque.sh"
+    script.write_text(
+        "#!/usr/bin/env bash\necho 'something weird happened' >&2\nexit 1\n",
+        encoding="utf-8",
+    )
+    script.chmod(0o755)
+    plan = {
+        "repo": {"name": "repo"},
+        "work_items": [
+            {
+                "id": "work-1",
+                "repo": "repo",
+                "module": "mod-001",
+                "source_policy": {"required_default_sources": []},
+                "exercises": [],
+            }
+        ],
+    }
+
+    with pytest.raises(RuntimeError):
+        generate_from_plan(repo, plan, work_id="work-1", command_override=str(script))
+
+    state = json.loads((repo / ".aicg" / "run-state.json").read_text(encoding="utf-8"))
+    assert state["status"] == "generator_failed"
+    assert state["limit_pattern_unmatched"] is True
+
+
 def test_generator_persists_limit_state(tmp_path):
     repo = tmp_path / "repo"
     repo.mkdir()

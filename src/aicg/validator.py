@@ -165,20 +165,72 @@ def validate_markdown_format(path: Path, repo_path: Path) -> list[dict[str, Any]
 
 
 def validate_markdown_tables(path: Path, repo_path: Path, lines: list[str]) -> list[dict[str, Any]]:
+    """Validate that every GitHub-flavored markdown table is well-formed.
+
+    Rules enforced:
+
+    - The row after a header must be a separator row of the same column
+      count (``|---|---|`` or variations with alignment markers).
+    - Every body row must have the same number of columns as the header.
+    - A bare separator row without a preceding header is flagged.
+    """
     findings: list[dict[str, Any]] = []
     table_width: int | None = None
     in_table = False
+    separator_seen = False
+    in_code_fence = False
     for line_number, line in enumerate(lines, 1):
         stripped = line.strip()
-        is_table_row = stripped.startswith("|") and stripped.endswith("|")
-        if not is_table_row:
+        if stripped.startswith("```"):
+            in_code_fence = not in_code_fence
             table_width = None
             in_table = False
+            separator_seen = False
             continue
-        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if in_code_fence:
+            continue
+        if not _is_table_row(stripped):
+            table_width = None
+            in_table = False
+            separator_seen = False
+            continue
+        cells = _split_table_row(stripped)
         if not in_table:
             table_width = len(cells)
             in_table = True
+            separator_seen = False
+            continue
+        if not separator_seen:
+            separator_seen = True
+            if not _is_separator_cells(cells):
+                findings.append(
+                    {
+                        "severity": "error",
+                        "path": relative_path(path, repo_path),
+                        "line": line_number,
+                        "message": "Markdown table is missing the |---|---| separator row after the header.",
+                    }
+                )
+                # Treat this row as if it were a body row for subsequent
+                # column-count checks.
+                if table_width is not None and len(cells) != table_width:
+                    findings.append(
+                        {
+                            "severity": "error",
+                            "path": relative_path(path, repo_path),
+                            "line": line_number,
+                            "message": "Markdown table row has a different column count.",
+                        }
+                    )
+            elif table_width is not None and len(cells) != table_width:
+                findings.append(
+                    {
+                        "severity": "error",
+                        "path": relative_path(path, repo_path),
+                        "line": line_number,
+                        "message": "Markdown table separator column count does not match the header.",
+                    }
+                )
             continue
         if table_width is not None and len(cells) != table_width:
             findings.append(
@@ -190,6 +242,21 @@ def validate_markdown_tables(path: Path, repo_path: Path, lines: list[str]) -> l
                 }
             )
     return findings
+
+
+def _is_table_row(stripped: str) -> bool:
+    return stripped.startswith("|") and stripped.endswith("|") and len(stripped) >= 2
+
+
+def _split_table_row(stripped: str) -> list[str]:
+    return [cell.strip() for cell in stripped.strip("|").split("|")]
+
+
+_SEPARATOR_CELL_PATTERN = __import__("re").compile(r"^:?-{2,}:?$")
+
+
+def _is_separator_cells(cells: list[str]) -> bool:
+    return bool(cells) and all(_SEPARATOR_CELL_PATTERN.match(cell) for cell in cells)
 
 
 def check_ci_contract(repo_path: Path) -> dict[str, Any]:
