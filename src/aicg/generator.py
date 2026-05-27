@@ -199,13 +199,21 @@ def build_prompt_packet(work_item: dict[str, Any], registry: SourceRegistry) -> 
         if work_item.get("project")
         else f"path `{work_item.get('path', '?')}`"
     )
-    goal_lead = (
-        "Create module-level reference solutions"
-        if work_item.get("module")
-        else "Author the project solution artifact"
-        if work_item.get("project")
-        else "Refresh the artifact below"
-    )
+    is_depth_followup = work_item.get("type") == "exercise_depth_followup"
+    if is_depth_followup:
+        goal_lead = (
+            "Split the existing module-level SOLUTION.md into per-exercise "
+            "SOLUTION.md files. The module-level file already covers the "
+            "rationale; your job is to factor it into the per-exercise "
+            "directories listed below WITHOUT inventing new content. Keep "
+            "the module-level file as a high-level index"
+        )
+    elif work_item.get("module"):
+        goal_lead = "Create module-level reference solutions"
+    elif work_item.get("project"):
+        goal_lead = "Author the project solution artifact"
+    else:
+        goal_lead = "Refresh the artifact below"
 
     return (
         f"# AICG Work Packet: {work_item['id']}\n\n"

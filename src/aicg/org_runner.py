@@ -221,6 +221,26 @@ def run_org_audit(
                 }
             )
 
+        # Backlog items (exercise_depth_followup etc.) become medium-
+        # severity work so they sit below structural gaps but get
+        # worked eventually rather than living only in per-repo state.
+        for item in plan.get("backlog_items", []):
+            biased_item = {**item, "severity": "medium"}
+            queue_items.append(
+                {
+                    "id": f"{repo}:{item['id']}",
+                    "repo": repo,
+                    "work_id": item["id"],
+                    "module": item.get("module"),
+                    "type": item["type"],
+                    "severity": "medium",
+                    "title": item["title"],
+                    "status": "ready",
+                    "priority": queue_priority(manifest, repo, biased_item),
+                    "created_at": utc_now(),
+                }
+            )
+
         # Splice in freshness work items if the most recent audit-links /
         # audit-versions / review runs left reports behind. These are
         # additive — structural gaps remain in the queue too.
@@ -590,14 +610,24 @@ def _open_work_item_pr(
     """
     from .gitops import GitOpsError, prepare_pr
 
-    # The audit / validation reports are inputs to the PR body. If
-    # validation has not been run for this repo yet (common — the
-    # daily flow doesn't run it), feed an empty placeholder so the
-    # PR body still renders. Audit is required.
+    # Re-audit the target so the PR body reflects post-generation
+    # state, not the weekly-audit snapshot. The result is written to
+    # .aicg/audit-report.json which prepare_pr reads.
     try:
-        audit_report = read_state(repo_path, "audit-report.json")
-    except FileNotFoundError:
-        return {"status": "skipped", "reason": "audit-report.json missing"}
+        audit_report = audit_repo(
+            workspace=repo_path.parent,
+            repo_name=repo_path.name,
+        )
+    except Exception as exc:  # noqa: BLE001
+        # Fall back to whatever audit-report.json existed before; we
+        # never block PR creation on a stale audit.
+        try:
+            audit_report = read_state(repo_path, "audit-report.json")
+        except FileNotFoundError:
+            return {
+                "status": "skipped",
+                "reason": f"audit failed and no prior audit-report.json: {exc}",
+            }
 
     try:
         validation_report = read_state(repo_path, "validation-report.json")
@@ -651,20 +681,26 @@ def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:
     return items
 
 
+_BACKLOG_TYPES = {"exercise_depth_followup"}
+
+
 def _severity_bias(item: dict[str, Any]) -> int:
     """Convert work item severity + type into a priority bias.
 
-    - High-severity refresh items: -100000 (jumps above every structural
-      gap regardless of role level).
-    - Medium-severity refresh items: +5000 (below structural gaps within
-      the same role but above other refresh).
-    - Low-severity refresh items: +20000 (deepest backlog).
+    Lower number = higher priority (queue is sorted ascending).
+
+    - High-severity refresh items: -100000 (jumps above every
+      structural gap regardless of role level).
     - Structural gaps (module_solution_gap, project_solution_gap): 0.
+    - Medium-severity refresh + backlog (exercise_depth_followup): +5000
+      (just below structural within the same role).
+    - Low-severity refresh items: +20000 (deepest backlog).
     """
     severity = str(item.get("severity", "")).lower()
     work_type = str(item.get("type", ""))
     is_refresh = work_type.startswith("refresh_")
-    if not is_refresh:
+    is_backlog = work_type in _BACKLOG_TYPES
+    if not is_refresh and not is_backlog:
         return 0
     if severity == "high":
         return -100_000
