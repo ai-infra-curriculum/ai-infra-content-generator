@@ -57,6 +57,7 @@ done
 
 [[ -f "$PROMPT" ]] || { echo "Prompt not found: $PROMPT" >&2; exit 2; }
 [[ -n "$OUTPUT_DIR" ]] || { echo "--output-dir is required" >&2; exit 2; }
+[[ -n "$REPO" && -d "$REPO" ]] || { echo "--repo path missing or not a directory: $REPO" >&2; exit 2; }
 command -v codex >/dev/null || { echo "codex CLI not found in PATH" >&2; exit 127; }
 
 mkdir -p "$OUTPUT_DIR"
@@ -68,4 +69,16 @@ mkdir -p "$OUTPUT_DIR"
   date '+started_at=%Y-%m-%dT%H:%M:%S%z'
 } >"$OUTPUT_DIR/agent-run.env"
 
-codex exec --model "$MODEL" --input "$PROMPT" >"$OUTPUT_DIR/response.md"
+# Unattended permission profile:
+#   --sandbox workspace-write : agent can write inside the repo, sandboxed elsewhere
+#   --cd <repo>               : working root pinned to the repo
+#   --skip-git-repo-check     : repo is git but may have a dirty state from earlier
+#   prompt fed via stdin      : --input was removed in newer codex builds
+cd "$REPO"
+codex exec \
+  --model "$MODEL" \
+  --sandbox workspace-write \
+  --cd "$REPO" \
+  --skip-git-repo-check \
+  - < "$PROMPT" \
+  >"$OUTPUT_DIR/response.md"

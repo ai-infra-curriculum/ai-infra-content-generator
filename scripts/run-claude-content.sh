@@ -57,6 +57,7 @@ done
 
 [[ -f "$PROMPT" ]] || { echo "Prompt not found: $PROMPT" >&2; exit 2; }
 [[ -n "$OUTPUT_DIR" ]] || { echo "--output-dir is required" >&2; exit 2; }
+[[ -n "$REPO" && -d "$REPO" ]] || { echo "--repo path missing or not a directory: $REPO" >&2; exit 2; }
 command -v claude >/dev/null || { echo "claude CLI not found in PATH" >&2; exit 127; }
 
 mkdir -p "$OUTPUT_DIR"
@@ -68,4 +69,31 @@ mkdir -p "$OUTPUT_DIR"
   date '+started_at=%Y-%m-%dT%H:%M:%S%z'
 } >"$OUTPUT_DIR/agent-run.env"
 
-claude --model "$MODEL" -p "$(cat "$PROMPT")" >"$OUTPUT_DIR/response.md"
+# Unattended permission profile:
+#   --permission-mode acceptEdits  : Edit/Write/Read auto-approved
+#   --add-dir <repo>               : grant tool access to the repo
+#   --allowedTools                 : narrow Bash to safe read-only ops + git status/diff
+#   stdin redirected from /dev/null: never block on prompts
+ALLOWED_TOOLS=(
+  "Edit"
+  "Write"
+  "Read"
+  "Glob"
+  "Grep"
+  "Bash(mkdir:*)"
+  "Bash(ls:*)"
+  "Bash(cat:*)"
+  "Bash(git status:*)"
+  "Bash(git diff:*)"
+)
+
+cd "$REPO"
+claude \
+  --model "$MODEL" \
+  --print \
+  --permission-mode acceptEdits \
+  --add-dir "$REPO" \
+  --allowedTools "${ALLOWED_TOOLS[@]}" \
+  "$(cat "$PROMPT")" \
+  </dev/null \
+  >"$OUTPUT_DIR/response.md"

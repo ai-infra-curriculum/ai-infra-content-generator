@@ -65,7 +65,27 @@ PROMPT_BODY="$(cat "$PROMPT")
 Write your verdict as JSON to: $OUTPUT_DIR/response.json
 Follow the schema described in the prompt above."
 
-claude --model "$MODEL" -p "$PROMPT_BODY" >"$OUTPUT_DIR/raw-output.md"
+# Judge is read-only by contract; deny write tools to ensure it cannot
+# mutate the artifact it is grading.
+ARTIFACT_DIR="$(dirname "$ARTIFACT")"
+ALLOWED_TOOLS=(
+  "Read"
+  "Glob"
+  "Grep"
+  "Bash(cat:*)"
+  "Bash(ls:*)"
+)
+
+claude \
+  --model "$MODEL" \
+  --print \
+  --permission-mode default \
+  --add-dir "$ARTIFACT_DIR" \
+  --allowedTools "${ALLOWED_TOOLS[@]}" \
+  --disallowedTools "Edit" "Write" \
+  "$PROMPT_BODY" \
+  </dev/null \
+  >"$OUTPUT_DIR/raw-output.md"
 
 # If the agent wrote raw JSON to stdout instead of response.json,
 # attempt a permissive extraction.
