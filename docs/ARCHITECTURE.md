@@ -333,6 +333,64 @@ The runner never uses `--dangerously-skip-permissions` / `--dangerously-bypass-a
 | Steward sees `ci_failed` | Tests broke from generated content | PR sits open; human investigates; once fixed, next steward tick merges |
 | Curriculum-plan-delta merge fails | Malformed JSON from research agent | Reported in `research-apply-report.json`; plan file untouched |
 | Two job-script runs collide | systemd timer overlap | Second run sees `.aicg/org/aicg-org.lock/` and exits 0 |
+| PR sits in `review_blocked` after 3 auto-respond attempts | Reviewer keeps requesting changes the agent can't satisfy | Item flips to `escalated`; `daily-issues` opens an `aicg:escalated-pr-response` issue with the blocker list |
+
+---
+
+## PR-response loop
+
+`daily-steward` doesn't just poll CI. After CI passes + guardrails clear,
+it fetches reviews and review threads via `gh api graphql` and blocks
+auto-merge on:
+
+- A review in `CHANGES_REQUESTED` state (human or bot)
+- An unresolved, non-outdated review thread (human or bot)
+
+Blocked PRs become `respond_pr_review` work items in
+`.aicg/org/pr-response-queue.json`. The next `daily-remediate` tick
+picks them up at priority bias **-200000** (jumps every other type),
+checks out the PR branch, invokes the agent with the full blocker list,
+and pushes follow-up commits to the same branch.
+
+The next steward pass re-checks. Bot threads typically self-resolve
+when the underlying metric recovers (codecov stops complaining); human
+review threads stay open until a human resolves them — the runner
+never marks human threads resolved.
+
+After **3 failed response attempts** for the same blocker signature,
+the item becomes `escalated` and `daily-issues` opens an
+`aicg:escalated-pr-response` issue so a human can step in.
+
+```mermaid
+flowchart TD
+    Steward["daily-steward 04:40 MST"]
+    CI{"CI green?"}
+    Guard{"guardrails ok?"}
+    ReviewFetch["fetch_review_state via gh graphql"]
+    Classify{"CHANGES_REQUESTED<br/>or unresolved<br/>threads?"}
+    Merge["gh pr merge --auto --squash"]
+    Queue[("pr-response-queue.json")]
+    Cap{"response_count<br/>>= 3?"}
+    Daily["daily-remediate (next tick)<br/>checkout PR branch<br/>+ agent + push"]
+    Escalated["status = escalated"]
+    Issues["daily-issues opens<br/>aicg:escalated-pr-response"]
+
+    Steward --> CI
+    CI -- no --> Stop1["ci_failed / ci_pending"]
+    CI -- yes --> Guard
+    Guard -- no --> Stop2["guardrails_blocked"]
+    Guard -- yes --> ReviewFetch
+    ReviewFetch --> Classify
+    Classify -- no --> Merge
+    Classify -- yes --> Cap
+    Cap -- no --> Queue --> Daily --> Steward
+    Cap -- yes --> Escalated --> Issues
+
+    classDef terminal fill:#fee2e2,stroke:#991b1b
+    classDef ok fill:#dcfce7,stroke:#14532d
+    class Stop1,Stop2,Escalated terminal
+    class Merge ok
+```
 
 ---
 

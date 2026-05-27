@@ -241,6 +241,39 @@ def run_org_audit(
                 }
             )
 
+        # Splice in PR-response items emitted by the previous steward
+        # run. These are high-severity so they jump ahead of structural
+        # gaps — keeping an in-flight PR's loop closed beats opening
+        # new ones.
+        for refresh_item in _collect_pr_response_items(state_dir, repo):
+            queue_items.append(
+                {
+                    "id": refresh_item["id"],
+                    "repo": repo,
+                    "work_id": refresh_item["id"].split(":", 1)[-1],
+                    "type": refresh_item["type"],
+                    "severity": refresh_item.get("severity", "high"),
+                    "title": refresh_item.get(
+                        "title",
+                        f"Respond to PR #{refresh_item.get('pr_number')}",
+                    ),
+                    "pr_number": refresh_item.get("pr_number"),
+                    "head_ref": refresh_item.get("head_ref"),
+                    "blockers": refresh_item.get("blockers", []),
+                    "response_count": refresh_item.get("response_count", 0),
+                    "max_response_attempts": refresh_item.get(
+                        "max_response_attempts", 3
+                    ),
+                    "status": refresh_item.get("status", "ready"),
+                    "priority": queue_priority(
+                        manifest,
+                        repo,
+                        {**refresh_item, "severity": "high"},
+                    ),
+                    "created_at": utc_now(),
+                }
+            )
+
         # Splice in freshness work items if the most recent audit-links /
         # audit-versions / review runs left reports behind. These are
         # additive — structural gaps remain in the queue too.
@@ -291,7 +324,6 @@ def run_daily_remediation(
 
     item = ready[0]
     repo_path = workspace / item["repo"]
-    plan = read_state(repo_path, "work-plan.json")
     result = {
         "schema_version": 1,
         "generated_at": utc_now(),
@@ -299,6 +331,19 @@ def run_daily_remediation(
         "selected": item,
         "status": "started",
     }
+    # PR-response items go through a separate handler — no plan, no
+    # propagate, no new PR (they push to an existing one).
+    if item.get("type") == "respond_pr_review":
+        return _handle_pr_response_item(
+            manifest=manifest,
+            workspace=workspace,
+            repo_path=repo_path,
+            item=item,
+            state_dir=state_dir,
+            result=result,
+        )
+
+    plan = read_state(repo_path, "work-plan.json")
     try:
         run_state = generate_from_plan(
             repo_path,
@@ -599,6 +644,216 @@ def queue_priority(manifest: OrgManifest, repo: str, item: dict[str, Any]) -> in
     return severity_bias + base * 1000 + int(item.get("priority", 100))
 
 
+def _handle_pr_response_item(
+    manifest: OrgManifest,
+    workspace: Path,
+    repo_path: Path,
+    item: dict[str, Any],
+    state_dir: Path,
+    result: dict[str, Any],
+) -> dict[str, Any]:
+    """Process a respond_pr_review work item.
+
+    Checks out the PR branch, builds a response prompt that lists each
+    blocker, invokes the response agent, and pushes follow-up commits
+    to the PR. The next steward pass re-checks reviews; if blockers
+    clear, it merges. If the agent runs out of retries the item is
+    flipped to escalated and daily-issues picks it up.
+    """
+    pr_number = item.get("pr_number")
+    head_ref = item.get("head_ref")
+    blockers = item.get("blockers", [])
+    response_count = int(item.get("response_count", 0))
+    max_attempts = int(item.get("max_response_attempts", 3))
+
+    if response_count >= max_attempts:
+        item["status"] = "escalated"
+        result["status"] = "escalated"
+        result["reason"] = (
+            f"PR #{pr_number} hit max response attempts ({max_attempts}); "
+            "daily-issues will surface to a human."
+        )
+        _persist_pr_response_state(state_dir, item)
+        return result
+
+    if not pr_number or not head_ref:
+        item["status"] = "failed_permanently"
+        result["status"] = "failed_permanently"
+        result["reason"] = "missing pr_number or head_ref"
+        _persist_pr_response_state(state_dir, item)
+        return result
+
+    # Check out the PR branch so the agent edits the right tree.
+    co = subprocess.run(
+        ["git", "-C", str(repo_path), "fetch", "origin", head_ref],
+        capture_output=True, text=True, check=False,
+    )
+    if co.returncode != 0:
+        result["status"] = "fetch_failed"
+        result["stderr_tail"] = co.stderr[-400:]
+        return result
+    subprocess.run(
+        ["git", "-C", str(repo_path), "checkout", head_ref],
+        capture_output=True, text=True, check=False,
+    )
+
+    prompt = _build_pr_response_prompt(pr_number, blockers, item)
+    prompt_dir = repo_path / ".aicg" / "pr-responses" / f"pr-{pr_number}"
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = prompt_dir / "prompt.md"
+    prompt_path.write_text(prompt, encoding="utf-8")
+    output_dir = prompt_dir / f"attempt-{response_count + 1}"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    command = content_generation_command(manifest).format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=item["id"],
+        runner=str(Path(__file__).resolve().parents[2]),
+    )
+    from .agent_cli import run_agent_command
+
+    agent_result = run_agent_command(command, cwd=repo_path)
+    item["response_count"] = response_count + 1
+
+    if agent_result.limit_reached:
+        item["status"] = "deferred"
+        item["retry_after"] = agent_result.retry_after
+        result["status"] = "deferred"
+        result["retry_after"] = agent_result.retry_after
+        _checkout_main(repo_path)
+        _persist_pr_response_state(state_dir, item)
+        return result
+
+    if agent_result.returncode != 0:
+        result["status"] = "agent_failed"
+        result["returncode"] = agent_result.returncode
+        result["stderr_tail"] = agent_result.stderr[-400:]
+        _checkout_main(repo_path)
+        _persist_pr_response_state(state_dir, item)
+        return result
+
+    # Commit + push whatever the agent changed.
+    push_outcome = _commit_and_push_pr_response(repo_path, pr_number, response_count + 1)
+    result["status"] = push_outcome["status"]
+    result["push"] = push_outcome
+    item["status"] = (
+        "ready"
+        if push_outcome["status"] in {"pushed", "no_changes"}
+        else "failed_permanently"
+    )
+    _checkout_main(repo_path)
+    _persist_pr_response_state(state_dir, item)
+    return result
+
+
+def _build_pr_response_prompt(
+    pr_number: int, blockers: list[dict[str, Any]], item: dict[str, Any]
+) -> str:
+    lines = [
+        f"# Respond to PR #{pr_number} review comments",
+        "",
+        "## Goal",
+        "",
+        "Address every blocker listed below by editing the code on the",
+        "current branch. You are NOT writing new curriculum content — you",
+        "are responding to a reviewer (human or bot). Make the smallest",
+        "change that resolves each blocker.",
+        "",
+        "## Source policy",
+        "",
+        "Same as content generation: official sources first, no invented",
+        "facts, mark unresolved claims with `<!-- needs-research: ... -->`.",
+        "",
+        "## Blockers",
+        "",
+    ]
+    for i, b in enumerate(blockers, 1):
+        if b.get("kind") == "changes_requested":
+            lines.append(f"### {i}. CHANGES_REQUESTED from @{b.get('author')}")
+            lines.append("")
+            lines.append(f"> {(b.get('body') or '').strip() or '(no body)'}")
+            lines.append("")
+        elif b.get("kind") == "unresolved_thread":
+            actor = "bot" if b.get("is_bot") else "human"
+            lines.append(
+                f"### {i}. Unresolved review thread "
+                f"({actor}: @{b.get('author')}) "
+                f"in `{b.get('path')}:{b.get('line')}`"
+            )
+            lines.append("")
+            lines.append(f"> {(b.get('body') or '').strip() or '(no body)'}")
+            lines.append("")
+    lines.extend(
+        [
+            "## Output contract",
+            "",
+            "- Edit only files in this repo on the current branch.",
+            "- Make atomic commits per blocker where possible.",
+            "- Do NOT mark review threads resolved — only the reviewer can do",
+            "  that. Your job is to push commits that address the underlying",
+            "  issue; bot threads will auto-resolve when their metric recovers,",
+            "  human threads stay open until the human resolves them.",
+            "- Do NOT touch CURRICULUM.md, README.md, VERSIONS.md, or anything",
+            "  outside the scope of the reviewer's comment.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _commit_and_push_pr_response(
+    repo_path: Path, pr_number: int, attempt: int
+) -> dict[str, Any]:
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    if not status.stdout.strip():
+        return {"status": "no_changes"}
+    msg = f"aicg: respond to PR #{pr_number} review (attempt {attempt})"
+    for args in (
+        ["git", "-C", str(repo_path), "add", "-A", "--", ".", ":(exclude).aicg", ":(exclude).aicg/**"],
+        ["git", "-C", str(repo_path), "commit", "-m", msg],
+        ["git", "-C", str(repo_path), "push"],
+    ):
+        c = subprocess.run(args, capture_output=True, text=True, check=False)
+        if c.returncode != 0:
+            return {
+                "status": "push_failed",
+                "step": args[3],
+                "stderr_tail": c.stderr[-400:],
+            }
+    return {"status": "pushed", "message": msg}
+
+
+def _checkout_main(repo_path: Path) -> None:
+    subprocess.run(
+        ["git", "-C", str(repo_path), "checkout", "main"],
+        capture_output=True, text=True, check=False,
+    )
+
+
+def _persist_pr_response_state(state_dir: Path, item: dict[str, Any]) -> None:
+    """Write the updated item back into pr-response-queue.json."""
+    from .steward import PR_RESPONSE_QUEUE
+
+    path = state_dir / PR_RESPONSE_QUEUE
+    if not path.exists():
+        return
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    items = payload.get("items", [])
+    for i, existing in enumerate(items):
+        if existing.get("id") == item["id"]:
+            items[i] = {**existing, **item, "updated_at": utc_now()}
+            break
+    payload["items"] = items
+    write_json(path, payload)
+
+
 def _open_work_item_pr(
     repo_path: Path, plan: dict[str, Any], item: dict[str, Any]
 ) -> dict[str, Any]:
@@ -654,6 +909,31 @@ def _open_work_item_pr(
     }
 
 
+def _collect_pr_response_items(state_dir: Path, repo: str) -> list[dict[str, Any]]:
+    """Read pr-response-queue.json from the org state and filter to ``repo``.
+
+    Steward populates this queue when it finds CHANGES_REQUESTED reviews
+    or unresolved review threads. Items with status='escalated' are
+    skipped here — daily-issues handles those.
+    """
+    path = state_dir / "pr-response-queue.json"
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    # Both 'ready' (work the daily loop will pick up) and 'escalated'
+    # (work that daily-issues should open a tracking issue for) belong
+    # in the queue — daily-remediate skips escalated items, daily-issues
+    # acts on them.
+    return [
+        item
+        for item in (payload.get("items") or [])
+        if item.get("repo") == repo and item.get("status") in {"ready", "escalated"}
+    ]
+
+
 def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:
     """Read freshness reports from the repo and return their work items.
 
@@ -682,6 +962,7 @@ def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:
 
 
 _BACKLOG_TYPES = {"exercise_depth_followup"}
+_HIGH_PRIORITY_TYPES = {"respond_pr_review"}
 
 
 def _severity_bias(item: dict[str, Any]) -> int:
@@ -700,6 +981,11 @@ def _severity_bias(item: dict[str, Any]) -> int:
     work_type = str(item.get("type", ""))
     is_refresh = work_type.startswith("refresh_")
     is_backlog = work_type in _BACKLOG_TYPES
+    is_high_priority = work_type in _HIGH_PRIORITY_TYPES
+    if is_high_priority:
+        # PR responses always jump structural gaps — keeping an open PR
+        # moving beats opening another one.
+        return -200_000
     if not is_refresh and not is_backlog:
         return 0
     if severity == "high":

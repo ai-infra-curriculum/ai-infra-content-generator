@@ -47,6 +47,8 @@ from .org_config import OrgManifest, state_dir_for_manifest
 from .state import utc_now, write_json
 
 STEWARD_REPORT = "steward-report.json"
+PR_RESPONSE_QUEUE = "pr-response-queue.json"
+DEFAULT_MAX_RESPONSE_ATTEMPTS = 3
 
 
 class StewardError(RuntimeError):
@@ -96,7 +98,92 @@ def steward_run(
         "repos": repo_reports,
     }
     write_json(state_dir / STEWARD_REPORT, report)
+
+    # Side-effect: write the PR-response queue so daily-remediate can
+    # pick up auto-respond work items. Keeps the steward read-only by
+    # default (no commits, no comments).
+    response_queue = _build_response_queue(repo_reports, state_dir)
+    write_json(state_dir / PR_RESPONSE_QUEUE, response_queue)
+
     return report
+
+
+def _build_response_queue(
+    repo_reports: list[dict[str, Any]], state_dir: Path
+) -> dict[str, Any]:
+    """Diff the new review_blocked PRs against the prior queue.
+
+    Items already in flight (response_count > 0 but blockers unchanged)
+    keep their retry count. New blockers reset the count. Items that
+    exceeded ``DEFAULT_MAX_RESPONSE_ATTEMPTS`` get ``escalated`` so
+    daily-issues opens a tracking issue instead.
+    """
+    prior_path = state_dir / PR_RESPONSE_QUEUE
+    prior_items: dict[str, dict[str, Any]] = {}
+    if prior_path.exists():
+        try:
+            payload = json.loads(prior_path.read_text(encoding="utf-8"))
+            for item in payload.get("items", []):
+                prior_items[item["id"]] = item
+        except (OSError, json.JSONDecodeError):
+            prior_items = {}
+
+    new_items: list[dict[str, Any]] = []
+    for repo_report in repo_reports:
+        repo = repo_report.get("repo", "")
+        for pr in repo_report.get("prs", []):
+            if pr.get("state") != "review_blocked":
+                continue
+            item_id = f"{repo}:respond-pr-{pr['pr_number']}"
+            blockers = pr.get("review_blockers", []) or []
+            blocker_sig = _blocker_signature(blockers)
+            prior = prior_items.get(item_id)
+            response_count = int((prior or {}).get("response_count", 0))
+            prior_sig = (prior or {}).get("blocker_signature")
+            if prior_sig and prior_sig == blocker_sig:
+                status = (
+                    "escalated"
+                    if response_count >= DEFAULT_MAX_RESPONSE_ATTEMPTS
+                    else "ready"
+                )
+            else:
+                # New / changed blockers: reset retry count.
+                response_count = 0
+                status = "ready"
+            new_items.append(
+                {
+                    "id": item_id,
+                    "repo": repo,
+                    "pr_number": pr["pr_number"],
+                    "head_ref": pr.get("head_ref"),
+                    "title": pr.get("title"),
+                    "type": "respond_pr_review",
+                    "severity": "high",
+                    "status": status,
+                    "response_count": response_count,
+                    "max_response_attempts": DEFAULT_MAX_RESPONSE_ATTEMPTS,
+                    "blocker_signature": blocker_sig,
+                    "blockers": blockers,
+                    "updated_at": utc_now(),
+                }
+            )
+    return {
+        "schema_version": 1,
+        "generated_at": utc_now(),
+        "item_count": len(new_items),
+        "items": new_items,
+    }
+
+
+def _blocker_signature(blockers: list[dict[str, Any]]) -> str:
+    """Deterministic fingerprint over blocker identity (not content)."""
+    parts = []
+    for b in blockers:
+        if b.get("kind") == "unresolved_thread":
+            parts.append(f"t:{b.get('thread_id')}")
+        elif b.get("kind") == "changes_requested":
+            parts.append(f"cr:{b.get('author')}")
+    return "|".join(sorted(parts))
 
 
 def steward_repo(
@@ -141,6 +228,9 @@ def steward_repo(
         ),
         "ci_failed_count": sum(
             1 for item in pr_outcomes if item["state"] == "ci_failed"
+        ),
+        "review_blocked_count": sum(
+            1 for item in pr_outcomes if item["state"] == "review_blocked"
         ),
         "prs": pr_outcomes,
     }
@@ -216,6 +306,43 @@ def steward_pr(
             "history": history,
         }
     history.append({"timestamp": utc_now(), "state": "guardrails_ok"})
+
+    # Review-state check: CHANGES_REQUESTED reviews and unresolved
+    # review threads block auto-merge. Bot threads count too — once a
+    # bot stops complaining, its thread typically goes outdated/resolved.
+    owner, repo_name = _owner_repo_from_url(merged_pr.get("url", ""))
+    if owner and repo_name:
+        review_state = fetch_review_state(repo_path, owner, repo_name, number)
+        if review_state.get("error"):
+            history.append(
+                {
+                    "timestamp": utc_now(),
+                    "state": "review_state_unknown",
+                    "error": review_state["error"][:400],
+                }
+            )
+        else:
+            classification = classify_review_state(
+                review_state, pr_author=(merged_pr.get("author") or {}).get("login")
+            )
+            if classification["verdict"] == "blocked":
+                history.append(
+                    {
+                        "timestamp": utc_now(),
+                        "state": "review_blocked",
+                        "blockers": classification["blockers"],
+                    }
+                )
+                return {
+                    "repo": repo,
+                    "pr_number": number,
+                    "title": pr.get("title"),
+                    "head_ref": pr.get("headRefName"),
+                    "state": "review_blocked",
+                    "review_blockers": classification["blockers"],
+                    "history": history,
+                }
+            history.append({"timestamp": utc_now(), "state": "review_ok"})
 
     if not apply:
         history.append({"timestamp": utc_now(), "state": "dry_run_skipped_merge"})
@@ -404,6 +531,161 @@ def wait_for_ci(
 
 
 _PENDING_STATES = {"IN_PROGRESS", "QUEUED", "PENDING", "WAITING", "EXPECTED"}
+
+_REVIEW_THREADS_QUERY = """\
+query($owner:String!, $name:String!, $number:Int!) {
+  repository(owner:$owner, name:$name) {
+    pullRequest(number:$number) {
+      reviews(first:50, states:[APPROVED, CHANGES_REQUESTED, COMMENTED, DISMISSED, PENDING]) {
+        nodes {
+          state
+          author { login }
+          body
+          submittedAt
+        }
+      }
+      reviewThreads(first:100) {
+        nodes {
+          id
+          isResolved
+          isOutdated
+          comments(first:1) {
+            nodes {
+              body
+              path
+              line
+              author { login __typename }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
+
+def _owner_repo_from_url(url: str) -> tuple[str | None, str | None]:
+    """Pull (owner, repo) out of a GitHub PR URL.
+
+    Tolerates the absence of the URL — falls back to (None, None) which
+    skips the review-state check rather than crashing the steward.
+    """
+    if not url or "github.com" not in url:
+        return None, None
+    parts = url.rstrip("/").split("/")
+    # Expected shape: https://github.com/<owner>/<repo>/pull/<n>
+    if len(parts) < 5:
+        return None, None
+    try:
+        owner = parts[-4]
+        repo = parts[-3]
+        return owner, repo
+    except IndexError:
+        return None, None
+
+
+def fetch_review_state(
+    repo_path: Path, owner: str, repo_name: str, pr_number: int
+) -> dict[str, Any]:
+    """Fetch PR reviews + review threads via gh graphql.
+
+    Returns ``{"reviews": [...], "threads": [...], "error": str|None}``.
+    Errors are returned (not raised) so the steward can fall back to
+    'block until a human looks' instead of crashing the whole pass.
+    """
+    args = [
+        "gh",
+        "api",
+        "graphql",
+        "-f",
+        f"query={_REVIEW_THREADS_QUERY}",
+        "-F",
+        f"owner={owner}",
+        "-F",
+        f"name={repo_name}",
+        "-F",
+        f"number={pr_number}",
+    ]
+    completed = subprocess.run(
+        args, cwd=repo_path, capture_output=True, text=True, check=False
+    )
+    if completed.returncode != 0:
+        return {
+            "reviews": [],
+            "threads": [],
+            "error": (completed.stderr or completed.stdout)[-1500:],
+        }
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError as exc:
+        return {"reviews": [], "threads": [], "error": f"parse: {exc}"}
+    pr = ((payload.get("data") or {}).get("repository") or {}).get("pullRequest") or {}
+    reviews = ((pr.get("reviews") or {}).get("nodes")) or []
+    threads = ((pr.get("reviewThreads") or {}).get("nodes")) or []
+    return {"reviews": reviews, "threads": threads, "error": None}
+
+
+def classify_review_state(
+    review_state: dict[str, Any], pr_author: str | None = None
+) -> dict[str, Any]:
+    """Classify reviews + threads into a single mergeable verdict.
+
+    Returns ``{"verdict": "mergeable"|"blocked", "blockers": [...]}``.
+    Latest review per author wins. CHANGES_REQUESTED is a hard block.
+    Unresolved (non-outdated) review threads are blockers too.
+    Outdated threads are ignored on the assumption that the author
+    addressed them with later commits.
+    """
+    blockers: list[dict[str, Any]] = []
+
+    # Latest review per author.
+    latest_by_author: dict[str, dict[str, Any]] = {}
+    for review in review_state.get("reviews", []):
+        author = (review.get("author") or {}).get("login") or "?"
+        # Skip the PR author's own pending self-review.
+        if pr_author and author == pr_author and review.get("state") == "PENDING":
+            continue
+        prev = latest_by_author.get(author)
+        if prev is None or (review.get("submittedAt") or "") > (prev.get("submittedAt") or ""):
+            latest_by_author[author] = review
+
+    for author, review in latest_by_author.items():
+        if (review.get("state") or "").upper() == "CHANGES_REQUESTED":
+            blockers.append(
+                {
+                    "kind": "changes_requested",
+                    "author": author,
+                    "body": (review.get("body") or "")[:500],
+                }
+            )
+
+    for thread in review_state.get("threads", []):
+        if thread.get("isResolved"):
+            continue
+        if thread.get("isOutdated"):
+            continue
+        comments = (thread.get("comments") or {}).get("nodes") or []
+        first = comments[0] if comments else {}
+        author_info = first.get("author") or {}
+        login = author_info.get("login") or "?"
+        is_bot = author_info.get("__typename") == "Bot" or login.endswith("[bot]")
+        blockers.append(
+            {
+                "kind": "unresolved_thread",
+                "thread_id": thread.get("id"),
+                "path": first.get("path"),
+                "line": first.get("line"),
+                "author": login,
+                "is_bot": is_bot,
+                "body": (first.get("body") or "")[:500],
+            }
+        )
+
+    return {
+        "verdict": "blocked" if blockers else "mergeable",
+        "blockers": blockers,
+    }
 
 
 def classify_rollup(rollup: list[dict[str, Any]]) -> str:

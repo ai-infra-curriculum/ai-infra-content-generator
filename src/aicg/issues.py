@@ -226,6 +226,23 @@ def _decide(
                 "labels": list(_ISSUE_LABELS) + ["aicg:stuck-deferred"],
             }
 
+    if status == "escalated":
+        if existing:
+            return {
+                "work_id": work_id,
+                "action": "comment",
+                "reason": "escalated — refresh issue",
+                "issue_number": existing.get("number"),
+            }
+        return {
+            "work_id": work_id,
+            "action": "open",
+            "reason": "PR-response loop exhausted retries; needs human.",
+            "issue_title": _title_for(item, "escalated"),
+            "issue_body": _body_for(item, "escalated"),
+            "labels": list(_ISSUE_LABELS) + ["aicg:escalated-pr-response"],
+        }
+
     if status == "verified" and existing:
         return {
             "work_id": work_id,
