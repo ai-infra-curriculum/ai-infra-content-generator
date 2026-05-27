@@ -13,9 +13,12 @@ from aicg.agent_cli import AgentCommandResult
 from aicg.org_config import load_manifest
 from aicg.research import (
     ResearchAgentConfig,
+    ResearchCaps,
     ResearchError,
     merge_curriculum_plan_delta,
+    promote_plan,
     research_apply,
+    validate_delta_against_caps,
 )
 
 
@@ -84,6 +87,12 @@ def test_research_apply_records_applied_when_agent_succeeds(tmp_path: Path) -> N
         limit_scope=None,
     )
 
+    evidence_set = [
+        {"employer": "ACME", "title": "ML SecEng", "url": "https://e/1", "date_observed": "2026-04-12"},
+        {"employer": "B Corp", "title": "AI Sec Engineer", "url": "https://e/2", "date_observed": "2026-04-18"},
+        {"employer": "C Co", "title": "Adversarial ML Eng", "url": "https://e/3", "date_observed": "2026-04-22"},
+    ]
+
     def _fake_agent(command: str, cwd: Path) -> AgentCommandResult:
         # Simulate what the agent would do: write the three contract files.
         (learning / "JOB_REQUIREMENTS.md").write_text("# req\n", encoding="utf-8")
@@ -97,14 +106,16 @@ def test_research_apply_records_applied_when_agent_succeeds(tmp_path: Path) -> N
                     "schema_version": 1,
                     "role_id": "security",
                     "month": "2026-05",
-                    "rationale": "Adding ML supply-chain content.",
+                    "rationale": "Adding ML supply-chain content based on 3+ recent postings.",
                     "modules": [
-                        {"id": "mod-099-supply-chain", "title": "Supply Chain Security"}
+                        {
+                            "id": "mod-099-supply-chain",
+                            "title": "Supply Chain Security",
+                            "evidence": evidence_set,
+                        }
                     ],
                     "exercises": [],
-                    "projects": [
-                        {"id": "project-99-attestation", "title": "Build SLSA-3 pipeline"}
-                    ],
+                    "projects": [],
                 }
             ),
             encoding="utf-8",
@@ -113,17 +124,25 @@ def test_research_apply_records_applied_when_agent_succeeds(tmp_path: Path) -> N
 
     with patch("aicg.research.run_agent_command", side_effect=_fake_agent):
         report = research_apply(
-            manifest, workspace, month="2026-05", state_dir=state_dir
+            manifest,
+            workspace,
+            month="2026-05",
+            state_dir=state_dir,
+            open_pr=False,
         )
 
     role_report = report["roles"][0]
-    assert role_report["status"] == "applied"
+    assert role_report["status"] == "proposal_ready"
     assert role_report["outputs"]["job_requirements_md"] is True
     assert role_report["outputs"]["delta_present"] is True
-    # Plan file should have been created with the new module + project.
-    plan = json.loads((learning / "curriculum-plan.json").read_text())
-    assert any(m.get("id") == "mod-099-supply-chain" for m in plan["modules"])
-    assert any(p.get("id") == "project-99-attestation" for p in plan["projects"])
+    # The runner must NOT have auto-merged into curriculum-plan.json.
+    assert not (learning / "curriculum-plan.json").exists()
+    # The proposal artifacts MUST exist.
+    assert (learning / "RESEARCH_PROPOSAL_2026-05.md").exists()
+    assert (learning / ".aicg/curriculum-plan-delta-filtered.json").exists()
+    summary = role_report["validation"]
+    assert summary["accepted_counts"]["modules"] == 1
+    assert summary["accepted_counts"]["projects"] == 0
 
 
 def test_research_apply_records_deferred_on_subscription_limit(tmp_path: Path) -> None:
@@ -245,3 +264,138 @@ def test_merge_delta_returns_present_false_when_no_delta(tmp_path: Path) -> None
     report = merge_curriculum_plan_delta(tmp_path / "learning")
     assert report["present"] is False
     assert report["added"] == []
+
+
+# ---------------------------------------------------------------------------
+# Caps + evidence threshold + promote-plan
+# ---------------------------------------------------------------------------
+
+
+def _write_delta(learning: Path, payload: dict) -> Path:
+    delta = learning / ".aicg" / "curriculum-plan-delta.json"
+    delta.parent.mkdir(parents=True, exist_ok=True)
+    delta.write_text(json.dumps(payload), encoding="utf-8")
+    return delta
+
+
+def _evidence(n: int) -> list:
+    return [
+        {
+            "employer": f"E{i}",
+            "title": "t",
+            "url": f"https://e/{i}",
+            "date_observed": "2026-04-15",
+        }
+        for i in range(n)
+    ]
+
+
+def test_caps_reject_items_below_evidence_threshold(tmp_path: Path) -> None:
+    learning = tmp_path / "learning"
+    _write_delta(
+        learning,
+        {
+            "rationale": "...",
+            "modules": [
+                {"id": "mod-a", "title": "A", "evidence": _evidence(3)},
+                # Below threshold: only 1 citation.
+                {"id": "mod-b", "title": "B", "evidence": _evidence(1)},
+            ],
+        },
+    )
+    caps = ResearchCaps(
+        max_modules=5, max_exercises=5, max_projects=5, min_evidence_count=3
+    )
+    result = validate_delta_against_caps(learning / ".aicg/curriculum-plan-delta.json", caps)
+    accepted_ids = [m["id"] for m in result["accepted"]["modules"]]
+    rejected_reasons = [r["reason"] for r in result["rejected"]]
+    assert accepted_ids == ["mod-a"]
+    assert any("evidence_below_threshold" in r for r in rejected_reasons)
+
+
+def test_caps_enforce_max_modules_per_run(tmp_path: Path) -> None:
+    learning = tmp_path / "learning"
+    _write_delta(
+        learning,
+        {
+            "modules": [
+                {"id": f"mod-{i}", "title": f"M{i}", "evidence": _evidence(3 + i)}
+                for i in range(5)
+            ]
+        },
+    )
+    caps = ResearchCaps(
+        max_modules=2, max_exercises=10, max_projects=10, min_evidence_count=3
+    )
+    result = validate_delta_against_caps(
+        learning / ".aicg/curriculum-plan-delta.json", caps
+    )
+    # Cap = 2. We should keep the 2 with highest evidence count.
+    assert len(result["accepted"]["modules"]) == 2
+    accepted_ids = {m["id"] for m in result["accepted"]["modules"]}
+    # mod-4 has 7 citations, mod-3 has 6 — those should win.
+    assert accepted_ids == {"mod-4", "mod-3"}
+    assert sum(1 for r in result["rejected"] if "cap_exceeded" in r["reason"]) == 3
+
+
+def test_caps_max_zero_blocks_everything(tmp_path: Path) -> None:
+    learning = tmp_path / "learning"
+    _write_delta(
+        learning,
+        {
+            "projects": [
+                {"id": "proj-a", "evidence": _evidence(5)},
+            ]
+        },
+    )
+    caps = ResearchCaps(
+        max_modules=5, max_exercises=5, max_projects=0, min_evidence_count=3
+    )
+    result = validate_delta_against_caps(
+        learning / ".aicg/curriculum-plan-delta.json", caps
+    )
+    assert result["accepted"]["projects"] == []
+    assert any(r["kind"] == "project" for r in result["rejected"])
+
+
+def test_promote_plan_applies_filtered_proposal(tmp_path: Path) -> None:
+    learning = tmp_path / "learning"
+    (learning / ".aicg").mkdir(parents=True)
+    (learning / ".aicg/curriculum-plan-delta-filtered.json").write_text(
+        json.dumps(
+            {
+                "modules": [{"id": "mod-001"}],
+                "projects": [{"id": "project-1"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = promote_plan(learning)
+
+    plan = json.loads((learning / "curriculum-plan.json").read_text())
+    assert plan["modules"][0]["id"] == "mod-001"
+    assert plan["projects"][0]["id"] == "project-1"
+    assert "archived_proposal" in report
+    # Filtered file must be moved out so re-running promote is a no-op.
+    assert not (learning / ".aicg/curriculum-plan-delta-filtered.json").exists()
+
+
+def test_promote_plan_raises_when_no_filtered_proposal(tmp_path: Path) -> None:
+    learning = tmp_path / "learning"
+    learning.mkdir()
+    with pytest.raises(ResearchError):
+        promote_plan(learning)
+
+
+def test_research_caps_from_manifest_uses_defaults(tmp_path: Path) -> None:
+    from conftest import write_minimal_manifest
+    from aicg.org_config import load_manifest
+
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    caps = ResearchCaps.from_manifest(manifest)
+    # No caps block in the minimal manifest -> defaults apply.
+    assert caps.max_modules == 1
+    assert caps.max_exercises == 3
+    assert caps.max_projects == 0
+    assert caps.min_evidence_count == 3

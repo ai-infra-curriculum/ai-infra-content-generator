@@ -28,7 +28,7 @@
   },
   "schedules": {
     "monthly_release": "0 2 1 * *",
-    "monthly_research": "30 5 1 * *",
+    "monthly_research": "30 5 1 3,6,9,12 *",
     "weekly_audit": "0 3 * * 0",
     "daily_remediate": "0 * * * *",
     "daily_issues": "20 4 * * *",
@@ -69,11 +69,19 @@
       "provider": "anthropic",
       "model": "claude-opus-4.7",
       "interface": "local_cli_subscription",
-      "purpose": "monthly job-market research with web tools enabled",
+      "purpose": "quarterly job-market research with web tools enabled",
       "agent_command": "{runner}/scripts/run-claude-research.sh --model claude-opus-4.7 --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id}"
     },
     "minimum_postings_per_role": 25,
-    "source_window_days": 45
+    "source_window_days": 90,
+    "caps": {
+      "_comment": "Per role, per research run. Anything above the cap is rejected with a 'cap_exceeded' reason and surfaced in the proposal PR so a human can decide whether to raise the cap or trim the list.",
+      "max_modules_per_run": 1,
+      "max_exercises_per_run": 3,
+      "max_projects_per_run": 0
+    },
+    "min_evidence_count": 3,
+    "min_evidence_window_days": 90
   },
   "roles": [
     {

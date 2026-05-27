@@ -80,7 +80,7 @@ install_cron() {
   local block
   block="$marker_begin
 0 2 1 * * $(job_command monthly-release)
-30 5 1 * * $(job_command monthly-research)
+30 5 1 3,6,9,12 * $(job_command monthly-research)
 0 3 * * 0 $(job_command weekly-audit)
 0 * * * * $(job_command daily-remediate)
 20 4 * * * $(job_command daily-issues)
@@ -158,7 +158,9 @@ install_systemd() {
   fi
 
   write_systemd_pair "$unit_dir" "monthly-release" "monthly-release" "*-*-01 02:00:00"
-  write_systemd_pair "$unit_dir" "monthly-research" "monthly-research" "*-*-01 05:30:00"
+  # Quarterly cadence: research is realistic at quarterly intervals;
+  # the keyword "monthly" in the timer name is historical.
+  write_systemd_pair "$unit_dir" "monthly-research" "monthly-research" "*-03,06,09,12-01 05:30:00"
   # Quarterly LLM freshness review (1st of Mar/Jun/Sep/Dec at 06:00).
   write_systemd_pair "$unit_dir" "monthly-review" "monthly-review" "*-03,06,09,12-01 06:00:00"
   write_systemd_pair "$unit_dir" "weekly-audit" "weekly-audit" "Sun 03:00:00"

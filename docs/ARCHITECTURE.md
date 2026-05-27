@@ -67,8 +67,8 @@ timeline
         Sun 03:00 : weekly-audit (sync + audit-links + audit-versions + audit)
     section Monthly
         1st 02:00 : monthly-release (sync + release --apply)
-        1st 05:30 : monthly-research (research --apply + execute-plan + audit)
     section Quarterly
+        Mar/Jun/Sep/Dec 1st 05:30 : monthly-research (writes proposals, opens PRs, NO auto-merge)
         Mar/Jun/Sep/Dec 1st 06:00 : monthly-review (LLM freshness review across all solutions)
     section One-off override
         2026-06-15 02:00 : monthly-release shifted from June 1 to give the cold-start drain runway
@@ -131,48 +131,55 @@ flowchart TD
 
 ---
 
-## 4. `monthly-research --apply` — closing the research → curriculum loop
+## 4. `monthly-research --apply` — proposal-only research loop
 
-Runs the 1st of every month at 05:30. The `--apply` flag is what makes
-research packets actually update content (without it the runner just
-writes prompts that no consumer ever reads).
+Runs the 1st of Mar/Jun/Sep/Dec at 05:30. **The runner never adds
+modules, exercises, or projects to the curriculum on its own.** Every
+proposal goes through a human-reviewable PR. Caps from the manifest
+prevent the agent from drowning the PR with weakly-justified
+additions.
 
 ```mermaid
 flowchart TD
-    Tick["timer fires:<br/>1st of month, 05:30"]
-    Loop["for role in list-roles:<br/>junior-engineer → engineer → ...<br/>→ principal-architect"]
+    Tick["timer fires:<br/>Mar/Jun/Sep/Dec 1st, 05:30"]
+    Loop["for role in list-roles"]
     WritePrompt[".aicg/org/research/&lt;YYYY-MM&gt;/<br/>&lt;role&gt;.md prompt packet"]
     Agent["run-claude-research.sh<br/>(WebFetch · WebSearch enabled)"]
     Outputs["agent writes 3 files<br/>into the learning repo"]
-    JRM["JOB_REQUIREMENTS.md"]
-    JRJ[".aicg/job-requirements.json"]
-    Delta[".aicg/curriculum-plan-delta.json<br/>(new modules · exercises · projects)"]
-    Merge["merge_curriculum_plan_delta()<br/>(additive · dedup by id/slug)"]
+    JRM["JOB_REQUIREMENTS.md (committed)"]
+    JRJ[".aicg/job-requirements.json (committed)"]
+    Delta[".aicg/curriculum-plan-delta.json<br/>(transient · raw agent output)"]
+    Validate["validate_delta_against_caps()<br/>· evidence ≥ N citations<br/>· max N modules/exercises/projects<br/>· highest-evidence first"]
+    Filtered[".aicg/curriculum-plan-delta-filtered.json"]
+    Md["RESEARCH_PROPOSAL_&lt;month&gt;.md<br/>(rationale, accepted, rejected)"]
+    PR["gh pr create<br/>label: aicg:plan-proposal"]
+    Human{"human reviews<br/>and merges PR?"}
+    Promote["aicg org promote-plan<br/>(manual or weekly-audit)"]
     Plan["curriculum-plan.json<br/>(merged)"]
-    Exec["aicg org execute-plan<br/>--role &lt;role&gt;<br/>(scaffold skeletons)"]
-    NextLoop{"more roles?"}
-    Audit["aicg org audit<br/>(new skeletons → gaps<br/>in work-queue.json)"]
-    HourlyRemediate["hourly remediate<br/>picks them up over<br/>the following weeks"]
+    Exec["execute-plan scaffolds<br/>skeletons"]
+    Audit["audit picks up new<br/>structural gaps"]
+    Discard["PR closed — no change"]
 
     Tick --> Loop
-    Loop --> WritePrompt
-    WritePrompt --> Agent
-    Agent --> Outputs
+    Loop --> WritePrompt --> Agent --> Outputs
     Outputs --> JRM
     Outputs --> JRJ
     Outputs --> Delta
-    Delta --> Merge
-    Merge --> Plan
-    Plan --> Exec
-    Exec --> NextLoop
-    NextLoop -- yes --> Loop
-    NextLoop -- no --> Audit
-    Audit --> HourlyRemediate
+    Delta --> Validate
+    Validate --> Filtered
+    Validate --> Md
+    Filtered --> PR
+    Md --> PR
+    PR --> Human
+    Human -- yes --> Promote --> Plan --> Exec --> Audit
+    Human -- no --> Discard
 
     classDef io fill:#dbeafe,stroke:#1e3a8a
-    classDef merge fill:#fef3c7,stroke:#92400e
-    class JRM,JRJ,Delta,Plan io
-    class Merge,Audit merge
+    classDef gate fill:#fef3c7,stroke:#92400e
+    classDef terminal fill:#fee2e2,stroke:#991b1b
+    class JRM,JRJ,Delta,Filtered,Md,Plan io
+    class Validate,Human gate
+    class Discard terminal
 ```
 
 ---

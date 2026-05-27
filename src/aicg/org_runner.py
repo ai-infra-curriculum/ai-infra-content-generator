@@ -479,25 +479,38 @@ def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -
         "Write exactly these files inside the learning repo (paths are relative to the repo root):\n\n"
         "1. `JOB_REQUIREMENTS.md` — grouped requirements, posting evidence, curriculum links, and external resources for out-of-scope items.\n"
         "2. `.aicg/job-requirements.json` — machine-readable requirements, evidence, owner role, coverage path, and status.\n"
-        "3. `.aicg/curriculum-plan-delta.json` — proposed additions to the curriculum plan, strictly additive (never delete existing items). Use this schema:\n\n"
+        "3. `.aicg/curriculum-plan-delta.json` — *proposed* additions, strictly additive (never delete existing items). The runner will apply per-run caps and reject items lacking evidence; nothing is auto-merged. Use this schema:\n\n"
         "```json\n"
         "{\n"
         '  "schema_version": 1,\n'
         '  "role_id": "<role>",\n'
         '  "month": "<YYYY-MM>",\n'
-        '  "rationale": "One paragraph: what changed in the job market and why these additions reflect that.",\n'
+        '  "rationale": "One paragraph: what specific change in the job market over the last 90 days drives every item below. Vague rationales get the proposal rejected by humans on review.",\n'
         '  "modules": [\n'
-        '    {"id": "mod-XXX-<slug>", "title": "...", "description": "...", "exercises": [], "rationale": "..."}\n'
+        '    {\n'
+        '      "id": "mod-XXX-<slug>",\n'
+        '      "title": "...",\n'
+        '      "description": "...",\n'
+        '      "exercises": [],\n'
+        '      "rationale": "Why THIS module, why now, and which exact requirement(s) from JOB_REQUIREMENTS.md it covers.",\n'
+        '      "evidence": [\n'
+        '        {"employer": "...", "title": "...", "url": "...", "date_observed": "YYYY-MM-DD", "quote": "..."}\n'
+        '      ]\n'
+        '    }\n'
         '  ],\n'
         '  "exercises": [\n'
-        '    {"module_id": "mod-XXX-<existing-module>", "exercise": {"slug": "exercise-NN-<slug>", "title": "...", "summary": "..."}}\n'
+        '    {\n'
+        '      "module_id": "mod-XXX-<existing-module>",\n'
+        '      "exercise": {"slug": "exercise-NN-<slug>", "title": "...", "summary": "..."},\n'
+        '      "evidence": [{"employer": "...", "title": "...", "url": "...", "date_observed": "YYYY-MM-DD", "quote": "..."}]\n'
+        '    }\n'
         '  ],\n'
         '  "projects": [\n'
-        '    {"id": "project-NN-<slug>", "title": "...", "description": "...", "rationale": "..."}\n'
+        '    {"id": "project-NN-<slug>", "title": "...", "description": "...", "rationale": "...", "evidence": [...]}\n'
         '  ]\n'
         "}\n"
         "```\n\n"
-        "Leave arrays empty when no change is warranted. If a requirement is already covered at a lower level, link to it in `JOB_REQUIREMENTS.md` and do NOT add it to the delta.\n\n"
+        "Every item MUST carry an `evidence` array citing at least 3 distinct job postings from the last 90 days that demonstrate the gap. Items with fewer citations get rejected mechanically; do not pad with low-quality postings. PREFER ZERO ADDITIONS over weakly-justified ones — empty arrays are the expected output when nothing has materially shifted. If a requirement is already covered at a lower level, link to it in `JOB_REQUIREMENTS.md` and do NOT add it.\n\n"
         "Do NOT edit `CURRICULUM.md`, `CURRICULUM_INDEX.md`, `README.md`, or `VERSIONS.md` directly — the runner regenerates those from the merged plan. Mark unresolved claims with `<!-- needs-research: ... -->`.\n"
     )
 

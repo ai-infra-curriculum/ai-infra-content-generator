@@ -18,8 +18,9 @@ Usage: $SCRIPT_NAME JOB [OPTIONS]
 Jobs:
   sync
   monthly-release
-  monthly-research
-  monthly-review
+  monthly-research      (quarterly: writes proposals, opens PRs, NO auto-merge)
+  monthly-review        (quarterly: LLM freshness review of existing content)
+  promote-plan          (on-demand: applies approved research proposals after PR merge)
   weekly-audit
   daily-remediate
   daily-issues
@@ -113,9 +114,16 @@ main() {
       run_aicg_org release --apply
       ;;
     monthly-research)
+      # Quarterly research. The runner does NOT scaffold new modules
+      # autonomously — `research --apply` opens proposal PRs for human
+      # review. After a human merges a proposal PR, run
+      # `aicg org promote-plan --role <role>` (or the next
+      # weekly-audit) to apply the approved delta and scaffold
+      # skeletons.
       run_aicg_org research --apply
-      # After research apply, scaffold any new modules/projects each
-      # role's curriculum-plan-delta proposed.
+      ;;
+    promote-plan)
+      run_aicg_org promote-plan
       local roles
       roles=$("$AICG_BIN" --workspace "$WORKSPACE" org list-roles \
         --manifest "$MANIFEST" --state-dir "$STATE_DIR" 2>/dev/null || true)

@@ -221,7 +221,24 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="After writing prompts, invoke the configured agent on each role's packet so it updates JOB_REQUIREMENTS + curriculum-plan-delta in the learning repo.",
     )
+    org_research.add_argument(
+        "--no-pr",
+        action="store_true",
+        help="Skip opening proposal PRs. Useful for first-cycle inspection and tests; the proposal files still get written.",
+    )
     org_research.set_defaults(func=cmd_org_research)
+
+    org_promote = org_subparsers.add_parser(
+        "promote-plan",
+        help="Apply a human-approved research proposal to curriculum-plan.json (run AFTER merging the proposal PR)",
+    )
+    add_org_args(org_promote)
+    org_promote.add_argument(
+        "--role",
+        default=None,
+        help="Role id to promote. Omit to promote every role with a pending proposal.",
+    )
+    org_promote.set_defaults(func=cmd_org_promote_plan)
 
     org_audit = org_subparsers.add_parser("audit", help="Audit all solution repos and write queue")
     add_org_args(org_audit)
@@ -756,28 +773,39 @@ def cmd_org_research(args: argparse.Namespace) -> int:
             workspace,
             month=args.month,
             state_dir=state_dir,
+            open_pr=not getattr(args, "no_pr", False),
         )
     except ResearchError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
 
-    applied = sum(1 for r in apply_report["roles"] if r["status"] == "applied")
+    proposal_ready = sum(1 for r in apply_report["roles"] if r["status"] == "proposal_ready")
+    no_delta = sum(1 for r in apply_report["roles"] if r["status"] == "applied_no_delta")
     deferred = sum(1 for r in apply_report["roles"] if r["status"] == "deferred")
     failed = sum(1 for r in apply_report["roles"] if r["status"] == "agent_failed")
     skipped = sum(
         1
         for r in apply_report["roles"]
-        if r["status"] not in {"applied", "deferred", "agent_failed"}
+        if r["status"] not in {"proposal_ready", "applied_no_delta", "deferred", "agent_failed"}
     )
     print(
-        f"Research apply: {applied} applied, {deferred} deferred, "
-        f"{failed} failed, {skipped} skipped."
+        f"Research apply: {proposal_ready} proposal(s), {no_delta} no-delta, "
+        f"{deferred} deferred, {failed} failed, {skipped} skipped."
     )
     for role in apply_report["roles"]:
-        if role["status"] == "applied":
-            merge = role.get("delta_merge") or {}
-            added = len(merge.get("added", []))
-            print(f"  + {role['role']}: applied (+{added} plan additions)")
+        if role["status"] == "proposal_ready":
+            summary = role.get("validation", {})
+            counts = summary.get("accepted_counts", {})
+            rejected = summary.get("rejected_count", 0)
+            print(
+                f"  + {role['role']}: proposal "
+                f"(mods={counts.get('modules', 0)} "
+                f"ex={counts.get('exercises', 0)} "
+                f"proj={counts.get('projects', 0)} "
+                f"rejected={rejected})"
+            )
+        elif role["status"] == "applied_no_delta":
+            print(f"  = {role['role']}: requirements updated, no curriculum additions")
         elif role["status"] == "deferred":
             print(f"  ~ {role['role']}: deferred ({role.get('reason', '')})")
         elif role["status"] == "agent_failed":
@@ -785,6 +813,41 @@ def cmd_org_research(args: argparse.Namespace) -> int:
         else:
             print(f"  - {role['role']}: {role['status']}")
     return 0 if failed == 0 else 1
+
+
+def cmd_org_promote_plan(args: argparse.Namespace) -> int:
+    from .research import ResearchError, promote_plan
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    roles_to_promote = (
+        [next((r for r in manifest.roles if r.id == args.role), None)]
+        if args.role
+        else list(manifest.roles)
+    )
+    if args.role and roles_to_promote[0] is None:
+        print(f"error: role not in manifest: {args.role}", file=sys.stderr)
+        return 1
+
+    promoted_count = 0
+    skipped_count = 0
+    for role in roles_to_promote:
+        if role is None:
+            continue
+        learning_path = workspace / role.learning_repo
+        try:
+            report = promote_plan(learning_path)
+        except ResearchError:
+            skipped_count += 1
+            continue
+        added = report.get("merge_report", {}).get("added", [])
+        print(
+            f"+ {role.id}: promoted ({len(added)} item(s) added to curriculum-plan.json)"
+        )
+        promoted_count += 1
+    if skipped_count:
+        print(f"({skipped_count} role(s) had no pending proposal — skipped)")
+    return 0
 
 
 def cmd_org_audit(args: argparse.Namespace) -> int:
