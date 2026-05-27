@@ -111,6 +111,12 @@ write_systemd_pair() {
   local service="$unit_dir/aicg-$name.service"
   local timer="$unit_dir/aicg-$name.timer"
 
+  # Drop-in marker file lets operators keep a local override in
+  # aicg-$name.timer.d/override.conf — we never touch *.d/ subdirs.
+  # Anything written here gets the install-script default; existing
+  # drop-ins take effect after `daemon-reload`.
+  :
+
   local log_dir="$HOME/.cache/aicg"
   local service_content="[Unit]
 Description=AICG org job: $job
