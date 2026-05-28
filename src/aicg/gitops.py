@@ -134,7 +134,24 @@ def checkout_branch(repo_path: Path, branch: str) -> None:
 
 
 def commit_all(repo_path: Path, message: str) -> None:
-    run(repo_path, ["git", "add", "-A", "--", ".", ":(exclude).aicg", ":(exclude).aicg/**"])
+    """Stage everything except ``.aicg/`` and commit.
+
+    git's pathspec exclusion (``:(exclude)foo``) only works alongside
+    OTHER positive pathspecs — listing ``.`` alongside excludes makes
+    git treat ``.aicg/`` as an explicitly-requested ignored path and
+    abort. Use ``--all`` with a pure exclude pathspec instead.
+    """
+    run(
+        repo_path,
+        [
+            "git",
+            "add",
+            "--all",
+            "--",
+            ":(top,exclude).aicg",
+            ":(top,exclude).aicg/**",
+        ],
+    )
     run(repo_path, ["git", "commit", "-m", message])
 
 

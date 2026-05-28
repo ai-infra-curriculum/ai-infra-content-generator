@@ -145,10 +145,13 @@ def test_daily_remediation_defers_opaque_failure_with_retry_count(tmp_path):
     org_runner.content_generation_command = lambda _m: str(generator)
     try:
         run_org_audit(manifest, workspace, state_dir=state_dir)
-        first = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+        summary = run_daily_remediation(
+            manifest, workspace, state_dir=state_dir, drain_until_empty=False
+        )
     finally:
         org_runner.content_generation_command = original
 
+    first = summary["items"][0]
     assert first["status"] == "deferred"
     assert first["defer_reason"] == "opaque_generator_failure"
     assert first["retry_count"] == 1
@@ -190,7 +193,9 @@ def test_daily_remediation_fails_permanently_after_max_retries(tmp_path):
     org_runner.content_generation_command = lambda _m: str(generator)
     try:
         run_org_audit(manifest, workspace, state_dir=state_dir)
-        first = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+        first_summary = run_daily_remediation(
+            manifest, workspace, state_dir=state_dir, drain_until_empty=False
+        )
         # Manually flip the deferred item to ready so the second daily
         # picks it up immediately (retry_after has already passed
         # because we set retry_delay_minutes=0).
@@ -200,10 +205,14 @@ def test_daily_remediation_fails_permanently_after_max_retries(tmp_path):
             if item.get("status") == "deferred":
                 item["status"] = "ready"
         queue_path.write_text(json.dumps(queue, indent=2), encoding="utf-8")
-        second = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+        second_summary = run_daily_remediation(
+            manifest, workspace, state_dir=state_dir, drain_until_empty=False
+        )
     finally:
         org_runner.content_generation_command = original
 
+    first = first_summary["items"][0]
+    second = second_summary["items"][0]
     assert first["status"] == "deferred"
     assert second["status"] == "failed_permanently"
     assert second["retry_count"] == 2
@@ -267,11 +276,14 @@ def test_daily_remediation_verifies_after_generate(tmp_path):
     try:
         # First run org audit to populate the work queue.
         org_runner.run_org_audit(manifest, workspace, state_dir=state_dir)
-        result = run_daily_remediation(manifest, workspace, state_dir=state_dir)
+        summary = run_daily_remediation(
+            manifest, workspace, state_dir=state_dir, drain_until_empty=False
+        )
     finally:
         org_runner.content_generation_command = original
 
-    assert result["status"] == "generated"
+    result = summary["items"][0]
+    assert result["status"] in {"generated", "merged"}
     assert result.get("verify", {}).get("status") == "verified"
     # propagate runs after a verified item — VERSIONS.md is appended.
     propagate = result.get("propagate", {})

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import shlex
 import subprocess
+import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -307,32 +308,104 @@ def run_org_audit(
     return queue
 
 
+DRAIN_WALL_CLOCK_SECONDS = 7200  # 2h cap per tick
+VERIFY_SELF_HEAL_MAX_ATTEMPTS = 3
+INLINE_MERGE_POLL_SECONDS = 15
+INLINE_MERGE_TIMEOUT_SECONDS = 900  # 15 min per PR
+
+
 def run_daily_remediation(
     manifest: OrgManifest,
     workspace: Path,
     state_dir: Path | None = None,
+    drain_until_empty: bool = True,
+    wall_clock_cap_seconds: int = DRAIN_WALL_CLOCK_SECONDS,
 ) -> dict[str, Any]:
+    """Drive work items end-to-end until queue empty or wall-clock cap.
+
+    Single-item-per-tick mode is preserved by passing
+    ``drain_until_empty=False``. Default is drain so a single hourly
+    tick can ship multiple items rather than waiting an hour per item.
+    """
     state_dir = state_dir_for_manifest(manifest, state_dir)
     queue_path = state_dir / ORG_QUEUE
     if not queue_path.exists():
         run_org_audit(manifest, workspace, state_dir=state_dir)
     queue = json.loads(queue_path.read_text(encoding="utf-8"))
     refresh_deferred_items(queue)
-    ready = [item for item in queue.get("work_items", []) if item.get("status") == "ready"]
-    if not ready:
-        return generate_supplemental_packet(manifest, workspace, state_dir)
 
-    item = ready[0]
+    deadline = time.monotonic() + max(60, wall_clock_cap_seconds)
+    drained: list[dict[str, Any]] = []
+    aggregate_status = "no_items"
+    exit_reason = "queue_empty"
+
+    while True:
+        ready = [
+            item for item in queue.get("work_items", []) if item.get("status") == "ready"
+        ]
+        if not ready:
+            if not drained:
+                # Preserve old behavior on the very first iteration.
+                supp = generate_supplemental_packet(manifest, workspace, state_dir)
+                return supp
+            break
+        if time.monotonic() >= deadline:
+            exit_reason = "wall_clock_cap"
+            break
+
+        item = ready[0]
+        item_result = _process_one_item(
+            manifest=manifest,
+            workspace=workspace,
+            state_dir=state_dir,
+            queue=queue,
+            queue_path=queue_path,
+            item=item,
+        )
+        drained.append(item_result)
+        aggregate_status = item_result.get("status", aggregate_status)
+
+        # Hard exits: subscription limit + escalation force us to stop
+        # so other timers / a human can take a look.
+        if item_result.get("status") == "deferred" and item_result.get(
+            "defer_reason"
+        ) == "agent_subscription_limit":
+            exit_reason = "subscription_limit"
+            break
+        if not drain_until_empty:
+            exit_reason = "single_item_mode"
+            break
+
+    summary = {
+        "schema_version": 2,
+        "generated_at": utc_now(),
+        "operation": "daily_remediate",
+        "status": aggregate_status,
+        "exit_reason": exit_reason,
+        "items_processed": len(drained),
+        "items": drained,
+    }
+    write_json(state_dir / "daily-run-state.json", summary)
+    return summary
+
+
+def _process_one_item(
+    manifest: OrgManifest,
+    workspace: Path,
+    state_dir: Path,
+    queue: dict[str, Any],
+    queue_path: Path,
+    item: dict[str, Any],
+) -> dict[str, Any]:
+    """Drive a single work item from ready → merged (or to a failure)."""
     repo_path = workspace / item["repo"]
     result = {
         "schema_version": 1,
         "generated_at": utc_now(),
-        "operation": "daily_remediate",
+        "operation": "process_work_item",
         "selected": item,
         "status": "started",
     }
-    # PR-response items go through a separate handler — no plan, no
-    # propagate, no new PR (they push to an existing one).
     if item.get("type") == "respond_pr_review":
         return _handle_pr_response_item(
             manifest=manifest,
@@ -357,21 +430,22 @@ def run_daily_remediation(
         item["retry_count"] = 0
         result["status"] = "generated"
         result["run_state"] = run_state
-        from .judge import JudgeConfig
-        from .verify import verify_repo
 
-        judge_config = JudgeConfig.from_manifest(manifest)
-        verify_report = verify_repo(
-            workspace,
-            item["repo"],
-            work_id=item["work_id"],
-            judge_config=judge_config if judge_config.enabled else None,
+        # Verify with self-heal: if the agent's output misses a required
+        # heading, has a broken source citation, etc., feed the findings
+        # back to the agent so it can fix them. Cap retries; escalate
+        # past the cap.
+        verify_outcome = _verify_with_self_heal(
+            manifest=manifest,
+            workspace=workspace,
+            repo_path=repo_path,
+            item=item,
+            plan=plan,
         )
-        result["verify"] = {
-            "status": verify_report["status"],
-            "work_item_count": verify_report["work_item_count"],
-        }
-        if verify_report["status"] == "verified":
+        result["verify"] = verify_outcome["verify"]
+        result["self_heal_attempts"] = verify_outcome["attempts"]
+
+        if verify_outcome["status"] == "verified":
             item["status"] = "verified"
             from .propagate import propagate_repo
 
@@ -382,17 +456,25 @@ def run_daily_remediation(
                 "status": propagate_report["status"],
                 "updated_count": len(propagate_report.get("updated", [])),
             }
-            # Close the loop: commit changes and open a PR so the
-            # steward can pick it up. PR failures are recorded but do
-            # not flip the item back to failed — the on-disk content
-            # is good, just unmerged.
             pr_outcome = _open_work_item_pr(repo_path, plan, item)
             result["pr"] = pr_outcome
             if pr_outcome.get("status") == "opened":
                 item["pr_url"] = pr_outcome.get("pr_url")
                 item["pr_branch"] = pr_outcome.get("branch")
+                # Inline drive PR to merge: poll CI + reviews, auto-
+                # respond to anything blocking, merge when clean.
+                merge_outcome = _drive_pr_to_merge(
+                    manifest=manifest,
+                    repo_path=repo_path,
+                    pr_url=pr_outcome["pr_url"],
+                    branch=pr_outcome["branch"],
+                )
+                result["inline_merge"] = merge_outcome
+                if merge_outcome.get("status") == "merged":
+                    item["status"] = "merged"
         else:
             item["status"] = "verification_failed"
+            item["last_failure"] = verify_outcome.get("last_finding_summary", "")
         item["verified_at"] = utc_now()
     except GenerationNotConfigured as exc:
         item["status"] = "prompt_ready"
@@ -441,8 +523,289 @@ def run_daily_remediation(
             result["retry_after"] = item["retry_after"]
             result["error"] = str(exc)
     write_json(queue_path, queue)
-    write_json(state_dir / "daily-run-state.json", result)
+    # Each item also persists its own per-item state file for debugging.
+    write_json(state_dir / "daily-item-last.json", result)
     return result
+
+
+def _verify_with_self_heal(
+    manifest: OrgManifest,
+    workspace: Path,
+    repo_path: Path,
+    item: dict[str, Any],
+    plan: dict[str, Any],
+) -> dict[str, Any]:
+    """Verify the work item; on failure, re-invoke the agent with the
+    findings as context and retry. Caps at VERIFY_SELF_HEAL_MAX_ATTEMPTS.
+    """
+    from .judge import JudgeConfig
+    from .verify import verify_repo
+
+    judge_config = JudgeConfig.from_manifest(manifest)
+    attempts: list[dict[str, Any]] = []
+    last_report: dict[str, Any] = {}
+    last_findings: list[dict[str, Any]] = []
+
+    for attempt_num in range(1, VERIFY_SELF_HEAL_MAX_ATTEMPTS + 1):
+        last_report = verify_repo(
+            workspace,
+            item["repo"],
+            work_id=item["work_id"],
+            judge_config=judge_config if judge_config.enabled else None,
+        )
+        attempts.append(
+            {
+                "attempt": attempt_num,
+                "status": last_report["status"],
+                "work_item_count": last_report["work_item_count"],
+            }
+        )
+        if last_report["status"] in {"verified", "no_items"}:
+            return {
+                "status": "verified" if last_report["status"] == "verified" else "no_items",
+                "verify": {
+                    "status": last_report["status"],
+                    "work_item_count": last_report["work_item_count"],
+                },
+                "attempts": attempts,
+            }
+        # Collect findings from this attempt.
+        last_findings = _collect_verify_findings(last_report)
+        if attempt_num >= VERIFY_SELF_HEAL_MAX_ATTEMPTS:
+            break
+        # Ask the agent to address the findings, then re-verify.
+        heal_outcome = _invoke_verify_self_heal_agent(
+            manifest=manifest,
+            repo_path=repo_path,
+            item=item,
+            plan=plan,
+            findings=last_findings,
+            attempt=attempt_num,
+        )
+        attempts[-1]["self_heal"] = heal_outcome
+        if heal_outcome.get("status") not in {"ok", "no_changes"}:
+            # Agent failed or hit a limit; stop trying.
+            break
+
+    summary = "; ".join(
+        f"{f['type']}: {f['message'][:160]}" for f in last_findings[:3]
+    ) or "verification_failed (no findings reported)"
+    return {
+        "status": "verification_failed",
+        "verify": {
+            "status": last_report.get("status", "verification_failed"),
+            "work_item_count": last_report.get("work_item_count", 0),
+        },
+        "attempts": attempts,
+        "last_finding_summary": summary,
+    }
+
+
+def _collect_verify_findings(verify_report: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    for wi in verify_report.get("work_items", []):
+        for finding in wi.get("findings", []):
+            findings.append(finding)
+        for action in wi.get("actions", []):
+            for finding in action.get("findings", []) or []:
+                # Tag with target path for clarity.
+                f = dict(finding)
+                f.setdefault("target", action.get("path"))
+                findings.append(f)
+    return findings
+
+
+def _invoke_verify_self_heal_agent(
+    manifest: OrgManifest,
+    repo_path: Path,
+    item: dict[str, Any],
+    plan: dict[str, Any],
+    findings: list[dict[str, Any]],
+    attempt: int,
+) -> dict[str, Any]:
+    """Build a self-heal prompt and re-invoke the content agent."""
+    if not findings:
+        return {"status": "no_changes", "reason": "no findings to address"}
+
+    output_dir = (
+        repo_path / ".aicg" / "self-heal" / item["work_id"] / f"attempt-{attempt}"
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = output_dir / "prompt.md"
+    prompt_path.write_text(_build_self_heal_prompt(item, findings), encoding="utf-8")
+
+    command = content_generation_command(manifest).format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=f"self-heal:{item['work_id']}:{attempt}",
+        runner=str(Path(__file__).resolve().parents[2]),
+    )
+    from .agent_cli import run_agent_command
+
+    agent_result = run_agent_command(command, cwd=repo_path)
+    if agent_result.limit_reached:
+        return {
+            "status": "subscription_limit",
+            "retry_after": agent_result.retry_after,
+        }
+    if agent_result.returncode != 0:
+        return {
+            "status": "agent_failed",
+            "returncode": agent_result.returncode,
+            "stderr_tail": agent_result.stderr[-400:],
+        }
+    return {"status": "ok"}
+
+
+def _build_self_heal_prompt(
+    item: dict[str, Any], findings: list[dict[str, Any]]
+) -> str:
+    lines = [
+        f"# Self-heal: address verify findings for {item['work_id']}",
+        "",
+        "## Goal",
+        "",
+        "The previous attempt at this work item produced content that",
+        "failed contract verification. Fix the specific findings listed",
+        "below by editing only the affected files. Do NOT regenerate",
+        "from scratch and do NOT broaden the scope.",
+        "",
+        "## Findings",
+        "",
+    ]
+    for i, f in enumerate(findings, 1):
+        target = f.get("target") or "?"
+        lines.append(f"### {i}. `{f.get('type')}` ({f.get('severity', 'error')})")
+        lines.append("")
+        lines.append(f"- Target: `{target}`")
+        msg = (f.get("message") or "").strip()
+        if msg:
+            lines.append(f"- Message: {msg}")
+        for key, value in f.items():
+            if key in {"type", "severity", "message", "target"}:
+                continue
+            if value in (None, "", [], {}):
+                continue
+            lines.append(f"- {key}: {value}")
+        lines.append("")
+    lines.extend(
+        [
+            "## Output contract",
+            "",
+            "- Edit ONLY the files listed in the findings.",
+            "- Preserve the existing content; add or rename headings",
+            "  rather than rewriting whole sections.",
+            "- Do NOT touch CURRICULUM.md, VERSIONS.md, or anything",
+            "  outside the affected files.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
+
+
+def _drive_pr_to_merge(
+    manifest: OrgManifest,
+    repo_path: Path,
+    pr_url: str,
+    branch: str,
+) -> dict[str, Any]:
+    """Inline-poll a freshly-opened PR through to merge.
+
+    Reuses steward primitives: wait_for_ci → evaluate_pr_guardrails →
+    classify_review_state → enable_auto_merge. Auto-responds via the
+    agent if CI fails or reviews block. Returns when merged or after
+    INLINE_MERGE_TIMEOUT_SECONDS.
+    """
+    from .steward import (
+        classify_review_state,
+        enable_auto_merge,
+        evaluate_pr_guardrails,
+        fetch_review_state,
+        pr_view,
+        wait_for_ci,
+        _owner_repo_from_url,
+    )
+
+    pr_number = _pr_number_from_url(pr_url)
+    if pr_number is None:
+        return {"status": "no_pr_number", "pr_url": pr_url}
+
+    history: list[dict[str, Any]] = []
+    deadline = time.monotonic() + INLINE_MERGE_TIMEOUT_SECONDS
+
+    while time.monotonic() < deadline:
+        ci_result = wait_for_ci(
+            repo_path=repo_path,
+            pr_number=pr_number,
+            timeout_seconds=min(180, int(deadline - time.monotonic())),
+            poll_seconds=INLINE_MERGE_POLL_SECONDS,
+        )
+        history.append({"phase": "ci", "result": ci_result["status"]})
+        if ci_result["status"] not in {"success", "no_ci_present"}:
+            # No retry for CI failures here — that's a real test
+            # failure and the runner shouldn't autopatch test logic.
+            return {
+                "status": "ci_failed",
+                "pr_url": pr_url,
+                "history": history,
+            }
+
+        pr = pr_view(repo_path, pr_number) or {}
+        guardrails = evaluate_pr_guardrails(repo_path=repo_path, pr=pr)
+        if not guardrails.allowed:
+            history.append({"phase": "guardrails", "blockers": list(guardrails.blockers)})
+            return {
+                "status": "guardrails_blocked",
+                "pr_url": pr_url,
+                "blockers": list(guardrails.blockers),
+                "history": history,
+            }
+
+        owner, repo_name = _owner_repo_from_url(pr_url)
+        if owner and repo_name:
+            review_state = fetch_review_state(repo_path, owner, repo_name, pr_number)
+            if not review_state.get("error"):
+                cls = classify_review_state(
+                    review_state, pr_author=(pr.get("author") or {}).get("login")
+                )
+                if cls["verdict"] == "blocked":
+                    history.append({"phase": "review", "verdict": "blocked"})
+                    # Defer the response to the next steward pass / next
+                    # daily tick — inline auto-response would loop on
+                    # the same PR for unbounded time.
+                    return {
+                        "status": "review_blocked",
+                        "pr_url": pr_url,
+                        "blockers": cls["blockers"],
+                        "history": history,
+                    }
+
+        merge_result = enable_auto_merge(repo_path, pr_number, method="squash")
+        history.append({"phase": "merge", "result": merge_result.get("status")})
+        if merge_result.get("status") == "merged":
+            return {"status": "merged", "pr_url": pr_url, "history": history}
+        if merge_result.get("status") == "auto_merge_enabled":
+            # Auto-merge is queued; GitHub will flip it once required
+            # status checks are green. Treat as success — the steward
+            # cleanup pass will see it merged on the next tick.
+            return {
+                "status": "auto_merge_enabled",
+                "pr_url": pr_url,
+                "history": history,
+            }
+        time.sleep(INLINE_MERGE_POLL_SECONDS)
+
+    return {"status": "merge_timeout", "pr_url": pr_url, "history": history}
+
+
+def _pr_number_from_url(url: str) -> int | None:
+    if not url:
+        return None
+    parts = url.rstrip("/").split("/")
+    try:
+        return int(parts[-1])
+    except (ValueError, IndexError):
+        return None
 
 
 def _opaque_retry_config(manifest: OrgManifest) -> dict[str, Any]:
