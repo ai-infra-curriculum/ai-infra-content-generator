@@ -318,14 +318,20 @@ def run_daily_remediation(
     manifest: OrgManifest,
     workspace: Path,
     state_dir: Path | None = None,
-    drain_until_empty: bool = True,
+    drain_until_empty: bool = False,
     wall_clock_cap_seconds: int = DRAIN_WALL_CLOCK_SECONDS,
 ) -> dict[str, Any]:
-    """Drive work items end-to-end until queue empty or wall-clock cap.
+    """Drive ONE work item end-to-end from ready to merged.
 
-    Single-item-per-tick mode is preserved by passing
-    ``drain_until_empty=False``. Default is drain so a single hourly
-    tick can ship multiple items rather than waiting an hour per item.
+    Default is single-item-per-tick: pick the highest-priority ready
+    item, run the full pipeline (generate → verify-with-self-heal →
+    propagate → commit/PR → inline-merge), exit. Pass
+    ``drain_until_empty=True`` to keep processing items until the queue
+    is empty, subscription limit hits, or the wall-clock cap fires.
+
+    Single-item mode is the intended default: one item lands fully
+    (committed, PR opened, merged on main) per tick. The next hourly
+    tick picks up the next item. No partial state left between ticks.
     """
     state_dir = state_dir_for_manifest(manifest, state_dir)
     queue_path = state_dir / ORG_QUEUE
