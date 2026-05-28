@@ -767,6 +767,22 @@ def _drive_pr_to_merge(
     history: list[dict[str, Any]] = []
     deadline = time.monotonic() + INLINE_MERGE_TIMEOUT_SECONDS
 
+    # Auto-rebase: if main has moved since the PR was opened, merge it
+    # in first so we don't waste a CI cycle on a guaranteed-conflict
+    # merge. The conflict handler keeps main's version for any file
+    # and takes the union for VERSIONS.md (append-only by contract).
+    rebase_outcome = _auto_rebase_branch_on_main(
+        repo_path=repo_path, branch=branch, pr_number=pr_number
+    )
+    history.append({"phase": "auto_rebase", "result": rebase_outcome.get("status")})
+    if rebase_outcome.get("status") == "conflicts_unresolved":
+        return {
+            "status": "rebase_conflicts",
+            "pr_url": pr_url,
+            "conflicts": rebase_outcome.get("conflicts"),
+            "history": history,
+        }
+
     ci_attempts = 0
     while time.monotonic() < deadline:
         ci_attempts += 1
@@ -870,6 +886,222 @@ def _drive_pr_to_merge(
         time.sleep(INLINE_MERGE_POLL_SECONDS)
 
     return {"status": "merge_timeout", "pr_url": pr_url, "history": history}
+
+
+def _auto_rebase_branch_on_main(
+    repo_path: Path, branch: str, pr_number: int
+) -> dict[str, Any]:
+    """Merge origin/main into the PR branch (auto-resolving known cases).
+
+    Why merge, not rebase: a merge keeps each PR's history while still
+    incorporating main. Rebase would force-push, which is brittle when
+    the steward / GitHub auto-merge are watching for the same SHA.
+
+    Auto-resolutions:
+      - VERSIONS.md: take the union of rows (append-only contract)
+      - Any other conflicting file: keep main's version (already merged
+        + validated)
+
+    Returns status:
+      - `up_to_date`: no merge needed
+      - `merged_clean`: merge completed without conflicts
+      - `merged_with_auto_resolution`: conflicts auto-resolved + pushed
+      - `conflicts_unresolved`: hit a case the auto-resolver doesn't know
+      - `error`: git command failed
+    """
+    try:
+        # Make sure we have the latest main.
+        subprocess.run(
+            ["git", "-C", str(repo_path), "fetch", "origin", "main"],
+            capture_output=True, text=True, check=False,
+        )
+        # Ensure we're on the PR branch.
+        subprocess.run(
+            ["git", "-C", str(repo_path), "checkout", branch],
+            capture_output=True, text=True, check=False,
+        )
+        # Bail if branch is already up to date with main.
+        rev_check = subprocess.run(
+            ["git", "-C", str(repo_path), "merge-base", "--is-ancestor",
+             "origin/main", "HEAD"],
+            capture_output=True, text=True, check=False,
+        )
+        if rev_check.returncode == 0:
+            _checkout_main(repo_path)
+            return {"status": "up_to_date"}
+
+        merge = subprocess.run(
+            ["git", "-C", str(repo_path), "merge", "origin/main", "--no-edit"],
+            capture_output=True, text=True, check=False,
+        )
+        if merge.returncode == 0:
+            push = subprocess.run(
+                ["git", "-C", str(repo_path), "push"],
+                capture_output=True, text=True, check=False,
+            )
+            _checkout_main(repo_path)
+            return {
+                "status": "merged_clean",
+                "push_rc": push.returncode,
+            }
+
+        # Conflict — resolve known patterns.
+        conflicts = _list_unmerged_files(repo_path)
+        unresolved = _auto_resolve_known_conflicts(repo_path, conflicts)
+        if unresolved:
+            # Abort the merge so the branch is left clean for the operator.
+            subprocess.run(
+                ["git", "-C", str(repo_path), "merge", "--abort"],
+                capture_output=True, text=True, check=False,
+            )
+            _checkout_main(repo_path)
+            return {
+                "status": "conflicts_unresolved",
+                "conflicts": unresolved,
+            }
+
+        commit = subprocess.run(
+            ["git", "-C", str(repo_path), "commit", "--no-edit"],
+            capture_output=True, text=True, check=False,
+        )
+        if commit.returncode != 0:
+            subprocess.run(
+                ["git", "-C", str(repo_path), "merge", "--abort"],
+                capture_output=True, text=True, check=False,
+            )
+            _checkout_main(repo_path)
+            return {
+                "status": "error",
+                "step": "commit",
+                "stderr_tail": commit.stderr[-400:],
+            }
+        push = subprocess.run(
+            ["git", "-C", str(repo_path), "push"],
+            capture_output=True, text=True, check=False,
+        )
+        _checkout_main(repo_path)
+        return {
+            "status": "merged_with_auto_resolution",
+            "resolved_files": [c for c in conflicts],
+            "push_rc": push.returncode,
+        }
+    except Exception as exc:  # noqa: BLE001
+        _checkout_main(repo_path)
+        return {"status": "error", "exception": str(exc)}
+
+
+def _list_unmerged_files(repo_path: Path) -> list[str]:
+    completed = subprocess.run(
+        ["git", "-C", str(repo_path), "diff", "--name-only", "--diff-filter=U"],
+        capture_output=True, text=True, check=False,
+    )
+    return [line.strip() for line in completed.stdout.splitlines() if line.strip()]
+
+
+def _auto_resolve_known_conflicts(
+    repo_path: Path, conflicts: list[str]
+) -> list[str]:
+    """Auto-resolve the conflict patterns the runner knows about.
+
+    Returns the list of files that could NOT be resolved automatically.
+    """
+    unresolved: list[str] = []
+    for rel in conflicts:
+        path = repo_path / rel
+        if rel == "VERSIONS.md":
+            if _resolve_versions_md_conflict(path):
+                subprocess.run(
+                    ["git", "-C", str(repo_path), "add", rel],
+                    capture_output=True, text=True, check=False,
+                )
+                continue
+        # Default: keep main's version (PR #15-style fixes have already
+        # been validated against CI).
+        rc = subprocess.run(
+            ["git", "-C", str(repo_path), "checkout", "--theirs", "--", rel],
+            capture_output=True, text=True, check=False,
+        )
+        if rc.returncode == 0:
+            subprocess.run(
+                ["git", "-C", str(repo_path), "add", rel],
+                capture_output=True, text=True, check=False,
+            )
+        else:
+            unresolved.append(rel)
+    return unresolved
+
+
+def _resolve_versions_md_conflict(path: Path) -> bool:
+    """Take the union of all rows across both sides of a VERSIONS.md merge.
+
+    VERSIONS.md is append-only by contract — each PR adds a row for its
+    work item under the current month heading. Conflicts arise when two
+    PRs added different rows in the same month block. The resolution is
+    deterministic: keep all rows, dedup by ``work_id``, preserve order
+    of first appearance.
+    """
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return False
+
+    # Split conflict markers. Pattern:
+    #   <<<<<<< HEAD
+    #   ...ours...
+    #   =======
+    #   ...theirs...
+    #   >>>>>>> origin/main
+    if "<<<<<<<" not in text:
+        return False
+
+    resolved_lines: list[str] = []
+    seen_work_ids: set[str] = set()
+    i = 0
+    lines = text.splitlines()
+    while i < len(lines):
+        if lines[i].startswith("<<<<<<<"):
+            ours: list[str] = []
+            theirs: list[str] = []
+            i += 1
+            while i < len(lines) and not lines[i].startswith("======="):
+                ours.append(lines[i])
+                i += 1
+            if i < len(lines):
+                i += 1  # skip =======
+            while i < len(lines) and not lines[i].startswith(">>>>>>>"):
+                theirs.append(lines[i])
+                i += 1
+            if i < len(lines):
+                i += 1  # skip >>>>>>>
+            # Union — emit ours first then theirs, dedup by `work_id`
+            # (extract from the row's second column wrapped in backticks).
+            for source in (ours, theirs):
+                for line in source:
+                    work_id = _extract_work_id_from_versions_row(line)
+                    if work_id and work_id in seen_work_ids:
+                        continue
+                    if work_id:
+                        seen_work_ids.add(work_id)
+                    resolved_lines.append(line)
+        else:
+            resolved_lines.append(lines[i])
+            i += 1
+
+    new_text = "\n".join(resolved_lines)
+    if not new_text.endswith("\n"):
+        new_text += "\n"
+    path.write_text(new_text, encoding="utf-8")
+    return True
+
+
+def _extract_work_id_from_versions_row(line: str) -> str | None:
+    """Pull the work-id from a VERSIONS.md table row like:
+    | 2026-05-27 | `work-id` | `scope` | Title |
+    """
+    import re as _re
+
+    match = _re.search(r"\|\s*`([^`]+)`\s*\|", line)
+    return match.group(1) if match else None
 
 
 def _invoke_ci_self_heal_agent(
