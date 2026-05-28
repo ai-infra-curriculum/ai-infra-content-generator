@@ -43,7 +43,30 @@ class OrgManifest:
     quality_judge: dict[str, Any]
     job_requirements: dict[str, Any]
     research: dict[str, Any]
+    maintained_by: dict[str, Any]
     path: Path
+
+    @property
+    def known_org_references(self) -> set[str]:
+        """Names + URL hosts the audits should treat as legitimate refs.
+
+        Catches both the bare name (``VeriSwarm.ai``) and the URL host
+        (``veriswarm.ai``), so the org-profile audit doesn't flag the
+        maintainer attribution as an 'orphan reference'.
+        """
+        refs: set[str] = set()
+        mb = self.maintained_by or {}
+        if mb.get("name"):
+            refs.add(str(mb["name"]))
+            refs.add(str(mb["name"]).lower())
+        url = str(mb.get("url") or "")
+        if url:
+            from urllib.parse import urlparse
+
+            host = urlparse(url).netloc.lower().lstrip("www.")
+            if host:
+                refs.add(host)
+        return refs
 
     @property
     def repo_names(self) -> list[str]:
@@ -123,6 +146,7 @@ def load_manifest(path: Path | None = None) -> OrgManifest:
         quality_judge=raw.get("quality_judge", {}),
         job_requirements=raw.get("job_requirements", {}),
         research=raw.get("research", {}),
+        maintained_by=raw.get("maintained_by", {}),
         path=manifest_path,
     )
 

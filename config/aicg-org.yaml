@@ -13,6 +13,13 @@
       "release": false
     }
   ],
+  "maintained_by": {
+    "_comment": "Project maintainership attribution. Used by aicg org rebrand to write the footer, and by the audits to treat references to these orgs as legitimate (not 'orphan'). Distinct from the source policy for curriculum content — those rules are unchanged.",
+    "name": "VeriSwarm.ai",
+    "url": "https://veriswarm.ai",
+    "phrasing": "Maintained by [VeriSwarm.ai](https://veriswarm.ai)",
+    "footer_marker": "<!-- aicg:maintained-by -->"
+  },
   "documentation": {
     "format_guard_files": [
       "CURRICULUM.md",

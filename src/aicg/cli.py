@@ -443,6 +443,31 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_audit_profile)
     org_audit_profile.set_defaults(func=cmd_org_audit_profile)
 
+    org_rebrand = org_subparsers.add_parser(
+        "rebrand",
+        help=(
+            "One-shot org-wide maintainer footer (driven by "
+            "manifest.maintained_by). Idempotent; opens one PR per "
+            "repo so each footer addition can be reviewed."
+        ),
+    )
+    add_org_args(org_rebrand)
+    org_rebrand.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually write files + commit + open PRs. Omit for dry-run.",
+    )
+    org_rebrand.add_argument(
+        "--repo",
+        action="append",
+        default=None,
+        help=(
+            "Limit the rebrand to one or more specific repos (repeat "
+            "the flag). Default: every manifest repo."
+        ),
+    )
+    org_rebrand.set_defaults(func=cmd_org_rebrand)
+
     org_dependabot = org_subparsers.add_parser(
         "dependabot",
         help=(
@@ -1391,6 +1416,39 @@ def cmd_org_audit_curriculum(args: argparse.Namespace) -> int:
         if n:
             print(f"  ! {repo}: {n} nav drift(s)")
     print(f"Curriculum-nav audit: {total_gaps} drift(s)")
+    return 0
+
+
+def cmd_org_rebrand(args: argparse.Namespace) -> int:
+    from .rebrand import rebrand_run
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    report = rebrand_run(
+        manifest=manifest,
+        workspace=workspace,
+        state_dir=state_dir,
+        apply=args.apply,
+        repos=args.repo,
+    )
+    if report.get("status") == "skipped":
+        print(f"Rebrand skipped: {report.get('reason')}")
+        return 0
+    mode = "apply" if args.apply else "dry-run"
+    by_status: dict[str, int] = {}
+    for r in report.get("repos", []):
+        by_status[r["status"]] = by_status.get(r["status"], 0) + 1
+    print(
+        f"Rebrand {mode}: "
+        + ", ".join(f"{s}={n}" for s, n in sorted(by_status.items()))
+    )
+    for r in report.get("repos", [])[:20]:
+        if r["status"] in {"already_branded", "skipped"}:
+            continue
+        print(f"  {r['repo']}: {r['status']}")
+        if r.get("pr", {}).get("pr_url"):
+            print(f"    {r['pr']['pr_url']}")
     return 0
 
 

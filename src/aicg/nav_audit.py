@@ -324,6 +324,7 @@ def _audit_profile_doc(
 
     findings: list[ProfileFinding] = []
     manifest_repos = set(manifest.repo_names)
+    known_refs = manifest.known_org_references
 
     # Find repo references in the doc and compare against the manifest.
     referenced_repos: set[str] = set()
@@ -333,7 +334,13 @@ def _audit_profile_doc(
             referenced_repos.add(candidate)
 
     missing_from_doc = sorted(manifest_repos - referenced_repos)
-    referenced_but_unknown = sorted(referenced_repos - manifest_repos)
+    # known_org_references (e.g. the project's maintainer) are
+    # explicit allow-listed even though they aren't in the manifest's
+    # repo_names. Filter them out of the orphan check.
+    referenced_but_unknown = sorted(
+        ref for ref in (referenced_repos - manifest_repos)
+        if ref not in known_refs and ref.lower() not in known_refs
+    )
 
     if missing_from_doc:
         findings.append(

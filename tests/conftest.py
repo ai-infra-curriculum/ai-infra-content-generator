@@ -78,6 +78,12 @@ def write_minimal_manifest(path: Path) -> Path:
             "supplemental_dir": "supplemental",
         },
         "research": {"minimum_postings_per_role": 25, "source_window_days": 45},
+        "maintained_by": {
+            "name": "VeriSwarm.ai",
+            "url": "https://veriswarm.ai",
+            "phrasing": "Maintained by [VeriSwarm.ai](https://veriswarm.ai)",
+            "footer_marker": "<!-- aicg:maintained-by -->",
+        },
         "quality_judge": {
             "enabled": False,
             "agent_command": "{runner}/scripts/run-claude-judge.sh --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id} --artifact {artifact}",
