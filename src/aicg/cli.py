@@ -266,8 +266,34 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_audit)
     org_audit.set_defaults(func=cmd_org_audit)
 
-    org_daily = org_subparsers.add_parser("daily", help="Consume the next ready work item")
+    org_daily = org_subparsers.add_parser(
+        "daily",
+        help=(
+            "Drive ready work items end-to-end. Drain mode is read from "
+            "manifest.automation.daily_drain by default; override with "
+            "--drain / --no-drain."
+        ),
+    )
     add_org_args(org_daily)
+    org_daily.add_argument(
+        "--drain",
+        dest="drain",
+        action="store_true",
+        default=None,
+        help="Process items until the queue is empty (or wall-clock cap fires).",
+    )
+    org_daily.add_argument(
+        "--no-drain",
+        dest="drain",
+        action="store_false",
+        help="Process exactly one item then exit (legacy mode).",
+    )
+    org_daily.add_argument(
+        "--wall-clock-cap-seconds",
+        type=int,
+        default=None,
+        help="Override the per-tick wall-clock cap (default 7200).",
+    )
     org_daily.set_defaults(func=cmd_org_daily)
 
     org_execute_plan = org_subparsers.add_parser(
@@ -974,17 +1000,35 @@ def cmd_org_audit(args: argparse.Namespace) -> int:
 
 def cmd_org_daily(args: argparse.Namespace) -> int:
     manifest = resolve_manifest(args)
+    # Drain default: CLI flag wins, else manifest's automation.daily_drain,
+    # else False (single-item per tick).
+    drain = args.drain
+    if drain is None:
+        automation = manifest.automation or {}
+        drain = bool(automation.get("daily_drain", False))
+    kwargs = {"drain_until_empty": drain}
+    if args.wall_clock_cap_seconds is not None:
+        kwargs["wall_clock_cap_seconds"] = args.wall_clock_cap_seconds
+
     report = run_daily_remediation(
         manifest,
         resolve_workspace(args),
         state_dir=resolve_org_state_dir(args, manifest),
+        **kwargs,
     )
-    print(f"Daily remediation status: {report['status']}")
-    if report.get("selected"):
-        selected = report["selected"]
-        print(f"- selected: {selected['repo']} {selected['work_id']}")
-    if report.get("prompt_path"):
-        print(f"- prompt: {report['prompt_path']}")
+    status = report.get("status", "no_items")
+    items_processed = report.get("items_processed", 0)
+    exit_reason = report.get("exit_reason", "n/a")
+    print(
+        f"Daily remediation: status={status} items_processed={items_processed} "
+        f"exit_reason={exit_reason} (drain={drain})"
+    )
+    for item in report.get("items", [])[:10]:
+        selected = item.get("selected") or {}
+        print(
+            f"  - {selected.get('repo','?')}/{selected.get('work_id','?')}: "
+            f"{item.get('status','?')}"
+        )
     return 0
 
 
