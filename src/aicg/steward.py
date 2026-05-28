@@ -466,20 +466,64 @@ def pr_state(repo_path: Path, pr_number: int) -> str:
 def enable_auto_merge(
     repo_path: Path, pr_number: int, method: str = "squash"
 ) -> dict[str, Any]:
+    """Call ``gh pr merge --auto`` and classify the outcome.
+
+    gh's stdout is unreliable for distinguishing 'merged immediately'
+    from 'queued for auto-merge', so after the call we re-query the
+    PR's actual state to ground the status. Without this, callers see
+    ``status=None`` even when the PR has merged — which made the inline
+    -merge loop spin 89 times on PR #5.
+    """
     method = method.lower()
     flag = {"squash": "--squash", "merge": "--merge", "rebase": "--rebase"}.get(
         method, "--squash"
     )
-    completed = _run_gh(
-        repo_path,
-        ["gh", "pr", "merge", str(pr_number), "--auto", flag, "--delete-branch"],
-    )
+    command = ["gh", "pr", "merge", str(pr_number), "--auto", flag, "--delete-branch"]
+    completed = _run_gh(repo_path, command)
+
+    status = _classify_merge_outcome(repo_path, pr_number, completed)
     return {
-        "command": " ".join(["gh", "pr", "merge", str(pr_number), "--auto", flag, "--delete-branch"]),
+        "status": status,
+        "command": " ".join(command),
         "returncode": completed.returncode,
         "stdout": completed.stdout[-2000:],
         "stderr": completed.stderr[-2000:],
     }
+
+
+def _classify_merge_outcome(
+    repo_path: Path,
+    pr_number: int,
+    completed: subprocess.CompletedProcess[str],
+) -> str:
+    """Map gh's command result + a follow-up state read into a single status."""
+    out = (completed.stdout or "") + (completed.stderr or "")
+    lowered = out.lower()
+    if completed.returncode != 0:
+        if "no commits" in lowered or "already merged" in lowered:
+            return "already_merged"
+        if "auto-merge is not allowed" in lowered:
+            return "auto_merge_not_allowed"
+        return "merge_call_failed"
+    # gh returned 0 — re-read the PR's actual state so we can tell
+    # 'merged immediately' from 'auto-merge enabled and waiting'.
+    view = _run_gh(
+        repo_path,
+        ["gh", "pr", "view", str(pr_number), "--json", "state,mergedAt,autoMergeRequest"],
+    )
+    if view.returncode != 0:
+        return "merged"  # best-effort; gh said it merged
+    try:
+        payload = json.loads(view.stdout)
+    except json.JSONDecodeError:
+        return "merged"
+    if payload.get("state") == "MERGED" or payload.get("mergedAt"):
+        return "merged"
+    if payload.get("autoMergeRequest"):
+        return "auto_merge_enabled"
+    # State unchanged after the call — treat as auto_merge_enabled since
+    # gh reported success.
+    return "auto_merge_enabled"
 
 
 def _run_gh(repo_path: Path, args: list[str]) -> subprocess.CompletedProcess[str]:
