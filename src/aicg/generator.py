@@ -105,12 +105,24 @@ def select_work_item(
     module: str | None = None,
     work_id: str | None = None,
 ) -> dict[str, Any] | None:
-    for item in work_plan.get("work_items", []):
-        if work_id and item["id"] != work_id:
-            continue
-        if module and item.get("module") != module:
-            continue
-        return item
+    """Look up a work item in the plan.
+
+    Searches ``work_items`` first, then ``backlog_items`` — the org
+    work-queue can promote backlog (e.g. ``exercise_depth_followup``)
+    items to ready, but the per-repo plan still keeps them in the
+    backlog list. This used to raise 'No matching work item was found.'
+    """
+    pools = (
+        work_plan.get("work_items", []),
+        work_plan.get("backlog_items", []),
+    )
+    for pool in pools:
+        for item in pool:
+            if work_id and item["id"] != work_id:
+                continue
+            if module and item.get("module") != module:
+                continue
+            return item
     return None
 
 

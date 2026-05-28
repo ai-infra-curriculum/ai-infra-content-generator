@@ -55,7 +55,12 @@ def prepare_pr(
     auto_merge: bool = False,
     work_id: str | None = None,
 ) -> dict[str, Any]:
-    work_items = work_plan.get("work_items") or []
+    # Union work_items + backlog_items so backlog work (e.g.
+    # exercise_depth_followup) can also have PRs opened for it.
+    work_items = (
+        (work_plan.get("work_items") or [])
+        + (work_plan.get("backlog_items") or [])
+    )
     if not work_items:
         raise GitOpsError("No work items are available for PR creation.")
 
