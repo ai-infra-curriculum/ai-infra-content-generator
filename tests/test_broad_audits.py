@@ -68,7 +68,8 @@ def test_learning_audit_detects_placeholder_module(tmp_path: Path) -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_pairing_audit_flags_module_only_in_learning(tmp_path: Path) -> None:
+def test_pairing_audit_skips_module_only_in_learning_dedup(tmp_path: Path) -> None:
+    """Duplicate of module_solution_gap from the structural audit."""
     workspace = tmp_path / "workspace"
     (workspace / "ai-infra-security-learning" / "modules" / "mod-001").mkdir(parents=True)
     (workspace / "ai-infra-security-solutions" / "modules").mkdir(parents=True)
@@ -77,7 +78,7 @@ def test_pairing_audit_flags_module_only_in_learning(tmp_path: Path) -> None:
     report = audit_pairing(manifest, workspace, state_dir=tmp_path / "state")
 
     types = {f["type"] for f in report["findings"]}
-    assert "module_only_in_learning" in types
+    assert "module_only_in_learning" not in types
 
 
 def test_pairing_audit_flags_exercise_slug_drift(tmp_path: Path) -> None:
@@ -245,39 +246,24 @@ def test_org_profile_flags_missing_repo_dir(tmp_path: Path) -> None:
 
 
 def test_run_org_audit_includes_pairing_findings(tmp_path: Path) -> None:
+    """Trigger an exercise_slug_drift — that's a non-deduped pairing finding."""
     from aicg.org_runner import run_org_audit
 
     workspace = tmp_path / "workspace"
-    # Solution + learning side both present but learning has an extra module
-    (workspace / "ai-infra-security-learning" / "modules" / "mod-001").mkdir(parents=True)
-    write_file(
-        workspace / "ai-infra-security-learning" / "modules" / "mod-001" / "README.md",
-        "# Mod 001\n\n" + "Content " * 50,
+    learning_mod = (
+        workspace / "ai-infra-security-learning" / "modules" / "mod-001"
     )
+    solution_mod = (
+        workspace / "ai-infra-security-solutions" / "modules" / "mod-001"
+    )
+    (learning_mod / "exercises").mkdir(parents=True)
+    write_file(learning_mod / "README.md", "# Mod 001\n\n" + "Content " * 50)
     write_file(
-        workspace
-        / "ai-infra-security-learning"
-        / "modules"
-        / "mod-001"
-        / "exercises"
-        / "exercise-01-threat-model.md",
+        learning_mod / "exercises" / "exercise-01-threat-model.md",
         "# Ex\n" + "x" * 400,
     )
-    (workspace / "ai-infra-security-learning" / "modules" / "mod-002").mkdir(parents=True)
-    write_file(
-        workspace / "ai-infra-security-learning" / "modules" / "mod-002" / "README.md",
-        "# Mod 002\n\n" + "Content " * 50,
-    )
-    write_file(
-        workspace
-        / "ai-infra-security-learning"
-        / "modules"
-        / "mod-002"
-        / "exercises"
-        / "exercise-01-foo.md",
-        "# Ex\n" + "x" * 400,
-    )
-    (workspace / "ai-infra-security-solutions" / "modules" / "mod-001").mkdir(parents=True)
+    # Same exercise number, DIFFERENT slug on the solutions side → slug drift.
+    (solution_mod / "exercise-01-completely-different-slug").mkdir(parents=True)
     write_file(workspace / "ai-infra-security-solutions" / "modules" / "README.md", "")
     write_file(
         workspace / "ai-infra-security-solutions" / ".github" / "workflows" / "ci.yml",
@@ -288,5 +274,4 @@ def test_run_org_audit_includes_pairing_findings(tmp_path: Path) -> None:
     queue = run_org_audit(manifest, workspace, state_dir=tmp_path / "state")
 
     types = {item.get("type") for item in queue["work_items"]}
-    # Pairing + learning + nav all run and at least pairing mismatch surfaces
     assert "pairing_mismatch" in types

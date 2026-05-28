@@ -127,24 +127,12 @@ def _audit_role_pair(
     learning_modules = _inventory_modules(learning_path)
     solution_modules = _inventory_modules(solution_path)
 
-    only_in_learning = sorted(set(learning_modules) - set(solution_modules))
     only_in_solutions = sorted(set(solution_modules) - set(learning_modules))
     in_both = sorted(set(learning_modules) & set(solution_modules))
 
-    for mod_id in only_in_learning:
-        findings.append(
-            PairingFinding(
-                role=role.id,
-                severity="error",
-                type="module_only_in_learning",
-                learning_path=str(learning_modules[mod_id].relative_to(learning_path)),
-                solution_path=None,
-                message=(
-                    f"Module `{mod_id}` exists in learning repo but is "
-                    f"missing from solutions."
-                ),
-            )
-        )
+    # NOTE: 'module_only_in_learning' is intentionally OMITTED — the
+    # structural solution audit already emits module_solution_gap work
+    # items for every learning module that has no solution counterpart.
     for mod_id in only_in_solutions:
         findings.append(
             PairingFinding(
