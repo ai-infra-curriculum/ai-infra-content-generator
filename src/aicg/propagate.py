@@ -75,13 +75,14 @@ def propagate_repo(
         ) from exc
 
     summaries: list[WorkSummary] = []
-    for item in plan.get("work_items", []):
-        if work_id is not None and item.get("id") != work_id:
-            continue
-        if item.get("status") not in {"verified", "generated"}:
-            # Skip planned items that have not been generated yet.
-            continue
-        summaries.append(_summarise(item))
+    for pool in (plan.get("work_items", []), plan.get("backlog_items", [])):
+        for item in pool:
+            if work_id is not None and item.get("id") != work_id:
+                continue
+            if item.get("status") not in {"verified", "generated"}:
+                # Skip planned items that have not been generated yet.
+                continue
+            summaries.append(_summarise(item))
 
     if not summaries:
         return _emit_report(

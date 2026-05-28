@@ -88,16 +88,17 @@ def _expected_paths_for(
     plan: dict[str, Any], work_id: str | None
 ) -> set[str]:
     paths: set[str] = set()
-    for item in plan.get("work_items", []):
-        if work_id and item.get("id") != work_id:
-            continue
-        for action in item.get("actions", []):
-            target = action.get("path")
-            if not target:
+    for pool in (plan.get("work_items", []), plan.get("backlog_items", [])):
+        for item in pool:
+            if work_id and item.get("id") != work_id:
                 continue
-            # ``create_directory`` actions list the dir; include that
-            # plus its contents as expected.
-            paths.add(target.rstrip("/"))
+            for action in item.get("actions", []):
+                target = action.get("path")
+                if not target:
+                    continue
+                # ``create_directory`` actions list the dir; include that
+                # plus its contents as expected.
+                paths.add(target.rstrip("/"))
     return paths
 
 

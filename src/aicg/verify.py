@@ -119,12 +119,15 @@ def verify_repo(
     registry = source_registry or SourceRegistry.load()
 
     items: list[WorkItemVerification] = []
-    for work_item in plan.get("work_items", []):
-        if work_id is not None and work_item.get("id") != work_id:
-            continue
-        items.append(
-            verify_work_item(repo_path, work_item, registry, judge_config=judge_config)
-        )
+    # Union work_items + backlog_items — same shape, both carry actions.
+    pools = (plan.get("work_items", []), plan.get("backlog_items", []))
+    for pool in pools:
+        for work_item in pool:
+            if work_id is not None and work_item.get("id") != work_id:
+                continue
+            items.append(
+                verify_work_item(repo_path, work_item, registry, judge_config=judge_config)
+            )
 
     summary_status = "verified"
     if any(item.status == "verification_failed" for item in items):
@@ -512,15 +515,18 @@ def _update_plan_statuses(
 ) -> None:
     by_id = {item.work_id: item for item in items}
     changed = False
-    for work_item in plan.get("work_items", []):
-        result = by_id.get(work_item.get("id"))
-        if result is None:
-            continue
-        new_status = "verified" if result.status == "verified" else "verification_failed"
-        if work_item.get("status") != new_status:
-            work_item["status"] = new_status
-            work_item["verified_at"] = utc_now()
-            changed = True
+    for pool in (plan.get("work_items", []), plan.get("backlog_items", [])):
+        for work_item in pool:
+            result = by_id.get(work_item.get("id"))
+            if result is None:
+                continue
+            new_status = (
+                "verified" if result.status == "verified" else "verification_failed"
+            )
+            if work_item.get("status") != new_status:
+                work_item["status"] = new_status
+                work_item["verified_at"] = utc_now()
+                changed = True
     if changed:
         write_json(state_path(repo_path, WORK_PLAN), plan)
 
