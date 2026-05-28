@@ -79,8 +79,11 @@ def _rebrand_repo(
     """Edit READMEs in this repo and (if apply) push a PR."""
     if apply:
         # Skip when the working tree is dirty (another job mid-flight).
+        # --untracked-files=no excludes the runner's own .aicg/ scratch
+        # dir, which is untracked but gitignored or just orphaned.
         dirty = subprocess.run(
-            ["git", "-C", str(repo_path), "status", "--porcelain"],
+            ["git", "-C", str(repo_path), "status", "--porcelain",
+             "--untracked-files=no"],
             capture_output=True, text=True, check=False,
         )
         if dirty.stdout.strip():
@@ -88,7 +91,7 @@ def _rebrand_repo(
                 "repo": repo,
                 "status": "skipped_dirty_tree",
                 "changed_files": [],
-                "reason": "working tree had uncommitted changes",
+                "reason": "tracked-file modifications present",
             }
 
     marker = str(maintained_by.get("footer_marker") or "<!-- aicg:maintained-by -->")
