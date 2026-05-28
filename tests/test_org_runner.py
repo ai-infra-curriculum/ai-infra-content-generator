@@ -87,9 +87,16 @@ def test_org_audit_writes_queue_from_solution_gaps(tmp_path):
 
     queue = run_org_audit(manifest, workspace, state_dir=tmp_path / "state")
 
-    assert queue["work_item_count"] == 1
-    assert queue["work_items"][0]["repo"] == "ai-infra-security-solutions"
-    assert queue["work_items"][0]["status"] == "ready"
+    # The structural solution gap must be present at minimum; broader
+    # audits (learning, pairing, nav, profile) may add more.
+    assert queue["work_item_count"] >= 1
+    solution_items = [
+        item for item in queue["work_items"]
+        if item.get("repo") == "ai-infra-security-solutions"
+        and item.get("type") == "module_solution_gap"
+    ]
+    assert len(solution_items) == 1
+    assert solution_items[0]["status"] == "ready"
 
 
 def test_cli_org_research(tmp_path):

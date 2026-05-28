@@ -242,6 +242,31 @@ def run_org_audit(
                 }
             )
 
+        # Curriculum-nav audit per repo: orphan-on-disk + broken-references.
+        try:
+            from .nav_audit import audit_curriculum_nav
+
+            nav_report = audit_curriculum_nav(repo_path)
+            for item in nav_report.get("work_items", []):
+                biased = {**item, "severity": item.get("severity", "medium")}
+                queue_items.append(
+                    {
+                        "id": f"{repo}:{item['id']}",
+                        "repo": repo,
+                        "work_id": item["id"],
+                        "type": item["type"],
+                        "severity": biased["severity"],
+                        "title": item["title"],
+                        "path": item.get("path"),
+                        "status": "ready",
+                        "priority": queue_priority(manifest, repo, biased),
+                        "created_at": utc_now(),
+                    }
+                )
+        except Exception:  # noqa: BLE001
+            # Nav-audit is best-effort; never let it block the main loop.
+            pass
+
         # Splice in PR-response items emitted by the previous steward
         # run. These are high-severity so they jump ahead of structural
         # gaps — keeping an in-flight PR's loop closed beats opening
@@ -293,6 +318,83 @@ def run_org_audit(
                     "created_at": utc_now(),
                 }
             )
+
+    # Learning-repo structural audits. Each learning_gap item gets
+    # medium-severity priority (below solution structural, above
+    # default refresh).
+    try:
+        from .learning_audit import audit_learning_repo
+
+        for learning_repo in manifest.learning_repo_names:
+            learning_path = workspace / learning_repo
+            if not learning_path.exists():
+                continue
+            la_report = audit_learning_repo(learning_path)
+            for item in la_report.get("work_items", []):
+                biased = {**item, "severity": item.get("severity", "medium")}
+                queue_items.append(
+                    {
+                        "id": f"{learning_repo}:{item['id']}",
+                        "repo": learning_repo,
+                        "work_id": item["id"],
+                        "type": item["type"],
+                        "severity": biased["severity"],
+                        "title": item["title"],
+                        "path": item.get("path"),
+                        "status": "ready",
+                        "priority": queue_priority(manifest, learning_repo, biased),
+                        "created_at": utc_now(),
+                    }
+                )
+    except Exception:  # noqa: BLE001
+        pass
+
+    # Cross-repo pairing audit (one report per org).
+    try:
+        from .pairing_audit import audit_pairing
+
+        pa_report = audit_pairing(manifest, workspace, state_dir=state_dir)
+        for item in pa_report.get("work_items", []):
+            biased = {**item, "severity": item.get("severity", "medium")}
+            queue_items.append(
+                {
+                    "id": item["id"],
+                    "repo": "_pairing",
+                    "work_id": item["id"],
+                    "type": item["type"],
+                    "severity": biased["severity"],
+                    "title": item["title"],
+                    "status": "ready",
+                    "priority": queue_priority(manifest, "_pairing", biased),
+                    "created_at": utc_now(),
+                }
+            )
+    except Exception:  # noqa: BLE001
+        pass
+
+    # Org-profile audit on the .github repo.
+    try:
+        from .nav_audit import audit_org_profile
+
+        op_report = audit_org_profile(manifest, workspace, state_dir=state_dir)
+        for item in op_report.get("work_items", []):
+            biased = {**item, "severity": item.get("severity", "medium")}
+            queue_items.append(
+                {
+                    "id": item["id"],
+                    "repo": ".github",
+                    "work_id": item["id"],
+                    "type": item["type"],
+                    "severity": biased["severity"],
+                    "title": item["title"],
+                    "path": item.get("path"),
+                    "status": "ready",
+                    "priority": queue_priority(manifest, ".github", biased),
+                    "created_at": utc_now(),
+                }
+            )
+    except Exception:  # noqa: BLE001
+        pass
 
     queue_items.sort(key=lambda item: (item["priority"], item["repo"], item["work_id"]))
     queue = {
@@ -1949,7 +2051,16 @@ def _collect_freshness_items(repo_path: Path) -> list[dict[str, Any]]:
     return items
 
 
-_BACKLOG_TYPES = {"exercise_depth_followup"}
+_BACKLOG_TYPES = {
+    "exercise_depth_followup",
+    # New broad-audit types — same priority tier as the existing
+    # exercise_depth_followup backlog. They surface real gaps in the
+    # learning side, nav docs, cross-repo pairing, and org profile.
+    "learning_gap",
+    "pairing_mismatch",
+    "curriculum_nav_drift",
+    "org_profile_stale",
+}
 _HIGH_PRIORITY_TYPES = {"respond_pr_review"}
 
 

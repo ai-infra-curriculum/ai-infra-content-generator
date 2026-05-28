@@ -64,7 +64,7 @@ timeline
         04:40 : daily-steward (--apply)
         05:00 : daily-discussions (dry-run)
     section Weekly
-        Sun 03:00 : weekly-audit (sync + audit-links + audit-versions + audit)
+        Sun 03:00 : weekly-audit (sync + freshness + learning/pairing/curriculum/profile audits + audit)
     section Monthly
         1st 02:00 : monthly-release (sync + release --apply)
     section Quarterly

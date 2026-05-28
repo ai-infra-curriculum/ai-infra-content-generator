@@ -138,6 +138,13 @@ main() {
       # Freshness checks first so their work items are picked up by audit.
       run_aicg_org audit-links || true
       run_aicg_org audit-versions || true
+      # Broader structural audits also feed into the work-queue via
+      # run_org_audit, but a standalone run here writes their reports
+      # and surfaces summary lines in the log.
+      run_aicg_org audit-learning || true
+      run_aicg_org audit-pairing || true
+      run_aicg_org audit-curriculum || true
+      run_aicg_org audit-profile || true
       run_aicg_org audit
       ;;
     monthly-review)

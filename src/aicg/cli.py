@@ -389,6 +389,34 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_list_roles)
     org_list_roles.set_defaults(func=cmd_org_list_roles)
 
+    org_audit_learning = org_subparsers.add_parser(
+        "audit-learning",
+        help="Structural audit of every learning repo in the manifest",
+    )
+    add_org_args(org_audit_learning)
+    org_audit_learning.set_defaults(func=cmd_org_audit_learning)
+
+    org_audit_pairing = org_subparsers.add_parser(
+        "audit-pairing",
+        help="Compare each learning repo to its paired solutions repo for alignment",
+    )
+    add_org_args(org_audit_pairing)
+    org_audit_pairing.set_defaults(func=cmd_org_audit_pairing)
+
+    org_audit_curriculum = org_subparsers.add_parser(
+        "audit-curriculum",
+        help="Walk every repo's CURRICULUM.md / CURRICULUM_INDEX.md for completeness",
+    )
+    add_org_args(org_audit_curriculum)
+    org_audit_curriculum.set_defaults(func=cmd_org_audit_curriculum)
+
+    org_audit_profile = org_subparsers.add_parser(
+        "audit-profile",
+        help="Audit the .github org-profile docs for staleness vs the manifest",
+    )
+    add_org_args(org_audit_profile)
+    org_audit_profile.set_defaults(func=cmd_org_audit_profile)
+
     org_audit_links = org_subparsers.add_parser(
         "audit-links",
         help="Run the link checker against every solution repo in the manifest",
@@ -1237,6 +1265,85 @@ def cmd_org_review(args: argparse.Namespace) -> int:
                 f"  ! {repo['repo']}: {repo['stale_count']} stale of "
                 f"{repo['artifacts_reviewed']} reviewed"
             )
+    return 0
+
+
+def cmd_org_audit_learning(args: argparse.Namespace) -> int:
+    from .learning_audit import audit_learning_repo
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    total_gaps = 0
+    repos_with_gaps = 0
+    for repo in manifest.learning_repo_names:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        report = audit_learning_repo(repo_path)
+        n = report["summary"]["gap_count"]
+        total_gaps += n
+        if n:
+            repos_with_gaps += 1
+            print(
+                f"  ! {repo}: {n} gap(s) "
+                f"({report['summary']['error_count']} error, "
+                f"{report['summary']['warning_count']} warning)"
+            )
+    print(
+        f"Learning audit: {total_gaps} gap(s) across "
+        f"{repos_with_gaps} repo(s)"
+    )
+    return 0
+
+
+def cmd_org_audit_pairing(args: argparse.Namespace) -> int:
+    from .pairing_audit import audit_pairing
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    report = audit_pairing(manifest, workspace, state_dir=state_dir)
+    print(
+        f"Pairing audit: {report['finding_count']} mismatch(es) across "
+        f"{report['role_count']} role(s) "
+        f"(errors={report['by_severity']['error']}, "
+        f"warnings={report['by_severity']['warning']})"
+    )
+    for role_report in report["roles"]:
+        if role_report.get("finding_count"):
+            print(f"  ! {role_report['role']}: {role_report['finding_count']}")
+    return 0
+
+
+def cmd_org_audit_curriculum(args: argparse.Namespace) -> int:
+    from .nav_audit import audit_curriculum_nav
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    total_gaps = 0
+    for repo in manifest.repo_names:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        report = audit_curriculum_nav(repo_path)
+        n = report["gap_count"]
+        total_gaps += n
+        if n:
+            print(f"  ! {repo}: {n} nav drift(s)")
+    print(f"Curriculum-nav audit: {total_gaps} drift(s)")
+    return 0
+
+
+def cmd_org_audit_profile(args: argparse.Namespace) -> int:
+    from .nav_audit import audit_org_profile
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    report = audit_org_profile(manifest, workspace, state_dir=state_dir)
+    print(f"Org-profile audit: {report['gap_count']} finding(s)")
+    for finding in report["findings"][:5]:
+        print(f"  ! {finding['severity']:>7}  {finding['type']}: {finding['message'][:80]}")
     return 0
 
 
