@@ -11,6 +11,18 @@
       "name": ".github",
       "kind": "org-profile",
       "release": false
+    },
+    {
+      "_comment": "Standalone guidebook repo; carries author guidance but not curriculum modules. Released alongside the curriculum to keep version pins coherent.",
+      "name": "ai-agent-guidebook",
+      "kind": "guidebook",
+      "release": true
+    },
+    {
+      "_comment": "The AICG runner itself. Listed so it gets the maintainer footer + audits like every other repo. release=false so monthly-release does NOT tag it — versions are driven by the runner's own pyproject.",
+      "name": "ai-infra-content-generator",
+      "kind": "runner",
+      "release": false
     }
   ],
   "maintained_by": {
