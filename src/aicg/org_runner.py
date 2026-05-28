@@ -316,6 +316,7 @@ INLINE_MERGE_POLL_SECONDS = 15
 INLINE_MERGE_TIMEOUT_SECONDS = 1800
 CI_SELF_HEAL_MAX_ATTEMPTS = 3
 CI_WAIT_PER_ATTEMPT_SECONDS = 300  # 5 min per CI cycle
+REVIEW_SELF_HEAL_MAX_ATTEMPTS = 3
 
 
 def run_daily_remediation(
@@ -766,6 +767,7 @@ def _drive_pr_to_merge(
     owner, repo_name = _owner_repo_from_url(pr_url)
     history: list[dict[str, Any]] = []
     deadline = time.monotonic() + INLINE_MERGE_TIMEOUT_SECONDS
+    review_attempts = 0
 
     # Auto-rebase: if main has moved since the PR was opened, merge it
     # in first so we don't waste a CI cycle on a guaranteed-conflict
@@ -864,13 +866,49 @@ def _drive_pr_to_merge(
                     review_state, pr_author=(pr.get("author") or {}).get("login")
                 )
                 if cls["verdict"] == "blocked":
-                    history.append({"phase": "review", "verdict": "blocked"})
-                    return {
-                        "status": "review_blocked",
-                        "pr_url": pr_url,
-                        "blockers": cls["blockers"],
-                        "history": history,
-                    }
+                    history.append(
+                        {
+                            "phase": "review",
+                            "verdict": "blocked",
+                            "attempt": review_attempts + 1,
+                        }
+                    )
+                    if review_attempts >= REVIEW_SELF_HEAL_MAX_ATTEMPTS:
+                        return {
+                            "status": "review_blocked_escalated",
+                            "pr_url": pr_url,
+                            "blockers": cls["blockers"],
+                            "history": history,
+                        }
+                    review_attempts += 1
+                    heal_outcome = _invoke_review_self_heal_agent(
+                        manifest=manifest,
+                        repo_path=repo_path,
+                        pr_number=pr_number,
+                        branch=branch,
+                        blockers=cls["blockers"],
+                        attempt=review_attempts,
+                    )
+                    history.append(
+                        {
+                            "phase": "review_self_heal",
+                            "attempt": review_attempts,
+                            "result": heal_outcome.get("status"),
+                            "blocker_count": len(cls["blockers"]),
+                        }
+                    )
+                    if heal_outcome.get("status") not in {"pushed", "no_changes"}:
+                        return {
+                            "status": "review_blocked",
+                            "pr_url": pr_url,
+                            "blockers": cls["blockers"],
+                            "self_heal": heal_outcome,
+                            "history": history,
+                        }
+                    # Pushed a fix — loop back to wait for new CI then
+                    # re-check reviews. Bot threads typically auto-resolve
+                    # once the underlying issue is addressed.
+                    continue
 
         merge_result = enable_auto_merge(repo_path, pr_number, method="squash")
         history.append({"phase": "merge", "result": merge_result.get("status")})
@@ -1102,6 +1140,137 @@ def _extract_work_id_from_versions_row(line: str) -> str | None:
 
     match = _re.search(r"\|\s*`([^`]+)`\s*\|", line)
     return match.group(1) if match else None
+
+
+def _invoke_review_self_heal_agent(
+    manifest: OrgManifest,
+    repo_path: Path,
+    pr_number: int,
+    branch: str,
+    blockers: list[dict[str, Any]],
+    attempt: int,
+) -> dict[str, Any]:
+    """Invoke the agent to address review comments / changes-requested.
+
+    Same shape as the CI self-heal handler: checkout PR branch, build a
+    prompt enumerating each blocker, run the agent, trust the working
+    tree, commit + push.
+    """
+    subprocess.run(
+        ["git", "-C", str(repo_path), "fetch", "origin", branch],
+        capture_output=True, text=True, check=False,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo_path), "checkout", branch],
+        capture_output=True, text=True, check=False,
+    )
+
+    output_dir = (
+        repo_path / ".aicg" / "review-self-heal" / f"pr-{pr_number}" / f"attempt-{attempt}"
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = output_dir / "prompt.md"
+    prompt_path.write_text(
+        _build_review_self_heal_prompt(pr_number, blockers), encoding="utf-8"
+    )
+
+    command = content_generation_command(manifest).format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=f"review-heal:pr-{pr_number}:{attempt}",
+        runner=str(Path(__file__).resolve().parents[2]),
+    )
+    from .agent_cli import run_agent_command
+
+    agent_result = run_agent_command(command, cwd=repo_path)
+    if agent_result.limit_reached:
+        _checkout_main(repo_path)
+        return {
+            "status": "subscription_limit",
+            "retry_after": agent_result.retry_after,
+        }
+
+    # Trust the working tree (same pattern as CI self-heal).
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    has_changes = bool(status.stdout.strip())
+    if not has_changes:
+        _checkout_main(repo_path)
+        if agent_result.returncode != 0:
+            return {
+                "status": "agent_failed",
+                "returncode": agent_result.returncode,
+                "stderr_tail": agent_result.stderr[-400:],
+            }
+        return {"status": "no_changes"}
+
+    for args in (
+        ["git", "-C", str(repo_path), "add", "--all"],
+        ["git", "-C", str(repo_path), "commit", "-m",
+         f"aicg: address PR #{pr_number} review (attempt {attempt})"],
+        ["git", "-C", str(repo_path), "push"],
+    ):
+        c = subprocess.run(args, capture_output=True, text=True, check=False)
+        if c.returncode != 0:
+            _checkout_main(repo_path)
+            return {
+                "status": "push_failed",
+                "step": args[3],
+                "stderr_tail": c.stderr[-400:],
+            }
+    _checkout_main(repo_path)
+    return {"status": "pushed", "agent_returncode": agent_result.returncode}
+
+
+def _build_review_self_heal_prompt(
+    pr_number: int, blockers: list[dict[str, Any]]
+) -> str:
+    lines = [
+        f"# Address review feedback on PR #{pr_number}",
+        "",
+        "## Goal",
+        "",
+        "Reviewers (human or bot) left feedback that blocks auto-merge.",
+        "Address each blocker below with the smallest possible code",
+        "change. Do NOT rewrite scope and do NOT touch unrelated files.",
+        "",
+        "## Blockers",
+        "",
+    ]
+    for i, b in enumerate(blockers, 1):
+        if b.get("kind") == "changes_requested":
+            lines.append(f"### {i}. CHANGES_REQUESTED from @{b.get('author')}")
+            lines.append("")
+            lines.append(f"> {(b.get('body') or '').strip() or '(no body)'}")
+            lines.append("")
+        elif b.get("kind") == "unresolved_thread":
+            actor = "bot" if b.get("is_bot") else "human"
+            lines.append(
+                f"### {i}. Unresolved review thread "
+                f"({actor}: @{b.get('author')}) "
+                f"in `{b.get('path')}:{b.get('line')}`"
+            )
+            lines.append("")
+            lines.append(f"> {(b.get('body') or '').strip() or '(no body)'}")
+            lines.append("")
+    lines.extend(
+        [
+            "## Output contract",
+            "",
+            "- Edit only the files referenced by these blockers.",
+            "- Preserve the existing structure; don't delete sections.",
+            "- Do NOT touch CURRICULUM.md, README.md, or VERSIONS.md.",
+            "- Do NOT mark review threads resolved yourself — only the",
+            "  reviewer can do that. Your job is to push commits that",
+            "  address the underlying issue. Bot threads auto-resolve",
+            "  when their metric recovers; human threads stay open until",
+            "  the human resolves them.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
 
 
 def _invoke_ci_self_heal_agent(
