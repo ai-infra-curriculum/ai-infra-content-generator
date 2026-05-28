@@ -912,8 +912,7 @@ def _invoke_ci_self_heal_agent(
         return {"status": "no_changes"}
 
     for args in (
-        ["git", "-C", str(repo_path), "add", "--all", "--",
-         ":(top,exclude).aicg", ":(top,exclude).aicg/**"],
+        ["git", "-C", str(repo_path), "add", "--all"],
         ["git", "-C", str(repo_path), "commit", "-m",
          f"aicg: address CI failures on PR #{pr_number} (attempt {attempt})"],
         ["git", "-C", str(repo_path), "push"],
@@ -1359,7 +1358,7 @@ def _commit_and_push_pr_response(
         return {"status": "no_changes"}
     msg = f"aicg: respond to PR #{pr_number} review (attempt {attempt})"
     for args in (
-        ["git", "-C", str(repo_path), "add", "-A", "--", ".", ":(exclude).aicg", ":(exclude).aicg/**"],
+        ["git", "-C", str(repo_path), "add", "--all"],
         ["git", "-C", str(repo_path), "commit", "-m", msg],
         ["git", "-C", str(repo_path), "push"],
     ):

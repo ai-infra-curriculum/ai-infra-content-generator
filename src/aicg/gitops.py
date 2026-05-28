@@ -134,24 +134,15 @@ def checkout_branch(repo_path: Path, branch: str) -> None:
 
 
 def commit_all(repo_path: Path, message: str) -> None:
-    """Stage everything except ``.aicg/`` and commit.
+    """Stage everything except gitignored paths and commit.
 
-    git's pathspec exclusion (``:(exclude)foo``) only works alongside
-    OTHER positive pathspecs — listing ``.`` alongside excludes makes
-    git treat ``.aicg/`` as an explicitly-requested ignored path and
-    abort. Use ``--all`` with a pure exclude pathspec instead.
+    ``git add --all`` with no pathspec silently respects gitignore, so
+    ``.aicg/`` is skipped without triggering the ``addIgnoredFile``
+    advice. Adding an explicit pathspec that hits ``.aicg`` (even via
+    ``:(exclude)``) trips the warning and returns non-zero, even when
+    staging actually succeeded — confusing and brittle.
     """
-    run(
-        repo_path,
-        [
-            "git",
-            "add",
-            "--all",
-            "--",
-            ":(top,exclude).aicg",
-            ":(top,exclude).aicg/**",
-        ],
-    )
+    run(repo_path, ["git", "add", "--all"])
     run(repo_path, ["git", "commit", "-m", message])
 
 
