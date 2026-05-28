@@ -164,6 +164,10 @@ main() {
       # post @dependabot rebase on stale ones, escalate after 3 rebase
       # loops without progress.
       run_aicg_org dependabot --apply || true
+      # Re-attempt the maintainer rebrand for any repos that were
+      # skipped (dirty tree etc.) on a previous run. Idempotent —
+      # already-branded repos are no-ops.
+      run_aicg_org rebrand --apply || true
       ;;
     daily-discussions)
       run_aicg_org discussions
