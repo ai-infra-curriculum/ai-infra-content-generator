@@ -275,3 +275,95 @@ def test_run_org_audit_includes_pairing_findings(tmp_path: Path) -> None:
 
     types = {item.get("type") for item in queue["work_items"]}
     assert "pairing_mismatch" in types
+
+
+# ---------------------------------------------------------------------------
+# Cross-repo handler dispatch
+# ---------------------------------------------------------------------------
+
+
+def test_cross_repo_handler_resolves_org_profile_target(tmp_path: Path) -> None:
+    from aicg.org_runner import _resolve_cross_repo_target
+
+    workspace = tmp_path / "workspace"
+    (workspace / ".github" / "profile").mkdir(parents=True)
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+
+    item = {
+        "type": "org_profile_stale",
+        "subtype": "profile_missing_repos",
+        "path": "profile/README.md",
+    }
+    target = _resolve_cross_repo_target(manifest, workspace, item)
+    assert target is not None
+    assert target["repo"] == ".github"
+    assert target["target_file"] == "profile/README.md"
+
+
+def test_cross_repo_handler_resolves_learning_gap_target(tmp_path: Path) -> None:
+    from aicg.org_runner import _resolve_cross_repo_target
+
+    workspace = tmp_path / "workspace"
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+
+    item = {
+        "type": "learning_gap",
+        "subtype": "missing_module_readme",
+        "repo": "ai-infra-security-learning",
+        "path": "modules/mod-001/README.md",
+    }
+    target = _resolve_cross_repo_target(manifest, workspace, item)
+    assert target is not None
+    assert target["repo"] == "ai-infra-security-learning"
+    assert target["target_file"] == "modules/mod-001/README.md"
+
+
+def test_cross_repo_handler_defers_project_only_in_solutions(tmp_path: Path) -> None:
+    """That subtype needs human judgment — handler returns None."""
+    from aicg.org_runner import _resolve_cross_repo_target
+
+    workspace = tmp_path / "workspace"
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+
+    item = {
+        "type": "pairing_mismatch",
+        "subtype": "project_only_in_solutions",
+        "role": "security",
+        "solution_path": "projects/project-99-orphan",
+    }
+    target = _resolve_cross_repo_target(manifest, workspace, item)
+    assert target is None
+
+
+def test_cross_repo_handler_routes_slug_drift_to_solutions(tmp_path: Path) -> None:
+    from aicg.org_runner import _resolve_cross_repo_target
+
+    workspace = tmp_path / "workspace"
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+
+    item = {
+        "type": "pairing_mismatch",
+        "subtype": "exercise_slug_drift",
+        "role": "security",
+        "learning_path": "mod-001/exercise-01-good-slug",
+        "solution_path": "mod-001/exercise-01-bad-slug",
+    }
+    target = _resolve_cross_repo_target(manifest, workspace, item)
+    assert target is not None
+    assert target["repo"] == "ai-infra-security-solutions"
+
+
+def test_cross_repo_prompt_includes_details(tmp_path: Path) -> None:
+    from aicg.org_runner import _build_cross_repo_prompt
+
+    item = {
+        "type": "learning_gap",
+        "subtype": "missing_module_readme",
+        "details": "Module mod-001 missing README",
+        "path": "modules/mod-001/README.md",
+    }
+    target = {"repo": "ai-infra-security-learning", "target_file": "modules/mod-001/README.md"}
+    prompt = _build_cross_repo_prompt(item, target)
+    assert "missing_module_readme" in prompt
+    assert "Module mod-001 missing README" in prompt
+    assert "ai-infra-security-learning" in prompt

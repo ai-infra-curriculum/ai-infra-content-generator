@@ -529,6 +529,23 @@ def _process_one_item(
             result=result,
         )
 
+    if item.get("type") in {
+        "pairing_mismatch",
+        "curriculum_nav_drift",
+        "learning_gap",
+        "org_profile_stale",
+    }:
+        return _handle_cross_repo_item(
+            manifest=manifest,
+            workspace=workspace,
+            item=item,
+            state_dir=state_dir,
+            queue=queue,
+            queue_path=queue_path,
+            result=result,
+        )
+
+
     try:
         plan = read_state(repo_path, "work-plan.json")
     except FileNotFoundError:
@@ -1743,6 +1760,336 @@ def queue_priority(manifest: OrgManifest, repo: str, item: dict[str, Any]) -> in
     base = role.level if role else 100
     severity_bias = _severity_bias(item)
     return severity_bias + base * 1000 + int(item.get("priority", 100))
+
+
+def _handle_cross_repo_item(
+    manifest: OrgManifest,
+    workspace: Path,
+    item: dict[str, Any],
+    state_dir: Path,
+    queue: dict[str, Any],
+    queue_path: Path,
+    result: dict[str, Any],
+) -> dict[str, Any]:
+    """Process a cross-repo audit item end-to-end.
+
+    Routes by ``item['type']`` (and ``item['subtype']`` where relevant):
+
+    - ``curriculum_nav_drift`` → edit the named CURRICULUM doc in the
+      target repo.
+    - ``learning_gap`` → edit the named file in the learning repo.
+    - ``org_profile_stale`` → edit ``profile/README.md`` in ``.github``.
+    - ``pairing_mismatch``:
+       - ``exercise_missing_in_learning`` → write a learning brief
+         in the learning repo.
+       - ``exercise_slug_drift`` → align the solution-side slug to the
+         learning side (learning is authoritative).
+       - ``project_only_in_solutions`` → defer (human review).
+
+    The handler runs the same generate → commit → push → PR → inline
+    -merge pipeline as structural items but skips verify (no plan) and
+    skips propagate (these don't add new curriculum content so
+    VERSIONS.md doesn't need a row).
+    """
+    work_type = item["type"]
+    subtype = item.get("subtype", "")
+
+    target = _resolve_cross_repo_target(manifest, workspace, item)
+    if target is None:
+        item["status"] = "deferred"
+        item["updated_at"] = utc_now()
+        item["defer_reason"] = "needs_human_judgment"
+        item["last_failure"] = (
+            f"Cross-repo item `{work_type}/{subtype}` needs human review; "
+            "deferring."
+        )
+        item["retry_after"] = _retry_after_in_minutes(60 * 24 * 7)  # 1 week
+        result["status"] = "deferred"
+        result["defer_reason"] = "needs_human_judgment"
+        write_json(queue_path, queue)
+        return result
+
+    repo_path: Path = target["repo_path"]
+    repo_name: str = target["repo"]
+
+    # Branch + prompt.
+    today = utc_now()[:10]
+    safe_id = _slug_for_branch(item["work_id"])
+    branch = f"aicg/{today}/{repo_name}/{safe_id}"
+    prompt_dir = repo_path / ".aicg" / "cross-repo" / item["work_id"]
+    prompt_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = prompt_dir / "prompt.md"
+    prompt_path.write_text(
+        _build_cross_repo_prompt(item, target), encoding="utf-8"
+    )
+    output_dir = prompt_dir / "agent-run"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Checkout a fresh branch from main.
+    for args in (
+        ["git", "-C", str(repo_path), "fetch", "origin", "main"],
+        ["git", "-C", str(repo_path), "checkout", "main"],
+        ["git", "-C", str(repo_path), "pull", "--ff-only"],
+        ["git", "-C", str(repo_path), "checkout", "-B", branch],
+    ):
+        subprocess.run(args, capture_output=True, text=True, check=False)
+
+    command = content_generation_command(manifest).format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=item["work_id"],
+        runner=str(Path(__file__).resolve().parents[2]),
+    )
+    from .agent_cli import run_agent_command
+
+    agent_result = run_agent_command(command, cwd=repo_path)
+    if agent_result.limit_reached:
+        _checkout_main(repo_path)
+        item["status"] = "deferred"
+        item["updated_at"] = utc_now()
+        item["defer_reason"] = "agent_subscription_limit"
+        item["retry_after"] = agent_result.retry_after
+        result["status"] = "deferred"
+        result["defer_reason"] = "agent_subscription_limit"
+        result["retry_after"] = agent_result.retry_after
+        write_json(queue_path, queue)
+        return result
+
+    # Trust working tree; commit any changes.
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    has_changes = bool(status.stdout.strip())
+    if not has_changes:
+        _checkout_main(repo_path)
+        item["status"] = "failed_permanently" if agent_result.returncode != 0 else "no_changes"
+        item["updated_at"] = utc_now()
+        item["last_failure"] = (
+            f"Agent produced no on-disk changes (rc={agent_result.returncode}); "
+            f"{agent_result.stderr[-200:]}"
+        )
+        result["status"] = item["status"]
+        write_json(queue_path, queue)
+        return result
+
+    msg = f"aicg: {work_type} {subtype} for {item.get('path', item['work_id'])}"
+    for args in (
+        ["git", "-C", str(repo_path), "add", "--all"],
+        ["git", "-C", str(repo_path), "commit", "-m", msg],
+        ["git", "-C", str(repo_path), "push", "-u", "origin", branch],
+    ):
+        c = subprocess.run(args, capture_output=True, text=True, check=False)
+        if c.returncode != 0:
+            _checkout_main(repo_path)
+            item["status"] = "failed_permanently"
+            item["last_failure"] = f"git step `{args[3]}` failed: {c.stderr[-200:]}"
+            result["status"] = "failed_permanently"
+            write_json(queue_path, queue)
+            return result
+
+    # gh pr create
+    pr_body_path = prompt_dir / "pr-body.md"
+    pr_body_path.write_text(
+        _build_cross_repo_pr_body(item, target), encoding="utf-8"
+    )
+    title = f"aicg: {work_type} — {item.get('path', item['work_id'])[:80]}"
+    pr_create = subprocess.run(
+        [
+            "gh", "pr", "create",
+            "--base", "main",
+            "--title", title,
+            "--body-file", str(pr_body_path),
+        ],
+        cwd=repo_path,
+        capture_output=True, text=True, check=False,
+    )
+    if pr_create.returncode != 0:
+        _checkout_main(repo_path)
+        item["status"] = "failed_permanently"
+        item["last_failure"] = f"gh pr create failed: {pr_create.stderr[-200:]}"
+        result["status"] = "failed_permanently"
+        write_json(queue_path, queue)
+        return result
+    pr_url = pr_create.stdout.strip()
+    result["pr"] = {"status": "opened", "pr_url": pr_url, "branch": branch}
+    item["pr_url"] = pr_url
+    item["pr_branch"] = branch
+
+    # Drive to merge (auto-rebase + CI self-heal + review self-heal +
+    # enable_auto_merge are all reused from the structural flow).
+    _checkout_main(repo_path)
+    merge_outcome = _drive_pr_to_merge(
+        manifest=manifest,
+        repo_path=repo_path,
+        pr_url=pr_url,
+        branch=branch,
+    )
+    result["inline_merge"] = merge_outcome
+    if merge_outcome.get("status") == "merged":
+        item["status"] = "merged"
+        item["updated_at"] = utc_now()
+    elif merge_outcome.get("status") == "auto_merge_enabled":
+        item["status"] = "auto_merge_enabled"
+        item["updated_at"] = utc_now()
+    else:
+        item["status"] = "pr_open"
+        item["updated_at"] = utc_now()
+
+    result["status"] = item["status"]
+    write_json(queue_path, queue)
+    return result
+
+
+def _resolve_cross_repo_target(
+    manifest: OrgManifest, workspace: Path, item: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Pick the repo + file the agent should edit for this item.
+
+    Returns ``None`` when the item needs human judgment.
+    """
+    work_type = item.get("type", "")
+    subtype = item.get("subtype", "")
+
+    if work_type == "org_profile_stale":
+        return {
+            "repo": ".github",
+            "repo_path": workspace / ".github",
+            "target_file": item.get("path") or "profile/README.md",
+        }
+
+    if work_type in {"learning_gap", "curriculum_nav_drift"}:
+        repo = item.get("repo")
+        if not repo:
+            return None
+        return {
+            "repo": repo,
+            "repo_path": workspace / repo,
+            "target_file": (item.get("path") or "").split("#", 1)[0],
+        }
+
+    if work_type == "pairing_mismatch":
+        if subtype == "exercise_missing_in_learning":
+            # Need to write a learning brief on the learning side.
+            role_id = item.get("role")
+            role = next((r for r in manifest.roles if r.id == role_id), None)
+            if role is None:
+                return None
+            return {
+                "repo": role.learning_repo,
+                "repo_path": workspace / role.learning_repo,
+                "target_file": item.get("solution_path") or "",
+            }
+        if subtype == "exercise_slug_drift":
+            # Rename the solutions-side directory to match learning
+            # (learning is authoritative). Agent will move dir + update
+            # any references.
+            role_id = item.get("role")
+            role = next((r for r in manifest.roles if r.id == role_id), None)
+            if role is None:
+                return None
+            return {
+                "repo": role.solution_repo,
+                "repo_path": workspace / role.solution_repo,
+                "target_file": item.get("solution_path") or "",
+            }
+        # project_only_in_solutions: orphan solution project; human
+        # decides whether to backfill the learning brief or delete.
+        return None
+
+    return None
+
+
+def _build_cross_repo_prompt(
+    item: dict[str, Any], target: dict[str, Any]
+) -> str:
+    work_type = item.get("type", "?")
+    subtype = item.get("subtype", "?")
+    details = item.get("details") or item.get("title") or ""
+    repo = target["repo"]
+    file_hint = target.get("target_file") or "(see details)"
+
+    common = (
+        f"# {work_type}: {subtype}\n\n"
+        f"Repo: `{repo}`\n"
+        f"Target: `{file_hint}`\n\n"
+        f"## Why this work exists\n\n{details}\n\n"
+        "## Scope\n\n"
+        "- Edit only the files needed to address the issue above.\n"
+        "- Do NOT touch CURRICULUM.md sections you weren't asked to,\n"
+        "  do NOT touch VERSIONS.md (the runner manages that).\n"
+        "- Preserve all existing structure and tone.\n"
+    )
+
+    if work_type == "curriculum_nav_drift":
+        return common + (
+            "\n## Specific instructions\n\n"
+            "The named nav doc is out of sync with what's on disk. "
+            "If a module/project is missing from the doc, add a row in "
+            "the appropriate table preserving the existing column shape. "
+            "If a referenced module/project doesn't exist on disk, remove "
+            "the row. Do NOT invent content — just align the navigation."
+        )
+
+    if work_type == "learning_gap":
+        return common + (
+            "\n## Specific instructions\n\n"
+            "Write learning content for the path above. Match the tone and "
+            "depth of the other modules' content in this repo. Use official "
+            "sources only; mark unresolved claims with "
+            "`<!-- needs-research: ... -->`. Do not exceed reasonable scope."
+        )
+
+    if work_type == "org_profile_stale":
+        return common + (
+            "\n## Specific instructions\n\n"
+            "Bring the org profile in line with the current set of org "
+            "repos. Preserve the existing format; add references for any "
+            "missing repos; remove orphan references."
+        )
+
+    if work_type == "pairing_mismatch":
+        if subtype == "exercise_missing_in_learning":
+            return common + (
+                "\n## Specific instructions\n\n"
+                "A solution exercise exists with no corresponding learning "
+                "brief. Write the missing learning brief at the standard "
+                "path for that module + exercise number. The brief should "
+                "state the goal, the expected output, and acceptance "
+                "criteria; do NOT include the worked solution."
+            )
+        if subtype == "exercise_slug_drift":
+            return common + (
+                "\n## Specific instructions\n\n"
+                "The solutions-side exercise directory uses a different "
+                "slug than the learning side. Rename the solutions-side "
+                "directory to match the learning slug (learning is "
+                "authoritative). Update any internal references / index "
+                "files that mention the old slug."
+            )
+
+    return common
+
+
+def _build_cross_repo_pr_body(
+    item: dict[str, Any], target: dict[str, Any]
+) -> str:
+    return (
+        f"## AICG cross-repo audit work item\n\n"
+        f"- Type: `{item.get('type')}` / `{item.get('subtype', '?')}`\n"
+        f"- Work ID: `{item.get('work_id')}`\n"
+        f"- Repo: `{target.get('repo')}`\n"
+        f"- Target: `{target.get('target_file', '?')}`\n\n"
+        f"### Why\n\n{item.get('details') or item.get('title') or ''}\n\n"
+        f"### Loop note\n\nGenerated by the autonomous runner. CI must pass.\n"
+    )
+
+
+def _slug_for_branch(text: str) -> str:
+    import re
+
+    return re.sub(r"[^A-Za-z0-9_\-]+", "-", text).strip("-").lower()[:120]
 
 
 def _handle_pr_response_item(
