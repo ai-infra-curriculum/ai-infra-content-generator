@@ -604,6 +604,26 @@ def _process_one_item(
         result["status"] = "prompt_ready"
         result["prompt_path"] = str(exc.prompt_path)
         result["output_dir"] = str(exc.output_dir)
+    except ValueError as exc:
+        # Cross-repo audit items (pairing, nav, learning, profile)
+        # don't appear in any per-repo work-plan; the structural
+        # generator can't find them and raises ValueError. Defer with
+        # a long retry_after so the tick keeps moving instead of
+        # crashing repeatedly. A dedicated handler can pick them up
+        # later.
+        if "No matching work item" not in str(exc):
+            raise
+        item["status"] = "deferred"
+        item["updated_at"] = utc_now()
+        item["defer_reason"] = "unhandled_work_type"
+        item["last_failure"] = (
+            f"Work-item type `{item.get('type', '?')}` has no per-repo "
+            "plan entry; no handler wired yet."
+        )
+        item["retry_after"] = _retry_after_in_minutes(60 * 24)
+        result["status"] = "deferred"
+        result["defer_reason"] = "unhandled_work_type"
+        result["retry_after"] = item["retry_after"]
     except AgentLimitReached as exc:
         item["status"] = "deferred"
         item["updated_at"] = utc_now()

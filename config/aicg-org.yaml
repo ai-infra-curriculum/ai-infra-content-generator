@@ -42,7 +42,7 @@
     "auto_merge": false,
     "max_daily_work_items": 1,
     "_comment_daily_drain": "True = drain queue per tick until empty / wall-clock cap; False = exactly one item per tick.",
-    "daily_drain": true,
+    "daily_drain": false,
     "agent": {
       "provider": "openai",
       "model": "codex-gpt-5.5",
