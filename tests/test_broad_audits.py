@@ -111,7 +111,10 @@ def test_pairing_audit_clean_when_perfect_pair(tmp_path: Path) -> None:
     assert role_report.get("finding_count", 0) == 0
 
 
-def test_pairing_audit_flags_project_only_in_learning(tmp_path: Path) -> None:
+def test_pairing_audit_skips_project_only_in_learning_dedup(tmp_path: Path) -> None:
+    """The structural solution audit already emits project_solution_gap
+    for projects only in learning; the pairing audit deliberately
+    skips that type to avoid double work-items."""
     workspace = tmp_path / "workspace"
     (workspace / "ai-infra-security-learning" / "projects" / "project-01-zero-trust").mkdir(parents=True)
     (workspace / "ai-infra-security-solutions" / "projects").mkdir(parents=True)
@@ -120,7 +123,26 @@ def test_pairing_audit_flags_project_only_in_learning(tmp_path: Path) -> None:
     report = audit_pairing(manifest, workspace, state_dir=tmp_path / "state")
 
     types = {f["type"] for f in report["findings"]}
-    assert "project_only_in_learning" in types
+    assert "project_only_in_learning" not in types
+
+
+def test_pairing_audit_skips_exercise_missing_in_solutions_dedup(tmp_path: Path) -> None:
+    """Same dedup logic for missing-in-solutions exercises — the structural
+    audit's module_solution_gap action list already covers them."""
+    workspace = tmp_path / "workspace"
+    learning = workspace / "ai-infra-security-learning" / "modules" / "mod-001"
+    solutions = workspace / "ai-infra-security-solutions" / "modules" / "mod-001"
+    # Both modules exist; learning has 2 exercises, solutions has only 1.
+    (learning / "exercises").mkdir(parents=True)
+    write_file(learning / "exercises" / "exercise-01-threat-model.md", "")
+    write_file(learning / "exercises" / "exercise-02-iam-design.md", "")
+    (solutions / "exercise-01-threat-model").mkdir(parents=True)
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+
+    report = audit_pairing(manifest, workspace, state_dir=tmp_path / "state")
+
+    types = {f["type"] for f in report["findings"]}
+    assert "exercise_missing_in_solutions" not in types
 
 
 # ---------------------------------------------------------------------------

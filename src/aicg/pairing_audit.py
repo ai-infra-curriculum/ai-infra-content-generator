@@ -161,26 +161,19 @@ def _audit_role_pair(
         )
 
     # Exercise-slug drift per paired module.
+    # NOTE: 'exercise_missing_in_solutions' is intentionally OMITTED —
+    # the structural solution audit already emits module_solution_gap
+    # work items whose actions cover the same exercises. Surfacing them
+    # here too would double the work.
     for mod_id in in_both:
         l_ex = _inventory_exercises(learning_modules[mod_id])
         s_ex = _inventory_exercises(solution_modules[mod_id])
         for num, l_slug in l_ex.items():
             s_slug = s_ex.get(num)
             if s_slug is None:
-                findings.append(
-                    PairingFinding(
-                        role=role.id,
-                        severity="warning",
-                        type="exercise_missing_in_solutions",
-                        learning_path=f"{learning_modules[mod_id].relative_to(learning_path)}/exercise-{num:02d}-{l_slug}",
-                        solution_path=None,
-                        message=(
-                            f"Exercise {num:02d} (`{l_slug}`) in `{mod_id}` "
-                            "has no paired solution directory."
-                        ),
-                    )
-                )
-            elif s_slug != l_slug:
+                # Covered by the structural audit — skip.
+                continue
+            if s_slug != l_slug:
                 findings.append(
                     PairingFinding(
                         role=role.id,
@@ -211,22 +204,11 @@ def _audit_role_pair(
                 )
 
     # Project pairing.
+    # NOTE: 'project_only_in_learning' is intentionally OMITTED —
+    # the structural solution audit already emits project_solution_gap
+    # work items for these.
     learning_projects = _inventory_projects(learning_path)
     solution_projects = _inventory_projects(solution_path)
-    for proj_id in sorted(set(learning_projects) - set(solution_projects)):
-        findings.append(
-            PairingFinding(
-                role=role.id,
-                severity="error",
-                type="project_only_in_learning",
-                learning_path=str(learning_projects[proj_id].relative_to(learning_path)),
-                solution_path=None,
-                message=(
-                    f"Project `{proj_id}` exists in learning repo but has no "
-                    "solution counterpart."
-                ),
-            )
-        )
     for proj_id in sorted(set(solution_projects) - set(learning_projects)):
         findings.append(
             PairingFinding(
