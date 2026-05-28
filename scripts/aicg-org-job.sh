@@ -160,6 +160,10 @@ main() {
       ;;
     daily-steward)
       run_aicg_org steward --apply
+      # Also sweep Dependabot PRs each morning: queue auto-merge,
+      # post @dependabot rebase on stale ones, escalate after 3 rebase
+      # loops without progress.
+      run_aicg_org dependabot --apply || true
       ;;
     daily-discussions)
       run_aicg_org discussions

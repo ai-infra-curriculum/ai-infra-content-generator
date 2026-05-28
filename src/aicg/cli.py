@@ -443,6 +443,22 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_audit_profile)
     org_audit_profile.set_defaults(func=cmd_org_audit_profile)
 
+    org_dependabot = org_subparsers.add_parser(
+        "dependabot",
+        help=(
+            "Sweep Dependabot PRs across org repos: enable auto-merge on "
+            "clean ones, post @dependabot rebase on stale ones, escalate "
+            "after 3 fruitless rebase requests."
+        ),
+    )
+    add_org_args(org_dependabot)
+    org_dependabot.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually post comments and enable auto-merge. Omit for dry-run.",
+    )
+    org_dependabot.set_defaults(func=cmd_org_dependabot)
+
     org_audit_links = org_subparsers.add_parser(
         "audit-links",
         help="Run the link checker against every solution repo in the manifest",
@@ -1375,6 +1391,40 @@ def cmd_org_audit_curriculum(args: argparse.Namespace) -> int:
         if n:
             print(f"  ! {repo}: {n} nav drift(s)")
     print(f"Curriculum-nav audit: {total_gaps} drift(s)")
+    return 0
+
+
+def cmd_org_dependabot(args: argparse.Namespace) -> int:
+    from .dependabot import dependabot_run
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+    report = dependabot_run(
+        manifest=manifest,
+        workspace=workspace,
+        state_dir=state_dir,
+        apply=args.apply,
+    )
+    mode = "apply" if args.apply else "dry-run"
+    total_prs = sum(r["pr_count"] for r in report["repos"])
+    auto_merged = sum(r["auto_merged"] for r in report["repos"])
+    rebased = sum(r["rebase_requested"] for r in report["repos"])
+    escalated = sum(r["escalated"] for r in report["repos"])
+    print(
+        f"Dependabot sweep {mode}: {total_prs} PR(s) total; "
+        f"auto-merge enabled on {auto_merged}, rebase requested on "
+        f"{rebased}, escalated {escalated}."
+    )
+    for repo in report["repos"]:
+        if not repo["pr_count"]:
+            continue
+        print(f"  {repo['repo']}:")
+        for pr in repo["prs"][:5]:
+            print(
+                f"    #{pr['pr_number']} {pr['title'][:60]} → "
+                f"action={pr.get('action')} status={pr.get('status')}"
+            )
     return 0
 
 
