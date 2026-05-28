@@ -426,7 +426,16 @@ def _process_one_item(
             result=result,
         )
 
-    plan = read_state(repo_path, "work-plan.json")
+    try:
+        plan = read_state(repo_path, "work-plan.json")
+    except FileNotFoundError:
+        # Org queue references this repo but the per-repo plan got
+        # cleared (gitignored .aicg/ wiped, fresh clone, etc.). Re-
+        # audit on the fly so the tick can proceed instead of crashing.
+        from .planner import plan_from_audit
+
+        audit = audit_repo(workspace, item["repo"])
+        plan = plan_from_audit(audit, repo_path=repo_path)
     try:
         run_state = generate_from_plan(
             repo_path,
