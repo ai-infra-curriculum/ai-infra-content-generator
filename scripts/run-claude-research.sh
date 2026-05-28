@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# claude is typically installed under ~/.local/bin which is in
+# interactive PATH but not in subprocess PATH inherited from ssh or
+# systemd. Make the wrapper self-sufficient.
+export PATH="${HOME}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 # Research wrapper: sibling of run-claude-content.sh but with web tools
 # enabled because research requires fetching live job postings, vendor
 # docs, and industry references. The agent must end up writing the

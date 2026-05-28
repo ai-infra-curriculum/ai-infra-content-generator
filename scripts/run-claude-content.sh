@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# claude / codex are typically installed under ~/.local/bin which is
+# in interactive PATH but not in subprocess PATH inherited from ssh
+# or systemd. Make the wrapper self-sufficient.
+export PATH="${HOME}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 MODEL="claude-opus-4-7"
 PROMPT=""
 OUTPUT_DIR=""

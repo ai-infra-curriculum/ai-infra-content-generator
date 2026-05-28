@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# claude is typically installed under ~/.local/bin which is in
+# interactive PATH but not in subprocess PATH inherited from ssh or
+# systemd. Make the wrapper self-sufficient.
+export PATH="${HOME}/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
 # Local Claude judge wrapper. Mirrors run-claude-content.sh but
 # scopes the agent to grading: it reads the judge prompt packet (which
 # includes the absolute artifact path and the rubric) and is expected
