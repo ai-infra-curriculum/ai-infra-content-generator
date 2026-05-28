@@ -592,6 +592,111 @@ query($owner:String!, $name:String!, $number:Int!) {
 """
 
 
+def fetch_failed_checks(
+    repo_path: Path, owner: str, repo_name: str, pr_number: int
+) -> list[dict[str, Any]]:
+    """Return one entry per FAILED check on the PR's head commit.
+
+    Each entry: ``{name, conclusion, details_url, annotations}`` where
+    ``annotations`` is a list of ``{path, start_line, message, level}``
+    (empty when the checker emitted no annotations, e.g. older bash
+    scripts that just exit non-zero).
+    """
+    # The head SHA — required for /commits/SHA/check-runs.
+    head_sha = _fetch_pr_head_sha(repo_path, owner, repo_name, pr_number)
+    if not head_sha:
+        return []
+    checks_args = [
+        "gh",
+        "api",
+        f"repos/{owner}/{repo_name}/commits/{head_sha}/check-runs",
+        "--paginate",
+    ]
+    completed = subprocess.run(
+        checks_args, cwd=repo_path, capture_output=True, text=True, check=False
+    )
+    if completed.returncode != 0:
+        return []
+    try:
+        payload = json.loads(completed.stdout)
+    except json.JSONDecodeError:
+        return []
+
+    failed: list[dict[str, Any]] = []
+    for run in payload.get("check_runs", []) or []:
+        if str(run.get("conclusion", "")).upper() not in {
+            "FAILURE",
+            "CANCELLED",
+            "TIMED_OUT",
+            "ACTION_REQUIRED",
+        }:
+            continue
+        run_id = run.get("id")
+        annotations = _fetch_check_annotations(
+            repo_path, owner, repo_name, run_id
+        ) if run_id else []
+        failed.append(
+            {
+                "name": run.get("name") or "?",
+                "conclusion": run.get("conclusion"),
+                "details_url": run.get("details_url") or run.get("html_url"),
+                "annotations": annotations,
+            }
+        )
+    return failed
+
+
+def _fetch_pr_head_sha(
+    repo_path: Path, owner: str, repo_name: str, pr_number: int
+) -> str | None:
+    args = [
+        "gh",
+        "api",
+        f"repos/{owner}/{repo_name}/pulls/{pr_number}",
+        "--jq",
+        ".head.sha",
+    ]
+    completed = subprocess.run(
+        args, cwd=repo_path, capture_output=True, text=True, check=False
+    )
+    if completed.returncode != 0:
+        return None
+    sha = completed.stdout.strip().strip('"')
+    return sha or None
+
+
+def _fetch_check_annotations(
+    repo_path: Path, owner: str, repo_name: str, check_run_id: int
+) -> list[dict[str, Any]]:
+    args = [
+        "gh",
+        "api",
+        f"repos/{owner}/{repo_name}/check-runs/{check_run_id}/annotations",
+        "--paginate",
+    ]
+    completed = subprocess.run(
+        args, cwd=repo_path, capture_output=True, text=True, check=False
+    )
+    if completed.returncode != 0:
+        return []
+    try:
+        items = json.loads(completed.stdout)
+    except json.JSONDecodeError:
+        return []
+    return [
+        {
+            "path": ann.get("path"),
+            "start_line": ann.get("start_line"),
+            "end_line": ann.get("end_line"),
+            "level": ann.get("annotation_level"),
+            "message": (ann.get("message") or "")[:600],
+            "title": ann.get("title"),
+        }
+        for ann in items
+        if isinstance(ann, dict)
+    ]
+
+
 def _owner_repo_from_url(url: str) -> tuple[str | None, str | None]:
     """Pull (owner, repo) out of a GitHub PR URL.
 

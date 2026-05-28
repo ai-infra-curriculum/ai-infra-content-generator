@@ -312,6 +312,8 @@ DRAIN_WALL_CLOCK_SECONDS = 7200  # 2h cap per tick
 VERIFY_SELF_HEAL_MAX_ATTEMPTS = 3
 INLINE_MERGE_POLL_SECONDS = 15
 INLINE_MERGE_TIMEOUT_SECONDS = 900  # 15 min per PR
+CI_SELF_HEAL_MAX_ATTEMPTS = 3
+CI_WAIT_PER_ATTEMPT_SECONDS = 180  # 3 min per CI cycle
 
 
 def run_daily_remediation(
@@ -715,17 +717,19 @@ def _drive_pr_to_merge(
     pr_url: str,
     branch: str,
 ) -> dict[str, Any]:
-    """Inline-poll a freshly-opened PR through to merge.
+    """Inline-poll a freshly-opened PR through to merge, with CI self-heal.
 
-    Reuses steward primitives: wait_for_ci → evaluate_pr_guardrails →
-    classify_review_state → enable_auto_merge. Auto-responds via the
-    agent if CI fails or reviews block. Returns when merged or after
-    INLINE_MERGE_TIMEOUT_SECONDS.
+    Per CI cycle:
+      1. wait_for_ci (CI_WAIT_PER_ATTEMPT_SECONDS budget per attempt)
+      2. CI failure → fetch annotations → ask agent to address → push
+         to the same branch → loop, up to CI_SELF_HEAL_MAX_ATTEMPTS
+      3. CI passes (or no_ci_present) → guardrails → reviews → merge
     """
     from .steward import (
         classify_review_state,
         enable_auto_merge,
         evaluate_pr_guardrails,
+        fetch_failed_checks,
         fetch_review_state,
         pr_view,
         wait_for_ci,
@@ -736,26 +740,73 @@ def _drive_pr_to_merge(
     if pr_number is None:
         return {"status": "no_pr_number", "pr_url": pr_url}
 
+    owner, repo_name = _owner_repo_from_url(pr_url)
     history: list[dict[str, Any]] = []
     deadline = time.monotonic() + INLINE_MERGE_TIMEOUT_SECONDS
 
+    ci_attempts = 0
     while time.monotonic() < deadline:
+        ci_attempts += 1
         ci_result = wait_for_ci(
             repo_path=repo_path,
             pr_number=pr_number,
-            timeout_seconds=min(180, int(deadline - time.monotonic())),
+            timeout_seconds=min(
+                CI_WAIT_PER_ATTEMPT_SECONDS, int(deadline - time.monotonic())
+            ),
             poll_seconds=INLINE_MERGE_POLL_SECONDS,
         )
-        history.append({"phase": "ci", "result": ci_result["status"]})
-        if ci_result["status"] not in {"success", "no_ci_present"}:
-            # No retry for CI failures here — that's a real test
-            # failure and the runner shouldn't autopatch test logic.
+        history.append({"phase": "ci", "attempt": ci_attempts, "result": ci_result["status"]})
+
+        if ci_result["status"] == "failure":
+            if ci_attempts >= CI_SELF_HEAL_MAX_ATTEMPTS:
+                return {
+                    "status": "ci_failed_escalated",
+                    "pr_url": pr_url,
+                    "ci_attempts": ci_attempts,
+                    "history": history,
+                }
+            if not owner or not repo_name:
+                return {
+                    "status": "ci_failed",
+                    "pr_url": pr_url,
+                    "reason": "could not parse owner/repo from PR URL",
+                    "history": history,
+                }
+            failed_checks = fetch_failed_checks(
+                repo_path, owner, repo_name, pr_number
+            )
+            heal_outcome = _invoke_ci_self_heal_agent(
+                manifest=manifest,
+                repo_path=repo_path,
+                pr_number=pr_number,
+                branch=branch,
+                failed_checks=failed_checks,
+                attempt=ci_attempts,
+            )
+            history.append(
+                {
+                    "phase": "ci_self_heal",
+                    "attempt": ci_attempts,
+                    "result": heal_outcome.get("status"),
+                    "failed_checks": [c["name"] for c in failed_checks],
+                }
+            )
+            if heal_outcome.get("status") not in {"pushed", "no_changes"}:
+                return {
+                    "status": "ci_failed",
+                    "pr_url": pr_url,
+                    "history": history,
+                    "self_heal": heal_outcome,
+                }
+            # Pushed a fix — loop to re-wait for CI.
+            continue
+        if ci_result["status"] == "timeout":
             return {
-                "status": "ci_failed",
+                "status": "ci_timeout",
                 "pr_url": pr_url,
                 "history": history,
             }
-
+        # success or no_ci_present → continue to guardrails / reviews
         pr = pr_view(repo_path, pr_number) or {}
         guardrails = evaluate_pr_guardrails(repo_path=repo_path, pr=pr)
         if not guardrails.allowed:
@@ -767,7 +818,6 @@ def _drive_pr_to_merge(
                 "history": history,
             }
 
-        owner, repo_name = _owner_repo_from_url(pr_url)
         if owner and repo_name:
             review_state = fetch_review_state(repo_path, owner, repo_name, pr_number)
             if not review_state.get("error"):
@@ -776,9 +826,6 @@ def _drive_pr_to_merge(
                 )
                 if cls["verdict"] == "blocked":
                     history.append({"phase": "review", "verdict": "blocked"})
-                    # Defer the response to the next steward pass / next
-                    # daily tick — inline auto-response would loop on
-                    # the same PR for unbounded time.
                     return {
                         "status": "review_blocked",
                         "pr_url": pr_url,
@@ -791,17 +838,147 @@ def _drive_pr_to_merge(
         if merge_result.get("status") == "merged":
             return {"status": "merged", "pr_url": pr_url, "history": history}
         if merge_result.get("status") == "auto_merge_enabled":
-            # Auto-merge is queued; GitHub will flip it once required
-            # status checks are green. Treat as success — the steward
-            # cleanup pass will see it merged on the next tick.
             return {
                 "status": "auto_merge_enabled",
                 "pr_url": pr_url,
                 "history": history,
             }
+        # Merge call returned something else — wait and retry.
         time.sleep(INLINE_MERGE_POLL_SECONDS)
 
     return {"status": "merge_timeout", "pr_url": pr_url, "history": history}
+
+
+def _invoke_ci_self_heal_agent(
+    manifest: OrgManifest,
+    repo_path: Path,
+    pr_number: int,
+    branch: str,
+    failed_checks: list[dict[str, Any]],
+    attempt: int,
+) -> dict[str, Any]:
+    """Invoke the agent on the failed CI checks, then commit + push."""
+    # Make sure the local working tree is on the PR branch — the runner
+    # restored main after PR creation.
+    subprocess.run(
+        ["git", "-C", str(repo_path), "fetch", "origin", branch],
+        capture_output=True, text=True, check=False,
+    )
+    subprocess.run(
+        ["git", "-C", str(repo_path), "checkout", branch],
+        capture_output=True, text=True, check=False,
+    )
+
+    output_dir = (
+        repo_path / ".aicg" / "ci-self-heal" / f"pr-{pr_number}" / f"attempt-{attempt}"
+    )
+    output_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = output_dir / "prompt.md"
+    prompt_path.write_text(
+        _build_ci_self_heal_prompt(pr_number, failed_checks), encoding="utf-8"
+    )
+
+    command = content_generation_command(manifest).format(
+        prompt=str(prompt_path),
+        output_dir=str(output_dir),
+        repo=str(repo_path),
+        work_id=f"ci-heal:pr-{pr_number}:{attempt}",
+        runner=str(Path(__file__).resolve().parents[2]),
+    )
+    from .agent_cli import run_agent_command
+
+    agent_result = run_agent_command(command, cwd=repo_path)
+    if agent_result.limit_reached:
+        _checkout_main(repo_path)
+        return {
+            "status": "subscription_limit",
+            "retry_after": agent_result.retry_after,
+        }
+    if agent_result.returncode != 0:
+        _checkout_main(repo_path)
+        return {
+            "status": "agent_failed",
+            "returncode": agent_result.returncode,
+            "stderr_tail": agent_result.stderr[-400:],
+        }
+
+    # Stage + commit + push whatever the agent changed.
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    if not status.stdout.strip():
+        _checkout_main(repo_path)
+        return {"status": "no_changes"}
+
+    for args in (
+        ["git", "-C", str(repo_path), "add", "--all", "--",
+         ":(top,exclude).aicg", ":(top,exclude).aicg/**"],
+        ["git", "-C", str(repo_path), "commit", "-m",
+         f"aicg: address CI failures on PR #{pr_number} (attempt {attempt})"],
+        ["git", "-C", str(repo_path), "push"],
+    ):
+        c = subprocess.run(args, capture_output=True, text=True, check=False)
+        if c.returncode != 0:
+            _checkout_main(repo_path)
+            return {
+                "status": "push_failed",
+                "step": args[3],
+                "stderr_tail": c.stderr[-400:],
+            }
+    _checkout_main(repo_path)
+    return {"status": "pushed"}
+
+
+def _build_ci_self_heal_prompt(
+    pr_number: int, failed_checks: list[dict[str, Any]]
+) -> str:
+    lines = [
+        f"# Address CI failures on PR #{pr_number}",
+        "",
+        "## Goal",
+        "",
+        "The PR you just opened failed CI. Fix the failures listed",
+        "below by editing files on the current branch. Do NOT regenerate",
+        "the content from scratch — make the minimal edit needed to",
+        "satisfy each failing check.",
+        "",
+        "## Failed checks",
+        "",
+    ]
+    for i, check in enumerate(failed_checks, 1):
+        lines.append(f"### {i}. `{check.get('name')}` ({check.get('conclusion')})")
+        lines.append("")
+        if check.get("details_url"):
+            lines.append(f"- Details: <{check['details_url']}>")
+        annotations = check.get("annotations") or []
+        if annotations:
+            lines.append("- Annotations:")
+            for ann in annotations[:20]:
+                path = ann.get("path") or "?"
+                line = ann.get("start_line") or "?"
+                msg = (ann.get("message") or "").splitlines()[0][:300]
+                level = ann.get("level") or "?"
+                lines.append(f"  - `{path}:{line}` ({level}): {msg}")
+        else:
+            lines.append(
+                "- No annotations exposed by this check. Infer the failure"
+                " from the check name; if you cannot tell what's wrong from"
+                " the name alone, leave a brief comment in the PR and exit"
+                " without editing rather than guessing."
+            )
+        lines.append("")
+    lines.extend(
+        [
+            "## Output contract",
+            "",
+            "- Edit ONLY files inside this repo on the current branch.",
+            "- Preserve the existing structure; do not delete sections.",
+            "- Do NOT touch CURRICULUM.md, README.md, or VERSIONS.md.",
+            "- One atomic commit covering all fixes is fine.",
+        ]
+    )
+    return "\n".join(lines) + "\n"
 
 
 def _pr_number_from_url(url: str) -> int | None:
