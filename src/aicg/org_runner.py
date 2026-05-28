@@ -311,9 +311,11 @@ def run_org_audit(
 DRAIN_WALL_CLOCK_SECONDS = 7200  # 2h cap per tick
 VERIFY_SELF_HEAL_MAX_ATTEMPTS = 3
 INLINE_MERGE_POLL_SECONDS = 15
-INLINE_MERGE_TIMEOUT_SECONDS = 900  # 15 min per PR
+# 30 min: 3 CI self-heal cycles × (3 min CI wait + ~5 min agent) + buffer.
+# Below this the timeout fires before the loop can use its full retry budget.
+INLINE_MERGE_TIMEOUT_SECONDS = 1800
 CI_SELF_HEAL_MAX_ATTEMPTS = 3
-CI_WAIT_PER_ATTEMPT_SECONDS = 180  # 3 min per CI cycle
+CI_WAIT_PER_ATTEMPT_SECONDS = 300  # 5 min per CI cycle
 
 
 def run_daily_remediation(
