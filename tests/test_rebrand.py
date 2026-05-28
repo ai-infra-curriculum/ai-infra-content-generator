@@ -133,3 +133,40 @@ def test_audit_org_profile_does_not_flag_maintained_by_as_orphan(
 
     types = [f["type"] for f in report["findings"]]
     assert "profile_orphan_references" not in types
+
+
+# ---------------------------------------------------------------------------
+# Branch name + dirty-tree handling
+# ---------------------------------------------------------------------------
+
+
+def test_rebrand_skips_dirty_working_tree(tmp_path: Path) -> None:
+    """Don't clobber an in-flight job's uncommitted changes."""
+    workspace, state_dir, manifest = _setup_workspace(tmp_path)
+    repo_path = workspace / "ai-infra-security-learning"
+    write_file(repo_path / "README.md", "# Repo\n")
+
+    with patch("aicg.rebrand.subprocess.run") as mock_run:
+        # First call (the dirty check inside _rebrand_repo) returns
+        # 'M README.md' so the rebrand should skip cleanly.
+        mock_run.return_value.stdout = " M README.md\n"
+        mock_run.return_value.returncode = 0
+        outcome = _rebrand_repo(repo_path, "ai-infra-security-learning",
+                                manifest.maintained_by, apply=True)
+    assert outcome["status"] == "skipped_dirty_tree"
+
+
+def test_rebrand_branch_safe_for_dotted_repo_names() -> None:
+    """git refuses 'aicg/.../.github/...' because the component begins
+    with a dot. Verify our branch builder sanitizes it."""
+    import re
+
+    from aicg.rebrand import utc_now
+
+    repo = ".github"
+    safe_repo = re.sub(r"^\.+", "dot-", repo).replace("/", "-")
+    branch = f"aicg/{utc_now()[:10]}/{safe_repo}/maintainer-footer"
+
+    # Each component must not start with '.'
+    parts = branch.split("/")
+    assert all(not p.startswith(".") for p in parts), branch

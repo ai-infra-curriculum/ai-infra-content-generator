@@ -77,6 +77,20 @@ def _rebrand_repo(
     repo_path: Path, repo: str, maintained_by: dict[str, Any], apply: bool
 ) -> dict[str, Any]:
     """Edit READMEs in this repo and (if apply) push a PR."""
+    if apply:
+        # Skip when the working tree is dirty (another job mid-flight).
+        dirty = subprocess.run(
+            ["git", "-C", str(repo_path), "status", "--porcelain"],
+            capture_output=True, text=True, check=False,
+        )
+        if dirty.stdout.strip():
+            return {
+                "repo": repo,
+                "status": "skipped_dirty_tree",
+                "changed_files": [],
+                "reason": "working tree had uncommitted changes",
+            }
+
     marker = str(maintained_by.get("footer_marker") or "<!-- aicg:maintained-by -->")
     phrasing = str(
         maintained_by.get("phrasing")
@@ -145,7 +159,11 @@ def _open_rebrand_pr(
 ) -> dict[str, Any]:
     """Create a branch, commit the changes, push, open PR."""
     today = utc_now()[:10]
-    branch = f"aicg/{today}/{repo}/maintainer-footer"
+    # git refuses branch components starting with '.'; replace dots so
+    # '.github' becomes 'dot-github' in the branch path while the
+    # working repo stays untouched.
+    safe_repo = re.sub(r"^\.+", "dot-", repo).replace("/", "-")
+    branch = f"aicg/{today}/{safe_repo}/maintainer-footer"
     title = (
         f"docs: add `Maintained by {maintained_by.get('name')}` footer"
     )
