@@ -659,13 +659,25 @@ def _invoke_verify_self_heal_agent(
             "status": "subscription_limit",
             "retry_after": agent_result.retry_after,
         }
-    if agent_result.returncode != 0:
+    # Trust the working tree, not the exit code. If files were edited
+    # we let verify re-read them and decide; if not AND exit was non-
+    # zero, surface as agent_failed.
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    has_changes = bool(status.stdout.strip())
+    if not has_changes and agent_result.returncode != 0:
         return {
             "status": "agent_failed",
             "returncode": agent_result.returncode,
             "stderr_tail": agent_result.stderr[-400:],
         }
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "agent_returncode": agent_result.returncode,
+        "had_changes": has_changes,
+    }
 
 
 def _build_self_heal_prompt(
@@ -896,21 +908,26 @@ def _invoke_ci_self_heal_agent(
             "status": "subscription_limit",
             "retry_after": agent_result.retry_after,
         }
-    if agent_result.returncode != 0:
-        _checkout_main(repo_path)
-        return {
-            "status": "agent_failed",
-            "returncode": agent_result.returncode,
-            "stderr_tail": agent_result.stderr[-400:],
-        }
 
-    # Stage + commit + push whatever the agent changed.
+    # Trust the working tree, not the exit code. Claude often returns
+    # non-zero when it tried a denied tool (git add) but the file
+    # edits via Edit/Write still landed. If anything is dirty, commit
+    # and push; if nothing is dirty AND exit was non-zero, treat as
+    # a real failure.
     status = subprocess.run(
         ["git", "-C", str(repo_path), "status", "--porcelain"],
         capture_output=True, text=True, check=False,
     )
-    if not status.stdout.strip():
+    has_changes = bool(status.stdout.strip())
+
+    if not has_changes:
         _checkout_main(repo_path)
+        if agent_result.returncode != 0:
+            return {
+                "status": "agent_failed",
+                "returncode": agent_result.returncode,
+                "stderr_tail": agent_result.stderr[-400:],
+            }
         return {"status": "no_changes"}
 
     for args in (
@@ -928,7 +945,12 @@ def _invoke_ci_self_heal_agent(
                 "stderr_tail": c.stderr[-400:],
             }
     _checkout_main(repo_path)
-    return {"status": "pushed"}
+    # Note agent exit so observers can see whether the changes came
+    # from a clean run or a partial-success one.
+    return {
+        "status": "pushed",
+        "agent_returncode": agent_result.returncode,
+    }
 
 
 def _build_ci_self_heal_prompt(
@@ -1273,7 +1295,14 @@ def _handle_pr_response_item(
         _persist_pr_response_state(state_dir, item)
         return result
 
-    if agent_result.returncode != 0:
+    # Trust the working tree. Claude often exits non-zero after a
+    # blocked tool call but still leaves valid edits via Edit/Write.
+    status = subprocess.run(
+        ["git", "-C", str(repo_path), "status", "--porcelain"],
+        capture_output=True, text=True, check=False,
+    )
+    has_changes = bool(status.stdout.strip())
+    if not has_changes and agent_result.returncode != 0:
         result["status"] = "agent_failed"
         result["returncode"] = agent_result.returncode
         result["stderr_tail"] = agent_result.stderr[-400:]
@@ -1283,6 +1312,8 @@ def _handle_pr_response_item(
 
     # Commit + push whatever the agent changed.
     push_outcome = _commit_and_push_pr_response(repo_path, pr_number, response_count + 1)
+    if agent_result.returncode != 0:
+        push_outcome["agent_returncode"] = agent_result.returncode
     result["status"] = push_outcome["status"]
     result["push"] = push_outcome
     item["status"] = (
