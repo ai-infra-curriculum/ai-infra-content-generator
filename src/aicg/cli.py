@@ -178,6 +178,28 @@ def build_parser() -> argparse.ArgumentParser:
     )
     verify_parser.set_defaults(func=cmd_verify)
 
+    pr_drive_parser = subparsers.add_parser(
+        "pr-drive",
+        help=(
+            "Run the inline-merge loop against an existing PR: CI wait → "
+            "self-heal failed checks → guardrails → reviews → merge."
+        ),
+    )
+    add_repo_args(pr_drive_parser)
+    pr_drive_parser.add_argument(
+        "--pr",
+        type=int,
+        required=True,
+        help="PR number to drive to merge.",
+    )
+    pr_drive_parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=None,
+        help="Org manifest path. Defaults to config/aicg-org.yaml.",
+    )
+    pr_drive_parser.set_defaults(func=cmd_pr_drive)
+
     pr_parser = subparsers.add_parser("pr", help="Create guarded branch, commit, and GitHub PR")
     add_repo_args(pr_parser)
     pr_parser.add_argument(
@@ -665,6 +687,65 @@ def cmd_verify(args: argparse.Namespace) -> int:
         if len(item["actions"]) > 4:
             print(f"    ... {len(item['actions']) - 4} more action(s) in .aicg/verify-report.json")
     return 0 if report["status"] in {"verified", "no_items"} else 1
+
+
+def cmd_pr_drive(args: argparse.Namespace) -> int:
+    """Run the inline-merge loop (with CI self-heal) on an existing PR."""
+    import json as _json
+    import subprocess as _sp
+
+    from .org_runner import _drive_pr_to_merge
+
+    workspace = resolve_workspace(args)
+    repo_path = target_repo_path(workspace, args.repo)
+    manifest = load_manifest(args.manifest)
+
+    # Look up the PR's url + head branch via gh.
+    completed = _sp.run(
+        [
+            "gh",
+            "pr",
+            "view",
+            str(args.pr),
+            "--json",
+            "url,headRefName,state",
+        ],
+        cwd=repo_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        print(f"error: gh pr view {args.pr} failed: {completed.stderr.strip()}", file=sys.stderr)
+        return 1
+    try:
+        pr = _json.loads(completed.stdout)
+    except _json.JSONDecodeError as exc:
+        print(f"error: could not parse gh pr view output: {exc}", file=sys.stderr)
+        return 1
+
+    if pr.get("state") != "OPEN":
+        print(f"PR #{args.pr} is not OPEN (state={pr.get('state')}); nothing to do.")
+        return 0
+
+    print(
+        f"Driving PR #{args.pr} ({pr['url']}) — branch `{pr['headRefName']}`. "
+        "This may invoke the agent and push commits."
+    )
+    outcome = _drive_pr_to_merge(
+        manifest=manifest,
+        repo_path=repo_path,
+        pr_url=pr["url"],
+        branch=pr["headRefName"],
+    )
+    print(f"Outcome: {outcome.get('status')}")
+    for entry in outcome.get("history", [])[-10:]:
+        print(f"  - {entry}")
+    if outcome.get("status") in {"merged", "auto_merge_enabled"}:
+        return 0
+    if outcome.get("status") in {"review_blocked", "guardrails_blocked"}:
+        return 0  # not a failure — surfaces to the operator's attention
+    return 1
 
 
 def cmd_pr(args: argparse.Namespace) -> int:
