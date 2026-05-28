@@ -150,3 +150,9 @@ Org-level autonomous operation is described in
 System architecture (Mermaid diagrams of every workflow, timer cadence,
 state files, and external surface) is in
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+
+---
+
+<!-- aicg:maintained-by -->
+Maintained by [VeriSwarm.ai](https://veriswarm.ai)
