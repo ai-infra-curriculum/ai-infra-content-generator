@@ -170,3 +170,50 @@ def test_rebrand_branch_safe_for_dotted_repo_names() -> None:
     # Each component must not start with '.'
     parts = branch.split("/")
     assert all(not p.startswith(".") for p in parts), branch
+
+
+# ---------------------------------------------------------------------------
+# Defensive idempotency: don't double-add when a 'Maintained by' line
+# already exists (under any phrasing).
+# ---------------------------------------------------------------------------
+
+
+def test_rebrand_skips_when_prior_maintained_by_line_present(tmp_path: Path) -> None:
+    workspace, state_dir, manifest = _setup_workspace(tmp_path)
+    # Old-style attribution that the rebrand should NOT clobber by
+    # appending its own footer.
+    write_file(
+        workspace / "ai-infra-security-learning" / "README.md",
+        "# Repo\n\n## License\n\n---\n\n"
+        "*Maintained by the AI Infrastructure Curriculum Project*\n",
+    )
+
+    report = rebrand_run(
+        manifest, workspace, state_dir=state_dir, apply=False,
+        repos=["ai-infra-security-learning"],
+    )
+
+    outcome = next(
+        r for r in report["repos"] if r["repo"] == "ai-infra-security-learning"
+    )
+    assert outcome["status"] == "already_branded"
+    assert outcome["changed_files"] == []
+
+
+def test_rebrand_still_skips_when_existing_attribution_is_to_us(tmp_path: Path) -> None:
+    """A prior run added our exact phrasing without the marker — still skip."""
+    workspace, state_dir, manifest = _setup_workspace(tmp_path)
+    write_file(
+        workspace / "ai-infra-security-learning" / "README.md",
+        "# Repo\n\nMaintained by VeriSwarm.ai\n",
+    )
+
+    report = rebrand_run(
+        manifest, workspace, state_dir=state_dir, apply=False,
+        repos=["ai-infra-security-learning"],
+    )
+
+    outcome = next(
+        r for r in report["repos"] if r["repo"] == "ai-infra-security-learning"
+    )
+    assert outcome["status"] == "already_branded"

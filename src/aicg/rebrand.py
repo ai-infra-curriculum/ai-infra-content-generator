@@ -112,7 +112,14 @@ def _rebrand_repo(
         if not path.exists():
             continue
         body = path.read_text(encoding="utf-8")
+        # Idempotent on our marker (so re-runs are no-ops) AND defensive
+        # against pre-existing 'Maintained by' lines in the README from
+        # before we ever ran. If the doc already attributes maintainership,
+        # skip — operators can adopt our marker by hand if they want the
+        # auto-managed version.
         if marker in body:
+            continue
+        if _has_existing_maintainer_line(body, maintained_by):
             continue
         new_body = _append_maintainer_footer(body, marker, phrasing)
         if not apply:
@@ -141,6 +148,34 @@ def _rebrand_repo(
         "changed_files": changed_files,
         "pr": pr_outcome,
     }
+
+
+def _has_existing_maintainer_line(
+    body: str, maintained_by: dict[str, Any]
+) -> bool:
+    """Detect any 'Maintained by ...' line in the doc that ISN'T ours.
+
+    Catches variants like ``*Maintained by ...*`` (italic),
+    ``**Maintained by:** ...`` (bold-colon), or embedded inside a
+    pipe-separated metadata line like
+    ``*Last updated ... | Maintained by ...*``. Our own footer is
+    detected via the marker (checked separately) so the runner is
+    still idempotent.
+    """
+    import re as _re
+
+    name = str(maintained_by.get("name") or "").lower()
+    for line in body.splitlines():
+        if "maintained by" not in line.lower():
+            continue
+        if name and name in line.lower():
+            # Already attributes to us; don't bother adding a footer too.
+            return True
+        # Any other 'Maintained by' line counts — drop the operator a
+        # hint by leaving it alone.
+        if _re.search(r"maintained by", line, _re.IGNORECASE):
+            return True
+    return False
 
 
 def _append_maintainer_footer(
