@@ -41,6 +41,8 @@ HANDLED_WORK_TYPES = frozenset(
         "fill_solution_gap",
         "module_solution_gap",
         "exercise_solution_gap",
+        # deterministic link-refresh (see link_refresh.handle_refresh_links_item)
+        "refresh_links",
     }
 )
 
@@ -563,6 +565,36 @@ def _process_one_item(
             state_dir=state_dir,
             result=result,
         )
+
+    if item.get("type") == "refresh_links":
+        from .link_refresh import handle_refresh_links_item
+
+        refresh_result = handle_refresh_links_item(
+            workspace=workspace, item=item
+        )
+        result.update(refresh_result)
+        # Mark the queue item so the selector won't re-pick it.
+        if refresh_result.get("status") in {
+            "pr_opened", "edited", "no_action_now_alive",
+        }:
+            item["status"] = "pr_open" if refresh_result.get("pr") else "completed"
+            item["pr_url"] = refresh_result.get("pr", {}).get("pr_url")
+            item["pr_branch"] = refresh_result.get("pr", {}).get("branch")
+        elif refresh_result.get("status") in {
+            "no_replacements_found", "no_diff_after_apply",
+        }:
+            # Defer with a long retry — next audit cycle may surface
+            # Wayback snapshots that aren't indexed yet, or the upstream
+            # site may come back. Don't burn cycles re-checking sooner.
+            item["status"] = "deferred"
+            item["defer_reason"] = "no_link_resolution"
+            item["retry_after"] = _retry_after_in_minutes(60 * 24 * 7)
+        else:
+            item["status"] = "failed"
+            item["last_failure"] = refresh_result.get("reason", "unknown")
+        item["updated_at"] = utc_now()
+        write_json(queue_path, queue)
+        return result
 
     if item.get("type") in {
         "pairing_mismatch",
