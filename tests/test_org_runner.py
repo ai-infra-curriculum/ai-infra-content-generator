@@ -231,6 +231,8 @@ def test_daily_remediation_skips_unhandled_work_types(tmp_path):
     Regression: 289 ``refresh_links`` items sat at top priority with no
     handler, so the selector always picked one and deferred it,
     blocking the items that did have handlers from ever running.
+    (Uses ``refresh_versions`` here because ``refresh_links`` is now
+    handled by the deterministic link-refresh handler.)
     """
     import json as _json
 
@@ -248,7 +250,7 @@ def test_daily_remediation_skips_unhandled_work_types(tmp_path):
     # handled exists — selector should return the supplemental packet
     # and report skipped_unhandled_types=1, instead of picking the
     # unhandled item.
-    assert "refresh_links" not in HANDLED_WORK_TYPES
+    assert "refresh_versions" not in HANDLED_WORK_TYPES
     queue = {
         "schema_version": 1,
         "generated_at": "2026-01-01T00:00:00Z",
@@ -259,7 +261,7 @@ def test_daily_remediation_skips_unhandled_work_types(tmp_path):
         "work_items": [
             {
                 "id": "fake-unhandled-1",
-                "type": "refresh_links",
+                "type": "refresh_versions",
                 "repo": "ai-infra-security-solutions",
                 "status": "ready",
                 "priority": -89900,
@@ -312,7 +314,7 @@ def test_daily_remediation_picks_handled_over_higher_priority_unhandled(tmp_path
         "work_items": [
             {
                 "id": "unhandled-top",
-                "type": "refresh_links",
+                "type": "refresh_versions",
                 "repo": "ai-infra-security-solutions",
                 "status": "ready",
                 "priority": -89900,
