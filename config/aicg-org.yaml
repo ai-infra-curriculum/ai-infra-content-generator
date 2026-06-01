@@ -188,6 +188,13 @@
       "level": 60,
       "learning_repo": "ai-infra-principal-architect-learning",
       "solution_repo": "ai-infra-principal-architect-solutions"
+    },
+    {
+      "id": "chief-ai-officer",
+      "title": "Chief AI Officer",
+      "level": 70,
+      "learning_repo": "ai-infra-chief-ai-officer-learning",
+      "solution_repo": "ai-infra-chief-ai-officer-solutions"
     }
   ]
 }
