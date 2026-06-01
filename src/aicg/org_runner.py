@@ -329,20 +329,26 @@ def run_org_audit(
         # audit-versions / review runs left reports behind. These are
         # additive — structural gaps remain in the queue too.
         for refresh_item in _collect_freshness_items(repo_path):
-            queue_items.append(
-                {
-                    "id": f"{repo}:{refresh_item['id']}",
-                    "repo": repo,
-                    "work_id": refresh_item["id"],
-                    "type": refresh_item["type"],
-                    "severity": refresh_item.get("severity", "low"),
-                    "title": refresh_item.get("title", refresh_item["id"]),
-                    "path": refresh_item.get("path"),
-                    "status": "ready",
-                    "priority": queue_priority(manifest, repo, refresh_item),
-                    "created_at": utc_now(),
-                }
-            )
+            promoted = {
+                "id": f"{repo}:{refresh_item['id']}",
+                "repo": repo,
+                "work_id": refresh_item["id"],
+                "type": refresh_item["type"],
+                "severity": refresh_item.get("severity", "low"),
+                "title": refresh_item.get("title", refresh_item["id"]),
+                "path": refresh_item.get("path"),
+                "status": "ready",
+                "priority": queue_priority(manifest, repo, refresh_item),
+                "created_at": utc_now(),
+            }
+            # Preserve the audit's payload so the handler has something
+            # to work with. refresh_links needs `details` (the broken
+            # URLs), refresh_versions needs `matches` + `target` info.
+            for k in ("details", "broken_count", "matches", "target",
+                      "current_target"):
+                if k in refresh_item:
+                    promoted[k] = refresh_item[k]
+            queue_items.append(promoted)
 
     # Learning-repo structural audits. Each learning_gap item gets
     # medium-severity priority (below solution structural, above

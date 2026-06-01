@@ -352,6 +352,50 @@ def test_daily_remediation_picks_handled_over_higher_priority_unhandled(tmp_path
     assert summary.get("skipped_unhandled_types") == 1
 
 
+def test_org_audit_preserves_refresh_links_details_when_promoting(tmp_path):
+    """Regression: queue promotion stripped ``details`` so the link
+    handler had no URLs to resolve."""
+    import json as _json
+
+    workspace = make_security_workspace(tmp_path)
+    repo_path = workspace / "ai-infra-security-solutions"
+    state_dir = tmp_path / "state"
+
+    # Drop a freshness-links report into the repo's .aicg state.
+    aicg = repo_path / ".aicg"
+    aicg.mkdir(exist_ok=True)
+    (aicg / "freshness-links-report.json").write_text(_json.dumps({
+        "work_items": [
+            {
+                "id": "refresh-links-docs-foo-md",
+                "type": "refresh_links",
+                "severity": "high",
+                "path": "docs/foo.md",
+                "broken_count": 2,
+                "title": "Fix 2 broken link(s) in docs/foo.md",
+                "details": [
+                    {"url": "https://gone.example/a", "status": 404, "reason": "Not Found"},
+                    {"url": "https://gone.example/b", "status": 404, "reason": "Not Found"},
+                ],
+            }
+        ],
+    }))
+
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    report = run_org_audit(manifest, workspace, state_dir=state_dir)
+
+    promoted = [
+        it for it in report["work_items"] if it["type"] == "refresh_links"
+    ]
+    assert promoted, "refresh_links should be promoted to the org queue"
+    item = promoted[0]
+    # The bug: these fields were missing from the promoted item.
+    assert "details" in item
+    assert len(item["details"]) == 2
+    assert item["details"][0]["url"] == "https://gone.example/a"
+    assert item.get("broken_count") == 2
+
+
 def test_daily_remediation_verifies_after_generate(tmp_path):
     import textwrap
 
