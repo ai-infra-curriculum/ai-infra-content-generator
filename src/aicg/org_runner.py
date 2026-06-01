@@ -21,6 +21,29 @@ ORG_QUEUE = "work-queue.json"
 ORG_RESEARCH_PLAN = "job-research-plan.json"
 ORG_STEWARD_REPORT = "steward-report.json"
 
+# Work-item types daily_remediate knows how to drive end-to-end. When a
+# new handler ships, add the type here so the selector starts picking it
+# up. Items whose type is NOT in this set stay in the queue (preserved
+# for when a handler exists) but are skipped during selection — this
+# avoids the runner spinning on a high-priority type with no handler and
+# starving the items it CAN do.
+HANDLED_WORK_TYPES = frozenset(
+    {
+        "respond_pr_review",
+        # cross-repo (audit-derived, dispatched via _handle_cross_repo_item)
+        "pairing_mismatch",
+        "curriculum_nav_drift",
+        "learning_gap",
+        "org_profile_stale",
+        # per-repo plan items (the structural generator drives these)
+        "exercise_depth_followup",
+        "project_solution_gap",
+        "fill_solution_gap",
+        "module_solution_gap",
+        "exercise_solution_gap",
+    }
+)
+
 
 class OrgRunnerError(RuntimeError):
     """Raised when an org-level operation cannot proceed."""
@@ -452,14 +475,25 @@ def run_daily_remediation(
     aggregate_status = "no_items"
     exit_reason = "queue_empty"
 
+    skipped_unhandled = 0
     while True:
-        ready = [
+        ready_all = [
             item for item in queue.get("work_items", []) if item.get("status") == "ready"
         ]
+        ready = [
+            item for item in ready_all
+            if item.get("type", "") in HANDLED_WORK_TYPES
+        ]
+        skipped_unhandled = len(ready_all) - len(ready)
         if not ready:
             if not drained:
-                # Preserve old behavior on the very first iteration.
+                # Preserve old behavior on the very first iteration:
+                # nothing pickable, fall through to supplemental work.
+                # Surface the skipped-unhandled count so operators see
+                # why the queue looks idle.
                 supp = generate_supplemental_packet(manifest, workspace, state_dir)
+                if skipped_unhandled:
+                    supp["skipped_unhandled_types"] = skipped_unhandled
                 return supp
             break
         if time.monotonic() >= deadline:
@@ -497,6 +531,7 @@ def run_daily_remediation(
         "exit_reason": exit_reason,
         "items_processed": len(drained),
         "items": drained,
+        "skipped_unhandled_types": skipped_unhandled,
     }
     write_json(state_dir / "daily-run-state.json", summary)
     return summary
