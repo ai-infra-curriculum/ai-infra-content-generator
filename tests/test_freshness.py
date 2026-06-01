@@ -34,7 +34,7 @@ def _seed_repo_with_links(tmp_path: Path, urls_by_file: dict[str, list[str]]) ->
 def test_audit_links_flags_404(tmp_path: Path) -> None:
     repo = _seed_repo_with_links(
         tmp_path,
-        {"modules/mod-001/README.md": ["https://example.com/broken"]},
+        {"modules/mod-001/README.md": ["https://dead-site.foo/broken"]},
     )
 
     def fake_fetch(url: str) -> tuple[int, str]:
@@ -51,7 +51,7 @@ def test_audit_links_severity_escalates_with_count(tmp_path: Path) -> None:
         tmp_path,
         {
             "modules/mod-001/README.md": [
-                f"https://example.com/broken/{i}" for i in range(6)
+                f"https://dead-site.foo/broken/{i}" for i in range(6)
             ]
         },
     )
@@ -65,7 +65,7 @@ def test_audit_links_severity_escalates_with_count(tmp_path: Path) -> None:
 def test_audit_links_ignores_200_ok(tmp_path: Path) -> None:
     repo = _seed_repo_with_links(
         tmp_path,
-        {"modules/mod-001/README.md": ["https://example.com/ok"]},
+        {"modules/mod-001/README.md": ["https://dead-site.foo/ok"]},
     )
     report = audit_links(repo, url_fetcher=lambda url: (200, "OK"))
     assert report["broken_count"] == 0
@@ -80,13 +80,13 @@ def test_audit_links_raises_when_repo_missing(tmp_path: Path) -> None:
 def test_audit_links_skips_archive_and_aicg(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     write_file(
-        repo / "modules/mod-001/README.md", "[ok](https://example.com/in-repo)\n"
+        repo / "modules/mod-001/README.md", "[ok](https://dead-site.foo/in-repo)\n"
     )
     write_file(
-        repo / "_archive/old.md", "[old](https://example.com/in-archive)\n"
+        repo / "_archive/old.md", "[old](https://dead-site.foo/in-archive)\n"
     )
     write_file(
-        repo / ".aicg/notes.md", "[ai](https://example.com/in-aicg)\n"
+        repo / ".aicg/notes.md", "[ai](https://dead-site.foo/in-aicg)\n"
     )
 
     seen: list[str] = []
@@ -95,9 +95,82 @@ def test_audit_links_skips_archive_and_aicg(tmp_path: Path) -> None:
         return 200, "OK"
 
     audit_links(repo, url_fetcher=fake_fetch)
-    assert "https://example.com/in-repo" in seen
-    assert "https://example.com/in-archive" not in seen
-    assert "https://example.com/in-aicg" not in seen
+    assert "https://dead-site.foo/in-repo" in seen
+    assert "https://dead-site.foo/in-archive" not in seen
+    assert "https://dead-site.foo/in-aicg" not in seen
+
+
+def test_audit_links_skips_reserved_example_hosts(tmp_path: Path) -> None:
+    """RFC 2606 reserved hosts + localhost must not be flagged broken.
+
+    Regression: the queue had 289 ``refresh_links`` items, many for
+    docs full of example/placeholder URLs like ``http://localhost:8000``
+    and ``https://your-api.example.com``. Audit should drop those at
+    collection time so they never reach the work queue.
+    """
+    skip_urls = [
+        "http://localhost:8000/health",
+        "http://localhost/path",
+        "https://example.com/api",
+        "https://example.org/x",
+        "https://example.net/y",
+        "https://your-api.example.com/v1",
+        "https://my-cluster.local/admin",
+        "https://placeholder-service.foo/x",
+        "https://api.test/x",
+        "https://thing.invalid/x",
+        "https://service.localhost/x",
+        "http://127.0.0.1:9000",
+        "http://0.0.0.0:8080",
+        "http://10.0.0.5/admin",
+        "http://192.168.1.100:8443",
+        "http://172.16.0.1/x",
+        "http://169.254.169.254/latest/meta-data/",
+    ]
+    keep_urls = [
+        "https://dead-site.foo/x",  # not reserved
+        "https://news.ycombinator.com/y",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls + keep_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 404, "Not Found"
+
+    report = audit_links(repo, url_fetcher=fake_fetch)
+    # Only the non-reserved URLs should have been HEAD-pinged.
+    assert set(seen) == set(keep_urls)
+    # And only those should appear in broken findings / work items.
+    flagged = {f["url"] for f in report["broken_findings"]}
+    assert flagged == set(keep_urls)
+
+
+def test_audit_links_strips_trailing_quote(tmp_path: Path) -> None:
+    """Regression: bare-URL extraction left a trailing ``"`` on URLs
+    that were the value of a JSON/YAML string in a code sample."""
+    body = (
+        '```json\n'
+        '{"endpoint": "https://dead-site.foo/v1"}\n'
+        '```\n'
+    )
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 200, "OK"
+
+    audit_links(repo, url_fetcher=fake_fetch)
+    assert seen == ["https://dead-site.foo/v1"]
+    # The trailing quote MUST have been stripped — otherwise we'd see
+    # the URL with the trailing '"' character.
+    assert all(not u.endswith('"') for u in seen)
 
 
 # ---------------------------------------------------------------------------

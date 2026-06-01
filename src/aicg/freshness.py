@@ -63,6 +63,26 @@ _BARE_URL_RE = re.compile(r"(?<![\(\[\<])(https?://[^\s\)\]\>]+)")
 _SKIP_DIRS = {".git", ".aicg", "node_modules", "_archive", ".venv"}
 _MD_EXTENSIONS = {".md", ".mdx"}
 
+# Trailing characters that often glom onto URLs in markdown prose but are
+# never part of the URL itself. Includes the quote characters that show
+# up when a URL is the value of a JSON/YAML string in a code sample —
+# the audit was picking up ``http://x/y"`` and flagging it broken.
+_URL_TRAILING_STRIP = '.,;:!?"\'}'
+# Example / reserved hosts that should never be treated as live external
+# links. RFC 2606 (.example/.test/.invalid/.localhost TLDs and the
+# example.com/.net/.org domains), the loopback range, link-local, and
+# the common ``your-foo`` / ``my-foo`` placeholder prefixes curriculum
+# docs use in code samples. Real users of the curriculum should not
+# expect any of these to resolve.
+_RESERVED_TLDS = (".example", ".test", ".invalid", ".localhost")
+_RESERVED_EXAMPLE_HOSTS = frozenset(
+    {"example.com", "example.net", "example.org",
+     "localhost", "0.0.0.0", "127.0.0.1"}
+)
+_PLACEHOLDER_HOST_RE = re.compile(
+    r"^(your|my|some|sample|placeholder)[-.]", re.IGNORECASE
+)
+
 DEFAULT_LINK_TIMEOUT = 8.0
 DEFAULT_LINK_WORKERS = 16
 DEFAULT_LINK_USER_AGENT = "AICG-link-checker/1.0 (+https://github.com/AI-Infra-Curriculum)"
@@ -448,12 +468,48 @@ def _collect_markdown_urls(repo_path: Path) -> dict[str, list[str]]:
         urls: list[str] = []
         for pattern in (_MARKDOWN_LINK_RE, _AUTOLINK_RE, _BARE_URL_RE):
             for match in pattern.finditer(text):
-                url = match.group(1).rstrip(".,;:")
+                url = match.group(1).rstrip(_URL_TRAILING_STRIP)
+                if not url or _is_example_url(url):
+                    continue
                 if url not in urls:
                     urls.append(url)
         if urls:
             urls_by_file[rel] = urls
     return urls_by_file
+
+
+def _is_example_url(url: str) -> bool:
+    """True for URLs that are reserved / example / placeholder hosts.
+
+    These show up everywhere in curriculum code samples
+    (``http://localhost:8000/api``, ``https://your-api.example.com``)
+    and the audit should never flag them as broken external links —
+    they're teaching scaffolding, not real citations.
+    """
+    if not url.startswith(("http://", "https://")):
+        return False
+    host = re.sub(r"^https?://", "", url, count=1).split("/", 1)[0].lower()
+    host = host.split(":", 1)[0]  # strip port
+    if not host:
+        return False
+    if host in _RESERVED_EXAMPLE_HOSTS:
+        return True
+    if any(host == tld[1:] or host.endswith(tld) for tld in _RESERVED_TLDS):
+        return True
+    if _PLACEHOLDER_HOST_RE.match(host):
+        return True
+    # Private + link-local IPv4 ranges — curriculum code samples often
+    # use these as stand-in addresses. Never reachable from the audit
+    # runner anyway.
+    if re.match(r"^10\.\d+\.\d+\.\d+$", host):
+        return True
+    if re.match(r"^192\.168\.\d+\.\d+$", host):
+        return True
+    if re.match(r"^172\.(1[6-9]|2\d|3[01])\.\d+\.\d+$", host):
+        return True
+    if re.match(r"^169\.254\.\d+\.\d+$", host):  # link-local
+        return True
+    return False
 
 
 def _aggregate_per_file(broken: list[LinkFinding]) -> dict[str, list[LinkFinding]]:
