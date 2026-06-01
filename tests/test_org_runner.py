@@ -225,6 +225,131 @@ def test_daily_remediation_fails_permanently_after_max_retries(tmp_path):
     assert second["retry_count"] == 2
 
 
+def test_daily_remediation_skips_unhandled_work_types(tmp_path):
+    """Unhandled types in the queue must not starve handled items.
+
+    Regression: 289 ``refresh_links`` items sat at top priority with no
+    handler, so the selector always picked one and deferred it,
+    blocking the items that did have handlers from ever running.
+    """
+    import json as _json
+
+    from aicg.org_runner import (
+        HANDLED_WORK_TYPES,
+        run_daily_remediation,
+    )
+
+    workspace = make_security_workspace(tmp_path)
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+
+    # Hand-craft a queue with one unhandled item at top priority. Nothing
+    # handled exists — selector should return the supplemental packet
+    # and report skipped_unhandled_types=1, instead of picking the
+    # unhandled item.
+    assert "refresh_links" not in HANDLED_WORK_TYPES
+    queue = {
+        "schema_version": 1,
+        "generated_at": "2026-01-01T00:00:00Z",
+        "operation": "org_audit",
+        "workspace": str(workspace),
+        "work_item_count": 1,
+        "repo_reports": [],
+        "work_items": [
+            {
+                "id": "fake-unhandled-1",
+                "type": "refresh_links",
+                "repo": "ai-infra-security-solutions",
+                "status": "ready",
+                "priority": -89900,
+                "created_at": "2026-01-01T00:00:00Z",
+                "updated_at": "2026-01-01T00:00:00Z",
+                "title": "Refresh broken links",
+                "work_id": "fake-unhandled-1",
+            }
+        ],
+    }
+    (state_dir / "work-queue.json").write_text(_json.dumps(queue))
+
+    summary = run_daily_remediation(
+        manifest, workspace, state_dir=state_dir, drain_until_empty=False
+    )
+
+    # Item must remain in the queue (not deferred, not consumed).
+    queue_after = _json.loads(
+        (state_dir / "work-queue.json").read_text(encoding="utf-8")
+    )
+    assert queue_after["work_items"][0]["status"] == "ready"
+    # The supplemental-packet branch is what fires when nothing is
+    # handled — it returns ``status: no_supplement`` because the empty
+    # workspace has no supplemental work either. Either way, the
+    # important contract is: skipped_unhandled_types == 1.
+    assert summary.get("skipped_unhandled_types") == 1
+
+
+def test_daily_remediation_picks_handled_over_higher_priority_unhandled(tmp_path):
+    """Handled item must win even when an unhandled item outranks it."""
+    import json as _json
+
+    from aicg.org_runner import HANDLED_WORK_TYPES, run_daily_remediation
+
+    workspace = make_security_workspace(tmp_path)
+    manifest = load_manifest(write_minimal_manifest(tmp_path / "aicg-org.yaml"))
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+
+    handled_type = next(
+        t for t in ("pairing_mismatch", "curriculum_nav_drift") if t in HANDLED_WORK_TYPES
+    )
+    queue = {
+        "schema_version": 1,
+        "generated_at": "2026-01-01T00:00:00Z",
+        "operation": "org_audit",
+        "workspace": str(workspace),
+        "work_item_count": 2,
+        "repo_reports": [],
+        "work_items": [
+            {
+                "id": "unhandled-top",
+                "type": "refresh_links",
+                "repo": "ai-infra-security-solutions",
+                "status": "ready",
+                "priority": -89900,
+                "created_at": "2026-01-01T00:00:00Z",
+                "updated_at": "2026-01-01T00:00:00Z",
+                "title": "Refresh broken links",
+                "work_id": "unhandled-top",
+            },
+            {
+                "id": "handled-lower",
+                "type": handled_type,
+                "repo": "ai-infra-security-solutions",
+                "status": "ready",
+                "priority": 0,
+                "created_at": "2026-01-01T00:00:00Z",
+                "updated_at": "2026-01-01T00:00:00Z",
+                "title": "Cross-repo handled item",
+                "work_id": "handled-lower",
+                # Provide minimal fields the cross-repo dispatcher reads,
+                # but we don't actually need to drive it to completion —
+                # this test only asserts that the handled item is SELECTED.
+                "subtype": "project_only_in_solutions",
+            },
+        ],
+    }
+    (state_dir / "work-queue.json").write_text(_json.dumps(queue))
+
+    summary = run_daily_remediation(
+        manifest, workspace, state_dir=state_dir, drain_until_empty=False
+    )
+
+    # Selector must have moved past the unhandled item.
+    assert summary["items_processed"] == 1
+    assert summary["items"][0]["selected"]["id"] == "handled-lower"
+    assert summary.get("skipped_unhandled_types") == 1
+
+
 def test_daily_remediation_verifies_after_generate(tmp_path):
     import textwrap
 
