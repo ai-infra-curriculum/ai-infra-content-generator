@@ -575,9 +575,20 @@ def _process_one_item(
     if item.get("type") == "refresh_links":
         from .link_refresh import handle_refresh_links_item
 
-        refresh_result = handle_refresh_links_item(
-            workspace=workspace, item=item
-        )
+        # Catch unexpected handler crashes here so the queue item is
+        # always dispositioned. An un-dispositioned item gets re-picked
+        # next tick, producing an infinite failure loop on the same URL
+        # (see the 2026-06-01 16:00 onward incident — scheme-less URL
+        # crashed the urllib fetcher 15 hours in a row).
+        try:
+            refresh_result = handle_refresh_links_item(
+                workspace=workspace, item=item
+            )
+        except Exception as exc:  # noqa: BLE001 - intentional broad catch at boundary
+            refresh_result = {
+                "status": "handler_crashed",
+                "reason": f"{type(exc).__name__}: {exc}",
+            }
         result.update(refresh_result)
         # Mark the queue item so the selector won't re-pick it.
         if refresh_result.get("status") in {

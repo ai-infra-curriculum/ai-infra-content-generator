@@ -28,6 +28,7 @@ import json
 import re
 import subprocess
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -83,6 +84,14 @@ class FetchResult:
 
 def default_http_fetcher(url: str, method: str = "HEAD") -> FetchResult:
     """One HTTP request, no redirect-following (caller follows manually)."""
+    # Guard scheme up front. urllib raises ValueError("unknown url type: ...")
+    # on scheme-less URLs (e.g. a relative redirect Location header that
+    # leaked into the queue), and ValueError is not in the catch list below.
+    # Unhandled, it would crash the entire remediate tick.
+    if not url.startswith(("http://", "https://")):
+        return FetchResult(
+            status=None, final_url=url, error=f"unsupported url scheme: {url!r}"
+        )
     request = urllib.request.Request(
         url, method=method, headers={"User-Agent": USER_AGENT}
     )
@@ -97,12 +106,17 @@ def default_http_fetcher(url: str, method: str = "HEAD") -> FetchResult:
             return FetchResult(status=resp.status, final_url=resp.geturl())
     except urllib.error.HTTPError as exc:
         location = exc.headers.get("Location", "") if exc.headers else ""
+        # Resolve relative Location headers against the request URL — some
+        # servers return paths only (`/en/blog/...`) which downstream code
+        # cannot HEAD without a scheme.
+        if location:
+            location = urllib.parse.urljoin(url, location)
         return FetchResult(status=exc.code, final_url=location or url)
     except urllib.error.URLError as exc:
         return FetchResult(status=None, final_url=url, error=str(exc.reason))
     except TimeoutError:
         return FetchResult(status=None, final_url=url, error="timeout")
-    except OSError as exc:
+    except (OSError, ValueError) as exc:
         return FetchResult(status=None, final_url=url, error=str(exc))
 
 
