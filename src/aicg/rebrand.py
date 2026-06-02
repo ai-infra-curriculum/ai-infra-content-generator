@@ -79,14 +79,20 @@ def _rebrand_repo(
     """Edit READMEs in this repo and (if apply) push a PR."""
     if apply:
         # Skip when the working tree is dirty (another job mid-flight).
-        # --untracked-files=no excludes the runner's own .aicg/ scratch
-        # dir, which is untracked but gitignored or just orphaned.
+        # Filter out .aicg/ paths explicitly — the runner writes its own
+        # state files there (audit-report.json, work-plan.json, etc.) and
+        # in some repos those paths are tracked, so --untracked-files=no
+        # is not enough to exclude them.
         dirty = subprocess.run(
             ["git", "-C", str(repo_path), "status", "--porcelain",
              "--untracked-files=no"],
             capture_output=True, text=True, check=False,
         )
-        if dirty.stdout.strip():
+        non_aicg = [
+            line for line in dirty.stdout.splitlines()
+            if line.strip() and not line[3:].startswith(".aicg/")
+        ]
+        if non_aicg:
             return {
                 "repo": repo,
                 "status": "skipped_dirty_tree",
