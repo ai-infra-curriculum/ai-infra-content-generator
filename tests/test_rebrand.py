@@ -156,6 +156,57 @@ def test_rebrand_skips_dirty_working_tree(tmp_path: Path) -> None:
     assert outcome["status"] == "skipped_dirty_tree"
 
 
+def test_rebrand_pr_failure_cleans_up_modified_files(tmp_path: Path) -> None:
+    """A failed rebrand PR must not leave the README modified on main.
+
+    Regression: `git checkout main` preserves uncommitted modifications
+    when switching branches, so a failed rebrand left README modified
+    and every subsequent `pull --ff-only` then refused to clobber the
+    dirty file — breaking rebrand for that repo until manual cleanup.
+    The cleanup must `git checkout HEAD -- <changed_files>` before
+    switching back to main.
+    """
+    from aicg.rebrand import _open_rebrand_pr
+
+    repo_path = tmp_path / "ai-infra-security-learning"
+    repo_path.mkdir()
+    changed = ["README.md"]
+    maintained_by = {"name": "VeriSwarm.ai"}
+
+    call_log: list[list[str]] = []
+
+    def fake_run(cmd, **_):
+        call_log.append(list(cmd))
+        class _R:
+            returncode = 0
+            stdout = ""
+            stderr = ""
+        result = _R()
+        # Fail the `pull` step to trigger the cleanup path.
+        # cmd layout: ["git", "-C", repo, "pull", "--ff-only"]
+        if cmd[3:5] == ["pull", "--ff-only"]:
+            result.returncode = 1
+            result.stderr = "would be overwritten by merge"
+        return result
+
+    with patch("aicg.rebrand.subprocess.run", side_effect=fake_run):
+        outcome = _open_rebrand_pr(repo_path, "ai-infra-security-learning",
+                                   changed, maintained_by)
+
+    assert outcome["status"] == "pr_failed"
+    assert outcome["failed_step"] == "pull"
+    # The cleanup must include a `git checkout HEAD -- README.md` before
+    # the final `git checkout main`. Without it, modifications survive.
+    # cmd layout: ["git", "-C", repo, "checkout", "HEAD", "--", *files]
+    restore_calls = [
+        c for c in call_log
+        if c[3:6] == ["checkout", "HEAD", "--"] and "README.md" in c[6:]
+    ]
+    assert len(restore_calls) == 1, (
+        f"expected exactly one HEAD restore of README.md, got: {restore_calls}"
+    )
+
+
 def test_rebrand_ignores_aicg_runner_state_in_dirty_check(
     tmp_path: Path,
 ) -> None:
