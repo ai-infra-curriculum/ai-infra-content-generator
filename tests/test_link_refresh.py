@@ -264,3 +264,60 @@ def test_handler_skips_missing_file(tmp_path):
     )
     assert result["status"] == "skipped"
     assert result["reason"] == "file_not_found"
+
+
+# ---------- regression: scheme-less URL (2026-06-01 incident) ---------
+
+
+def test_default_http_fetcher_handles_schemeless_url_gracefully():
+    """A relative URL must not crash urllib with ValueError.
+
+    Regression for the 2026-06-01 incident: a server-side relative
+    Location header leaked a scheme-less URL into the queue; urllib's
+    `unknown url type` ValueError crashed the entire remediate tick
+    for 15 consecutive hourly runs until the bug was fixed.
+    """
+    from aicg.link_refresh import default_http_fetcher
+
+    result = default_http_fetcher("/en/blog/troubleshooting-network-issues")
+    assert result.status is None
+    assert "unsupported url scheme" in result.error
+    # Critical: no exception escapes the fetcher.
+
+
+def test_resolve_link_returns_unresolved_for_schemeless_url():
+    """End-to-end: scheme-less URL flows through resolve_link cleanly."""
+    resolution = resolve_link(
+        "/en/blog/troubleshooting-network-issues",
+        # Use real default_http_fetcher to exercise the scheme guard;
+        # wayback won't be reached because we don't get past HEAD.
+    )
+    assert resolution.source == "unresolved"
+    assert resolution.replacement is None
+
+
+def test_default_http_fetcher_resolves_relative_location_header():
+    """Relative redirect Location headers must be absolutized.
+
+    Without this, the redirect chase in resolve_link would feed the
+    relative URL back into the fetcher and produce the scheme-less
+    crash inside the chase loop instead of at the entry point.
+    """
+    from email.message import Message
+    from unittest.mock import patch
+    from urllib.error import HTTPError
+
+    from aicg.link_refresh import default_http_fetcher
+
+    hdrs = Message()
+    hdrs["Location"] = "/en/blog/new-path"
+
+    def _raise(*_a, **_kw):
+        raise HTTPError("https://example.com/old", 301, "Moved", hdrs, None)
+
+    with patch("aicg.link_refresh.urllib.request.build_opener") as m:
+        m.return_value.open = _raise
+        result = default_http_fetcher("https://example.com/old")
+
+    assert result.status == 301
+    assert result.final_url == "https://example.com/en/blog/new-path"
