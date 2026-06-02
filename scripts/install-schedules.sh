@@ -85,7 +85,7 @@ install_cron() {
 0 * * * * $(job_command daily-remediate)
 20 4 * * * $(job_command daily-issues)
 40 4 * * * $(job_command daily-steward)
-0 5 * * * $(job_command daily-discussions)
+5 5 * * * $(job_command daily-discussions)
 0 6 1 3,6,9,12 * $(job_command monthly-review)
 $marker_end"
 
@@ -167,7 +167,12 @@ install_systemd() {
   write_systemd_pair "$unit_dir" "daily-remediate" "daily-remediate" "*-*-* *:00:00"
   write_systemd_pair "$unit_dir" "daily-issues" "daily-issues" "*-*-* 04:20:00"
   write_systemd_pair "$unit_dir" "daily-steward" "daily-steward" "*-*-* 04:40:00"
-  write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:00:00"
+  # Discussions at 05:05, not 05:00 — the hourly remediate timer also
+  # fires at 05:00 and they raced for the org-job lock. Remediate won
+  # consistently and discussions bailed with "Another AICG org job is
+  # running" every day. 5 min is comfortably past remediate's typical
+  # runtime (~1-100s).
+  write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:05:00"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     systemctl --user daemon-reload
