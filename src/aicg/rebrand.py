@@ -260,6 +260,18 @@ def _open_rebrand_pr(
         if completed.returncode != 0 and label not in {"commit"}:
             # commit can return non-zero if nothing changed; everything
             # else is a hard stop. Reset to main so the repo is clean.
+            # `git checkout main` alone preserves uncommitted README
+            # modifications, which then break every subsequent rebrand
+            # attempt (`pull --ff-only` refuses to clobber the dirty
+            # file). Restore the files we touched from HEAD first so
+            # the working tree is genuinely clean. We restore only
+            # `changed_files` to avoid clobbering runner state in
+            # other paths (e.g. .aicg/*.json).
+            subprocess.run(
+                ["git", "-C", str(repo_path), "checkout", "HEAD", "--",
+                 *changed_files],
+                capture_output=True, text=True, check=False,
+            )
             subprocess.run(
                 ["git", "-C", str(repo_path), "checkout", "main"],
                 capture_output=True, text=True, check=False,
