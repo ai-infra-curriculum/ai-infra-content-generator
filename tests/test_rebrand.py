@@ -156,6 +156,37 @@ def test_rebrand_skips_dirty_working_tree(tmp_path: Path) -> None:
     assert outcome["status"] == "skipped_dirty_tree"
 
 
+def test_rebrand_ignores_aicg_runner_state_in_dirty_check(
+    tmp_path: Path,
+) -> None:
+    """Runner state files under .aicg/ must not block the rebrand.
+
+    Regression: 6 solution repos had tracked .aicg/*.json state files
+    that the runner re-wrote every tick. Steward's rebrand action
+    saw the modifications as 'dirty tree' and skipped those repos
+    every day. The dirty check must filter .aicg/ paths.
+    """
+    workspace, state_dir, manifest = _setup_workspace(tmp_path)
+    repo_path = workspace / "ai-infra-security-learning"
+    write_file(repo_path / "README.md", "# Repo\n")
+
+    with patch("aicg.rebrand.subprocess.run") as mock_run:
+        # Only .aicg/ modifications — should NOT be considered dirty.
+        mock_run.return_value.stdout = (
+            " M .aicg/audit-report.json\n"
+            " M .aicg/work-plan.json\n"
+            " M .aicg/curriculum-nav-report.json\n"
+        )
+        mock_run.return_value.returncode = 0
+        outcome = _rebrand_repo(repo_path, "ai-infra-security-learning",
+                                manifest.maintained_by, apply=True)
+    # Should proceed past the dirty check (downstream calls all see
+    # the same mocked subprocess so status reflects whatever the
+    # mock implies); the assertion is just that it didn't bail with
+    # skipped_dirty_tree.
+    assert outcome["status"] != "skipped_dirty_tree"
+
+
 def test_rebrand_branch_safe_for_dotted_repo_names() -> None:
     """git refuses 'aicg/.../.github/...' because the component begins
     with a dot. Verify our branch builder sanitizes it."""
