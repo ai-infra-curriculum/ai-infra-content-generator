@@ -87,7 +87,13 @@ _RESERVED_EXAMPLE_HOSTS = frozenset(
     {"example.com", "example.net", "example.org",
      "localhost", "0.0.0.0", "127.0.0.1",
      # Docker desktop & docker-compose default-bridge aliases.
-     "host.docker.internal", "gateway.docker.internal"}
+     "host.docker.internal", "gateway.docker.internal",
+     # Curriculum-wide placeholder domains used in SRE / runbook /
+     # incident-response examples. Not RFC-reserved but treated
+     # identically here — code samples constantly cite
+     # ``https://wiki.company.com/...``, ``https://runbooks.mycompany.com``.
+     "company.com", "mycompany.com", "yourcompany.com",
+     "acme.com", "acme.org"}
 )
 _PLACEHOLDER_HOST_RE = re.compile(
     r"^(your|my|some|sample|placeholder)[-.]", re.IGNORECASE
@@ -102,10 +108,30 @@ _K8S_DNS_SUFFIXES = (
     ".svc",
 )
 # Template placeholders that survive into URL text — $VAR, ${VAR},
-# <PLACEHOLDER>, {{ var }}. If any of these tokens appears between the
-# scheme and the next "/" we know the URL was never meant to be fetched.
+# $(cmd), <PLACEHOLDER>, {{ var }}. Checked across the WHOLE URL, not
+# just the host, because curriculum docs often build URLs in code
+# samples like ``curl -O https://dl.k8s.io/release/$(curl -s ...)``
+# where the shell substitution is in the path.
 _PLACEHOLDER_URL_RE = re.compile(
-    r"^https?://[^/]*(?:\$\{?[A-Z_]|<[A-Za-z_]|\{\{)"
+    r"\$\{?[A-Z_]|\$\(|<[A-Za-z_][\w-]*>|\{\{"
+)
+# Slack webhook stub. Real Slack webhooks look like
+# /services/T0123/B0123/abc — the placeholder convention is
+# /YOUR/SLACK/WEBHOOK or /WORKSPACE/CHANNEL/TOKEN. We match the
+# upper-case stub words anywhere in the path.
+_UPPER_PLACEHOLDER_PATH_RE = re.compile(
+    r"/(YOUR|YOU|MYORG|MYREPO|MY-ORG|MY-REPO|ORIGINAL-OWNER|YOUR-USERNAME|"
+    r"YOUR-ORG|YOUR-REPO|YOUR-TOKEN|TOKEN|SLACK|WEBHOOK|CHANNEL|WORKSPACE)"
+    r"(/|$)"
+)
+# github.com placeholder owners. Singular generic stand-ins used in
+# git tutorials: ``github.com/user/repo.git``, ``github.com/myorg/myrepo``.
+# Case-insensitive — covers ``YOU`` / ``YOUR-USERNAME`` too.
+_GITHUB_PLACEHOLDER_RE = re.compile(
+    r"^https?://(?:www\.)?github\.com/"
+    r"(user|username|myorg|my-org|myrepo|my-repo|original-owner|your-?username)"
+    r"(/|$)",
+    re.IGNORECASE,
 )
 
 DEFAULT_LINK_TIMEOUT = 8.0
@@ -698,8 +724,16 @@ def _is_example_url(url: str) -> bool:
     """
     if not url.startswith(("http://", "https://")):
         return False
-    # Template tokens between scheme and path → never a real URL.
-    if _PLACEHOLDER_URL_RE.match(url):
+    # Template tokens anywhere in the URL → never a real fetchable URL.
+    if _PLACEHOLDER_URL_RE.search(url):
+        return True
+    # Slack webhook / GitHub fork stubs use upper-case placeholder words
+    # in the path. Curriculum docs use these constantly for "fill in
+    # your own ID here" prose; never a real citation.
+    if _UPPER_PLACEHOLDER_PATH_RE.search(url):
+        return True
+    # GitHub-specific placeholder owners (case-insensitive).
+    if _GITHUB_PLACEHOLDER_RE.match(url):
         return True
     # Use urllib.parse so userinfo (admin:admin@), ports, and IPv6 are
     # handled correctly. The old split-based parser misread
