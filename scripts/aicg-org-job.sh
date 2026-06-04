@@ -22,6 +22,7 @@ Jobs:
   monthly-review        (quarterly: LLM freshness review of existing content)
   promote-plan          (on-demand: applies approved research proposals after PR merge)
   research-role ROLE    (nightly per-role research; replaces monthly-research)
+  review-role ROLE      (nightly per-role freshness review; replaces monthly-review)
   weekly-audit
   daily-remediate
   daily-issues
@@ -55,16 +56,18 @@ parse_args() {
   JOB="$1"
   shift
 
-  # research-role takes a positional ROLE argument. Capture it before
-  # the option loop so the rest of parsing stays uniform.
+  # research-role / review-role take a positional ROLE argument. Capture
+  # it before the option loop so the rest of parsing stays uniform.
   ROLE=""
-  if [[ "$JOB" == "research-role" ]]; then
-    if [[ $# -eq 0 || "$1" == --* ]]; then
-      die "research-role requires a ROLE argument (e.g. junior-engineer)"
-    fi
-    ROLE="$1"
-    shift
-  fi
+  case "$JOB" in
+    research-role|review-role)
+      if [[ $# -eq 0 || "$1" == --* ]]; then
+        die "$JOB requires a ROLE argument (e.g. junior-engineer)"
+      fi
+      ROLE="$1"
+      shift
+      ;;
+  esac
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -146,6 +149,18 @@ main() {
       # of any single failure to one role.
       [[ -n "$ROLE" ]] || die "research-role requires ROLE"
       run_aicg_org research --apply --role "$ROLE"
+      ;;
+    review-role)
+      # Per-role nightly freshness review. One role per night, days
+      # 14-26, lowest-level-first. Reviews BOTH the learning and
+      # solution repos for that role with a 50-artifact cap PER REPO.
+      # Replaces the org-wide monthly-review job — same total review
+      # cost (~1200 calls / month with the judge enabled) but spread
+      # across 13 separate Claude-budget windows instead of one shot.
+      # No-op when quality_judge.enabled is false (every artifact
+      # gets marked 'skipped').
+      [[ -n "$ROLE" ]] || die "review-role requires ROLE"
+      run_aicg_org review --role "$ROLE" --max-artifacts 50
       ;;
     promote-plan)
       run_aicg_org promote-plan

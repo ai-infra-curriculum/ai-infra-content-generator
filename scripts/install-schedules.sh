@@ -74,8 +74,8 @@ job_command() {
     "$RUNNER_DIR/scripts/aicg-org-job.sh" "$job" "$WORKSPACE" "$MANIFEST" "$STATE_DIR"
 }
 
-# research-role takes a positional ROLE that must follow the job name,
-# before option flags. Build the command in that order.
+# research-role / review-role take a positional ROLE that must follow
+# the job name, before option flags. Build the command in that order.
 job_command_research_role() {
   local role="$1"
   printf '%q %q %q --workspace %q --manifest %q --state-dir %q' \
@@ -83,13 +83,21 @@ job_command_research_role() {
     "$WORKSPACE" "$MANIFEST" "$STATE_DIR"
 }
 
+job_command_review_role() {
+  local role="$1"
+  printf '%q %q %q --workspace %q --manifest %q --state-dir %q' \
+    "$RUNNER_DIR/scripts/aicg-org-job.sh" "review-role" "$role" \
+    "$WORKSPACE" "$MANIFEST" "$STATE_DIR"
+}
+
 install_cron() {
   local marker_begin="# BEGIN AICG ORG JOBS"
   local marker_end="# END AICG ORG JOBS"
-  # Per-role nightly research at 00:00 on days 1-13. Matches the systemd
-  # ordering — lowest-level role on day 1, chief-ai-officer on day 13.
+  # Per-role nightly research at 00:00 on days 1-13, per-role review at
+  # 00:00 on days 14-26. Matches the systemd ordering — lowest-level
+  # role first, chief-ai-officer last.
   local per_role_lines=""
-  local -a role_slots=(
+  local -a research_slots=(
     "1:junior-engineer"
     "2:engineer"
     "3:ml-platform"
@@ -104,11 +112,31 @@ install_cron() {
     "12:principal-architect"
     "13:chief-ai-officer"
   )
+  local -a review_slots=(
+    "14:junior-engineer"
+    "15:engineer"
+    "16:ml-platform"
+    "17:mlops"
+    "18:senior-engineer"
+    "19:performance"
+    "20:security"
+    "21:team-lead"
+    "22:architect"
+    "23:principal-engineer"
+    "24:senior-architect"
+    "25:principal-architect"
+    "26:chief-ai-officer"
+  )
   local entry day role
-  for entry in "${role_slots[@]}"; do
+  for entry in "${research_slots[@]}"; do
     day="${entry%%:*}"
     role="${entry##*:}"
     per_role_lines+=$'\n'"0 0 $day * * $(job_command_research_role "$role")"
+  done
+  for entry in "${review_slots[@]}"; do
+    day="${entry%%:*}"
+    role="${entry##*:}"
+    per_role_lines+=$'\n'"0 0 $day * * $(job_command_review_role "$role")"
   done
 
   local block
@@ -118,8 +146,7 @@ install_cron() {
 0 * * * * $(job_command daily-remediate)
 20 4 * * * $(job_command daily-issues)
 40 4 * * * $(job_command daily-steward)
-5 5 * * * $(job_command daily-discussions)
-0 6 1 3,6,9,12 * $(job_command monthly-review)${per_role_lines}
+5 5 * * * $(job_command daily-discussions)${per_role_lines}
 $marker_end"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -263,6 +290,83 @@ WantedBy=timers.target
   done
 }
 
+install_per_role_review() {
+  local unit_dir="$1"
+  local log_dir="$HOME/.cache/aicg"
+  local service_path="$unit_dir/aicg-review-role@.service"
+  local template_path="$RUNNER_DIR/scripts/cron/aicg-review-role@.service.template"
+
+  [[ -f "$template_path" ]] || die "missing template: $template_path"
+
+  local service_content
+  service_content="$(
+    sed \
+      -e "s#{PATH}#$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin#g" \
+      -e "s#{HOME}#$HOME#g" \
+      -e "s#{LOG_DIR}#$log_dir#g" \
+      -e "s#{RUNNER_DIR}#$RUNNER_DIR#g" \
+      -e "s#{WORKSPACE}#$WORKSPACE#g" \
+      -e "s#{MANIFEST}#$MANIFEST#g" \
+      -e "s#{STATE_DIR}#$STATE_DIR#g" \
+      "$template_path"
+  )"
+
+  # Days 14-26 (after the research days 1-13 finish). Same role
+  # order — lowest level first — so the schedule reads as
+  # "research then review the same role 13 days later." Keep this
+  # list in lockstep with install_per_role_research's role_slots
+  # when the org manifest gains or loses a role.
+  local -a role_slots=(
+    "14:junior-engineer"
+    "15:engineer"
+    "16:ml-platform"
+    "17:mlops"
+    "18:senior-engineer"
+    "19:performance"
+    "20:security"
+    "21:team-lead"
+    "22:architect"
+    "23:principal-engineer"
+    "24:senior-architect"
+    "25:principal-architect"
+    "26:chief-ai-officer"
+  )
+
+  if [[ "$DRY_RUN" -eq 1 ]]; then
+    printf '%s\n%s\n' "----- $service_path -----" "$service_content"
+  else
+    printf '%s' "$service_content" >"$service_path"
+  fi
+
+  local entry day role timer_path timer_content
+  for entry in "${role_slots[@]}"; do
+    day="${entry%%:*}"
+    role="${entry##*:}"
+    timer_path="$unit_dir/aicg-review-role@${role}.timer"
+    timer_content="[Unit]
+Description=AICG per-role freshness review timer: ${role}
+
+[Timer]
+OnCalendar=*-*-${day} 00:00:00
+Persistent=true
+Unit=aicg-review-role@${role}.service
+
+[Install]
+WantedBy=timers.target
+"
+    if [[ "$DRY_RUN" -eq 1 ]]; then
+      printf '%s\n%s\n' "----- $timer_path -----" "$timer_content"
+    else
+      printf '%s' "$timer_content" >"$timer_path"
+    fi
+  done
+
+  PER_ROLE_REVIEW_SLUGS=()
+  for entry in "${role_slots[@]}"; do
+    PER_ROLE_REVIEW_SLUGS+=("${entry##*:}")
+  done
+}
+
 install_systemd() {
   local unit_dir="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
   if [[ "$DRY_RUN" -eq 0 ]]; then
@@ -291,15 +395,16 @@ install_systemd() {
   write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:05:00"
 
   install_per_role_research "$unit_dir"
+  install_per_role_review "$unit_dir"
 
   if [[ "$DRY_RUN" -eq 0 ]]; then
     systemctl --user daemon-reload
-    # Disable the legacy org-wide research timer in favor of per-role
-    # instances. Tolerate failure (it may already be inactive).
+    # Disable the legacy org-wide research/review timers in favor of
+    # per-role instances. Tolerate failure (they may already be inactive).
     systemctl --user disable --now aicg-monthly-research.timer 2>/dev/null || true
+    systemctl --user disable --now aicg-monthly-review.timer 2>/dev/null || true
     systemctl --user enable --now \
       aicg-monthly-release.timer \
-      aicg-monthly-review.timer \
       aicg-weekly-audit.timer \
       aicg-daily-remediate.timer \
       aicg-daily-issues.timer \
@@ -309,7 +414,10 @@ install_systemd() {
     for slug in "${PER_ROLE_SLUGS[@]}"; do
       systemctl --user enable --now "aicg-research-role@${slug}.timer"
     done
-    log "Installed systemd user timers (including ${#PER_ROLE_SLUGS[@]} per-role research timers)."
+    for slug in "${PER_ROLE_REVIEW_SLUGS[@]}"; do
+      systemctl --user enable --now "aicg-review-role@${slug}.timer"
+    done
+    log "Installed systemd user timers (${#PER_ROLE_SLUGS[@]} per-role research + ${#PER_ROLE_REVIEW_SLUGS[@]} per-role review)."
   fi
 }
 

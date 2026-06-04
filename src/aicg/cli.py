@@ -526,6 +526,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Cap per-repo artifacts reviewed in this run (default: unlimited).",
     )
+    org_review.add_argument(
+        "--role",
+        default=None,
+        help=(
+            "Process only this role's solution repo. Omit to review every "
+            "solution repo. Used by per-role systemd timers "
+            "(aicg-review-role@<slug>.timer)."
+        ),
+    )
     org_review.set_defaults(func=cmd_org_review)
 
     org_plan_delta_apply = org_subparsers.add_parser(
@@ -1433,9 +1442,34 @@ def cmd_org_review(args: argparse.Namespace) -> int:
     state_dir = resolve_org_state_dir(args, manifest)
     state_dir.mkdir(parents=True, exist_ok=True)
 
+    role_id = getattr(args, "role", None)
+    if role_id is not None:
+        role = next((r for r in manifest.roles if r.id == role_id), None)
+        if role is None:
+            valid = ", ".join(sorted(r.id for r in manifest.roles))
+            print(
+                f"error: Unknown role {role_id!r}. Known roles: {valid}",
+                file=sys.stderr,
+            )
+            return 1
+        # Both learning and solutions repos. The freshness rubric
+        # (api_currency / version_currency / citation_validity /
+        # hardware_currency) matters more for learner-facing content
+        # (lecture notes, exercise prompts) than for solutions, but
+        # both should be judged.
+        repos_to_review = [role.learning_repo, role.solution_repo]
+    else:
+        # Legacy org-wide mode (called by aicg-monthly-review.timer,
+        # which is now disabled in favor of per-role timers). Walk
+        # both repo lists so the legacy invocation matches the new
+        # per-role semantics.
+        repos_to_review = (
+            manifest.learning_repo_names + manifest.solution_repo_names
+        )
+
     all_work_items: list = []
     repo_summaries: list = []
-    for repo in manifest.solution_repo_names:
+    for repo in repos_to_review:
         repo_path = workspace / repo
         if not repo_path.exists():
             continue
@@ -1458,15 +1492,25 @@ def cmd_org_review(args: argparse.Namespace) -> int:
     org_report = {
         "schema_version": 1,
         "operation": "org_review",
+        "role": role_id,
         "repo_count": len(repo_summaries),
         "stale_total": sum(r["stale_count"] for r in repo_summaries),
         "work_item_total": len(all_work_items),
         "repos": repo_summaries,
         "work_items": all_work_items,
     }
-    write_json(state_dir / "freshness-review-report.json", org_report)
+    # Per-role runs land in their own file so adjacent nightly timers
+    # don't clobber each other. The unscoped (org-wide) file name is
+    # preserved when --role is omitted.
+    report_name = (
+        f"freshness-review-report.{role_id}.json"
+        if role_id
+        else "freshness-review-report.json"
+    )
+    write_json(state_dir / report_name, org_report)
+    scope = f" (role={role_id})" if role_id else ""
     print(
-        f"Freshness review: {org_report['stale_total']} stale artifact(s) across "
+        f"Freshness review{scope}: {org_report['stale_total']} stale artifact(s) across "
         f"{org_report['repo_count']} repo(s); {org_report['work_item_total']} work item(s)"
     )
     for repo in repo_summaries:
