@@ -40,6 +40,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from .manifest import CanonicalSourceRegistry
 from .state import utc_now
 
 USER_AGENT = "AICG-link-refresh/1.0 (+https://github.com/ai-infra-curriculum)"
@@ -98,7 +99,7 @@ _MACHINE_CONTEXT_RE = re.compile(
 class LinkResolution:
     original: str
     replacement: str | None
-    source: str  # "alive" | "redirect" | "wayback" | "unresolved" | "machine_endpoint" | "ambiguous"
+    source: str  # "alive" | "redirect" | "canonical" | "wayback" | "unresolved" | "machine_endpoint" | "ambiguous"
     note: str = ""
 
     @property
@@ -186,8 +187,15 @@ def resolve_link(
     http_fetcher: HttpFetcher = default_http_fetcher,
     wayback_fetcher: WaybackFetcher = default_wayback_fetcher,
     machine_consumed: bool = False,
+    canonical_sources: CanonicalSourceRegistry | None = None,
 ) -> LinkResolution:
-    """Try re-check → redirect chase → wayback.
+    """Try canonical successor → re-check → redirect chase → wayback.
+
+    When ``canonical_sources`` is provided, it is consulted FIRST. If the
+    URL has a known successor (vendor rebrand, project successor, OCI
+    migration, etc.), use that directly — short-circuiting the HTTP
+    probe entirely. This prevents bad-Wayback substitutions for URLs
+    we have ground-truth canonical replacements for.
 
     Wayback substitution is suppressed when ``machine_consumed=True`` —
     the caller has determined the URL is consumed by tooling (Helm repo
@@ -199,6 +207,20 @@ def resolve_link(
     unambiguously broken. This avoids replacing live IETF/Cloudflare
     pages just because the bot probe was rate-limited.
     """
+    if canonical_sources is not None:
+        successor = canonical_sources.lookup_successor(url)
+        if successor is not None and _canonical_replacement_allowed(successor):
+            return LinkResolution(
+                original=url,
+                replacement=successor,
+                source="canonical",
+                note="registered successor in canonical_sources.json",
+            )
+        # Also short-circuit machine-endpoint protection: a registered
+        # machine_consumed=true source (e.g., Fulcio) is always
+        # protected from Wayback, regardless of surrounding context.
+        if canonical_sources.is_known_machine_endpoint(url):
+            machine_consumed = True
     # Try HEAD, then GET when HEAD is non-200. Many CDNs / endpoints
     # return 4xx or 5xx for HEAD even though GET works (Bitnami chart
     # repos, Cloudflare-fronted RFC pages).
@@ -318,6 +340,7 @@ def handle_refresh_links_item(
     item: dict[str, Any],
     http_fetcher: HttpFetcher = default_http_fetcher,
     wayback_fetcher: WaybackFetcher = default_wayback_fetcher,
+    canonical_sources: CanonicalSourceRegistry | None = None,
     open_pr: bool = True,
 ) -> dict[str, Any]:
     """Resolve and apply replacements for one ``refresh_links`` item.
@@ -368,6 +391,7 @@ def handle_refresh_links_item(
             http_fetcher=http_fetcher,
             wayback_fetcher=wayback_fetcher,
             machine_consumed=(url in machine_consumed),
+            canonical_sources=canonical_sources,
         )
         for url in urls
     ]
@@ -486,11 +510,31 @@ def _machine_consumed_urls(body: str, urls: list[str]) -> set[str]:
 
 
 def _replacement_allowed(url: str) -> bool:
-    """Source-policy filter for replacements."""
+    """Source-policy filter for HTTP-fetched replacements (redirect chase / Wayback).
+
+    Restricts to ``http(s)://`` because the resolver actively fetched these.
+    """
     if not url.startswith(("http://", "https://")):
         return False
-    host = re.sub(r"^https?://", "", url, count=1).split("/", 1)[0].lower()
-    host = host.split(":", 1)[0]  # strip port
+    return _domain_allowed(url)
+
+
+def _canonical_replacement_allowed(url: str) -> bool:
+    """Source-policy filter for canonical-source successors.
+
+    Canonical entries are human-curated and frequently point at
+    machine-consumed schemes (``oci://``, ``git://``, ``file://``)
+    rather than ``http(s)://``. Only the domain blocklist applies.
+    """
+    return _domain_allowed(url)
+
+
+def _domain_allowed(url: str) -> bool:
+    if "://" in url:
+        rest = url.split("://", 1)[1]
+    else:
+        rest = url
+    host = rest.split("/", 1)[0].lower().split(":", 1)[0]
     return host not in DISALLOWED_REPLACEMENT_DOMAINS
 
 
