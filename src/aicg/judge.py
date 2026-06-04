@@ -77,6 +77,13 @@ class JudgeConfig:
     dimensions: tuple[str, ...]
     thresholds: dict[str, int]
     timeout_seconds: int | None
+    # Minimum days between freshness scans of the same artifact. Files
+    # scanned more recently than this are skipped by `review_existing_
+    # artifacts` so the per-night cap rotates through all artifacts
+    # over time instead of re-judging the alphabetically-first 50.
+    # 90 days = quarterly, which matches how slowly staleness develops
+    # (deprecations, version bumps, dead vendor links).
+    freshness_cooldown_days: int = 90
 
     @classmethod
     def from_manifest(cls, manifest: OrgManifest) -> "JudgeConfig":
@@ -93,6 +100,7 @@ class JudgeConfig:
             dimensions=dimensions,
             thresholds=thresholds,
             timeout_seconds=cfg.get("timeout_seconds"),
+            freshness_cooldown_days=int(cfg.get("freshness_cooldown_days", 90)),
         )
 
     def threshold_for(self, work_type: str) -> int:
@@ -230,6 +238,7 @@ def judge_artifact_freshness(
         dimensions=FRESHNESS_DIMENSIONS,
         thresholds={"default": threshold, "freshness": threshold},
         timeout_seconds=config.timeout_seconds,
+        freshness_cooldown_days=config.freshness_cooldown_days,
     )
     prompt_path = _write_freshness_prompt(
         repo_path=repo_path,
