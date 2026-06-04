@@ -57,6 +57,9 @@ TRACK_LEVEL = {
     "architect": 3,
     "senior-architect": 4,
     "principal-architect": 5,
+    # Executive track. The org manifest uses level=70 to keep it
+    # above every individual-contributor / architect level.
+    "chief-ai-officer": 70,
 }
 
 

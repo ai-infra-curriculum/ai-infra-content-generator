@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T05:11:51Z",
+  "generated_at": "2026-06-04T07:02:51Z",
   "org": "ai-infra-curriculum",
   "tracks": [
     {
@@ -575,6 +575,17 @@
       ],
       "projects": [
         {
+          "slug": "project-301-enterprise-mlops",
+          "number": 301,
+          "title": "Project 301: Enterprise MLOps Platform Architecture",
+          "learning_path": null,
+          "solutions_path": "projects/project-301-enterprise-mlops",
+          "learning_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-301-enterprise-mlops",
+          "docs": [],
+          "prerequisites": []
+        },
+        {
           "slug": "project-301-enterprise-mlops-platform",
           "number": 301,
           "title": "Enterprise ML Platform Architecture",
@@ -588,17 +599,6 @@
             "architecture.md",
             "requirements.md"
           ],
-          "prerequisites": []
-        },
-        {
-          "slug": "project-301-enterprise-mlops",
-          "number": 301,
-          "title": "Project 301: Enterprise MLOps Platform Architecture",
-          "learning_path": null,
-          "solutions_path": "projects/project-301-enterprise-mlops",
-          "learning_url": null,
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-301-enterprise-mlops",
-          "docs": [],
           "prerequisites": []
         },
         {
@@ -699,6 +699,762 @@
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-learning/blob/main/resources/tools.md"
         }
       ]
+    },
+    {
+      "slug": "chief-ai-officer",
+      "display_name": "Chief Ai Officer Track",
+      "level": 70,
+      "learning_repo": "ai-infra-chief-ai-officer-learning",
+      "solutions_repo": "ai-infra-chief-ai-officer-solutions",
+      "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning",
+      "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions",
+      "modules": [
+        {
+          "slug": "mod-101-foundations",
+          "number": 101,
+          "title": "Module 101 \u2014 AI Governance Foundations",
+          "path": "lessons/mod-101-foundations",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-101-foundations",
+          "exercises": [
+            {
+              "slug": "exercise-01-frameworks-crosswalk",
+              "number": 1,
+              "title": "Exercise 01 Frameworks Crosswalk",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-foundations/exercise-01-frameworks-crosswalk",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-101-foundations/exercise-01-frameworks-crosswalk"
+            },
+            {
+              "slug": "exercise-02-draft-a-governance-charter",
+              "number": 2,
+              "title": "Exercise 02 Draft A Governance Charter",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-foundations/exercise-02-draft-a-governance-charter",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-101-foundations/exercise-02-draft-a-governance-charter"
+            },
+            {
+              "slug": "exercise-03-place-the-cao-on-the-org-chart",
+              "number": 3,
+              "title": "Exercise 03 Place The Cao On The Org Chart",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-foundations/exercise-03-place-the-cao-on-the-org-chart",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-101-foundations/exercise-03-place-the-cao-on-the-org-chart"
+            },
+            {
+              "slug": "exercise-04-stakeholder-map",
+              "number": 4,
+              "title": "Exercise 04 Stakeholder Map",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-foundations/exercise-04-stakeholder-map",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-101-foundations/exercise-04-stakeholder-map"
+            },
+            {
+              "slug": "exercise-05-operating-model-recommendation-memo",
+              "number": 5,
+              "title": "Exercise 05 Operating Model Recommendation Memo",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-foundations/exercise-05-operating-model-recommendation-memo",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-101-foundations/exercise-05-operating-model-recommendation-memo"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-102-regulatory-landscape",
+          "number": 102,
+          "title": "Module 102 \u2014 Regulatory Landscape",
+          "path": "lessons/mod-102-regulatory-landscape",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-102-regulatory-landscape",
+          "exercises": [
+            {
+              "slug": "exercise-01-classify-against-eu-ai-act",
+              "number": 1,
+              "title": "Exercise 01 Classify Against Eu Ai Act",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-regulatory-landscape/exercise-01-classify-against-eu-ai-act",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-102-regulatory-landscape/exercise-01-classify-against-eu-ai-act"
+            },
+            {
+              "slug": "exercise-02-multi-framework-obligations-map",
+              "number": 2,
+              "title": "Exercise 02 Multi Framework Obligations Map",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-regulatory-landscape/exercise-02-multi-framework-obligations-map",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-102-regulatory-landscape/exercise-02-multi-framework-obligations-map"
+            },
+            {
+              "slug": "exercise-03-article-9-rms-summary",
+              "number": 3,
+              "title": "Exercise 03 Article 9 Rms Summary",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-regulatory-landscape/exercise-03-article-9-rms-summary",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-102-regulatory-landscape/exercise-03-article-9-rms-summary"
+            },
+            {
+              "slug": "exercise-04-reverse-engineer-regulator-letter",
+              "number": 4,
+              "title": "Exercise 04 Reverse Engineer Regulator Letter",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-regulatory-landscape/exercise-04-reverse-engineer-regulator-letter",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-102-regulatory-landscape/exercise-04-reverse-engineer-regulator-letter"
+            },
+            {
+              "slug": "exercise-05-regulatory-monitoring-playbook",
+              "number": 5,
+              "title": "Exercise 05 Regulatory Monitoring Playbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-regulatory-landscape/exercise-05-regulatory-monitoring-playbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-102-regulatory-landscape/exercise-05-regulatory-monitoring-playbook"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-103-ai-risk-frameworks",
+          "number": 103,
+          "title": "Module 103 \u2014 AI Risk Frameworks",
+          "path": "lessons/mod-103-ai-risk-frameworks",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-103-ai-risk-frameworks",
+          "exercises": [
+            {
+              "slug": "exercise-01-build-an-ai-risk-taxonomy",
+              "number": 1,
+              "title": "Exercise 01 Build An Ai Risk Taxonomy",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-ai-risk-frameworks/exercise-01-build-an-ai-risk-taxonomy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-103-ai-risk-frameworks/exercise-01-build-an-ai-risk-taxonomy"
+            },
+            {
+              "slug": "exercise-02-impact-assessment-template",
+              "number": 2,
+              "title": "Exercise 02 Impact Assessment Template",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-ai-risk-frameworks/exercise-02-impact-assessment-template",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-103-ai-risk-frameworks/exercise-02-impact-assessment-template"
+            },
+            {
+              "slug": "exercise-03-measurement-plan",
+              "number": 3,
+              "title": "Exercise 03 Measurement Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-ai-risk-frameworks/exercise-03-measurement-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-103-ai-risk-frameworks/exercise-03-measurement-plan"
+            },
+            {
+              "slug": "exercise-04-risk-treatment-plan",
+              "number": 4,
+              "title": "Exercise 04 Risk Treatment Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-ai-risk-frameworks/exercise-04-risk-treatment-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-103-ai-risk-frameworks/exercise-04-risk-treatment-plan"
+            },
+            {
+              "slug": "exercise-05-end-to-end-loop",
+              "number": 5,
+              "title": "Exercise 05 End To End Loop",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-ai-risk-frameworks/exercise-05-end-to-end-loop",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-103-ai-risk-frameworks/exercise-05-end-to-end-loop"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-104-model-risk-management",
+          "number": 104,
+          "title": "Module 104 \u2014 Model Risk Management",
+          "path": "lessons/mod-104-model-risk-management",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-104-model-risk-management",
+          "exercises": [
+            {
+              "slug": "exercise-01-tier-five-ml-models",
+              "number": 1,
+              "title": "Exercise 01 Tier Five Ml Models",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-model-risk-management/exercise-01-tier-five-ml-models",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-104-model-risk-management/exercise-01-tier-five-ml-models"
+            },
+            {
+              "slug": "exercise-02-design-independent-validation",
+              "number": 2,
+              "title": "Exercise 02 Design Independent Validation",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-model-risk-management/exercise-02-design-independent-validation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-104-model-risk-management/exercise-02-design-independent-validation"
+            },
+            {
+              "slug": "exercise-03-sr-11-7-inventory-entry-for-llm",
+              "number": 3,
+              "title": "Exercise 03 Sr 11 7 Inventory Entry For Llm",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-model-risk-management/exercise-03-sr-11-7-inventory-entry-for-llm",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-104-model-risk-management/exercise-03-sr-11-7-inventory-entry-for-llm"
+            },
+            {
+              "slug": "exercise-04-cao-vs-mrm-boundary-dispute",
+              "number": 4,
+              "title": "Exercise 04 Cao Vs Mrm Boundary Dispute",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-model-risk-management/exercise-04-cao-vs-mrm-boundary-dispute",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-104-model-risk-management/exercise-04-cao-vs-mrm-boundary-dispute"
+            },
+            {
+              "slug": "exercise-05-mrm-outside-banking",
+              "number": 5,
+              "title": "Exercise 05 Mrm Outside Banking",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-model-risk-management/exercise-05-mrm-outside-banking",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-104-model-risk-management/exercise-05-mrm-outside-banking"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-105-responsible-ai-and-ethics",
+          "number": 105,
+          "title": "Module 105 \u2014 Responsible AI and Ethics",
+          "path": "lessons/mod-105-responsible-ai-and-ethics",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-105-responsible-ai-and-ethics",
+          "exercises": [
+            {
+              "slug": "exercise-01-compare-three-ethics-frameworks",
+              "number": 1,
+              "title": "Exercise 01 Compare Three Ethics Frameworks",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-responsible-ai-and-ethics/exercise-01-compare-three-ethics-frameworks",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-105-responsible-ai-and-ethics/exercise-01-compare-three-ethics-frameworks"
+            },
+            {
+              "slug": "exercise-02-define-bias-metrics",
+              "number": 2,
+              "title": "Exercise 02 Define Bias Metrics",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-responsible-ai-and-ethics/exercise-02-define-bias-metrics",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-105-responsible-ai-and-ethics/exercise-02-define-bias-metrics"
+            },
+            {
+              "slug": "exercise-03-design-explainability-standard",
+              "number": 3,
+              "title": "Exercise 03 Design Explainability Standard",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-responsible-ai-and-ethics/exercise-03-design-explainability-standard",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-105-responsible-ai-and-ethics/exercise-03-design-explainability-standard"
+            },
+            {
+              "slug": "exercise-04-build-contestability-process",
+              "number": 4,
+              "title": "Exercise 04 Build Contestability Process",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-responsible-ai-and-ethics/exercise-04-build-contestability-process",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-105-responsible-ai-and-ethics/exercise-04-build-contestability-process"
+            },
+            {
+              "slug": "exercise-05-resolve-ethics-case-study",
+              "number": 5,
+              "title": "Exercise 05 Resolve Ethics Case Study",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-responsible-ai-and-ethics/exercise-05-resolve-ethics-case-study",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-105-responsible-ai-and-ethics/exercise-05-resolve-ethics-case-study"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-106-trust-architecture",
+          "number": 106,
+          "title": "Module 106 \u2014 Trust Architecture",
+          "path": "lessons/mod-106-trust-architecture",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-106-trust-architecture",
+          "exercises": [
+            {
+              "slug": "exercise-01-map-trust-boundaries",
+              "number": 1,
+              "title": "Exercise 01 Map Trust Boundaries",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-trust-architecture/exercise-01-map-trust-boundaries",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-106-trust-architecture/exercise-01-map-trust-boundaries"
+            },
+            {
+              "slug": "exercise-02-design-four-axis-trust-score",
+              "number": 2,
+              "title": "Exercise 02 Design Four Axis Trust Score",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-trust-architecture/exercise-02-design-four-axis-trust-score",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-106-trust-architecture/exercise-02-design-four-axis-trust-score"
+            },
+            {
+              "slug": "exercise-03-author-agent-identity-manifest",
+              "number": 3,
+              "title": "Exercise 03 Author Agent Identity Manifest",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-trust-architecture/exercise-03-author-agent-identity-manifest",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-106-trust-architecture/exercise-03-author-agent-identity-manifest"
+            },
+            {
+              "slug": "exercise-04-design-trust-gate-pipeline",
+              "number": 4,
+              "title": "Exercise 04 Design Trust Gate Pipeline",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-trust-architecture/exercise-04-design-trust-gate-pipeline",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-106-trust-architecture/exercise-04-design-trust-gate-pipeline"
+            },
+            {
+              "slug": "exercise-05-build-vs-buy-trust-architecture",
+              "number": 5,
+              "title": "Exercise 05 Build Vs Buy Trust Architecture",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-trust-architecture/exercise-05-build-vs-buy-trust-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-106-trust-architecture/exercise-05-build-vs-buy-trust-architecture"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-107-ai-security",
+          "number": 107,
+          "title": "Module 107 \u2014 AI Security and Adversarial Defense",
+          "path": "lessons/mod-107-ai-security",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-107-ai-security",
+          "exercises": [
+            {
+              "slug": "exercise-01-threat-model-mitre-atlas",
+              "number": 1,
+              "title": "Exercise 01 Threat Model Mitre Atlas",
+              "learning_path": null,
+              "solutions_path": "modules/mod-107-ai-security/exercise-01-threat-model-mitre-atlas",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-107-ai-security/exercise-01-threat-model-mitre-atlas"
+            },
+            {
+              "slug": "exercise-02-design-red-team-exercise",
+              "number": 2,
+              "title": "Exercise 02 Design Red Team Exercise",
+              "learning_path": null,
+              "solutions_path": "modules/mod-107-ai-security/exercise-02-design-red-team-exercise",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-107-ai-security/exercise-02-design-red-team-exercise"
+            },
+            {
+              "slug": "exercise-03-cao-vs-ciso-boundary-dispute",
+              "number": 3,
+              "title": "Exercise 03 Cao Vs Ciso Boundary Dispute",
+              "learning_path": null,
+              "solutions_path": "modules/mod-107-ai-security/exercise-03-cao-vs-ciso-boundary-dispute",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-107-ai-security/exercise-03-cao-vs-ciso-boundary-dispute"
+            },
+            {
+              "slug": "exercise-04-ai-incident-classification",
+              "number": 4,
+              "title": "Exercise 04 Ai Incident Classification",
+              "learning_path": null,
+              "solutions_path": "modules/mod-107-ai-security/exercise-04-ai-incident-classification",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-107-ai-security/exercise-04-ai-incident-classification"
+            },
+            {
+              "slug": "exercise-05-defense-in-depth-standard",
+              "number": 5,
+              "title": "Exercise 05 Defense In Depth Standard",
+              "learning_path": null,
+              "solutions_path": "modules/mod-107-ai-security/exercise-05-defense-in-depth-standard",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-107-ai-security/exercise-05-defense-in-depth-standard"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-108-audit-ledgers-and-evidence",
+          "number": 108,
+          "title": "Module 108 \u2014 Audit Ledgers and Evidence",
+          "path": "lessons/mod-108-audit-ledgers-and-evidence",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-108-audit-ledgers-and-evidence",
+          "exercises": [
+            {
+              "slug": "exercise-01-design-event-vocabulary",
+              "number": 1,
+              "title": "Exercise 01 Design Event Vocabulary",
+              "learning_path": null,
+              "solutions_path": "modules/mod-108-audit-ledgers-and-evidence/exercise-01-design-event-vocabulary",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-108-audit-ledgers-and-evidence/exercise-01-design-event-vocabulary"
+            },
+            {
+              "slug": "exercise-02-evidence-package-for-regulator",
+              "number": 2,
+              "title": "Exercise 02 Evidence Package For Regulator",
+              "learning_path": null,
+              "solutions_path": "modules/mod-108-audit-ledgers-and-evidence/exercise-02-evidence-package-for-regulator",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-108-audit-ledgers-and-evidence/exercise-02-evidence-package-for-regulator"
+            },
+            {
+              "slug": "exercise-03-design-merkle-ledger-structure",
+              "number": 3,
+              "title": "Exercise 03 Design Merkle Ledger Structure",
+              "learning_path": null,
+              "solutions_path": "modules/mod-108-audit-ledgers-and-evidence/exercise-03-design-merkle-ledger-structure",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-108-audit-ledgers-and-evidence/exercise-03-design-merkle-ledger-structure"
+            },
+            {
+              "slug": "exercise-04-retention-and-chain-of-custody-policy",
+              "number": 4,
+              "title": "Exercise 04 Retention And Chain Of Custody Policy",
+              "learning_path": null,
+              "solutions_path": "modules/mod-108-audit-ledgers-and-evidence/exercise-04-retention-and-chain-of-custody-policy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-108-audit-ledgers-and-evidence/exercise-04-retention-and-chain-of-custody-policy"
+            },
+            {
+              "slug": "exercise-05-build-vs-buy-audit-ledger",
+              "number": 5,
+              "title": "Exercise 05 Build Vs Buy Audit Ledger",
+              "learning_path": null,
+              "solutions_path": "modules/mod-108-audit-ledgers-and-evidence/exercise-05-build-vs-buy-audit-ledger",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-108-audit-ledgers-and-evidence/exercise-05-build-vs-buy-audit-ledger"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-109-compliance-operations",
+          "number": 109,
+          "title": "Module 109 \u2014 Compliance Operations",
+          "path": "lessons/mod-109-compliance-operations",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-109-compliance-operations",
+          "exercises": [
+            {
+              "slug": "exercise-01-map-regulation-to-controls",
+              "number": 1,
+              "title": "Exercise 01 Map Regulation To Controls",
+              "learning_path": null,
+              "solutions_path": "modules/mod-109-compliance-operations/exercise-01-map-regulation-to-controls",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-109-compliance-operations/exercise-01-map-regulation-to-controls"
+            },
+            {
+              "slug": "exercise-02-continuous-evidence-cadence",
+              "number": 2,
+              "title": "Exercise 02 Continuous Evidence Cadence",
+              "learning_path": null,
+              "solutions_path": "modules/mod-109-compliance-operations/exercise-02-continuous-evidence-cadence",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-109-compliance-operations/exercise-02-continuous-evidence-cadence"
+            },
+            {
+              "slug": "exercise-03-control-coverage-gap-analysis",
+              "number": 3,
+              "title": "Exercise 03 Control Coverage Gap Analysis",
+              "learning_path": null,
+              "solutions_path": "modules/mod-109-compliance-operations/exercise-03-control-coverage-gap-analysis",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-109-compliance-operations/exercise-03-control-coverage-gap-analysis"
+            },
+            {
+              "slug": "exercise-04-compliance-automation-framework",
+              "number": 4,
+              "title": "Exercise 04 Compliance Automation Framework",
+              "learning_path": null,
+              "solutions_path": "modules/mod-109-compliance-operations/exercise-04-compliance-automation-framework",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-109-compliance-operations/exercise-04-compliance-automation-framework"
+            },
+            {
+              "slug": "exercise-05-cao-vs-compliance-officer-boundary",
+              "number": 5,
+              "title": "Exercise 05 Cao Vs Compliance Officer Boundary",
+              "learning_path": null,
+              "solutions_path": "modules/mod-109-compliance-operations/exercise-05-cao-vs-compliance-officer-boundary",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-109-compliance-operations/exercise-05-cao-vs-compliance-officer-boundary"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-110-incident-response",
+          "number": 110,
+          "title": "Module 110 \u2014 Incident Response",
+          "path": "lessons/mod-110-incident-response",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-110-incident-response",
+          "exercises": [
+            {
+              "slug": "exercise-01-walk-incident-through-response",
+              "number": 1,
+              "title": "Exercise 01 Walk Incident Through Response",
+              "learning_path": null,
+              "solutions_path": "modules/mod-110-incident-response/exercise-01-walk-incident-through-response",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-110-incident-response/exercise-01-walk-incident-through-response"
+            },
+            {
+              "slug": "exercise-02-design-notification-matrix",
+              "number": 2,
+              "title": "Exercise 02 Design Notification Matrix",
+              "learning_path": null,
+              "solutions_path": "modules/mod-110-incident-response/exercise-02-design-notification-matrix",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-110-incident-response/exercise-02-design-notification-matrix"
+            },
+            {
+              "slug": "exercise-03-tabletop-exercise-design",
+              "number": 3,
+              "title": "Exercise 03 Tabletop Exercise Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-110-incident-response/exercise-03-tabletop-exercise-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-110-incident-response/exercise-03-tabletop-exercise-design"
+            },
+            {
+              "slug": "exercise-04-post-incident-review-template",
+              "number": 4,
+              "title": "Exercise 04 Post Incident Review Template",
+              "learning_path": null,
+              "solutions_path": "modules/mod-110-incident-response/exercise-04-post-incident-review-template",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-110-incident-response/exercise-04-post-incident-review-template"
+            },
+            {
+              "slug": "exercise-05-readiness-assessment",
+              "number": 5,
+              "title": "Exercise 05 Readiness Assessment",
+              "learning_path": null,
+              "solutions_path": "modules/mod-110-incident-response/exercise-05-readiness-assessment",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-110-incident-response/exercise-05-readiness-assessment"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-111-board-reporting",
+          "number": 111,
+          "title": "Module 111 \u2014 Board Reporting and Risk Appetite",
+          "path": "lessons/mod-111-board-reporting",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-111-board-reporting",
+          "exercises": [
+            {
+              "slug": "exercise-01-draft-ai-risk-appetite-statement",
+              "number": 1,
+              "title": "Exercise 01 Draft Ai Risk Appetite Statement",
+              "learning_path": null,
+              "solutions_path": "modules/mod-111-board-reporting/exercise-01-draft-ai-risk-appetite-statement",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-111-board-reporting/exercise-01-draft-ai-risk-appetite-statement"
+            },
+            {
+              "slug": "exercise-02-author-quarterly-board-report",
+              "number": 2,
+              "title": "Exercise 02 Author Quarterly Board Report",
+              "learning_path": null,
+              "solutions_path": "modules/mod-111-board-reporting/exercise-02-author-quarterly-board-report",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-111-board-reporting/exercise-02-author-quarterly-board-report"
+            },
+            {
+              "slug": "exercise-03-design-materiality-framework",
+              "number": 3,
+              "title": "Exercise 03 Design Materiality Framework",
+              "learning_path": null,
+              "solutions_path": "modules/mod-111-board-reporting/exercise-03-design-materiality-framework",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-111-board-reporting/exercise-03-design-materiality-framework"
+            },
+            {
+              "slug": "exercise-04-prepare-for-unexpected-ask",
+              "number": 4,
+              "title": "Exercise 04 Prepare For Unexpected Ask",
+              "learning_path": null,
+              "solutions_path": "modules/mod-111-board-reporting/exercise-04-prepare-for-unexpected-ask",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-111-board-reporting/exercise-04-prepare-for-unexpected-ask"
+            },
+            {
+              "slug": "exercise-05-annual-self-assessment",
+              "number": 5,
+              "title": "Exercise 05 Annual Self Assessment",
+              "learning_path": null,
+              "solutions_path": "modules/mod-111-board-reporting/exercise-05-annual-self-assessment",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-111-board-reporting/exercise-05-annual-self-assessment"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-112-cao-operating-model",
+          "number": 112,
+          "title": "Module 112 \u2014 The CAO Operating Model",
+          "path": "lessons/mod-112-cao-operating-model",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/lessons/mod-112-cao-operating-model",
+          "exercises": [
+            {
+              "slug": "exercise-01-year-one-operating-plan",
+              "number": 1,
+              "title": "Exercise 01 Year One Operating Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-112-cao-operating-model/exercise-01-year-one-operating-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-112-cao-operating-model/exercise-01-year-one-operating-plan"
+            },
+            {
+              "slug": "exercise-02-year-two-program-review",
+              "number": 2,
+              "title": "Exercise 02 Year Two Program Review",
+              "learning_path": null,
+              "solutions_path": "modules/mod-112-cao-operating-model/exercise-02-year-two-program-review",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-112-cao-operating-model/exercise-02-year-two-program-review"
+            },
+            {
+              "slug": "exercise-03-build-cao-calendar",
+              "number": 3,
+              "title": "Exercise 03 Build Cao Calendar",
+              "learning_path": null,
+              "solutions_path": "modules/mod-112-cao-operating-model/exercise-03-build-cao-calendar",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-112-cao-operating-model/exercise-03-build-cao-calendar"
+            },
+            {
+              "slug": "exercise-04-talent-and-succession-strategy",
+              "number": 4,
+              "title": "Exercise 04 Talent And Succession Strategy",
+              "learning_path": null,
+              "solutions_path": "modules/mod-112-cao-operating-model/exercise-04-talent-and-succession-strategy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-112-cao-operating-model/exercise-04-talent-and-succession-strategy"
+            },
+            {
+              "slug": "exercise-05-capstone-year-three-synthesis",
+              "number": 5,
+              "title": "Exercise 05 Capstone Year Three Synthesis",
+              "learning_path": null,
+              "solutions_path": "modules/mod-112-cao-operating-model/exercise-05-capstone-year-three-synthesis",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/modules/mod-112-cao-operating-model/exercise-05-capstone-year-three-synthesis"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
+      "projects": [
+        {
+          "slug": "project-301-stand-up-ai-governance-program",
+          "number": 301,
+          "title": "Capstone 301 \u2014 Stand Up an AI Governance Program for a 250-Person AI SaaS",
+          "learning_path": "projects/project-301-stand-up-ai-governance-program",
+          "solutions_path": "projects/project-301-stand-up-ai-governance-program",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/projects/project-301-stand-up-ai-governance-program",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/projects/project-301-stand-up-ai-governance-program",
+          "docs": [
+            "README.md",
+            "SCENARIO.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-302-eu-ai-act-high-risk-response",
+          "number": 302,
+          "title": "Capstone 302 \u2014 EU AI Act High-Risk Classification Response",
+          "learning_path": "projects/project-302-eu-ai-act-high-risk-response",
+          "solutions_path": "projects/project-302-eu-ai-act-high-risk-response",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/projects/project-302-eu-ai-act-high-risk-response",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/projects/project-302-eu-ai-act-high-risk-response",
+          "docs": [
+            "README.md",
+            "SCENARIO.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-303-mrm-buildout",
+          "number": 303,
+          "title": "Capstone 303 \u2014 Build an MRM Function for AI/ML at a Regional Bank",
+          "learning_path": "projects/project-303-mrm-buildout",
+          "solutions_path": "projects/project-303-mrm-buildout",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/projects/project-303-mrm-buildout",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/projects/project-303-mrm-buildout",
+          "docs": [
+            "README.md",
+            "SCENARIO.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-304-llm-data-leak-response",
+          "number": 304,
+          "title": "Capstone 304 \u2014 LLM Data-Leak Incident Response",
+          "learning_path": "projects/project-304-llm-data-leak-response",
+          "solutions_path": "projects/project-304-llm-data-leak-response",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/projects/project-304-llm-data-leak-response",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/projects/project-304-llm-data-leak-response",
+          "docs": [
+            "README.md",
+            "SCENARIO.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-305-quarterly-board-report",
+          "number": 305,
+          "title": "Capstone 305 \u2014 Quarterly Board AI Risk Report",
+          "learning_path": "projects/project-305-quarterly-board-report",
+          "solutions_path": "projects/project-305-quarterly-board-report",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-learning/blob/main/projects/project-305-quarterly-board-report",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-chief-ai-officer-solutions/blob/main/projects/project-305-quarterly-board-report",
+          "docs": [
+            "README.md",
+            "SCENARIO.md"
+          ],
+          "prerequisites": []
+        }
+      ],
+      "resources": []
     },
     {
       "slug": "engineer",
@@ -5633,6 +6389,17 @@
       ],
       "projects": [
         {
+          "slug": "project-401-transformation-strategy",
+          "number": 401,
+          "title": "Project 401: Enterprise AI Transformation Strategy",
+          "learning_path": null,
+          "solutions_path": "projects/project-401-transformation-strategy",
+          "learning_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-architect-solutions/blob/main/projects/project-401-transformation-strategy",
+          "docs": [],
+          "prerequisites": []
+        },
+        {
           "slug": "project-401-ai-transformation-strategy",
           "number": 401,
           "title": "Project 401: Enterprise AI Transformation Strategy",
@@ -5643,17 +6410,6 @@
           "docs": [
             "README.md"
           ],
-          "prerequisites": []
-        },
-        {
-          "slug": "project-401-transformation-strategy",
-          "number": 401,
-          "title": "Project 401: Enterprise AI Transformation Strategy",
-          "learning_path": null,
-          "solutions_path": "projects/project-401-transformation-strategy",
-          "learning_url": null,
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-architect-solutions/blob/main/projects/project-401-transformation-strategy",
-          "docs": [],
           "prerequisites": []
         },
         {

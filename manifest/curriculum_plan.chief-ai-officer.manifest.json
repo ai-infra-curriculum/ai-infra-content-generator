@@ -1,0 +1,433 @@
+{
+  "schema_version": 1,
+  "role": "chief-ai-officer",
+  "role_title": "Chief Ai Officer Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-CAO-MOD-101-FOUNDATIONS",
+      "label": "Module 101 \u2014 AI Governance Foundations",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-101-foundations/exercise-01-frameworks-crosswalk",
+        "mod-101-foundations/exercise-02-draft-a-governance-charter",
+        "mod-101-foundations/exercise-03-place-the-cao-on-the-org-chart",
+        "mod-101-foundations/exercise-04-stakeholder-map",
+        "mod-101-foundations/exercise-05-operating-model-recommendation-memo"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-101-foundations/exercise-01-frameworks-crosswalk/SOLUTION.md",
+        "modules/mod-101-foundations/exercise-02-draft-a-governance-charter/SOLUTION.md",
+        "modules/mod-101-foundations/exercise-03-place-the-cao-on-the-org-chart/SOLUTION.md",
+        "modules/mod-101-foundations/exercise-04-stakeholder-map/SOLUTION.md",
+        "modules/mod-101-foundations/exercise-05-operating-model-recommendation-memo/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-101-foundations`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-102-REGULATORY-LANDSCAPE",
+      "label": "Module 102 \u2014 Regulatory Landscape",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-102-regulatory-landscape/exercise-01-classify-against-eu-ai-act",
+        "mod-102-regulatory-landscape/exercise-02-multi-framework-obligations-map",
+        "mod-102-regulatory-landscape/exercise-03-article-9-rms-summary",
+        "mod-102-regulatory-landscape/exercise-04-reverse-engineer-regulator-letter",
+        "mod-102-regulatory-landscape/exercise-05-regulatory-monitoring-playbook"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-102-regulatory-landscape/exercise-01-classify-against-eu-ai-act/SOLUTION.md",
+        "modules/mod-102-regulatory-landscape/exercise-02-multi-framework-obligations-map/SOLUTION.md",
+        "modules/mod-102-regulatory-landscape/exercise-03-article-9-rms-summary/SOLUTION.md",
+        "modules/mod-102-regulatory-landscape/exercise-04-reverse-engineer-regulator-letter/SOLUTION.md",
+        "modules/mod-102-regulatory-landscape/exercise-05-regulatory-monitoring-playbook/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-102-regulatory-landscape`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-103-AI-RISK-FRAMEWORKS",
+      "label": "Module 103 \u2014 AI Risk Frameworks",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-103-ai-risk-frameworks/exercise-01-build-an-ai-risk-taxonomy",
+        "mod-103-ai-risk-frameworks/exercise-02-impact-assessment-template",
+        "mod-103-ai-risk-frameworks/exercise-03-measurement-plan",
+        "mod-103-ai-risk-frameworks/exercise-04-risk-treatment-plan",
+        "mod-103-ai-risk-frameworks/exercise-05-end-to-end-loop"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-103-ai-risk-frameworks/exercise-01-build-an-ai-risk-taxonomy/SOLUTION.md",
+        "modules/mod-103-ai-risk-frameworks/exercise-02-impact-assessment-template/SOLUTION.md",
+        "modules/mod-103-ai-risk-frameworks/exercise-03-measurement-plan/SOLUTION.md",
+        "modules/mod-103-ai-risk-frameworks/exercise-04-risk-treatment-plan/SOLUTION.md",
+        "modules/mod-103-ai-risk-frameworks/exercise-05-end-to-end-loop/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-103-ai-risk-frameworks`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-104-MODEL-RISK-MANAGEMENT",
+      "label": "Module 104 \u2014 Model Risk Management",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-104-model-risk-management/exercise-01-tier-five-ml-models",
+        "mod-104-model-risk-management/exercise-02-design-independent-validation",
+        "mod-104-model-risk-management/exercise-03-sr-11-7-inventory-entry-for-llm",
+        "mod-104-model-risk-management/exercise-04-cao-vs-mrm-boundary-dispute",
+        "mod-104-model-risk-management/exercise-05-mrm-outside-banking"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-104-model-risk-management/exercise-01-tier-five-ml-models/SOLUTION.md",
+        "modules/mod-104-model-risk-management/exercise-02-design-independent-validation/SOLUTION.md",
+        "modules/mod-104-model-risk-management/exercise-03-sr-11-7-inventory-entry-for-llm/SOLUTION.md",
+        "modules/mod-104-model-risk-management/exercise-04-cao-vs-mrm-boundary-dispute/SOLUTION.md",
+        "modules/mod-104-model-risk-management/exercise-05-mrm-outside-banking/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-104-model-risk-management`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-105-RESPONSIBLE-AI-AND-ETHICS",
+      "label": "Module 105 \u2014 Responsible AI and Ethics",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-105-responsible-ai-and-ethics/exercise-01-compare-three-ethics-frameworks",
+        "mod-105-responsible-ai-and-ethics/exercise-02-define-bias-metrics",
+        "mod-105-responsible-ai-and-ethics/exercise-03-design-explainability-standard",
+        "mod-105-responsible-ai-and-ethics/exercise-04-build-contestability-process",
+        "mod-105-responsible-ai-and-ethics/exercise-05-resolve-ethics-case-study"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-105-responsible-ai-and-ethics/exercise-01-compare-three-ethics-frameworks/SOLUTION.md",
+        "modules/mod-105-responsible-ai-and-ethics/exercise-02-define-bias-metrics/SOLUTION.md",
+        "modules/mod-105-responsible-ai-and-ethics/exercise-03-design-explainability-standard/SOLUTION.md",
+        "modules/mod-105-responsible-ai-and-ethics/exercise-04-build-contestability-process/SOLUTION.md",
+        "modules/mod-105-responsible-ai-and-ethics/exercise-05-resolve-ethics-case-study/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-105-responsible-ai-and-ethics`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-106-TRUST-ARCHITECTURE",
+      "label": "Module 106 \u2014 Trust Architecture",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-106-trust-architecture/exercise-01-map-trust-boundaries",
+        "mod-106-trust-architecture/exercise-02-design-four-axis-trust-score",
+        "mod-106-trust-architecture/exercise-03-author-agent-identity-manifest",
+        "mod-106-trust-architecture/exercise-04-design-trust-gate-pipeline",
+        "mod-106-trust-architecture/exercise-05-build-vs-buy-trust-architecture"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-106-trust-architecture/exercise-01-map-trust-boundaries/SOLUTION.md",
+        "modules/mod-106-trust-architecture/exercise-02-design-four-axis-trust-score/SOLUTION.md",
+        "modules/mod-106-trust-architecture/exercise-03-author-agent-identity-manifest/SOLUTION.md",
+        "modules/mod-106-trust-architecture/exercise-04-design-trust-gate-pipeline/SOLUTION.md",
+        "modules/mod-106-trust-architecture/exercise-05-build-vs-buy-trust-architecture/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-106-trust-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-107-AI-SECURITY",
+      "label": "Module 107 \u2014 AI Security and Adversarial Defense",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-107-ai-security/exercise-01-threat-model-mitre-atlas",
+        "mod-107-ai-security/exercise-02-design-red-team-exercise",
+        "mod-107-ai-security/exercise-03-cao-vs-ciso-boundary-dispute",
+        "mod-107-ai-security/exercise-04-ai-incident-classification",
+        "mod-107-ai-security/exercise-05-defense-in-depth-standard"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-107-ai-security/exercise-01-threat-model-mitre-atlas/SOLUTION.md",
+        "modules/mod-107-ai-security/exercise-02-design-red-team-exercise/SOLUTION.md",
+        "modules/mod-107-ai-security/exercise-03-cao-vs-ciso-boundary-dispute/SOLUTION.md",
+        "modules/mod-107-ai-security/exercise-04-ai-incident-classification/SOLUTION.md",
+        "modules/mod-107-ai-security/exercise-05-defense-in-depth-standard/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-107-ai-security`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-108-AUDIT-LEDGERS-AND-EVIDENCE",
+      "label": "Module 108 \u2014 Audit Ledgers and Evidence",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-108-audit-ledgers-and-evidence/exercise-01-design-event-vocabulary",
+        "mod-108-audit-ledgers-and-evidence/exercise-02-evidence-package-for-regulator",
+        "mod-108-audit-ledgers-and-evidence/exercise-03-design-merkle-ledger-structure",
+        "mod-108-audit-ledgers-and-evidence/exercise-04-retention-and-chain-of-custody-policy",
+        "mod-108-audit-ledgers-and-evidence/exercise-05-build-vs-buy-audit-ledger"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-108-audit-ledgers-and-evidence/exercise-01-design-event-vocabulary/SOLUTION.md",
+        "modules/mod-108-audit-ledgers-and-evidence/exercise-02-evidence-package-for-regulator/SOLUTION.md",
+        "modules/mod-108-audit-ledgers-and-evidence/exercise-03-design-merkle-ledger-structure/SOLUTION.md",
+        "modules/mod-108-audit-ledgers-and-evidence/exercise-04-retention-and-chain-of-custody-policy/SOLUTION.md",
+        "modules/mod-108-audit-ledgers-and-evidence/exercise-05-build-vs-buy-audit-ledger/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-108-audit-ledgers-and-evidence`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-109-COMPLIANCE-OPERATIONS",
+      "label": "Module 109 \u2014 Compliance Operations",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-109-compliance-operations/exercise-01-map-regulation-to-controls",
+        "mod-109-compliance-operations/exercise-02-continuous-evidence-cadence",
+        "mod-109-compliance-operations/exercise-03-control-coverage-gap-analysis",
+        "mod-109-compliance-operations/exercise-04-compliance-automation-framework",
+        "mod-109-compliance-operations/exercise-05-cao-vs-compliance-officer-boundary"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-109-compliance-operations/exercise-01-map-regulation-to-controls/SOLUTION.md",
+        "modules/mod-109-compliance-operations/exercise-02-continuous-evidence-cadence/SOLUTION.md",
+        "modules/mod-109-compliance-operations/exercise-03-control-coverage-gap-analysis/SOLUTION.md",
+        "modules/mod-109-compliance-operations/exercise-04-compliance-automation-framework/SOLUTION.md",
+        "modules/mod-109-compliance-operations/exercise-05-cao-vs-compliance-officer-boundary/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-109-compliance-operations`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-110-INCIDENT-RESPONSE",
+      "label": "Module 110 \u2014 Incident Response",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-110-incident-response/exercise-01-walk-incident-through-response",
+        "mod-110-incident-response/exercise-02-design-notification-matrix",
+        "mod-110-incident-response/exercise-03-tabletop-exercise-design",
+        "mod-110-incident-response/exercise-04-post-incident-review-template",
+        "mod-110-incident-response/exercise-05-readiness-assessment"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-110-incident-response/exercise-01-walk-incident-through-response/SOLUTION.md",
+        "modules/mod-110-incident-response/exercise-02-design-notification-matrix/SOLUTION.md",
+        "modules/mod-110-incident-response/exercise-03-tabletop-exercise-design/SOLUTION.md",
+        "modules/mod-110-incident-response/exercise-04-post-incident-review-template/SOLUTION.md",
+        "modules/mod-110-incident-response/exercise-05-readiness-assessment/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-110-incident-response`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-111-BOARD-REPORTING",
+      "label": "Module 111 \u2014 Board Reporting and Risk Appetite",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-111-board-reporting/exercise-01-draft-ai-risk-appetite-statement",
+        "mod-111-board-reporting/exercise-02-author-quarterly-board-report",
+        "mod-111-board-reporting/exercise-03-design-materiality-framework",
+        "mod-111-board-reporting/exercise-04-prepare-for-unexpected-ask",
+        "mod-111-board-reporting/exercise-05-annual-self-assessment"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-111-board-reporting/exercise-01-draft-ai-risk-appetite-statement/SOLUTION.md",
+        "modules/mod-111-board-reporting/exercise-02-author-quarterly-board-report/SOLUTION.md",
+        "modules/mod-111-board-reporting/exercise-03-design-materiality-framework/SOLUTION.md",
+        "modules/mod-111-board-reporting/exercise-04-prepare-for-unexpected-ask/SOLUTION.md",
+        "modules/mod-111-board-reporting/exercise-05-annual-self-assessment/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-111-board-reporting`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-MOD-112-CAO-OPERATING-MODEL",
+      "label": "Module 112 \u2014 The CAO Operating Model",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-112-cao-operating-model/exercise-01-year-one-operating-plan",
+        "mod-112-cao-operating-model/exercise-02-year-two-program-review",
+        "mod-112-cao-operating-model/exercise-03-build-cao-calendar",
+        "mod-112-cao-operating-model/exercise-04-talent-and-succession-strategy",
+        "mod-112-cao-operating-model/exercise-05-capstone-year-three-synthesis"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-112-cao-operating-model/exercise-01-year-one-operating-plan/SOLUTION.md",
+        "modules/mod-112-cao-operating-model/exercise-02-year-two-program-review/SOLUTION.md",
+        "modules/mod-112-cao-operating-model/exercise-03-build-cao-calendar/SOLUTION.md",
+        "modules/mod-112-cao-operating-model/exercise-04-talent-and-succession-strategy/SOLUTION.md",
+        "modules/mod-112-cao-operating-model/exercise-05-capstone-year-three-synthesis/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-112-cao-operating-model`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-PROJECT-301-STAND-UP-AI-GOVERNANCE-PROGRAM",
+      "label": "Capstone 301 \u2014 Stand Up an AI Governance Program for a 250-Person AI SaaS",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-301-stand-up-ai-governance-program"
+      ],
+      "solutions": [
+        "projects/project-301-stand-up-ai-governance-program/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-301-stand-up-ai-governance-program`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-PROJECT-302-EU-AI-ACT-HIGH-RISK-RESPONSE",
+      "label": "Capstone 302 \u2014 EU AI Act High-Risk Classification Response",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-302-eu-ai-act-high-risk-response"
+      ],
+      "solutions": [
+        "projects/project-302-eu-ai-act-high-risk-response/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-302-eu-ai-act-high-risk-response`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-PROJECT-303-MRM-BUILDOUT",
+      "label": "Capstone 303 \u2014 Build an MRM Function for AI/ML at a Regional Bank",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-303-mrm-buildout"
+      ],
+      "solutions": [
+        "projects/project-303-mrm-buildout/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-303-mrm-buildout`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-PROJECT-304-LLM-DATA-LEAK-RESPONSE",
+      "label": "Capstone 304 \u2014 LLM Data-Leak Incident Response",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-304-llm-data-leak-response"
+      ],
+      "solutions": [
+        "projects/project-304-llm-data-leak-response/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-304-llm-data-leak-response`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-CAO-PROJECT-305-QUARTERLY-BOARD-REPORT",
+      "label": "Capstone 305 \u2014 Quarterly Board AI Risk Report",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-305-quarterly-board-report"
+      ],
+      "solutions": [
+        "projects/project-305-quarterly-board-report/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-305-quarterly-board-report`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}
