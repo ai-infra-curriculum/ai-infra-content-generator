@@ -85,10 +85,27 @@ _URL_TRAILING_STRIP = '.,;:!?"\'}'
 _RESERVED_TLDS = (".example", ".test", ".invalid", ".localhost")
 _RESERVED_EXAMPLE_HOSTS = frozenset(
     {"example.com", "example.net", "example.org",
-     "localhost", "0.0.0.0", "127.0.0.1"}
+     "localhost", "0.0.0.0", "127.0.0.1",
+     # Docker desktop & docker-compose default-bridge aliases.
+     "host.docker.internal", "gateway.docker.internal"}
 )
 _PLACEHOLDER_HOST_RE = re.compile(
     r"^(your|my|some|sample|placeholder)[-.]", re.IGNORECASE
+)
+# Kubernetes service DNS — never reachable from a public link checker.
+# Covers the canonical fully-qualified form (svc.cluster.local), the
+# truncated within-namespace form (.svc), and the search-path-resolved
+# form (.cluster.local).
+_K8S_DNS_SUFFIXES = (
+    ".svc.cluster.local",
+    ".cluster.local",
+    ".svc",
+)
+# Template placeholders that survive into URL text — $VAR, ${VAR},
+# <PLACEHOLDER>, {{ var }}. If any of these tokens appears between the
+# scheme and the next "/" we know the URL was never meant to be fetched.
+_PLACEHOLDER_URL_RE = re.compile(
+    r"^https?://[^/]*(?:\$\{?[A-Z_]|<[A-Za-z_]|\{\{)"
 )
 
 DEFAULT_LINK_TIMEOUT = 8.0
@@ -104,6 +121,26 @@ class FreshnessError(RuntimeError):
     """Raised when a freshness audit cannot proceed."""
 
 
+# Substrings that mean "the hostname does not resolve". These are
+# almost always template placeholders / k8s service shortnames /
+# docker-compose service names that survived into prose URLs — never
+# real broken citations. The audit's collection-time _is_example_url
+# catches most of them, but the long tail (e.g. ``<svc>.<namespace>``
+# k8s shorthand) only fails at fetch time. Treating DNS-failure as
+# "not broken" silently drops those.
+_DNS_FAILURE_MARKERS = (
+    "name or service not known",
+    "nodename nor servname",
+    "getaddrinfo failed",
+    "temporary failure in name resolution",
+    "no address associated with hostname",
+    "[errno -2]",
+    "[errno -3]",
+    "[errno 8]",
+    "[errno 11001]",
+)
+
+
 @dataclass(frozen=True)
 class LinkFinding:
     file_path: str
@@ -112,7 +149,15 @@ class LinkFinding:
     reason: str
 
     def is_broken(self) -> bool:
-        return self.status is None or self.status >= 400 or self.status in {301, 308}
+        if self.status is None:
+            # status=None means the fetch never got a response.
+            # Distinguish DNS-resolution failures (placeholder URLs)
+            # from real network errors (server down / timeout).
+            reason_lower = (self.reason or "").lower()
+            if any(marker in reason_lower for marker in _DNS_FAILURE_MARKERS):
+                return False
+            return True
+        return self.status >= 400 or self.status in {301, 308}
 
 
 # ---------------------------------------------------------------------------
@@ -622,21 +667,61 @@ def _is_example_url(url: str) -> bool:
     """True for URLs that are reserved / example / placeholder hosts.
 
     These show up everywhere in curriculum code samples
-    (``http://localhost:8000/api``, ``https://your-api.example.com``)
+    (``http://localhost:8000/api``, ``https://your-api.example.com``,
+    ``http://${INGRESS_IP}/health``, ``http://backend-service:8080``)
     and the audit should never flag them as broken external links —
     they're teaching scaffolding, not real citations.
+
+    Coverage:
+      * RFC 2606 reserved TLDs (.example, .test, .invalid, .localhost)
+        and the example.com/.net/.org domains
+      * localhost / 0.0.0.0 / 127.0.0.1 / docker host aliases
+      * Private + link-local IPv4 ranges (10/8, 192.168/16, 172.16/12,
+        169.254/16)
+      * Hosts whose name starts with ``your-``, ``my-``, ``some-``,
+        ``sample-``, ``placeholder-``
+      * Kubernetes / docker-compose service DNS:
+        - any *.svc.cluster.local / *.cluster.local / *.svc
+        - any host with no dot (bare service name like ``db`` or
+          ``backend-service`` only used inside a compose network)
+      * URLs containing un-substituted template tokens: ``$VAR``,
+        ``${VAR}``, ``<PLACEHOLDER>``, ``{{ var }}``
+      * URLs with empty hostnames (``http://:8000/...``)
     """
     if not url.startswith(("http://", "https://")):
         return False
-    host = re.sub(r"^https?://", "", url, count=1).split("/", 1)[0].lower()
-    host = host.split(":", 1)[0]  # strip port
-    if not host:
+    # Template tokens between scheme and path → never a real URL.
+    if _PLACEHOLDER_URL_RE.match(url):
+        return True
+    # Use urllib.parse so userinfo (admin:admin@), ports, and IPv6 are
+    # handled correctly. The old split-based parser misread
+    # ``http://admin:admin@localhost:3000`` as host=``admin``.
+    try:
+        from urllib.parse import urlparse
+
+        parsed = urlparse(url)
+    except ValueError:
         return False
+    host = (parsed.hostname or "").lower()
+    if not host:
+        # Empty hostname means the URL is unmistakably a stub
+        # (``http://:8000/path``). Never reachable.
+        return True
     if host in _RESERVED_EXAMPLE_HOSTS:
         return True
     if any(host == tld[1:] or host.endswith(tld) for tld in _RESERVED_TLDS):
         return True
+    if any(host.endswith(suffix) for suffix in _K8S_DNS_SUFFIXES):
+        return True
     if _PLACEHOLDER_HOST_RE.match(host):
+        return True
+    # Bare hostnames (no dot) can never be reached from a public
+    # link checker. Curriculum code samples use them constantly for
+    # docker-compose service names (``db``, ``api``,
+    # ``backend-service``) and k8s service short names.
+    # IPv4 numeric literals always contain dots (10.0.0.1), so this
+    # rule never catches a real address.
+    if "." not in host:
         return True
     # Private + link-local IPv4 ranges — curriculum code samples often
     # use these as stand-in addresses. Never reachable from the audit
