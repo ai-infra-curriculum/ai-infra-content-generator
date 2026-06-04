@@ -381,6 +381,81 @@ def summarize_track_for_prompt(track: Track, *, max_titles: int = 12) -> str:
     return "\n".join(lines)
 
 
+@dataclass(frozen=True)
+class StaleCanonicalEntry:
+    """A registered canonical successor whose URL is now broken or gone."""
+
+    source_name: str
+    old_url: str
+    new_url: str
+    status: int | None
+    note: str
+
+    def render(self) -> str:
+        status = f"HTTP {self.status}" if self.status else "no response"
+        return (
+            f"- `{self.source_name}`: `{self.old_url}` → `{self.new_url}` "
+            f"({status}{': ' + self.note if self.note else ''})"
+        )
+
+
+def audit_canonical_sources(
+    registry: CanonicalSourceRegistry,
+    *,
+    http_fetcher=None,
+) -> list[StaleCanonicalEntry]:
+    """Probe every registered ``successors[*]`` URL and flag dead ones.
+
+    Uses the same HEAD-then-GET classification as the link-refresh
+    resolver — only 404/410/451/no-response count as stale. 401/403/429
+    are auth-walled / rate-limited and do NOT trigger a stale flag.
+
+    ``http_fetcher`` is the same fetcher signature used by link-refresh
+    (injectable for tests).
+    """
+    if http_fetcher is None:
+        from .link_refresh import default_http_fetcher
+
+        http_fetcher = default_http_fetcher
+
+    from .link_refresh import (
+        _UNAMBIGUOUSLY_BROKEN_STATUSES,
+        _is_redirect,
+        _is_success,
+    )
+
+    stale: list[StaleCanonicalEntry] = []
+    for source in registry.sources:
+        for old_url, new_url in source.successors.items():
+            # Skip non-HTTP canonicals (oci://, git://) — probing them
+            # would need scheme-specific clients; they don't rot the
+            # same way.
+            if not new_url.startswith(("http://", "https://")):
+                continue
+
+            head = http_fetcher(new_url, "HEAD")
+            if _is_success(head.status) or _is_redirect(head.status):
+                continue
+            # Confirm with GET — some servers reject HEAD.
+            get = http_fetcher(new_url, "GET")
+            if _is_success(get.status) or _is_redirect(get.status):
+                continue
+
+            final_status = get.status if get.status is not None else head.status
+            note = get.error or head.error
+            if final_status in _UNAMBIGUOUSLY_BROKEN_STATUSES or final_status is None:
+                stale.append(
+                    StaleCanonicalEntry(
+                        source_name=source.name,
+                        old_url=old_url,
+                        new_url=new_url,
+                        status=final_status,
+                        note=note,
+                    )
+                )
+    return stale
+
+
 def summarize_manifest_for_prompt(
     manifest: CurriculumManifest, *, only_track_slug: str | None = None
 ) -> str:

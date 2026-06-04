@@ -13,9 +13,22 @@ from typing import Any
 from .agent_cli import AgentLimitReached, retry_after_has_passed
 from .audit import audit_repo
 from .generator import GenerationNotConfigured, generate_from_plan
+from .manifest import (
+    ManifestError,
+    load_curriculum_manifest,
+    summarize_manifest_for_prompt,
+)
 from .org_config import OrgManifest, RoleConfig, state_dir_for_manifest
 from .planner import plan_from_audit
 from .state import read_state, utc_now, write_json
+
+# Path to the structural curriculum manifest, relative to the
+# content-generator repo root. Used for grounding research prompts in
+# what's already covered so the research agent has continuity to defend
+# against rather than rediscovering coverage every cycle.
+_CURRICULUM_MANIFEST_PATH = (
+    Path(__file__).resolve().parent.parent.parent / "manifest" / "curriculum.manifest.json"
+)
 
 ORG_QUEUE = "work-queue.json"
 ORG_RESEARCH_PLAN = "job-research-plan.json"
@@ -1729,6 +1742,59 @@ def generate_supplemental_packet(
     return report
 
 
+def _existing_curriculum_section(role: RoleConfig) -> str:
+    """Compact summary of the role's existing modules / projects.
+
+    Pulled from the structural curriculum manifest so the research agent
+    starts grounded in coverage that already exists. Falls back to a
+    short note when the manifest hasn't been built yet — the prompt is
+    still useful without it, just less specific.
+    """
+    if not _CURRICULUM_MANIFEST_PATH.exists():
+        return (
+            "## Existing curriculum to build on (do not duplicate)\n\n"
+            "_(curriculum.manifest.json not built yet — assume the role already has the modules and projects listed in its `curriculum-plan.json`)_"
+        )
+    try:
+        cur = load_curriculum_manifest(_CURRICULUM_MANIFEST_PATH)
+    except ManifestError:
+        return (
+            "## Existing curriculum to build on (do not duplicate)\n\n"
+            "_(curriculum.manifest.json failed to load — fall back to `curriculum-plan.json`)_"
+        )
+    summary = summarize_manifest_for_prompt(cur, only_track_slug=role.id)
+    return (
+        "## Existing curriculum to build on (do not duplicate)\n\n"
+        "Treat every module / exercise / project below as **already covered**. "
+        "Propose deltas only when the job market has materially shifted "
+        "(see Continuity bias).\n\n"
+        f"{summary}"
+    )
+
+
+def _continuity_bias_section(manifest: OrgManifest) -> str:
+    """Codify the 'continuity over novelty' policy in the prompt itself.
+
+    The author of the curriculum explicitly does NOT want massive drift
+    cycle-to-cycle. Encode that here so every research agent sees the
+    same instructions, and the validators in research.py can hold the
+    line when the prompt drifts.
+    """
+    return (
+        "## Continuity bias (READ THIS)\n\n"
+        "The curriculum is mature and the cohort is mid-flight. "
+        "**Default to no change.** Propose net-new content only when ALL of:\n\n"
+        "- ≥ 3 distinct job postings from the last 90 days cite a requirement that the existing curriculum does NOT cover, AND\n"
+        "- The requirement frequency is ≥ 0.30 (i.e., shows up in ≥ 30% of sampled postings), AND\n"
+        "- No existing module / exercise / project can be incrementally extended to cover it.\n\n"
+        "When in doubt, prefer **adding an exercise to an existing module** over **creating a new module**. "
+        "Prefer **citing existing content** over **proposing new content**. "
+        "Removals are out of scope for this packet — open a separate proposal if you believe a requirement is no longer relevant.\n\n"
+        "Deltas proposing **> 20% additions** or **> 10% removals** in one cycle will be auto-flagged "
+        "`requires_explicit_approval: true` and routed to human review. Pad them with weak postings to clear the threshold and you waste a cycle.\n"
+    )
+
+
 def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -> str:
     hierarchy = "\n".join(
         f"- level {item.level}: {item.title} (`{item.learning_repo}`)" for item in manifest.roles
@@ -1736,6 +1802,8 @@ def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -
     return (
         f"# Job Requirements Research Packet - {role.title} - {month}\n\n"
         f"Preferred content agent: {content_generation_label(manifest)}.\n\n"
+        f"{_continuity_bias_section(manifest)}\n"
+        f"{_existing_curriculum_section(role)}\n\n"
         "## Goal\n\n"
         f"Research current job postings for `{role.title}` and update "
         f"`{role.learning_repo}` requirements without duplicating lower-level coverage.\n\n"
