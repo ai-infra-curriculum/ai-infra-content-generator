@@ -1795,30 +1795,84 @@ def _continuity_bias_section(manifest: OrgManifest) -> str:
     )
 
 
-def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -> str:
-    hierarchy = "\n".join(
-        f"- level {item.level}: {item.title} (`{item.learning_repo}`)" for item in manifest.roles
-    )
+def _v2_output_contract_section(role: RoleConfig, month: str) -> str:
+    """Output contract for canary roles using the new curriculum-plan v2 manifest.
+
+    Routed via :data:`CANARY_ROLES_NEW_FORMAT` in ``research.py``. The
+    agent emits a single delta file at
+    ``.aicg/curriculum-plan-delta-v2.json``; ``research_apply`` validates
+    it against ``manifest/curriculum_plan.<role>.manifest.json`` in the
+    content-generator repo (NOT the legacy ``curriculum-plan.json``).
+    """
     return (
-        f"# Job Requirements Research Packet - {role.title} - {month}\n\n"
-        f"Preferred content agent: {content_generation_label(manifest)}.\n\n"
-        f"{_continuity_bias_section(manifest)}\n"
-        f"{_existing_curriculum_section(role)}\n\n"
-        "## Goal\n\n"
-        f"Research current job postings for `{role.title}` and update "
-        f"`{role.learning_repo}` requirements without duplicating lower-level coverage.\n\n"
-        "## Research Requirements\n\n"
-        f"- Analyze at least {manifest.research.get('minimum_postings_per_role', 25)} relevant postings.\n"
-        f"- Prefer postings from the last {manifest.research.get('source_window_days', 45)} days.\n"
-        "- Capture employer, title, URL, date observed, location, and requirements.\n"
-        "- Store raw normalized findings in `.aicg/job-requirements.json`.\n"
-        "- Update `JOB_REQUIREMENTS.md` with requirement coverage links.\n\n"
-        "## Ownership Rule\n\n"
-        "If a requirement belongs to multiple roles, assign the primary coverage to the "
-        "lowest-level role where it is genuinely required. Higher-level roles should link "
-        "to that owner unless they need different depth, architecture context, or leadership context.\n\n"
-        "## Role Hierarchy\n\n"
-        f"{hierarchy}\n\n"
+        "## Output Contract (curriculum-plan v2)\n\n"
+        "Write exactly these files inside the learning repo (paths relative to the repo root):\n\n"
+        "1. `JOB_REQUIREMENTS.md` — grouped requirements, posting evidence, curriculum links, external resources for out-of-scope items.\n"
+        "2. `.aicg/job-requirements.json` — machine-readable requirements, evidence, owner role, coverage path, status.\n"
+        "3. `.aicg/curriculum-plan-delta-v2.json` — *proposed* delta against the existing per-role manifest. Operates on the requirement IDs already listed in the **Existing curriculum** section above. Use this schema:\n\n"
+        "```jsonc\n"
+        "{\n"
+        '  "schema_version": 1,\n'
+        f'  "role": "{role.id}",\n'
+        f'  "month": "{month}",\n'
+        '  "rationale": "One paragraph: what specific market shift in the last 90 days drives every item below.",\n'
+        '  "research_window": {\n'
+        '    "window_start": "YYYY-MM-DD",\n'
+        '    "window_end":   "YYYY-MM-DD",\n'
+        '    "postings_sampled": 47,\n'
+        '    "last_refreshed": "YYYY-MM-DD",\n'
+        '    "sources": [{"name": "linkedin", "count": 22}]\n'
+        '  },\n'
+        '  "additions": [\n'
+        '    {\n'
+        '      "rationale": "Why this requirement, why now",\n'
+        '      "requirement": {\n'
+        '        "id": "REQ-<ROLE-CODE>-<SLUG>",\n'
+        '        "label": "Short human label",\n'
+        '        "frequency": 0.34,\n'
+        '        "provenance": "research",\n'
+        '        "requires_confirmation": false,\n'
+        '        "evidence": [\n'
+        '          {"posting_id": "p1", "phrase": "...", "employer": "...", "url": "...", "date_observed": "YYYY-MM-DD"},\n'
+        '          {"posting_id": "p2", "phrase": "..."},\n'
+        '          {"posting_id": "p3", "phrase": "..."}\n'
+        '        ],\n'
+        '        "exercises": [], "projects": [], "solutions": [], "tests": [],\n'
+        '        "coverage_status": "missing"\n'
+        '      }\n'
+        '    }\n'
+        '  ],\n'
+        '  "updates": [\n'
+        '    {\n'
+        '      "id": "REQ-<ROLE-CODE>-EXISTING",\n'
+        '      "frequency": 0.78,\n'
+        '      "evidence_add": [...],\n'
+        '      "exercises_add": ["mod-006/exercise-02-helm-chart"],\n'
+        '      "notes": "Bumped frequency from baseline due to higher prevalence in this window."\n'
+        '    }\n'
+        '  ],\n'
+        '  "removals": [\n'
+        '    {"id": "REQ-<ROLE-CODE>-OBSOLETE", "migration_note": "Why this is no longer relevant — required for high-frequency removals."}\n'
+        '  ]\n'
+        "}\n"
+        "```\n\n"
+        "Validator rules (enforced mechanically by `aicg org plan-delta-apply`):\n\n"
+        f"- Each addition must carry **≥ 3 evidence items**\n"
+        f"- Each addition must have **frequency ≥ 0.30**\n"
+        "- Each addition must have **provenance: \"research\"**\n"
+        "- Updates / removals must reference IDs that exist in the **Existing curriculum** section\n"
+        "- Removals of high-frequency (> 0.50) requirements require a `migration_note`\n"
+        "- Deltas with > 20% additions or > 10% removals auto-flag `requires_explicit_approval: true`\n\n"
+        "**The expected steady-state output is `additions: []`, `updates: []`, `removals: []`** "
+        "with a rationale saying \"market unchanged this cycle.\" "
+        "Do NOT pad with weak postings to clear thresholds — empty deltas are correct.\n\n"
+        "Do NOT edit `CURRICULUM.md`, `CURRICULUM_INDEX.md`, `README.md`, or `VERSIONS.md` directly — those regenerate from the merged manifest.\n"
+    )
+
+
+def _legacy_output_contract_section() -> str:
+    """The legacy output-contract block for non-canary roles."""
+    return (
         "## Output Contract\n\n"
         "Write exactly these files inside the learning repo (paths are relative to the repo root):\n\n"
         "1. `JOB_REQUIREMENTS.md` — grouped requirements, posting evidence, curriculum links, and external resources for out-of-scope items.\n"
@@ -1856,6 +1910,40 @@ def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -
         "```\n\n"
         "Every item MUST carry an `evidence` array citing at least 3 distinct job postings from the last 90 days that demonstrate the gap. Items with fewer citations get rejected mechanically; do not pad with low-quality postings. PREFER ZERO ADDITIONS over weakly-justified ones — empty arrays are the expected output when nothing has materially shifted. If a requirement is already covered at a lower level, link to it in `JOB_REQUIREMENTS.md` and do NOT add it.\n\n"
         "Do NOT edit `CURRICULUM.md`, `CURRICULUM_INDEX.md`, `README.md`, or `VERSIONS.md` directly — the runner regenerates those from the merged plan. Mark unresolved claims with `<!-- needs-research: ... -->`.\n"
+    )
+
+
+def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -> str:
+    from .research import CANARY_ROLES_NEW_FORMAT
+
+    hierarchy = "\n".join(
+        f"- level {item.level}: {item.title} (`{item.learning_repo}`)" for item in manifest.roles
+    )
+    if role.id in CANARY_ROLES_NEW_FORMAT:
+        output_contract = _v2_output_contract_section(role, month)
+    else:
+        output_contract = _legacy_output_contract_section()
+    return (
+        f"# Job Requirements Research Packet - {role.title} - {month}\n\n"
+        f"Preferred content agent: {content_generation_label(manifest)}.\n\n"
+        f"{_continuity_bias_section(manifest)}\n"
+        f"{_existing_curriculum_section(role)}\n\n"
+        "## Goal\n\n"
+        f"Research current job postings for `{role.title}` and update "
+        f"`{role.learning_repo}` requirements without duplicating lower-level coverage.\n\n"
+        "## Research Requirements\n\n"
+        f"- Analyze at least {manifest.research.get('minimum_postings_per_role', 25)} relevant postings.\n"
+        f"- Prefer postings from the last {manifest.research.get('source_window_days', 45)} days.\n"
+        "- Capture employer, title, URL, date observed, location, and requirements.\n"
+        "- Store raw normalized findings in `.aicg/job-requirements.json`.\n"
+        "- Update `JOB_REQUIREMENTS.md` with requirement coverage links.\n\n"
+        "## Ownership Rule\n\n"
+        "If a requirement belongs to multiple roles, assign the primary coverage to the "
+        "lowest-level role where it is genuinely required. Higher-level roles should link "
+        "to that owner unless they need different depth, architecture context, or leadership context.\n\n"
+        "## Role Hierarchy\n\n"
+        f"{hierarchy}\n\n"
+        f"{output_contract}"
     )
 
 
