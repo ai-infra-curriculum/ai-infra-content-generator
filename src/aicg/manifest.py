@@ -353,14 +353,45 @@ def _host_of(url: str) -> str:
 # ---------- prompt-summary helpers ----------
 
 
-def summarize_track_for_prompt(track: Track, *, max_titles: int = 12) -> str:
+def summarize_track_for_prompt(
+    track: Track, *, max_titles: int = 12, brief: bool = False
+) -> str:
     """Compact, prompt-friendly inventory of a single track.
 
     Designed to be included in a research prompt so the agent grounds
     proposals in what's already covered. Keeps each line short enough
     that even the full 12-track summary fits in a reasonable prompt
     budget.
+
+    ``brief=True`` produces a one-line-per-thing inventory (slugs
+    only, no exercise counts, no projects breakdown) for use in
+    prompts that don't consume the per-role manifest — the agent just
+    needs enough signal to avoid proposing duplicates.
     """
+    if brief:
+        lines = [f"### {track.display_name} (`{track.slug}`)"]
+        if track.modules:
+            slugs = ", ".join(
+                f"`{m.slug}`" for m in track.modules[:max_titles]
+            )
+            suffix = (
+                f" (+{len(track.modules) - max_titles} more)"
+                if len(track.modules) > max_titles
+                else ""
+            )
+            lines.append(f"Modules: {slugs}{suffix}")
+        if track.projects:
+            slugs = ", ".join(
+                f"`{p.slug}`" for p in track.projects[:max_titles]
+            )
+            suffix = (
+                f" (+{len(track.projects) - max_titles} more)"
+                if len(track.projects) > max_titles
+                else ""
+            )
+            lines.append(f"Projects: {slugs}{suffix}")
+        return "\n".join(lines)
+
     lines: list[str] = [
         f"## {track.display_name} (level {track.level}, slug `{track.slug}`)"
     ]
@@ -457,18 +488,33 @@ def audit_canonical_sources(
 
 
 def summarize_manifest_for_prompt(
-    manifest: CurriculumManifest, *, only_track_slug: str | None = None
+    manifest: CurriculumManifest,
+    *,
+    only_track_slug: str | None = None,
+    brief: bool = False,
 ) -> str:
     """Whole-curriculum summary suitable for embedding in research prompts.
 
     When ``only_track_slug`` is provided, returns just that track's
     summary plus a one-line index of sibling tracks — the most common
     use case from the research pipeline (per-role prompt).
+
+    ``brief=True`` produces a much smaller summary (slugs only) for
+    prompts that don't consume the per-role manifest. Saves ~50-70%
+    of the token cost when the agent only needs duplicate-avoidance
+    signal, not full hierarchy detail.
     """
     if only_track_slug is not None:
         target = manifest.track(only_track_slug)
         if target is None:
             return f"(no track matched `{only_track_slug}`)"
+        if brief:
+            # Skip the sibling-tracks index too — pure noise for the
+            # brief code path (non-canary roles).
+            return (
+                f"# Existing curriculum — `{only_track_slug}`\n\n"
+                f"{summarize_track_for_prompt(target, brief=True)}\n"
+            )
         sibling_index = "Sibling tracks: " + ", ".join(
             f"{t.slug} (L{t.level})" for t in manifest.tracks if t.slug != only_track_slug
         )
@@ -484,5 +530,5 @@ def summarize_manifest_for_prompt(
         f"{manifest.total_projects} projects)\n"
     ]
     for track in sorted(manifest.tracks, key=lambda t: (t.level, t.slug)):
-        parts.append(summarize_track_for_prompt(track))
+        parts.append(summarize_track_for_prompt(track, brief=brief))
     return "\n\n".join(parts)

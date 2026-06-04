@@ -68,6 +68,19 @@ _PER_ROLE_MANIFEST_RELATIVE = "manifest/curriculum_plan.{role}.manifest.json"
 _LABEL_NEW_FORMAT = "curriculum-plan-v2"
 _LABEL_REQUIRES_APPROVAL = "requires-explicit-approval"
 
+# Skip-if-open-PR token-conservation: if a role already has an open
+# research-proposal PR from a previous cycle, the human hasn't reviewed
+# the prior work. Running again would waste a full agent invocation
+# AND compete for the reviewer's attention. Skip with status
+# ``skipped_pending_review`` until the existing PR is merged or closed.
+#
+# Branch prefix matches what `_open_proposal_pr` / `_open_proposal_pr_v2`
+# create: ``aicg/research/<month>/<role>`` or ``research/<month>/<role>``.
+_OPEN_PR_BRANCH_PREFIXES: tuple[str, ...] = (
+    "aicg/research/",
+    "research/",
+)
+
 DEFAULT_CAPS = {
     "max_modules_per_run": 1,
     "max_exercises_per_run": 3,
@@ -173,6 +186,27 @@ def research_apply(
             continue
         if not config.enabled:
             role_reports.append(_skip(role, "agent_not_configured", None))
+            continue
+
+        # Bug 4 mitigation: skip-if-pending-review. If a prior cycle's
+        # research-proposal PR is still open for this role, the human
+        # has not approved the prior work. Running the agent again
+        # would burn ~100-500K tokens AND compete for review attention
+        # — both wasteful. Skip until the existing PR is merged/closed.
+        pending = _pending_proposal_pr(role)
+        if pending is not None:
+            role_reports.append(
+                {
+                    "role": role.id,
+                    "status": "skipped_pending_review",
+                    "reason": (
+                        f"Prior proposal PR still open ({pending}). "
+                        "Skipping agent invocation to conserve tokens. "
+                        "Merge or close the existing PR before re-running."
+                    ),
+                    "pending_pr": pending,
+                }
+            )
             continue
 
         result = _invoke_agent(
@@ -1182,3 +1216,62 @@ def _open_proposal_pr_v2(
         "labels": labels,
         "steps": trail,
     }
+
+
+def _pending_proposal_pr(role: "RoleConfig") -> str | None:
+    """Return the open proposal-PR URL for ``role``, or None.
+
+    Queries GitHub via ``gh pr list`` (cheap — single API call per
+    role). We match on branch name prefix rather than label so the
+    check still works on repos that never had the aicg labels
+    created. Returns the URL of the most-recently-updated open match.
+
+    Failures (gh not on PATH, network error, repo missing) return
+    ``None`` so the worst case is "we run the agent anyway."
+    """
+    import subprocess
+
+    repo_full = role.learning_repo
+    # Some manifests carry the repo as a slug; others as owner/slug.
+    # `gh pr list -R` accepts either, but the search field below needs
+    # just the branch substring.
+    cmd = [
+        "gh",
+        "pr",
+        "list",
+        "--repo",
+        f"ai-infra-curriculum/{repo_full}" if "/" not in repo_full else repo_full,
+        "--state",
+        "open",
+        "--json",
+        "url,headRefName,updatedAt",
+        "--limit",
+        "20",
+    ]
+    try:
+        completed = subprocess.run(
+            cmd, capture_output=True, text=True, check=False, timeout=15
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if completed.returncode != 0:
+        return None
+    try:
+        rows = json.loads(completed.stdout or "[]")
+    except json.JSONDecodeError:
+        return None
+
+    matches = [
+        row
+        for row in rows
+        if isinstance(row, dict)
+        and any(
+            str(row.get("headRefName", "")).startswith(prefix)
+            for prefix in _OPEN_PR_BRANCH_PREFIXES
+        )
+        and f"/{role.id}" in str(row.get("headRefName", ""))
+    ]
+    if not matches:
+        return None
+    matches.sort(key=lambda r: r.get("updatedAt", ""), reverse=True)
+    return str(matches[0].get("url", "")) or None

@@ -1749,7 +1749,18 @@ def _existing_curriculum_section(role: RoleConfig) -> str:
     starts grounded in coverage that already exists. Falls back to a
     short note when the manifest hasn't been built yet — the prompt is
     still useful without it, just less specific.
+
+    For canary roles (whose agent output is consumed as a v2 delta
+    against the per-role manifest), emit the full hierarchy. For
+    non-canary roles (whose agent output is the legacy add-modules
+    format), emit a brief slug-only list — enough signal to avoid
+    duplicates without burning tokens on exercise lists the agent
+    won't reference.
     """
+    from .research import CANARY_ROLES_NEW_FORMAT
+
+    is_canary = role.id in CANARY_ROLES_NEW_FORMAT
+
     if not _CURRICULUM_MANIFEST_PATH.exists():
         return (
             "## Existing curriculum to build on (do not duplicate)\n\n"
@@ -1762,12 +1773,19 @@ def _existing_curriculum_section(role: RoleConfig) -> str:
             "## Existing curriculum to build on (do not duplicate)\n\n"
             "_(curriculum.manifest.json failed to load — fall back to `curriculum-plan.json`)_"
         )
-    summary = summarize_manifest_for_prompt(cur, only_track_slug=role.id)
-    return (
-        "## Existing curriculum to build on (do not duplicate)\n\n"
+    summary = summarize_manifest_for_prompt(
+        cur, only_track_slug=role.id, brief=not is_canary
+    )
+    intro = (
         "Treat every module / exercise / project below as **already covered**. "
         "Propose deltas only when the job market has materially shifted "
-        "(see Continuity bias).\n\n"
+        "(see Continuity bias)."
+        if is_canary
+        else "These already exist — do NOT propose duplicates."
+    )
+    return (
+        "## Existing curriculum to build on (do not duplicate)\n\n"
+        f"{intro}\n\n"
         f"{summary}"
     )
 
