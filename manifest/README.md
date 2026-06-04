@@ -122,6 +122,45 @@ Research proposals are expected to be **mostly empty** — the curriculum is mat
 
 Deltas proposing **>20% additions** or **>10% removals** auto-flag `requires_explicit_approval: true` and route to human review.
 
+### Delta format + apply CLI
+
+Research output and human-authored proposals share a single delta schema (see `src/aicg/curriculum_plan_delta.py`):
+
+```jsonc
+{
+  "schema_version": 1,
+  "role": "junior-engineer",
+  "month": "2026-06",
+  "rationale": "One paragraph: what market shift drives this delta",
+  "research_window": { ... },
+  "additions": [
+    { "rationale": "...", "requirement": { "id": "REQ-JR-NEW", "label": "...", "frequency": 0.34, "provenance": "research", "evidence": [{...}, {...}, {...}] } }
+  ],
+  "updates": [
+    { "id": "REQ-JR-EXISTING", "frequency": 0.78, "evidence_add": [...], "exercises_add": [...] }
+  ],
+  "removals": [
+    { "id": "REQ-JR-OBSOLETE", "migration_note": "Merged into REQ-JR-X." }
+  ]
+}
+```
+
+**Validator rejects:** additions with <3 evidence items, frequency <0.30, provenance≠"research", ID collisions, updates/removals referencing unknown IDs, high-frequency (>0.50) removals without `migration_note`.
+
+**Validator flags (does NOT reject):** additions >20% of baseline count, removals >10%. Sets `requires_explicit_approval: true` so reviewers must confirm scope.
+
+**Apply via CLI:**
+
+```sh
+# Dry-run: validate + show diff, do not write
+aicg org plan-delta-apply --role junior-engineer --delta /path/to/delta.json --dry-run
+
+# Apply: writes the updated per-role manifest
+aicg org plan-delta-apply --role junior-engineer --delta /path/to/delta.json
+```
+
+Updates merge evidence and add to exercise/project/solution/test lists idempotently (existing entries are not duplicated).
+
 ## Schema versions
 
 All four file types carry `schema_version: 1`. Bump it (and the matching constants in `src/aicg/manifest.py` / `src/aicg/curriculum_plan.py`) when you make a backwards-incompatible change to the structure. The loader rejects mismatched versions to prevent silent drift.

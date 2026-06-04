@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -518,6 +519,40 @@ def build_parser() -> argparse.ArgumentParser:
         help="Cap per-repo artifacts reviewed in this run (default: unlimited).",
     )
     org_review.set_defaults(func=cmd_org_review)
+
+    org_plan_delta_apply = org_subparsers.add_parser(
+        "plan-delta-apply",
+        help="Apply a curriculum-plan delta to a per-role manifest (validates first; flags large changes for human approval).",
+    )
+    org_plan_delta_apply.add_argument(
+        "--role",
+        required=True,
+        help="Role slug, e.g. junior-engineer. Selects which curriculum_plan.<slug>.manifest.json to mutate.",
+    )
+    org_plan_delta_apply.add_argument(
+        "--delta",
+        type=Path,
+        required=True,
+        help="Path to the curriculum-plan delta JSON to apply.",
+    )
+    org_plan_delta_apply.add_argument(
+        "--baseline",
+        type=Path,
+        default=None,
+        help="Optional explicit path to the per-role manifest. Defaults to manifest/curriculum_plan.<role>.manifest.json next to the content-generator repo root.",
+    )
+    org_plan_delta_apply.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Optional explicit output path. Defaults to overwriting the baseline.",
+    )
+    org_plan_delta_apply.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate + print the rewritten manifest summary; do NOT write the file.",
+    )
+    org_plan_delta_apply.set_defaults(func=cmd_org_plan_delta_apply)
 
     return parser
 
@@ -1553,3 +1588,69 @@ def print_audit_summary(report: dict) -> None:
         print(f"- {gap['severity']}: {gap['type']}: {gap['message']}{suffix}")
     if len(report.get("gaps", [])) > 12:
         print(f"- ... {len(report['gaps']) - 12} more gap(s) in .aicg/audit-report.json")
+
+
+def cmd_org_plan_delta_apply(args: argparse.Namespace) -> int:
+    from .curriculum_plan import load_curriculum_plan
+    from .curriculum_plan_delta import (
+        CurriculumPlanDeltaError,
+        apply_delta,
+        load_delta,
+        validate_delta,
+    )
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    manifest_dir = repo_root / "manifest"
+    baseline_path = (
+        args.baseline
+        or manifest_dir / f"curriculum_plan.{args.role}.manifest.json"
+    )
+    out_path = args.out or baseline_path
+
+    try:
+        baseline = load_curriculum_plan(baseline_path)
+    except Exception as exc:
+        print(f"failed to load baseline {baseline_path}: {exc}", file=sys.stderr)
+        return 2
+
+    try:
+        delta = load_delta(args.delta)
+    except CurriculumPlanDeltaError as exc:
+        print(f"failed to load delta {args.delta}: {exc}", file=sys.stderr)
+        return 2
+
+    if delta.role != args.role:
+        print(
+            f"delta.role={delta.role!r} does not match --role={args.role!r}",
+            file=sys.stderr,
+        )
+        return 2
+
+    try:
+        validated = validate_delta(delta, baseline)
+    except CurriculumPlanDeltaError as exc:
+        print(f"validation failed: {exc}", file=sys.stderr)
+        return 3
+
+    new_plan = apply_delta(validated, baseline)
+    diff = {
+        "before": baseline.coverage_breakdown(),
+        "after": new_plan.coverage_breakdown(),
+        "added": len(validated.additions),
+        "updated": len(validated.updates),
+        "removed": len(validated.removals),
+        "requires_explicit_approval": validated.requires_explicit_approval,
+        "validation_notes": list(validated.validation_notes),
+    }
+
+    if args.dry_run:
+        print("dry-run: would apply delta to", baseline_path)
+        print(json.dumps(diff, indent=2))
+        return 0
+
+    from .curriculum_plan import write_curriculum_plan
+
+    write_curriculum_plan(new_plan, out_path)
+    print(f"applied delta to {out_path}")
+    print(json.dumps(diff, indent=2))
+    return 0
