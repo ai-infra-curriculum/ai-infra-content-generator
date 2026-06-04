@@ -577,6 +577,54 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_plan_coverage.set_defaults(func=cmd_org_plan_coverage)
 
+    org_discussions_refresh = org_subparsers.add_parser(
+        "discussions-refresh",
+        help="Fetch GitHub Discussions for a role and populate discussion_topics in its curriculum-plan manifest.",
+    )
+    org_discussions_refresh.add_argument(
+        "--role",
+        required=True,
+        help="Role slug, e.g. junior-engineer.",
+    )
+    org_discussions_refresh.add_argument(
+        "--repo",
+        default=None,
+        help="Override the learning repo to fetch (defaults to ai-infra-<role>-learning).",
+    )
+    org_discussions_refresh.add_argument(
+        "--owner",
+        default="ai-infra-curriculum",
+        help="GitHub org. Default: ai-infra-curriculum.",
+    )
+    org_discussions_refresh.add_argument(
+        "--baseline",
+        type=Path,
+        default=None,
+        help="Optional explicit per-role manifest path. Defaults to manifest/curriculum_plan.<role>.manifest.json.",
+    )
+    org_discussions_refresh.add_argument(
+        "--cache-dir",
+        type=Path,
+        default=None,
+        help="Cache dir. Defaults to manifest/.cache/discussions/ (gitignored).",
+    )
+    org_discussions_refresh.add_argument(
+        "--use-cache-only",
+        action="store_true",
+        help="Do not call gh; map purely from the cached threads file.",
+    )
+    org_discussions_refresh.add_argument(
+        "--no-auto-enable",
+        action="store_true",
+        help="Do NOT auto-enable Discussions on the target repo if disabled.",
+    )
+    org_discussions_refresh.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute mappings + print summary, but do not write the manifest.",
+    )
+    org_discussions_refresh.set_defaults(func=cmd_org_discussions_refresh)
+
     return parser
 
 
@@ -1700,4 +1748,33 @@ def cmd_org_plan_coverage(args: argparse.Namespace) -> int:
         print(json.dumps(report, indent=2))
     else:
         sys.stdout.write(render_text(report))
+    return 0
+
+
+def cmd_org_discussions_refresh(args: argparse.Namespace) -> int:
+    from .discussions_index import refresh_role_discussions
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    baseline_path = (
+        args.baseline
+        or repo_root / "manifest" / f"curriculum_plan.{args.role}.manifest.json"
+    )
+    cache_dir = (
+        args.cache_dir or repo_root / "manifest" / ".cache" / "discussions"
+    )
+    learning_repo = args.repo or f"ai-infra-{args.role}-learning"
+
+    report = refresh_role_discussions(
+        role=args.role,
+        learning_repo=learning_repo,
+        baseline_path=baseline_path,
+        cache_dir=cache_dir,
+        owner=args.owner,
+        auto_enable=not args.no_auto_enable,
+        use_cache_only=args.use_cache_only,
+        write=not args.dry_run,
+    )
+    print(json.dumps(report, indent=2))
+    if report.get("fetch", {}).get("error"):
+        return 3
     return 0
