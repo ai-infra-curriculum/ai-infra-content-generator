@@ -50,6 +50,24 @@ CURRICULUM_PLAN_DELTA_FILTERED = ".aicg/curriculum-plan-delta-filtered.json"
 JOB_REQUIREMENTS_JSON = ".aicg/job-requirements.json"
 JOB_REQUIREMENTS_MD = "JOB_REQUIREMENTS.md"
 
+# W2.2b: per-role manifest format ("v2"). The agent writes a delta in the
+# new shape at this path within the learning repo; research_apply
+# validates against ``manifest/curriculum_plan.<role>.manifest.json`` in
+# the content-generator repo, NOT the legacy curriculum-plan.json.
+CURRICULUM_PLAN_DELTA_V2_FILE = ".aicg/curriculum-plan-delta-v2.json"
+
+# Canary rollout — only these role IDs use the new v2 delta path. Other
+# roles continue on the legacy code path (modules/exercises/projects
+# additions) until we promote them after the canary stabilizes.
+CANARY_ROLES_NEW_FORMAT: frozenset[str] = frozenset({"junior-engineer"})
+
+# Path to per-role v2 manifests, relative to the content-generator root.
+_PER_ROLE_MANIFEST_RELATIVE = "manifest/curriculum_plan.{role}.manifest.json"
+
+# GitHub PR labels used on canary research proposals.
+_LABEL_NEW_FORMAT = "curriculum-plan-v2"
+_LABEL_REQUIRES_APPROVAL = "requires-explicit-approval"
+
 DEFAULT_CAPS = {
     "max_modules_per_run": 1,
     "max_exercises_per_run": 3,
@@ -189,6 +207,21 @@ def research_apply(
             continue
 
         outputs = _detect_outputs(learning_path)
+
+        # ----- W2.2b canary: junior-engineer uses the new v2 delta path -----
+        if role.id in CANARY_ROLES_NEW_FORMAT:
+            v2_report = _handle_new_format_role(
+                role=role,
+                learning_path=learning_path,
+                runner_root=runner_root,
+                month=month,
+                open_pr=open_pr,
+                outputs=outputs,
+            )
+            role_reports.append(v2_report)
+            continue
+        # -------------------------------------------------------------------
+
         if not outputs["delta_present"]:
             role_reports.append(
                 {
@@ -756,3 +789,301 @@ def _invoke_agent(
         runner=str(runner_root),
     )
     return run_agent_command(formatted, cwd=learning_path)
+
+
+# =====================================================================
+# W2.2b — new-format (v2) handler for canary roles
+# =====================================================================
+
+
+def _handle_new_format_role(
+    *,
+    role: "RoleConfig",
+    learning_path: Path,
+    runner_root: Path,
+    month: str,
+    open_pr: bool,
+    outputs: dict[str, Any],
+) -> dict[str, Any]:
+    """Process a canary role's agent output as a curriculum_plan_delta v2.
+
+    Looks for ``.aicg/curriculum-plan-delta-v2.json`` in the learning
+    repo. Validates against the per-role manifest in the content-
+    generator repo. Renders a proposal markdown summarizing the delta
+    (including any validator flags). Opens a PR with the
+    ``curriculum-plan-v2`` label, plus ``requires-explicit-approval`` if
+    the validator flagged the delta.
+    """
+    from .curriculum_plan import load_curriculum_plan
+    from .curriculum_plan_delta import (
+        CurriculumPlanDeltaError,
+        load_delta,
+        validate_delta,
+    )
+
+    delta_path = learning_path / CURRICULUM_PLAN_DELTA_V2_FILE
+    if not delta_path.exists():
+        return {
+            "role": role.id,
+            "status": "applied_no_delta",
+            "outputs": outputs,
+            "note": (
+                "Canary role: agent did not produce "
+                f"`{CURRICULUM_PLAN_DELTA_V2_FILE}`. Either no proposal this "
+                "cycle (the expected steady-state) or the agent's prompt did "
+                "not request v2 output."
+            ),
+            "format": "v2",
+        }
+
+    baseline_path = runner_root / _PER_ROLE_MANIFEST_RELATIVE.format(role=role.id)
+    if not baseline_path.exists():
+        return {
+            "role": role.id,
+            "status": "baseline_missing",
+            "outputs": outputs,
+            "note": f"Per-role manifest not found at {baseline_path}",
+            "format": "v2",
+        }
+
+    try:
+        baseline = load_curriculum_plan(baseline_path)
+        delta = load_delta(delta_path)
+        validated = validate_delta(delta, baseline)
+    except CurriculumPlanDeltaError as exc:
+        return {
+            "role": role.id,
+            "status": "delta_rejected",
+            "outputs": outputs,
+            "format": "v2",
+            "error": str(exc),
+            "delta_path": str(delta_path),
+        }
+
+    proposal = _write_new_format_proposal(
+        learning_path=learning_path,
+        role=role,
+        month=month,
+        baseline=baseline,
+        validated=validated,
+    )
+
+    pr_outcome: dict[str, Any] | None = None
+    if open_pr and (validated.additions or validated.updates or validated.removals):
+        labels = [_LABEL_NEW_FORMAT]
+        if validated.requires_explicit_approval:
+            labels.append(_LABEL_REQUIRES_APPROVAL)
+        pr_outcome = _open_proposal_pr_v2(
+            learning_path=learning_path,
+            role=role,
+            month=month,
+            proposal_paths=proposal["written"],
+            labels=labels,
+        )
+
+    return {
+        "role": role.id,
+        "status": "proposal_ready",
+        "format": "v2",
+        "outputs": outputs,
+        "validation": {
+            "additions": len(validated.additions),
+            "updates": len(validated.updates),
+            "removals": len(validated.removals),
+            "requires_explicit_approval": validated.requires_explicit_approval,
+            "notes": list(validated.validation_notes),
+        },
+        "proposal_files": proposal["written"],
+        "pr": pr_outcome,
+    }
+
+
+def _write_new_format_proposal(
+    *,
+    learning_path: Path,
+    role: "RoleConfig",
+    month: str,
+    baseline,  # CurriculumPlan
+    validated,  # CurriculumPlanDelta
+) -> dict[str, Any]:
+    """Render the per-cycle proposal markdown for v2 canary deltas."""
+    md_path = learning_path / f"RESEARCH_PROPOSAL_{month}.md"
+    md_path.write_text(
+        _render_new_format_proposal_markdown(role, month, baseline, validated),
+        encoding="utf-8",
+    )
+    return {"written": [str(md_path)]}
+
+
+def _render_new_format_proposal_markdown(
+    role: "RoleConfig",
+    month: str,
+    baseline,  # CurriculumPlan
+    validated,  # CurriculumPlanDelta
+) -> str:
+    flag_line = (
+        "**Requires explicit approval — reviewer must confirm scope before merging.**"
+        if validated.requires_explicit_approval
+        else "Validator did not flag this delta for explicit approval."
+    )
+    notes_block = (
+        "\n".join(f"- {n}" for n in validated.validation_notes) or "_(none)_"
+    )
+
+    lines = [
+        f"# Research Proposal — {role.title} — {month}",
+        "",
+        f"Format: **curriculum-plan v2** (per-role manifest at "
+        f"`manifest/curriculum_plan.{role.id}.manifest.json` in the "
+        "content-generator repo).",
+        "",
+        f"## Summary",
+        "",
+        f"- Baseline requirement count: **{baseline.requirement_count}**",
+        f"- Additions: **{len(validated.additions)}**",
+        f"- Updates: **{len(validated.updates)}**",
+        f"- Removals: **{len(validated.removals)}**",
+        "",
+        f"## Continuity check",
+        "",
+        flag_line,
+        "",
+        "Validator notes:",
+        "",
+        notes_block,
+        "",
+        "## Rationale",
+        "",
+        validated.rationale or "_(no rationale provided by agent)_",
+        "",
+    ]
+
+    if validated.additions:
+        lines += ["## Additions", ""]
+        for a in validated.additions:
+            req = a.requirement
+            freq = f"{req.frequency:.0%}" if req.frequency is not None else "?"
+            ev = len(req.evidence)
+            lines.append(
+                f"- `{req.id}` — **{req.label}** "
+                f"(frequency {freq}, {ev} evidence item(s))"
+            )
+            if a.rationale:
+                lines.append(f"  - Rationale: {a.rationale}")
+        lines.append("")
+
+    if validated.updates:
+        lines += ["## Updates", ""]
+        for u in validated.updates:
+            parts: list[str] = []
+            if u.label is not None:
+                parts.append(f"label→`{u.label}`")
+            if u.frequency is not None:
+                parts.append(f"freq→{u.frequency:.0%}")
+            if u.coverage_status is not None:
+                parts.append(f"coverage→{u.coverage_status}")
+            if u.evidence_add:
+                parts.append(f"+{len(u.evidence_add)} evidence")
+            if u.exercises_add or u.projects_add or u.solutions_add or u.tests_add:
+                parts.append(
+                    "+links "
+                    f"(+{len(u.exercises_add)} ex, "
+                    f"+{len(u.projects_add)} proj, "
+                    f"+{len(u.solutions_add)} sol, "
+                    f"+{len(u.tests_add)} tests)"
+                )
+            lines.append(f"- `{u.id}` — " + ("; ".join(parts) or "_(no fields changed)_"))
+        lines.append("")
+
+    if validated.removals:
+        lines += ["## Removals", ""]
+        for r in validated.removals:
+            note = r.migration_note or "_(no migration note)_"
+            lines.append(f"- `{r.id}` — {note}")
+        lines.append("")
+
+    lines += [
+        "## How to apply (after approval)",
+        "",
+        "```sh",
+        "aicg org plan-delta-apply \\",
+        f"  --role {role.id} \\",
+        f"  --delta .aicg/curriculum-plan-delta-v2.json",
+        "```",
+        "",
+        "The CLI re-validates the delta against the current baseline. If the "
+        "validator's flags or rejects have changed since this proposal was "
+        "written (e.g., new postings landed in another role), the apply will "
+        "surface them before writing.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+def _open_proposal_pr_v2(
+    *,
+    learning_path: Path,
+    role: "RoleConfig",
+    month: str,
+    proposal_paths: list[str],
+    labels: list[str],
+) -> dict[str, Any]:
+    """Open a PR for a v2 canary research proposal. ``gh`` shell-outs only."""
+    import shlex
+    import subprocess
+
+    branch = f"research/{month}/{role.id}"
+    title = f"research: monthly cycle for {role.id} ({month})"
+    body_lines = [
+        f"Auto-generated v2 research proposal for **{role.title}** — {month}.",
+        "",
+        f"See `RESEARCH_PROPOSAL_{month}.md` for the diff summary, "
+        "validator notes, and apply command.",
+        "",
+    ]
+    if _LABEL_REQUIRES_APPROVAL in labels:
+        body_lines += [
+            "⚠️ **Validator auto-flagged this delta** "
+            "(`requires_explicit_approval: true`). "
+            "Reviewer must explicitly confirm scope before merging — see the "
+            "validator notes in the proposal markdown.",
+            "",
+        ]
+
+    label_args: list[str] = []
+    for label in labels:
+        label_args += ["--label", label]
+
+    body = "\n".join(body_lines)
+    steps = [
+        ["git", "-C", str(learning_path), "checkout", "-B", branch],
+        ["git", "-C", str(learning_path), "add", *proposal_paths, CURRICULUM_PLAN_DELTA_V2_FILE],
+        ["git", "-C", str(learning_path), "commit", "-m", title],
+        ["git", "-C", str(learning_path), "push", "-u", "origin", branch],
+        ["gh", "pr", "create", "--base", "main", "--title", title, "--body", body, *label_args],
+    ]
+    trail: list[dict[str, Any]] = []
+    pr_url: str | None = None
+    for cmd in steps:
+        completed = subprocess.run(
+            cmd, cwd=learning_path, capture_output=True, text=True, check=False
+        )
+        trail.append(
+            {
+                "step": cmd[1] if cmd[0] == "git" else cmd[0],
+                "argv": shlex.join(cmd[-3:]),
+                "returncode": completed.returncode,
+                "stdout_tail": completed.stdout[-300:],
+                "stderr_tail": completed.stderr[-300:],
+            }
+        )
+        if cmd[:3] == ["gh", "pr", "create"] and completed.returncode == 0:
+            pr_url = completed.stdout.strip()
+        if completed.returncode != 0 and cmd[1] != "commit":
+            return {"status": "pr_failed", "branch": branch, "steps": trail}
+    return {
+        "status": "pr_opened",
+        "branch": branch,
+        "pr_url": pr_url,
+        "labels": labels,
+        "steps": trail,
+    }
