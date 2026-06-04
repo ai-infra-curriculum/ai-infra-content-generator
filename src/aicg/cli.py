@@ -554,6 +554,29 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_plan_delta_apply.set_defaults(func=cmd_org_plan_delta_apply)
 
+    org_plan_coverage = org_subparsers.add_parser(
+        "plan-coverage",
+        help="Print coverage breakdown for a per-role curriculum-plan manifest (text or JSON).",
+    )
+    org_plan_coverage.add_argument(
+        "--role",
+        required=True,
+        help="Role slug, e.g. junior-engineer.",
+    )
+    org_plan_coverage.add_argument(
+        "--baseline",
+        type=Path,
+        default=None,
+        help="Optional explicit path to the per-role manifest. Defaults to manifest/curriculum_plan.<role>.manifest.json next to the content-generator repo root.",
+    )
+    org_plan_coverage.add_argument(
+        "--format",
+        choices=("text", "json"),
+        default="text",
+        help="Output format (default: text).",
+    )
+    org_plan_coverage.set_defaults(func=cmd_org_plan_coverage)
+
     return parser
 
 
@@ -1653,4 +1676,28 @@ def cmd_org_plan_delta_apply(args: argparse.Namespace) -> int:
     write_curriculum_plan(new_plan, out_path)
     print(f"applied delta to {out_path}")
     print(json.dumps(diff, indent=2))
+    return 0
+
+
+def cmd_org_plan_coverage(args: argparse.Namespace) -> int:
+    from .curriculum_plan import load_curriculum_plan
+    from .plan_coverage import coverage_report, render_text
+
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    baseline_path = (
+        args.baseline
+        or repo_root / "manifest" / f"curriculum_plan.{args.role}.manifest.json"
+    )
+
+    try:
+        plan = load_curriculum_plan(baseline_path)
+    except Exception as exc:
+        print(f"failed to load baseline {baseline_path}: {exc}", file=sys.stderr)
+        return 2
+
+    report = coverage_report(plan)
+    if args.format == "json":
+        print(json.dumps(report, indent=2))
+    else:
+        sys.stdout.write(render_text(report))
     return 0
