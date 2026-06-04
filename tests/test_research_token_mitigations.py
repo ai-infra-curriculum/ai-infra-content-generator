@@ -25,10 +25,13 @@ from aicg.manifest import (
 )
 from aicg.org_config import RoleConfig, load_manifest
 from aicg.org_runner import build_research_prompt
+from aicg.org_runner import generate_research_packets
 from aicg.research import (
     CANARY_ROLES_NEW_FORMAT,
     _OPEN_PR_BRANCH_PREFIXES,
+    ResearchError,
     _pending_proposal_pr,
+    research_apply,
 )
 
 
@@ -276,3 +279,150 @@ def test_branch_prefixes_cover_both_openers() -> None:
     """The constant must include both prefix forms used by _open_proposal_pr / _v2."""
     assert "aicg/research/" in _OPEN_PR_BRANCH_PREFIXES
     assert "research/" in _OPEN_PR_BRANCH_PREFIXES
+
+
+# ---------- per-role filtering (Option A: nightly per-role timers) ----------
+
+
+def _multi_role_manifest_path(tmp_path: Path) -> Path:
+    """A manifest with two roles, used by the role-filter regression tests.
+
+    conftest.write_minimal_manifest only seeds one role, which can't
+    distinguish "filter to one role" from "loop touched every role".
+    """
+    data = {
+        "org": "AI-Infra-Curriculum",
+        "default_remote": "git@github.com:AI-Infra-Curriculum/{repo}.git",
+        "release": {"tag_format": "v%Y.%m", "branch": "main"},
+        "extra_repos": [],
+        "documentation": {
+            "format_guard_files": ["README.md"],
+            "org_readme_repo": ".github",
+            "org_readme_files": ["README.md"],
+        },
+        "schedules": {},
+        "automation": {
+            "state_dir": ".aicg/org",
+            "agent": {
+                "provider": "openai",
+                "model": "codex-gpt-5.5",
+                "interface": "local_cli_subscription",
+                "agent_command": "/bin/true",
+            },
+        },
+        "content_generation": {
+            "agent": {
+                "provider": "anthropic",
+                "model": "claude-opus-4-7",
+                "interface": "local_cli_subscription",
+                "agent_command": "/bin/true",
+            }
+        },
+        "job_requirements": {
+            "ownership_strategy": "lowest_level_role",
+            "markdown_file": "JOB_REQUIREMENTS.md",
+            "structured_file": ".aicg/job-requirements.json",
+            "supplemental_dir": "supplemental",
+        },
+        "research": {"minimum_postings_per_role": 25, "source_window_days": 45},
+        "maintained_by": {
+            "name": "VeriSwarm.ai",
+            "url": "https://veriswarm.ai",
+            "phrasing": "Maintained by VeriSwarm.ai",
+            "footer_marker": "<!-- aicg:maintained-by -->",
+        },
+        "quality_judge": {"enabled": False, "thresholds": {"default": 70}},
+        "roles": [
+            {
+                "id": "junior-engineer",
+                "title": "Junior",
+                "level": 10,
+                "learning_repo": "ai-infra-junior-engineer-learning",
+                "solution_repo": "ai-infra-junior-engineer-solutions",
+            },
+            {
+                "id": "engineer",
+                "title": "Engineer",
+                "level": 20,
+                "learning_repo": "ai-infra-engineer-learning",
+                "solution_repo": "ai-infra-engineer-solutions",
+            },
+        ],
+    }
+    path = tmp_path / "aicg-org.yaml"
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def test_generate_research_packets_role_filter_writes_only_target(tmp_path: Path) -> None:
+    """`generate_research_packets(role_id=...)` writes one prompt, not all."""
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    state_dir = tmp_path / "state"
+    manifest = load_manifest(_multi_role_manifest_path(tmp_path))
+
+    report = generate_research_packets(
+        manifest, workspace, month="2026-06", state_dir=state_dir, role_id="engineer"
+    )
+    assert len(report["packets"]) == 1
+    assert report["packets"][0]["role"] == "engineer"
+    # Only engineer.md is on disk; junior-engineer was filtered out.
+    month_dir = state_dir / "research" / "2026-06"
+    assert (month_dir / "engineer.md").exists()
+    assert not (month_dir / "junior-engineer.md").exists()
+
+
+def test_generate_research_packets_unknown_role_raises(tmp_path: Path) -> None:
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    state_dir = tmp_path / "state"
+    manifest = load_manifest(_multi_role_manifest_path(tmp_path))
+
+    with pytest.raises(ValueError, match="Unknown role 'nope'"):
+        generate_research_packets(
+            manifest, workspace, month="2026-06", state_dir=state_dir, role_id="nope"
+        )
+
+
+def test_research_apply_role_filter_skips_other_roles(tmp_path: Path) -> None:
+    """`research_apply(role_id=...)` only reports on the requested role."""
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    state_dir = tmp_path / "state"
+    manifest = load_manifest(_multi_role_manifest_path(tmp_path))
+
+    # Seed prompts for BOTH roles so we know the filter — not the
+    # missing-prompt branch — is what's narrowing the report.
+    packet_dir = state_dir / "research" / "2026-06"
+    packet_dir.mkdir(parents=True)
+    (packet_dir / "junior-engineer.md").write_text("# packet\n", encoding="utf-8")
+    (packet_dir / "engineer.md").write_text("# packet\n", encoding="utf-8")
+
+    report = research_apply(
+        manifest,
+        workspace,
+        month="2026-06",
+        state_dir=state_dir,
+        role_id="engineer",
+        open_pr=False,
+    )
+    assert len(report["roles"]) == 1
+    assert report["roles"][0]["role"] == "engineer"
+
+
+def test_research_apply_unknown_role_raises(tmp_path: Path) -> None:
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    state_dir = tmp_path / "state"
+    manifest = load_manifest(_multi_role_manifest_path(tmp_path))
+    (state_dir / "research" / "2026-06").mkdir(parents=True)
+
+    with pytest.raises(ResearchError, match="Unknown role 'nope'"):
+        research_apply(
+            manifest,
+            workspace,
+            month="2026-06",
+            state_dir=state_dir,
+            role_id="nope",
+            open_pr=False,
+        )

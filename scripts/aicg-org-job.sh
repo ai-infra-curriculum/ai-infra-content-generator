@@ -21,6 +21,7 @@ Jobs:
   monthly-research      (quarterly: writes proposals, opens PRs, NO auto-merge)
   monthly-review        (quarterly: LLM freshness review of existing content)
   promote-plan          (on-demand: applies approved research proposals after PR merge)
+  research-role ROLE    (nightly per-role research; replaces monthly-research)
   weekly-audit
   daily-remediate
   daily-issues
@@ -53,6 +54,17 @@ parse_args() {
 
   JOB="$1"
   shift
+
+  # research-role takes a positional ROLE argument. Capture it before
+  # the option loop so the rest of parsing stays uniform.
+  ROLE=""
+  if [[ "$JOB" == "research-role" ]]; then
+    if [[ $# -eq 0 || "$1" == --* ]]; then
+      die "research-role requires a ROLE argument (e.g. junior-engineer)"
+    fi
+    ROLE="$1"
+    shift
+  fi
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -89,7 +101,11 @@ run_aicg_org() {
 
 main() {
   mkdir -p "$STATE_DIR" "$LOG_DIR"
-  local log_file="$LOG_DIR/${JOB}-$(date '+%Y%m%d').log"
+  local log_slug="$JOB"
+  if [[ -n "$ROLE" ]]; then
+    log_slug="${JOB}-${ROLE}"
+  fi
+  local log_file="$LOG_DIR/${log_slug}-$(date '+%Y%m%d').log"
   exec >>"$log_file" 2>&1
 
   [[ -x "$AICG_BIN" ]] || die "aicg executable not found or not executable: $AICG_BIN"
@@ -121,6 +137,15 @@ main() {
       # weekly-audit) to apply the approved delta and scaffold
       # skeletons.
       run_aicg_org research --apply
+      ;;
+    research-role)
+      # Per-role nightly research. One role per night at midnight, ordered
+      # lowest-level-first across the month, opens a proposal PR if the
+      # delta passes caps. Replaces the org-wide monthly-research job —
+      # spreads token usage across 13 nights and bounds blast-radius
+      # of any single failure to one role.
+      [[ -n "$ROLE" ]] || die "research-role requires ROLE"
+      run_aicg_org research --apply --role "$ROLE"
       ;;
     promote-plan)
       run_aicg_org promote-plan

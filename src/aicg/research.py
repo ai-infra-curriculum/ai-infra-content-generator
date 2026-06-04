@@ -146,6 +146,7 @@ def research_apply(
     state_dir: Path | None = None,
     runner_root: Path | None = None,
     open_pr: bool = True,
+    role_id: str | None = None,
 ) -> dict[str, Any]:
     """Process every role's research packet via the configured agent.
 
@@ -174,8 +175,17 @@ def research_apply(
     caps = ResearchCaps.from_manifest(manifest)
     runner_root = runner_root or Path(__file__).resolve().parents[2]
 
+    roles = sorted(manifest.roles, key=lambda item: item.level)
+    if role_id is not None:
+        roles = [r for r in roles if r.id == role_id]
+        if not roles:
+            valid = ", ".join(sorted(r.id for r in manifest.roles))
+            raise ResearchError(
+                f"Unknown role {role_id!r}. Known roles: {valid}"
+            )
+
     role_reports: list[dict[str, Any]] = []
-    for role in sorted(manifest.roles, key=lambda item: item.level):
+    for role in roles:
         prompt_path = prompt_dir / f"{role.id}.md"
         if not prompt_path.exists():
             role_reports.append(_skip(role, "prompt_missing", str(prompt_path)))
