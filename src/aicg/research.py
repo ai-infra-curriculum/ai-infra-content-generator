@@ -39,7 +39,11 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
-from .agent_cli import AgentCommandResult, run_agent_command
+from .agent_cli import (
+    AgentCommandResult,
+    reclassify_with_response_file,
+    run_agent_command,
+)
 from .org_config import OrgManifest, RoleConfig, state_dir_for_manifest
 from .state import utc_now, write_json
 
@@ -891,7 +895,14 @@ def _invoke_agent(
         work_id=f"research:{role.id}",
         runner=str(runner_root),
     )
-    return run_agent_command(formatted, cwd=learning_path)
+    result = run_agent_command(formatted, cwd=learning_path)
+    # The wrapper redirects claude's stdout into response.md, so the
+    # rate-limit JSONL line never reaches `result.stdout`. Peek into
+    # the response file to catch the limit before it surfaces as
+    # `agent_failed` (Bug 2).
+    return reclassify_with_response_file(
+        result, output_dir / "response.md", output_dir / "response.json"
+    )
 
 
 # =====================================================================

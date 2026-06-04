@@ -46,6 +46,7 @@ from typing import Any
 from .agent_cli import (
     AgentCommandResult,
     classify_limit_scope,
+    reclassify_with_response_file,
     retry_after_for_scope,
 )
 from .org_config import OrgManifest
@@ -175,6 +176,13 @@ def judge_action(
         runner=str(runner_root or Path(__file__).resolve().parents[2]),
     )
     result = _run_judge_command(formatted, cwd=repo_path, timeout=config.timeout_seconds)
+    # See Bug 2 fix in agent_cli.reclassify_with_response_file — the
+    # judge wrapper also redirects claude's stdout into response.json,
+    # so a session-limit JSONL line lands there rather than in our
+    # subprocess stdout. Re-classify before falling through to
+    # "command failed" status.
+    response_path = output_dir / "response.json"
+    result = reclassify_with_response_file(result, response_path)
     if result.limit_reached:
         # The judge can hit subscription limits too; report it as a
         # blocker instead of recording a fake score.
@@ -201,7 +209,6 @@ def judge_action(
             raw=result.stdout + "\n" + result.stderr,
         )
 
-    response_path = output_dir / "response.json"
     raw_text = response_path.read_text(encoding="utf-8") if response_path.exists() else result.stdout
     verdict = parse_judge_response(
         raw_text=raw_text,
@@ -259,6 +266,10 @@ def judge_artifact_freshness(
     result = _run_judge_command(
         formatted, cwd=repo_path, timeout=config.timeout_seconds
     )
+    # Bug 2: peek into response.json for a session-limit JSONL line
+    # before reporting a generic command failure.
+    response_path = output_dir / "response.json"
+    result = reclassify_with_response_file(result, response_path)
     if result.limit_reached:
         return JudgeVerdict(
             score=0,
@@ -283,7 +294,6 @@ def judge_artifact_freshness(
             raw=result.stdout + "\n" + result.stderr,
         )
 
-    response_path = output_dir / "response.json"
     raw_text = (
         response_path.read_text(encoding="utf-8")
         if response_path.exists()
