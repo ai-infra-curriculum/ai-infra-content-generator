@@ -220,10 +220,24 @@ def resolve_link(
         if final is not None:
             return LinkResolution(original=url, replacement=final, source="redirect")
 
-    # At this point the URL is non-200, non-redirect. Was it
-    # unambiguously broken, or just bot-blocked / auth-walled?
+    # At this point the URL is non-200, non-redirect. Three subcases:
+    # 1. The server returned a clear non-broken status (401/403/429/5xx) →
+    #    "ambiguous": URL is alive but we can't see past the auth wall /
+    #    rate limit / anti-bot challenge. Leave the original in place.
+    # 2. The server returned a clear broken status (404/410/451) → fall
+    #    through to the Wayback / machine-endpoint branch below.
+    # 3. No status at all (timeout, DNS, scheme-less URL) → "unresolved":
+    #    we never got a clean probe, so we can't decide.
     final_status = confirm.status if confirm.status is not None else primary.status
     final_error = confirm.error or primary.error
+
+    if final_status is None:
+        return LinkResolution(
+            original=url,
+            replacement=None,
+            source="unresolved",
+            note=final_error or "no response",
+        )
 
     if not _is_unambiguously_broken(final_status):
         return LinkResolution(
@@ -233,8 +247,6 @@ def resolve_link(
             note=(
                 f"status {final_status} — auth-walled / rate-limited / transient; "
                 "leaving original in place"
-                if final_status is not None
-                else f"network: {final_error or 'no response'} — indeterminate"
             ),
         )
 
