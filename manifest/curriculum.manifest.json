@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T07:02:51Z",
+  "generated_at": "2026-06-04T09:09:59Z",
   "org": "ai-infra-curriculum",
   "tracks": [
     {
@@ -602,6 +602,17 @@
           "prerequisites": []
         },
         {
+          "slug": "project-302-multicloud-infra",
+          "number": 302,
+          "title": "Project 302: Multi-Cloud AI Infrastructure",
+          "learning_path": null,
+          "solutions_path": "projects/project-302-multicloud-infra",
+          "learning_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-302-multicloud-infra",
+          "docs": [],
+          "prerequisites": []
+        },
+        {
           "slug": "project-302-multicloud-infrastructure",
           "number": 302,
           "title": "Multi-Cloud AI Infrastructure",
@@ -615,17 +626,6 @@
             "architecture.md",
             "requirements.md"
           ],
-          "prerequisites": []
-        },
-        {
-          "slug": "project-302-multicloud-infra",
-          "number": 302,
-          "title": "Project 302: Multi-Cloud AI Infrastructure",
-          "learning_path": null,
-          "solutions_path": "projects/project-302-multicloud-infra",
-          "learning_url": null,
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-302-multicloud-infra",
-          "docs": [],
           "prerequisites": []
         },
         {
@@ -4211,16 +4211,577 @@
       "solutions_repo": "ai-infra-mlops-solutions",
       "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning",
       "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions",
-      "modules": [],
+      "modules": [
+        {
+          "slug": "mod-001-mlops-foundations",
+          "number": 1,
+          "title": "Module 01: MLOps Foundations",
+          "path": "lessons/mod-001-mlops-foundations",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-001-mlops-foundations",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Exercise 01",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-mlops-foundations/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-001-mlops-foundations/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Exercise 02",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-mlops-foundations/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-001-mlops-foundations/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Exercise 03",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-mlops-foundations/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-001-mlops-foundations/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Minimal MLOps Stack \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-mlops-foundations/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-001-mlops-foundations/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Exercise 05",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-mlops-foundations/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-001-mlops-foundations/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-002-experiment-tracking",
+          "number": 2,
+          "title": "Module 02: Experiment Tracking & MLflow",
+          "path": "lessons/mod-002-experiment-tracking",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-002-experiment-tracking",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "MLflow Tracking Fundamentals \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-experiment-tracking/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-002-experiment-tracking/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Model Registry Lifecycle \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-experiment-tracking/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-002-experiment-tracking/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "HPO with Tracking \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-experiment-tracking/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-002-experiment-tracking/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Advanced MLflow (Pyfunc) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-experiment-tracking/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-002-experiment-tracking/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "End-to-End MLflow Pipeline \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-experiment-tracking/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-002-experiment-tracking/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-003-model-monitoring",
+          "number": 3,
+          "title": "Module 03: Model Monitoring and Drift Detection",
+          "path": "lessons/mod-003-model-monitoring",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-003-model-monitoring",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "KS Drift Detection \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-model-monitoring/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-003-model-monitoring/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "PSI \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-model-monitoring/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-003-model-monitoring/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Evidently AI \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-model-monitoring/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-003-model-monitoring/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Alert Configuration \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-model-monitoring/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-003-model-monitoring/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Complete Monitoring Pipeline \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-model-monitoring/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-003-model-monitoring/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-004-data-quality",
+          "number": 4,
+          "title": "Module 04: Data Quality and Validation",
+          "path": "lessons/mod-004-data-quality",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-004-data-quality",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Pydantic Schema Validation \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-data-quality/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-004-data-quality/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Great Expectations Suite \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-data-quality/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-004-data-quality/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Statistical Quality Checks \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-data-quality/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-004-data-quality/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Profiling + Anomaly Detection \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-data-quality/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-004-data-quality/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "End-to-End DQ Pipeline \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-data-quality/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-004-data-quality/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-005-experimentation",
+          "number": 5,
+          "title": "Module 05: Experimentation and A/B Testing",
+          "path": "lessons/mod-005-experimentation",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-005-experimentation",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "A/B Testing Framework \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-experimentation/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-005-experimentation/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Significance Testing \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-experimentation/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-005-experimentation/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Multi-Armed Bandits \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-experimentation/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-005-experimentation/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Progressive Rollout \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-experimentation/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-005-experimentation/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Complete Experimentation Platform \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-experimentation/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-005-experimentation/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-006-automation",
+          "number": 6,
+          "title": "Module 06: Automation and Orchestration",
+          "path": "lessons/mod-006-automation",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-006-automation",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Airflow ML DAG \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-automation/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-006-automation/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Kubeflow Pipelines \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-automation/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-006-automation/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Error Handling + Retries \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-automation/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-006-automation/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "MLflow Integration in Pipelines \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-automation/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-006-automation/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Production Pipeline \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-automation/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-006-automation/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-007-governance",
+          "number": 7,
+          "title": "Module 07: ML Governance and Compliance",
+          "path": "lessons/mod-007-governance",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-007-governance",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Fairness with Fairlearn \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-governance/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-007-governance/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Bias Mitigation \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-governance/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-007-governance/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Model Card Generation \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-governance/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-007-governance/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Audit Logging \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-governance/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-007-governance/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Complete Governance Framework \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-governance/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-007-governance/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-008-production-ops",
+          "number": 8,
+          "title": "Module 08: Production Operations",
+          "path": "lessons/mod-008-production-ops",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-008-production-ops",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Exercise 01",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-production-ops/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-008-production-ops/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Exercise 02",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-production-ops/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-008-production-ops/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Exercise 03",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-production-ops/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-008-production-ops/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Incident Response \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-production-ops/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-008-production-ops/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Complete Production Operations \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-production-ops/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-008-production-ops/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-009-security",
+          "number": 9,
+          "title": "Module 09: MLOps Security",
+          "path": "lessons/mod-009-security",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-009-security",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "Exercise 01",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-security/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-009-security/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "Vault + ESO Secret Management \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-security/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-009-security/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Supply Chain (SLSA + SBOM + cosign) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-security/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-009-security/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "Container Runtime Security \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-security/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-009-security/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Exercise 05",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-security/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-009-security/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-010-advanced-topics",
+          "number": 10,
+          "title": "Module 10: Advanced MLOps Topics",
+          "path": "lessons/mod-010-advanced-topics",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/lessons/mod-010-advanced-topics",
+          "exercises": [
+            {
+              "slug": "exercise-01",
+              "number": 1,
+              "title": "LLMOps with vLLM \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-advanced-topics/exercise-01",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-010-advanced-topics/exercise-01"
+            },
+            {
+              "slug": "exercise-02",
+              "number": 2,
+              "title": "RAG System \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-advanced-topics/exercise-02",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-010-advanced-topics/exercise-02"
+            },
+            {
+              "slug": "exercise-03",
+              "number": 3,
+              "title": "Edge ML Optimization \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-advanced-topics/exercise-03",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-010-advanced-topics/exercise-03"
+            },
+            {
+              "slug": "exercise-04",
+              "number": 4,
+              "title": "AutoML Pipeline \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-advanced-topics/exercise-04",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-010-advanced-topics/exercise-04"
+            },
+            {
+              "slug": "exercise-05",
+              "number": 5,
+              "title": "Real-Time ML with Feature Stores \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-advanced-topics/exercise-05",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/modules/mod-010-advanced-topics/exercise-05"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
       "projects": [
         {
-          "slug": "project-1-ml-pipeline",
+          "slug": "project-01-ml-pipeline",
           "number": 1,
           "title": "Project 1: End-to-End ML Pipeline",
-          "learning_path": "projects/project-1-ml-pipeline",
-          "solutions_path": "projects/project-1-ml-pipeline",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-1-ml-pipeline",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-1-ml-pipeline",
+          "learning_path": "projects/project-01-ml-pipeline",
+          "solutions_path": "projects/project-01-ml-pipeline",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-01-ml-pipeline",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-01-ml-pipeline",
           "docs": [
             "ARCHITECTURE.md",
             "GETTING_STARTED.md",
@@ -4231,13 +4792,13 @@
           "prerequisites": []
         },
         {
-          "slug": "project-2-model-serving",
+          "slug": "project-02-model-serving",
           "number": 2,
           "title": "Project 2: Production Model Serving Platform",
-          "learning_path": "projects/project-2-model-serving",
-          "solutions_path": "projects/project-2-model-serving",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-2-model-serving",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-2-model-serving",
+          "learning_path": "projects/project-02-model-serving",
+          "solutions_path": "projects/project-02-model-serving",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-02-model-serving",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-02-model-serving",
           "docs": [
             "ARCHITECTURE.md",
             "COMPLETION_CHECKLIST.md",
@@ -4251,13 +4812,13 @@
           "prerequisites": []
         },
         {
-          "slug": "project-3-experimentation",
+          "slug": "project-03-experimentation",
           "number": 3,
           "title": "Project 3: ML Experimentation Platform",
-          "learning_path": "projects/project-3-experimentation",
-          "solutions_path": "projects/project-3-experimentation",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-3-experimentation",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-3-experimentation",
+          "learning_path": "projects/project-03-experimentation",
+          "solutions_path": "projects/project-03-experimentation",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-03-experimentation",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-03-experimentation",
           "docs": [
             "ARCHITECTURE.md",
             "GETTING_STARTED.md",
@@ -4270,13 +4831,13 @@
           "prerequisites": []
         },
         {
-          "slug": "project-4-governance",
+          "slug": "project-04-governance",
           "number": 4,
           "title": "Project 4: ML Governance & Compliance System",
-          "learning_path": "projects/project-4-governance",
-          "solutions_path": "projects/project-4-governance",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-4-governance",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-4-governance",
+          "learning_path": "projects/project-04-governance",
+          "solutions_path": "projects/project-04-governance",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-04-governance",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-04-governance",
           "docs": [
             "ARCHITECTURE.md",
             "GETTING_STARTED.md",
@@ -4286,13 +4847,13 @@
           "prerequisites": []
         },
         {
-          "slug": "project-5-llmops",
+          "slug": "project-05-llmops",
           "number": 5,
           "title": "Project 5: LLMOps Production System",
-          "learning_path": "projects/project-5-llmops",
-          "solutions_path": "projects/project-5-llmops",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-5-llmops",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-5-llmops",
+          "learning_path": "projects/project-05-llmops",
+          "solutions_path": "projects/project-05-llmops",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-learning/blob/main/projects/project-05-llmops",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-mlops-solutions/blob/main/projects/project-05-llmops",
           "docs": [
             "ARCHITECTURE.md",
             "GETTING_STARTED.md",
