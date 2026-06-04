@@ -29,6 +29,7 @@ import urllib.request
 import urllib.error
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -37,6 +38,13 @@ from .state import utc_now, write_json
 FRESHNESS_LINKS_REPORT = "freshness-links-report.json"
 FRESHNESS_VERSIONS_REPORT = "freshness-versions-report.json"
 FRESHNESS_REVIEW_REPORT = "freshness-review-report.json"
+# Per-repo rotation state. Tracks last-scanned timestamp + score for
+# every artifact ever judged so per-night runs can skip files still
+# within their cooldown window and prioritize least-recently-scanned
+# files first. Without this, max_artifacts always hits the
+# alphabetically-first N files and never reaches the tail.
+FRESHNESS_SCAN_HISTORY = "freshness-scan-history.json"
+FRESHNESS_SCAN_HISTORY_SCHEMA_VERSION = 1
 
 # Files that count as "reviewable artifacts" — module READMEs, lecture
 # notes, exercise solutions, project solutions. We deliberately skip
@@ -311,11 +319,28 @@ def review_existing_artifacts(
     write_report: bool = True,
     artifact_judge=None,
     runner_root: Path | None = None,
+    now: datetime | None = None,
 ) -> dict[str, Any]:
     """Invoke the freshness judge on existing committed artifacts.
 
     ``artifact_judge`` lets tests stub the network call; in production
     it defaults to :func:`aicg.judge.judge_artifact_freshness`.
+
+    Artifact selection now honors a per-repo scan-history file
+    (``.aicg/freshness-scan-history.json``):
+
+    * Files scanned within ``judge_config.freshness_cooldown_days`` are
+      dropped from the candidate list. The default is 90 days, so each
+      file gets re-judged ~quarterly.
+    * Remaining candidates are sorted by ``(last_scanned, path)`` —
+      least-recently-scanned (and never-scanned) come first.
+    * ``max_artifacts`` is applied AFTER the cooldown + sort, so the
+      cap rotates fairly across the corpus instead of always re-judging
+      the alphabetical front.
+
+    The history is updated after each judge call (mid-batch, before
+    a subscription-limit defer would otherwise break us) so deferred
+    files become eligible again immediately.
     """
     repo_path = Path(repo_path).resolve()
     if not repo_path.exists():
@@ -326,13 +351,21 @@ def review_existing_artifacts(
 
         artifact_judge = judge_artifact_freshness
 
-    artifacts = _collect_reviewable_artifacts(repo_path)
-    if max_artifacts is not None:
-        artifacts = artifacts[:max_artifacts]
+    now = now or datetime.now(timezone.utc)
+    cooldown_days = getattr(judge_config, "freshness_cooldown_days", 90)
+    history = _load_scan_history(repo_path)
+
+    all_artifacts = _collect_reviewable_artifacts(repo_path)
+    eligible = _filter_by_cooldown(all_artifacts, history, cooldown_days, now)
+    eligible = _sort_by_least_recently_scanned(eligible, history)
+    cap = len(eligible) if max_artifacts is None else max_artifacts
+    artifacts = eligible[:cap]
+    skipped_for_cooldown = len(all_artifacts) - len(eligible)
 
     role_findings: list[dict[str, Any]] = []
     work_items: list[dict[str, Any]] = []
     deferred: dict[str, Any] | None = None
+    history_updated = False
 
     for artifact_rel in artifacts:
         artifact_id = _slug(artifact_rel)
@@ -349,6 +382,9 @@ def review_existing_artifacts(
             entry["status"] = "skipped"
             entry["reason"] = "judge disabled or unconfigured"
             role_findings.append(entry)
+            # Judge-disabled is not a real scan — do NOT update history
+            # or we'd lock the file out for 90 days while the judge is
+            # off and miss the first real cycle after it's turned on.
             continue
         entry["score"] = verdict.score
         entry["passed"] = verdict.passed
@@ -381,6 +417,15 @@ def review_existing_artifacts(
         else:
             entry["status"] = "ok"
         role_findings.append(entry)
+        history[artifact_rel] = {
+            "last_scanned": now.isoformat().replace("+00:00", "Z"),
+            "last_score": verdict.score,
+            "last_passed": bool(verdict.passed),
+        }
+        history_updated = True
+
+    if history_updated:
+        _save_scan_history(repo_path, history, now)
 
     report = {
         "schema_version": 1,
@@ -388,6 +433,8 @@ def review_existing_artifacts(
         "operation": "freshness_review",
         "repo": repo_path.name,
         "artifacts_reviewed": len(role_findings),
+        "eligible_count": len(eligible),
+        "skipped_for_cooldown": skipped_for_cooldown,
         "stale_count": sum(1 for e in role_findings if e.get("status") == "stale"),
         "deferred": deferred,
         "findings": role_findings,
@@ -397,6 +444,99 @@ def review_existing_artifacts(
         (repo_path / ".aicg").mkdir(parents=True, exist_ok=True)
         write_json(repo_path / ".aicg" / FRESHNESS_REVIEW_REPORT, report)
     return report
+
+
+def _load_scan_history(repo_path: Path) -> dict[str, dict[str, Any]]:
+    """Load the per-repo scan history.
+
+    Returns an empty dict if the file is missing, unreadable, or has a
+    schema version we don't recognize. We never throw on history-load
+    failure — losing rotation state is preferable to skipping a review
+    cycle entirely, and the file will be rewritten cleanly on save.
+    """
+    path = repo_path / ".aicg" / FRESHNESS_SCAN_HISTORY
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(payload, dict):
+        return {}
+    if payload.get("schema_version") != FRESHNESS_SCAN_HISTORY_SCHEMA_VERSION:
+        return {}
+    files = payload.get("files")
+    if not isinstance(files, dict):
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for key, value in files.items():
+        if isinstance(key, str) and isinstance(value, dict):
+            out[key] = value
+    return out
+
+
+def _save_scan_history(
+    repo_path: Path, history: dict[str, dict[str, Any]], now: datetime
+) -> None:
+    payload = {
+        "schema_version": FRESHNESS_SCAN_HISTORY_SCHEMA_VERSION,
+        "updated_at": now.isoformat().replace("+00:00", "Z"),
+        "files": history,
+    }
+    (repo_path / ".aicg").mkdir(parents=True, exist_ok=True)
+    write_json(repo_path / ".aicg" / FRESHNESS_SCAN_HISTORY, payload)
+
+
+def _filter_by_cooldown(
+    artifacts: list[str],
+    history: dict[str, dict[str, Any]],
+    cooldown_days: int,
+    now: datetime,
+) -> list[str]:
+    """Drop artifacts scanned more recently than the cooldown window."""
+    if cooldown_days <= 0:
+        return list(artifacts)
+    cutoff = now - timedelta(days=cooldown_days)
+    out: list[str] = []
+    for rel in artifacts:
+        entry = history.get(rel) or {}
+        last = _parse_iso_timestamp(entry.get("last_scanned"))
+        if last is not None and last > cutoff:
+            continue
+        out.append(rel)
+    return out
+
+
+def _sort_by_least_recently_scanned(
+    artifacts: list[str], history: dict[str, dict[str, Any]]
+) -> list[str]:
+    """Sort by ``(last_scanned, path)`` ascending — never-scanned first.
+
+    Stable, deterministic, and tie-broken by alphabetical path so the
+    ordering is reproducible across nights when many files share the
+    same last_scanned timestamp (e.g. first cycle after the judge
+    becomes enabled).
+    """
+    def key(rel: str) -> tuple[int, str, str]:
+        entry = history.get(rel) or {}
+        raw = entry.get("last_scanned")
+        if not isinstance(raw, str):
+            return (0, "", rel)  # never-scanned: highest priority
+        return (1, raw, rel)
+    return sorted(artifacts, key=key)
+
+
+def _parse_iso_timestamp(raw: Any) -> datetime | None:
+    if not isinstance(raw, str):
+        return None
+    text = raw[:-1] + "+00:00" if raw.endswith("Z") else raw
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
 
 
 def _collect_reviewable_artifacts(repo_path: Path) -> list[str]:
