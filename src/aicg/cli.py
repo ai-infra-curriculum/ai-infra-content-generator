@@ -249,6 +249,14 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Skip opening proposal PRs. Useful for first-cycle inspection and tests; the proposal files still get written.",
     )
+    org_research.add_argument(
+        "--role",
+        default=None,
+        help=(
+            "Process only this role id. Omit to process every role in the manifest. "
+            "Used by per-role systemd timers (aicg-research-role@<slug>.timer)."
+        ),
+    )
     org_research.set_defaults(func=cmd_org_research)
 
     org_promote = org_subparsers.add_parser(
@@ -1036,13 +1044,23 @@ def cmd_org_research(args: argparse.Namespace) -> int:
     manifest = resolve_manifest(args)
     state_dir = resolve_org_state_dir(args, manifest)
     workspace = resolve_workspace(args)
-    report = generate_research_packets(
-        manifest,
-        workspace,
-        month=args.month,
-        state_dir=state_dir,
+    role_id = getattr(args, "role", None)
+    try:
+        report = generate_research_packets(
+            manifest,
+            workspace,
+            month=args.month,
+            state_dir=state_dir,
+            role_id=role_id,
+        )
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    scope = f" (role={role_id})" if role_id else ""
+    print(
+        f"Research packets ready for {report['month']}{scope}: "
+        f"{len(report['packets'])} role(s)"
     )
-    print(f"Research packets ready for {report['month']}: {len(report['packets'])} role(s)")
     for packet in report["packets"]:
         print(f"- {packet['role']}: {packet['prompt_path']}")
 
@@ -1056,6 +1074,7 @@ def cmd_org_research(args: argparse.Namespace) -> int:
             month=args.month,
             state_dir=state_dir,
             open_pr=not getattr(args, "no_pr", False),
+            role_id=role_id,
         )
     except ResearchError as exc:
         print(f"error: {exc}", file=sys.stderr)

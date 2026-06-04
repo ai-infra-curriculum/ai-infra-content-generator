@@ -173,14 +173,24 @@ def generate_research_packets(
     workspace: Path,
     month: str | None = None,
     state_dir: Path | None = None,
+    role_id: str | None = None,
 ) -> dict[str, Any]:
     month = month or date.today().strftime("%Y-%m")
     state_dir = state_dir_for_manifest(manifest, state_dir)
     prompt_dir = state_dir / "research" / month
     prompt_dir.mkdir(parents=True, exist_ok=True)
 
+    roles = sorted(manifest.roles, key=lambda item: item.level)
+    if role_id is not None:
+        roles = [r for r in roles if r.id == role_id]
+        if not roles:
+            valid = ", ".join(sorted(r.id for r in manifest.roles))
+            raise ValueError(
+                f"Unknown role {role_id!r}. Known roles: {valid}"
+            )
+
     packets: list[dict[str, Any]] = []
-    for role in sorted(manifest.roles, key=lambda item: item.level):
+    for role in roles:
         learning_path = workspace / role.learning_repo
         prompt_path = prompt_dir / f"{role.id}.md"
         prompt_path.write_text(build_research_prompt(manifest, role, month), encoding="utf-8")
