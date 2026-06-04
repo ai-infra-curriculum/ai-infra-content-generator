@@ -1,11 +1,22 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T05:44:36Z",
+  "generated_at": "2026-06-04T07:02:52Z",
   "roles": [
     {
       "slug": "architect",
       "file": "curriculum_plan.architect.manifest.json",
       "role_title": "Architect Track",
+      "requirement_count": 17,
+      "coverage": {
+        "covered": 0,
+        "partial": 17,
+        "missing": 0
+      }
+    },
+    {
+      "slug": "chief-ai-officer",
+      "file": "curriculum_plan.chief-ai-officer.manifest.json",
+      "role_title": "Chief Ai Officer Track",
       "requirement_count": 17,
       "coverage": {
         "covered": 0,

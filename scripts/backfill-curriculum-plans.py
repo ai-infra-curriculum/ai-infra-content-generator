@@ -80,6 +80,7 @@ _ROLE_CODE = {
     "senior-architect": "SARCH",
     "principal-architect": "PARCH",
     "team-lead": "TL",
+    "chief-ai-officer": "CAO",
 }
 
 
