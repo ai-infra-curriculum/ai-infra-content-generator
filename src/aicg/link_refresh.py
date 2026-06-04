@@ -2,16 +2,22 @@
 
 For each URL the audit flagged broken in a single doc, try (in order):
 
-1. **Re-check** — HEAD the URL again. Audit results are often stale
-   (transient DNS / 5xx / rate-limit). If the link is now alive, no
-   replacement needed.
-2. **Follow redirects** — if the URL now returns 3xx, follow it and use
-   the final 200 URL as the replacement.
-3. **Wayback Machine** — query ``archive.org/wayback/available`` for
-   the most recent good snapshot and use that.
+1. **Re-check** — HEAD then (when HEAD is ambiguous) GET the URL.
+   Audit results are often stale (transient DNS / 5xx / rate-limit / CDN
+   anti-bot challenge). If the link is now alive — or auth-walled rather
+   than missing — no replacement is made.
+2. **Follow redirects** — if the URL now returns 3xx, follow it (up to
+   ``MAX_REDIRECTS`` hops) and use the final 200 URL as the replacement.
+3. **Wayback Machine** — query ``archive.org/wayback/available`` for the
+   most recent good snapshot and use that, BUT only when:
+      a) the original URL is unambiguously broken (404/410/DNS-fail), and
+      b) the URL is referenced in a human-read context (not a Helm repo,
+         OCI registry, ``pip install -i``, ``git clone``, ``Chart.yaml
+         repository:``, etc. — Wayback HTML wrappers silently break
+         downstream tooling there).
 
-If none of those produce a verified replacement, leave the URL alone
-and let the next audit re-emit the work item.
+If none of those produce a verified replacement, leave the URL alone and
+let the next audit re-emit the work item.
 
 When at least one replacement is found, write the doc, commit on a
 branch, open a PR — **never auto-merge**. Content changes from this
@@ -53,12 +59,45 @@ DISALLOWED_REPLACEMENT_DOMAINS = frozenset(
     }
 )
 
+# HTTP statuses that prove the URL is gone. Anything outside this set
+# is treated as ambiguous (auth-walled / rate-limited / bot-blocked /
+# transient) and is NOT a justification to substitute Wayback.
+_UNAMBIGUOUSLY_BROKEN_STATUSES = frozenset(
+    {
+        404,  # not found
+        410,  # gone
+        451,  # legal removal
+    }
+)
+
+# Lines (or surrounding code-block context) matching any of these
+# patterns indicate a URL is consumed by tooling, not read by a human.
+# Wayback snapshots silently break Helm/OCI/pip/git semantics — refuse
+# to substitute in those positions and surface as unresolved instead.
+_MACHINE_CONTEXT_RE = re.compile(
+    r"(?:"
+    r"helm\s+repo\s+add"
+    r"|^\s*repository\s*:"
+    r"|^\s*image\s*:"
+    r"|^\s*registry\s*:"
+    r"|^\s*chart\s*:"
+    r"|^\s*url\s*:"  # YAML keyless URLs, generic url: fields
+    r"|pip\s+install\s+(?:-i|--index-url|--extra-index-url)"
+    r"|git\s+clone\s"
+    r"|docker\s+pull\s"
+    r"|kubectl\s+apply\s+-f\s+http"
+    r"|oci://"
+    r"|--repository-url"
+    r")",
+    re.IGNORECASE | re.MULTILINE,
+)
+
 
 @dataclass(frozen=True)
 class LinkResolution:
     original: str
     replacement: str | None
-    source: str  # "alive" | "redirect" | "wayback" | "unresolved"
+    source: str  # "alive" | "redirect" | "wayback" | "unresolved" | "machine_endpoint" | "ambiguous"
     note: str = ""
 
     @property
@@ -132,34 +171,73 @@ def resolve_link(
     *,
     http_fetcher: HttpFetcher = default_http_fetcher,
     wayback_fetcher: WaybackFetcher = default_wayback_fetcher,
+    machine_consumed: bool = False,
 ) -> LinkResolution:
-    """Try re-check → redirect chase → wayback."""
-    result = http_fetcher(url, "HEAD")
-    if result.status and 200 <= result.status < 300:
+    """Try re-check → redirect chase → wayback.
+
+    Wayback substitution is suppressed when ``machine_consumed=True`` —
+    the caller has determined the URL is consumed by tooling (Helm repo
+    add, ``pip install -i``, ``git clone``, etc.) and a Wayback HTML
+    wrapper would silently break the surrounding example.
+
+    A URL that responds with an *ambiguous* status (401/403/429/5xx,
+    network error) is never replaced — only 404/410/451 count as
+    unambiguously broken. This avoids replacing live IETF/Cloudflare
+    pages just because the bot probe was rate-limited.
+    """
+    # Try HEAD, then GET when HEAD is non-200. Many CDNs / endpoints
+    # return 4xx or 5xx for HEAD even though GET works (Bitnami chart
+    # repos, Cloudflare-fronted RFC pages).
+    primary = http_fetcher(url, "HEAD")
+    if _is_success(primary.status):
         return LinkResolution(original=url, replacement=url, source="alive")
 
-    # Follow up to MAX_REDIRECTS redirects, then HEAD-check the
-    # final URL to confirm it actually returns 200.
-    if result.status and 300 <= result.status < 400 and result.final_url:
-        seen = {url}
-        current = result.final_url
-        for _ in range(MAX_REDIRECTS):
-            if current in seen:
-                break
-            seen.add(current)
-            hop = http_fetcher(current, "HEAD")
-            if hop.status and 200 <= hop.status < 300:
-                if _replacement_allowed(current):
-                    return LinkResolution(
-                        original=url, replacement=current, source="redirect"
-                    )
-                break
-            if hop.status and 300 <= hop.status < 400 and hop.final_url:
-                current = hop.final_url
-                continue
-            break
+    if _is_redirect(primary.status) and primary.final_url:
+        final = _follow_redirects(primary.final_url, http_fetcher, seen={url})
+        if final is not None:
+            return LinkResolution(original=url, replacement=final, source="redirect")
 
-    # Wayback fallback.
+    # Re-probe with GET if HEAD didn't conclude.
+    confirm = http_fetcher(url, "GET") if primary.status != 200 else primary
+    if _is_success(confirm.status):
+        return LinkResolution(original=url, replacement=url, source="alive")
+    if _is_redirect(confirm.status) and confirm.final_url:
+        final = _follow_redirects(confirm.final_url, http_fetcher, seen={url})
+        if final is not None:
+            return LinkResolution(original=url, replacement=final, source="redirect")
+
+    # At this point the URL is non-200, non-redirect. Was it
+    # unambiguously broken, or just bot-blocked / auth-walled?
+    final_status = confirm.status if confirm.status is not None else primary.status
+    final_error = confirm.error or primary.error
+
+    if not _is_unambiguously_broken(final_status):
+        return LinkResolution(
+            original=url,
+            replacement=None,
+            source="ambiguous",
+            note=(
+                f"status {final_status} — auth-walled / rate-limited / transient; "
+                "leaving original in place"
+                if final_status is not None
+                else f"network: {final_error or 'no response'} — indeterminate"
+            ),
+        )
+
+    # Genuinely broken (404 / 410 / 451). Wayback is the last resort —
+    # but only for human-read contexts.
+    if machine_consumed:
+        return LinkResolution(
+            original=url,
+            replacement=None,
+            source="machine_endpoint",
+            note=(
+                "broken but URL is consumed by tooling "
+                "(helm/oci/pip/git/yaml field) — needs canonical successor, "
+                "Wayback wrapper would corrupt downstream commands"
+            ),
+        )
+
     archived = wayback_fetcher(url)
     if archived and _replacement_allowed(archived):
         return LinkResolution(
@@ -170,19 +248,35 @@ def resolve_link(
         original=url,
         replacement=None,
         source="unresolved",
-        note=result.error or (f"status {result.status}" if result.status else "no response"),
+        note=final_error or (f"status {final_status}" if final_status else "no response"),
     )
 
 
 def apply_replacements(body: str, resolutions: list[LinkResolution]) -> str:
-    """Substitute each resolved URL in the doc body.
+    """Substitute each unique resolved URL in the doc body.
 
-    Replace longest first so a URL that is a prefix of another doesn't
-    eat the longer one. Replaces the literal URL string — works for
-    both ``[text](url)`` markdown links and bare URLs.
+    Two safety properties:
+
+    - **Dedupe by original** — if the same broken URL appears in N
+      resolution slots (e.g., audit re-emitted it per occurrence), only
+      the first resolution wins. Without this guard, multiple
+      ``body.replace()`` passes can compose: the second pass finds the
+      original URL embedded as a substring inside the first
+      replacement's Wayback wrapper and rewrites it, producing
+      ``web.archive.org/X/http://web.archive.org/Y/...``.
+    - **Longest first** so a shorter URL that's a prefix of another
+      doesn't eat the longer URL.
     """
+    seen_originals: set[str] = set()
+    unique: list[LinkResolution] = []
+    for r in resolutions:
+        if r.original in seen_originals:
+            continue
+        seen_originals.add(r.original)
+        unique.append(r)
+
     pairs = sorted(
-        (r for r in resolutions if r.needs_edit and r.replacement),
+        (r for r in unique if r.needs_edit and r.replacement),
         key=lambda r: len(r.original),
         reverse=True,
     )
@@ -223,15 +317,31 @@ def handle_refresh_links_item(
         result["reason"] = "file_not_found"
         return result
 
-    urls = [d.get("url") for d in (item.get("details") or []) if d.get("url")]
+    # Dedupe URLs from the audit before resolving — the audit can emit
+    # the same URL once per occurrence, but the resolution is the same
+    # and re-resolving wastes HTTP calls.
+    urls: list[str] = []
+    seen: set[str] = set()
+    for detail in item.get("details") or []:
+        url = detail.get("url")
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        urls.append(url)
     if not urls:
         result["status"] = "skipped"
         result["reason"] = "no_urls"
         return result
 
+    body = target.read_text(encoding="utf-8")
+    machine_consumed = _machine_consumed_urls(body, urls)
+
     resolutions = [
         resolve_link(
-            url, http_fetcher=http_fetcher, wayback_fetcher=wayback_fetcher
+            url,
+            http_fetcher=http_fetcher,
+            wayback_fetcher=wayback_fetcher,
+            machine_consumed=(url in machine_consumed),
         )
         for url in urls
     ]
@@ -242,7 +352,7 @@ def handle_refresh_links_item(
 
     edits = [r for r in resolutions if r.needs_edit]
     alive = [r for r in resolutions if r.source == "alive"]
-    unresolved = [r for r in resolutions if r.source == "unresolved"]
+    unresolved = [r for r in resolutions if r.source in ("unresolved", "ambiguous", "machine_endpoint")]
 
     result["summary"] = {
         "edited": len(edits),
@@ -260,7 +370,6 @@ def handle_refresh_links_item(
             result["status"] = "no_replacements_found"
         return result
 
-    body = target.read_text(encoding="utf-8")
     new_body = apply_replacements(body, resolutions)
     if new_body == body:
         # Defensive — every needs_edit resolution should have produced
@@ -278,6 +387,76 @@ def handle_refresh_links_item(
         result["status"] = pr_outcome.get("status", "edited")
 
     return result
+
+
+def _is_success(status: int | None) -> bool:
+    return bool(status and 200 <= status < 300)
+
+
+def _is_redirect(status: int | None) -> bool:
+    return bool(status and 300 <= status < 400)
+
+
+def _is_unambiguously_broken(status: int | None) -> bool:
+    """True only for statuses that definitively prove the URL is gone.
+
+    401/403/429/5xx are excluded — auth walls, anti-bot challenges, and
+    transient failures should not justify a Wayback substitution.
+    """
+    return status in _UNAMBIGUOUSLY_BROKEN_STATUSES
+
+
+def _follow_redirects(
+    start: str, http_fetcher: HttpFetcher, *, seen: set[str]
+) -> str | None:
+    """Chase up to MAX_REDIRECTS hops; return the first 200 URL or None."""
+    current = start
+    for _ in range(MAX_REDIRECTS):
+        if current in seen:
+            return None
+        seen.add(current)
+        # Try HEAD first; some servers return 4xx for HEAD on a 200
+        # destination, so fall back to GET when HEAD is ambiguous.
+        hop = http_fetcher(current, "HEAD")
+        if _is_success(hop.status):
+            return current if _replacement_allowed(current) else None
+        if _is_redirect(hop.status) and hop.final_url:
+            current = hop.final_url
+            continue
+        confirm = http_fetcher(current, "GET")
+        if _is_success(confirm.status):
+            return current if _replacement_allowed(current) else None
+        if _is_redirect(confirm.status) and confirm.final_url:
+            current = confirm.final_url
+            continue
+        return None
+    return None
+
+
+def _machine_consumed_urls(body: str, urls: list[str]) -> set[str]:
+    """Return URLs whose surrounding context indicates tooling consumption.
+
+    A URL is "machine-consumed" if:
+    - It appears inside a fenced code block (```), OR
+    - Its line matches a tooling pattern (helm repo add, ``repository:``,
+      ``image:``, ``git clone``, ``oci://``, ``pip install -i``, …).
+
+    Replacing such a URL with a Wayback snapshot silently breaks the
+    surrounding command — the snapshot is HTML, not a Helm index.yaml
+    or OCI manifest.
+    """
+    machine: set[str] = set()
+    in_code = False
+    for line in body.split("\n"):
+        if line.lstrip().startswith("```"):
+            in_code = not in_code
+            continue
+        for url in urls:
+            if url not in line:
+                continue
+            if in_code or _MACHINE_CONTEXT_RE.search(line):
+                machine.add(url)
+    return machine
 
 
 def _replacement_allowed(url: str) -> bool:
