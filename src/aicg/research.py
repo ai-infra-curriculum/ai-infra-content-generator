@@ -534,6 +534,23 @@ def _open_proposal_pr(
     body_path = learning_path / f"RESEARCH_PROPOSAL_{month}.md"
 
     commands: list[tuple[str, list[str]]] = [
+        # Stash any residue the agent left behind — without this,
+        # `git checkout -B` complains about uncommitted changes and the
+        # subsequent `gh pr create` warns "Warning: N uncommitted
+        # changes" which can disable some flag handling.
+        (
+            "stash_residue",
+            [
+                "git",
+                "-C",
+                str(learning_path),
+                "stash",
+                "push",
+                "--include-untracked",
+                "--message",
+                f"aicg-research-residue-{month}-{role.id}",
+            ],
+        ),
         ("checkout", ["git", "-C", str(learning_path), "checkout", "-B", branch]),
         ("add", ["git", "-C", str(learning_path), "add", *proposal_paths]),
         (
@@ -551,6 +568,11 @@ def _open_proposal_pr(
             "push",
             ["git", "-C", str(learning_path), "push", "-u", "origin", branch],
         ),
+        # PR creation: do NOT pass --label flags. `gh pr create` hard-fails
+        # on missing labels (which is how the entire research cycle has
+        # been silently losing work — see Bug 1 in
+        # project_research_cycle_bugs memory). Labels are added in a
+        # follow-up step that tolerates failure.
         (
             "pr_create",
             [
@@ -561,13 +583,13 @@ def _open_proposal_pr(
                 title,
                 "--body-file",
                 str(body_path),
-                "--label",
-                "aicg",
-                "--label",
-                "aicg:plan-proposal",
             ],
         ),
     ]
+    # Best-effort labels — added AFTER the PR exists. Failures are
+    # logged but never block the PR. Run with --add-label per label so
+    # one missing label doesn't kill the others.
+    _LEGACY_LABELS = ("aicg", "aicg:plan-proposal")
     outcomes: list[dict[str, Any]] = []
     for label, cmd in commands:
         completed = subprocess.run(
@@ -586,9 +608,46 @@ def _open_proposal_pr(
                 "stderr_tail": completed.stderr[-400:],
             }
         )
-        if completed.returncode != 0 and label != "commit":
+        if completed.returncode != 0 and label not in ("commit", "stash_residue"):
             # `git commit` returning non-zero is fine if nothing changed.
+            # `git stash push` returns non-zero when there's nothing to
+            # stash — that's the expected steady state, not a failure.
             break
+
+    # Best-effort labels — added AFTER the PR exists so a missing label
+    # can't block PR creation. Each label is tried individually;
+    # failures are logged but never break the flow.
+    pr_created = any(
+        outcome["step"] == "pr_create" and outcome["returncode"] == 0
+        for outcome in outcomes
+    )
+    if pr_created:
+        for label_name in _LEGACY_LABELS:
+            cmd = [
+                "gh",
+                "pr",
+                "edit",
+                branch,
+                "--add-label",
+                label_name,
+            ]
+            completed = subprocess.run(
+                cmd,
+                cwd=learning_path,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            outcomes.append(
+                {
+                    "step": f"add_label:{label_name}",
+                    "command": shlex.join(cmd),
+                    "returncode": completed.returncode,
+                    "stdout_tail": completed.stdout[-300:],
+                    "stderr_tail": completed.stderr[-300:],
+                }
+            )
+
     # Restore main so subsequent agents start from a clean tree.
     subprocess.run(
         ["git", "-C", str(learning_path), "checkout", "main"],
@@ -1049,24 +1108,37 @@ def _open_proposal_pr_v2(
             "",
         ]
 
-    label_args: list[str] = []
-    for label in labels:
-        label_args += ["--label", label]
-
     body = "\n".join(body_lines)
+    # PR creation does NOT pass --label flags (gh hard-fails on missing
+    # labels). Labels are added in a follow-up step that tolerates
+    # failure per label.
     steps = [
+        # Stash residue first — without this, `git checkout -B` complains
+        # about uncommitted changes and `gh pr create` warns about them.
+        [
+            "git",
+            "-C",
+            str(learning_path),
+            "stash",
+            "push",
+            "--include-untracked",
+            "--message",
+            f"aicg-research-residue-{month}-{role.id}",
+        ],
         ["git", "-C", str(learning_path), "checkout", "-B", branch],
         ["git", "-C", str(learning_path), "add", *proposal_paths, CURRICULUM_PLAN_DELTA_V2_FILE],
         ["git", "-C", str(learning_path), "commit", "-m", title],
         ["git", "-C", str(learning_path), "push", "-u", "origin", branch],
-        ["gh", "pr", "create", "--base", "main", "--title", title, "--body", body, *label_args],
+        ["gh", "pr", "create", "--base", "main", "--title", title, "--body", body],
     ]
     trail: list[dict[str, Any]] = []
     pr_url: str | None = None
+    pr_created = False
     for cmd in steps:
         completed = subprocess.run(
             cmd, cwd=learning_path, capture_output=True, text=True, check=False
         )
+        is_stash = cmd[3:4] == ["stash"] if len(cmd) > 3 else False
         trail.append(
             {
                 "step": cmd[1] if cmd[0] == "git" else cmd[0],
@@ -1078,8 +1150,31 @@ def _open_proposal_pr_v2(
         )
         if cmd[:3] == ["gh", "pr", "create"] and completed.returncode == 0:
             pr_url = completed.stdout.strip()
-        if completed.returncode != 0 and cmd[1] != "commit":
+            pr_created = True
+        # `git commit` returning non-zero is fine if nothing changed.
+        # `git stash push` returning non-zero usually means "nothing to
+        # stash", which is the expected steady state.
+        if completed.returncode != 0 and cmd[1] != "commit" and not is_stash:
             return {"status": "pr_failed", "branch": branch, "steps": trail}
+
+    # Best-effort labels — added per-label AFTER the PR is created so a
+    # missing label can't block PR creation.
+    if pr_created and labels:
+        for label in labels:
+            cmd = ["gh", "pr", "edit", branch, "--add-label", label]
+            completed = subprocess.run(
+                cmd, cwd=learning_path, capture_output=True, text=True, check=False
+            )
+            trail.append(
+                {
+                    "step": f"add_label:{label}",
+                    "argv": shlex.join(cmd[-3:]),
+                    "returncode": completed.returncode,
+                    "stdout_tail": completed.stdout[-300:],
+                    "stderr_tail": completed.stderr[-300:],
+                }
+            )
+
     return {
         "status": "pr_opened",
         "branch": branch,
