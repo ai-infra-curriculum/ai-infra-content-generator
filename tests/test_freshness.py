@@ -221,6 +221,60 @@ def test_audit_links_skips_k8s_and_docker_placeholder_urls(
     )
 
 
+def test_audit_links_skips_example_subdomains(tmp_path: Path) -> None:
+    """staging.example.com / my-svc.example.org / app.example.net are
+    all RFC 2606 reservations even though they're subdomains. The
+    audit previously only matched the apex domain exactly and reported
+    SSL handshake failures from these as broken citations.
+    """
+    skip_urls = [
+        "https://staging.example.com/health",
+        "https://my-svc.example.org/v1",
+        "https://api.example.net/users",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 200, "OK"
+
+    audit_links(repo, url_fetcher=fake_fetch)
+    assert seen == [], (
+        f"example.com / .org / .net subdomains should not be fetched; got {seen}"
+    )
+
+
+def test_audit_links_treats_bot_blocking_as_not_broken(tmp_path: Path) -> None:
+    """403 / 405 / 429 / 451 mean the URL is reachable but the bot is
+    denied. Junior's queue had Udemy 403s and HashiCorp 429s that
+    learners can absolutely click and read — flagging them as broken
+    citations is a false positive."""
+    urls = {
+        "https://www.udemy.com/course/docker/": (403, "Forbidden"),
+        "https://www.hashicorp.com/resources/x": (429, "Too Many Requests"),
+        "https://labs.play-with-docker.com/": (405, "Method Not Allowed"),
+        "https://www.linkedin.com/in/example": (999, "Request denied"),
+        "https://reddit.com/r/devops": (451, "Unavailable for legal reasons"),
+        # Real broken link — still flagged.
+        "https://example.tld-does-not-exist/foo": (404, "Not Found"),
+    }
+    body = "\n".join(f"See [link]({u})." for u in urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        return urls[url]
+
+    report = audit_links(repo, url_fetcher=fake_fetch)
+    flagged = {f["url"] for f in report["broken_findings"]}
+    assert flagged == {"https://example.tld-does-not-exist/foo"}, (
+        f"only the 404 should be flagged; got {flagged}"
+    )
+
+
 def test_audit_links_strips_trailing_quote(tmp_path: Path) -> None:
     """Regression: bare-URL extraction left a trailing ``"`` on URLs
     that were the value of a JSON/YAML string in a code sample."""
