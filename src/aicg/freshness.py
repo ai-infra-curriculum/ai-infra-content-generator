@@ -157,6 +157,14 @@ class LinkFinding:
             if any(marker in reason_lower for marker in _DNS_FAILURE_MARKERS):
                 return False
             return True
+        # 403 / 405 / 429 / 451 / 999 are server-side denials of the
+        # audit's HEAD request — they prove the URL is REACHABLE, not
+        # broken. (LinkedIn returns 999 for the same reason.) The
+        # whole point of audit-links is to find dead citations; a
+        # citation a learner can click and read but the bot can't is
+        # still valid curriculum content.
+        if self.status in {403, 405, 429, 451, 999}:
+            return False
         return self.status >= 400 or self.status in {301, 308}
 
 
@@ -709,6 +717,13 @@ def _is_example_url(url: str) -> bool:
         return True
     if host in _RESERVED_EXAMPLE_HOSTS:
         return True
+    # Suffix match against the example.com/.net/.org family — covers
+    # subdomains like ``staging.example.com`` and ``my-svc.example.org``
+    # which are routine in cohort exercises (the RFC 2606 reservations
+    # apply to the whole subtree, not just the apex).
+    for reserved in _RESERVED_EXAMPLE_HOSTS:
+        if "." in reserved and host.endswith("." + reserved):
+            return True
     if any(host == tld[1:] or host.endswith(tld) for tld in _RESERVED_TLDS):
         return True
     if any(host.endswith(suffix) for suffix in _K8S_DNS_SUFFIXES):
