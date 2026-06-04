@@ -247,6 +247,84 @@ def test_audit_links_skips_example_subdomains(tmp_path: Path) -> None:
     )
 
 
+def test_audit_links_skips_placeholder_company_domains(tmp_path: Path) -> None:
+    """SRE / runbook / incident docs constantly cite
+    ``wiki.company.com``, ``runbooks.mycompany.com``, ``api.acme.com``
+    as stand-in URLs for "your internal tool here". Treat them like
+    example.com.
+    """
+    skip_urls = [
+        "https://wiki.company.com/runbook",
+        "https://runbooks.mycompany.com/slo",
+        "https://api.acme.com/v1/users",
+        "https://app.yourcompany.com/dashboard",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 200, "OK"
+
+    audit_links(repo, url_fetcher=fake_fetch)
+    assert seen == [], f"placeholder company domains should not be fetched; got {seen}"
+
+
+def test_audit_links_skips_shell_substitution_in_path(tmp_path: Path) -> None:
+    """``https://dl.k8s.io/release/$(curl -s ...)`` is a download
+    command published in installation docs — the ``$(...)`` is meant
+    to be evaluated by the user's shell, not by the audit's HEAD
+    request. PR #28's _PLACEHOLDER_URL_RE only matched between scheme
+    and first /; extend to the whole URL.
+    """
+    skip_urls = [
+        # No nested URL — the whole token is one placeholder.
+        "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname",
+        "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname",
+        "https://api.example-svc.com/configs/${VERSION}/manifest.yaml",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 200, "OK"
+
+    audit_links(repo, url_fetcher=fake_fetch)
+    assert seen == [], f"shell-substitution URLs should not be fetched; got {seen}"
+
+
+def test_audit_links_skips_placeholder_slack_and_github_paths(tmp_path: Path) -> None:
+    """Slack webhook stubs (``/services/YOUR/SLACK/WEBHOOK``) and
+    GitHub placeholder owners (``github.com/user/repo.git``,
+    ``github.com/myorg/myrepo``) are documentation conventions, not
+    citations.
+    """
+    skip_urls = [
+        "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+        "https://hooks.slack.com/services/WORKSPACE/CHANNEL/TOKEN",
+        "https://github.com/user/repo.git",
+        "https://github.com/YOU/ml-toolkit.git",
+        "https://github.com/ORIGINAL-OWNER/ml-toolkit.git",
+        "https://github.com/myorg/myrepo",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int, str]:
+        seen.append(url)
+        return 200, "OK"
+
+    audit_links(repo, url_fetcher=fake_fetch)
+    assert seen == [], f"placeholder Slack/GitHub URLs should not be fetched; got {seen}"
+
+
 def test_audit_links_treats_bot_blocking_as_not_broken(tmp_path: Path) -> None:
     """403 / 405 / 429 / 451 mean the URL is reachable but the bot is
     denied. Junior's queue had Udemy 403s and HashiCorp 429s that
