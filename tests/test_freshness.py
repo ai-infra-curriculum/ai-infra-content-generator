@@ -149,6 +149,78 @@ def test_audit_links_skips_reserved_example_hosts(tmp_path: Path) -> None:
     assert flagged == set(keep_urls)
 
 
+def test_audit_links_skips_k8s_and_docker_placeholder_urls(
+    tmp_path: Path,
+) -> None:
+    """Regression: junior-engineer's queue had 110 high-sev refresh_links
+    items, almost all of them pointing at docker-compose service names,
+    k8s service DNS, or un-substituted template variables. Those are
+    teaching scaffolding — the audit must drop them at collection time.
+    """
+    skip_urls = [
+        # docker-compose service names (bare hostnames, no dot)
+        "http://db:5432",
+        "http://container-b:8000/health",
+        "http://backend-service-correct",
+        "http://failing-readiness-svc",
+        # k8s short names with .namespace
+        "http://jaeger-collector.monitoring:4318",
+        # fully-qualified k8s service DNS
+        "http://flask-app-dev-flask-app.dev-namespace.svc.cluster.local",
+        "http://inference-gateway-v2.ml-inference.svc.cluster.local/health",
+        # docker desktop host alias
+        "http://host.docker.internal:8000",
+        # template placeholders
+        "http://${INGRESS_IP}/api",
+        "http://$EXTERNAL_IP/health",
+        "http://<INGRESS_IP>/admin",
+        "http://<service-ip>/admin",
+        "http://{{ gateway }}/v1",
+        # empty hostname (port-only URL)
+        "http://:8000/health",
+        # userinfo-prefixed localhost (regression — old splitter
+        # mis-read host as "admin")
+        "http://admin:admin@localhost:3000/api/dashboards/uid/slo",
+    ]
+    keep_urls = [
+        # Real public domain — should still be checked.
+        "https://www.redhat.com/sysadmin/troubleshooting-network-issues",
+    ]
+    body = "\n".join(f"See [link]({u})." for u in skip_urls + keep_urls) + "\n"
+    repo = tmp_path / "repo"
+    write_file(repo / "modules/mod-001/README.md", body)
+
+    seen: list[str] = []
+
+    def fake_fetch(url: str) -> tuple[int | None, str]:
+        seen.append(url)
+        if "redhat.com" in url:
+            return 404, "Not Found"
+        # Everything that slipped past _is_example_url at collection
+        # time fails DNS in real life — return None + the canonical
+        # Linux getaddrinfo error.
+        return None, "url-error: [Errno -2] Name or service not known"
+
+    report = audit_links(repo, url_fetcher=fake_fetch)
+    # Only real public URLs should be HEAD-pinged. If something else
+    # made it through, _is_example_url has a gap to plug.
+    leaked = set(seen) - set(keep_urls)
+    # k8s shorthand like jaeger-collector.monitoring is impractical to
+    # catch syntactically (no public TLD test we trust). The DNS-failure
+    # downgrade in is_broken() handles it at fetch time instead.
+    # So we tolerate fetches happening, but require that NOTHING from
+    # skip_urls ends up in the broken_findings list.
+    flagged = {f["url"] for f in report["broken_findings"]}
+    assert flagged == set(keep_urls), (
+        f"expected only {keep_urls} broken, but got {flagged}"
+    )
+    # And the explicit-skip URLs that bypassed fetch entirely.
+    explicit_skips_not_fetched = set(skip_urls) - set(seen)
+    assert len(explicit_skips_not_fetched) >= len(skip_urls) - 1, (
+        f"too many placeholder URLs reached the fetcher: leaked={leaked}"
+    )
+
+
 def test_audit_links_strips_trailing_quote(tmp_path: Path) -> None:
     """Regression: bare-URL extraction left a trailing ``"`` on URLs
     that were the value of a JSON/YAML string in a code sample."""
