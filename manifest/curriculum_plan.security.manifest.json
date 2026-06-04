@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "role": "security",
+  "role_title": "Security Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-SEC-MOD-001-ML-SECURITY-FOUNDATIONS",
+      "label": "Module 01 \u2014 Foundations of ML Security",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-001-ml-security-foundations`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-002-ZERO-TRUST-ARCHITECTURE",
+      "label": "Module 02 \u2014 Zero-Trust Architecture for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-002-zero-trust-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-003-CRYPTOGRAPHY-FOR-ML",
+      "label": "Module 03 \u2014 Cryptography for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-003-cryptography-for-ml`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-004-NETWORK-SECURITY",
+      "label": "Module 04 \u2014 Network Security for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-004-network-security`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-005-SECRETS-MANAGEMENT",
+      "label": "Module 05 \u2014 Secrets Management for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-005-secrets-management`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-006-ADVERSARIAL-ML",
+      "label": "Module 06 \u2014 Adversarial Machine Learning",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-006-adversarial-ml`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-007-COMPLIANCE-AND-GOVERNANCE",
+      "label": "Module 07 \u2014 Compliance and Governance for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-007-compliance-and-governance`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-008-RUNTIME-SECURITY",
+      "label": "Module 08 \u2014 Runtime Security for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-008-runtime-security`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-009-POLICY-AS-CODE",
+      "label": "Module 09 \u2014 Policy as Code",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-009-policy-as-code`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-010-SUPPLY-CHAIN-SECURITY",
+      "label": "Module 10 \u2014 Supply Chain Security for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-010-supply-chain-security`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-011-SECURITY-OPERATIONS",
+      "label": "Module 11 \u2014 Security Operations for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-011-security-operations`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-MOD-012-CAPSTONE",
+      "label": "Module 12 \u2014 Capstone",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [],
+      "solutions": [],
+      "tests": [],
+      "coverage_status": "missing",
+      "notes": "Backfilled from existing module `mod-012-capstone`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-PROJECT-1-ZERO-TRUST",
+      "label": "Project 1: Zero-Trust ML Infrastructure",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-1-zero-trust"
+      ],
+      "solutions": [
+        "projects/project-1-zero-trust/README.md",
+        "projects/project-1-zero-trust/SOLUTION.md"
+      ],
+      "tests": [
+        "projects/project-1-zero-trust/tests/penetration.sh"
+      ],
+      "coverage_status": "covered",
+      "notes": "Backfilled from existing project `project-1-zero-trust`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-PROJECT-2-COMPLIANCE",
+      "label": "Project 2: Compliance Framework for ML Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-2-compliance"
+      ],
+      "solutions": [
+        "projects/project-2-compliance/README.md",
+        "projects/project-2-compliance/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-2-compliance`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-PROJECT-3-ADVERSARIAL-DEFENSE",
+      "label": "Project 3: Adversarial ML Defense System",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-3-adversarial-defense"
+      ],
+      "solutions": [
+        "projects/project-3-adversarial-defense/README.md",
+        "projects/project-3-adversarial-defense/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-3-adversarial-defense`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-PROJECT-4-SECURE-CICD",
+      "label": "Project 4: Secure ML CI/CD Pipeline",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-4-secure-cicd"
+      ],
+      "solutions": [
+        "projects/project-4-secure-cicd/README.md",
+        "projects/project-4-secure-cicd/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-4-secure-cicd`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-SEC-PROJECT-5-SECURITY-OPERATIONS",
+      "label": "Project 5: Security Operations Center for ML",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-5-security-operations"
+      ],
+      "solutions": [
+        "projects/project-5-security-operations/README.md",
+        "projects/project-5-security-operations/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-5-security-operations`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}

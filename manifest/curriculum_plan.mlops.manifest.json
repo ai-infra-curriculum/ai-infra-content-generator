@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "role": "mlops",
+  "role_title": "Mlops Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-MLO-PROJECT-1-ML-PIPELINE",
+      "label": "Project 1: End-to-End ML Pipeline",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-1-ml-pipeline"
+      ],
+      "solutions": [
+        "projects/project-1-ml-pipeline/README.md",
+        "projects/project-1-ml-pipeline/SOLUTION.md",
+        "projects/project-1-ml-pipeline/STEP_BY_STEP.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-1-ml-pipeline`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-MLO-PROJECT-2-MODEL-SERVING",
+      "label": "Project 2: Production Model Serving Platform",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-2-model-serving"
+      ],
+      "solutions": [
+        "projects/project-2-model-serving/README.md",
+        "projects/project-2-model-serving/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-2-model-serving`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-MLO-PROJECT-3-EXPERIMENTATION",
+      "label": "Project 3: ML Experimentation Platform",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-3-experimentation"
+      ],
+      "solutions": [
+        "projects/project-3-experimentation/README.md",
+        "projects/project-3-experimentation/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-3-experimentation`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-MLO-PROJECT-4-GOVERNANCE",
+      "label": "Project 4: ML Governance & Compliance System",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-4-governance"
+      ],
+      "solutions": [
+        "projects/project-4-governance/README.md",
+        "projects/project-4-governance/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-4-governance`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-MLO-PROJECT-5-LLMOPS",
+      "label": "Project 5: LLMOps Production System",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-5-llmops"
+      ],
+      "solutions": [
+        "projects/project-5-llmops/README.md",
+        "projects/project-5-llmops/SOLUTION.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-5-llmops`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}
