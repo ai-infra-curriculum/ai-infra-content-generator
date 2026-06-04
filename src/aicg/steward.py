@@ -105,7 +105,52 @@ def steward_run(
     response_queue = _build_response_queue(repo_reports, state_dir)
     write_json(state_dir / PR_RESPONSE_QUEUE, response_queue)
 
+    # When the steward actually merged something (apply=True and at least
+    # one PR landed), refresh the structural curriculum manifest so
+    # downstream consumers (research prompts, /find, the canonical-source
+    # staleness audit) see the new state.
+    if apply and _any_pr_merged(repo_reports):
+        _refresh_curriculum_manifest(workspace, report)
+
     return report
+
+
+def _any_pr_merged(repo_reports: list[dict[str, Any]]) -> bool:
+    for repo in repo_reports:
+        for pr in repo.get("prs", []) or []:
+            if pr.get("decision") == "merged":
+                return True
+    return False
+
+
+def _refresh_curriculum_manifest(workspace: Path, report: dict[str, Any]) -> None:
+    """Call scripts/refresh-curriculum-manifest.sh; failures are non-fatal."""
+    import subprocess
+    from pathlib import Path as _Path
+
+    here = _Path(__file__).resolve().parent.parent.parent  # repo root
+    script = here / "scripts" / "refresh-curriculum-manifest.sh"
+    if not script.exists():
+        return
+    try:
+        completed = subprocess.run(
+            [str(script), "--workspace", str(workspace)],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=60,
+        )
+        report["curriculum_manifest_refresh"] = {
+            "ran": True,
+            "returncode": completed.returncode,
+            "stderr_tail": completed.stderr[-300:],
+        }
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        report["curriculum_manifest_refresh"] = {
+            "ran": True,
+            "returncode": -1,
+            "error": str(exc),
+        }
 
 
 def _build_response_queue(
