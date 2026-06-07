@@ -131,12 +131,14 @@ install_cron() {
   for entry in "${research_slots[@]}"; do
     day="${entry%%:*}"
     role="${entry##*:}"
-    per_role_lines+=$'\n'"0 0 $day * * $(job_command_research_role "$role")"
+    # minute 15, not 0 — daily-remediate fires at minute 0 every hour
+    # and holds the org-job lock. Mirrors the systemd OnCalendar fix.
+    per_role_lines+=$'\n'"15 0 $day * * $(job_command_research_role "$role")"
   done
   for entry in "${review_slots[@]}"; do
     day="${entry%%:*}"
     role="${entry##*:}"
-    per_role_lines+=$'\n'"0 0 $day * * $(job_command_review_role "$role")"
+    per_role_lines+=$'\n'"30 0 $day * * $(job_command_review_role "$role")"
   done
 
   local block
@@ -265,11 +267,18 @@ install_per_role_research() {
     day="${entry%%:*}"
     role="${entry##*:}"
     timer_path="$unit_dir/aicg-research-role@${role}.timer"
+    # 00:15, NOT 00:00 — daily-remediate fires hourly at *:00:00 and
+    # has been running for weeks, so it wins the org-job lock by a
+    # few hundred ms at the top of every hour. Both 2026-06-05 and
+    # 2026-06-06 research-role runs bailed in 32 seconds with
+    # "Another AICG org job is running; exiting." Same fix pattern
+    # as daily-discussions @ 05:05. 15 min is comfortably past
+    # remediate's typical 30-60s runtime.
     timer_content="[Unit]
 Description=AICG per-role research timer: ${role}
 
 [Timer]
-OnCalendar=*-*-${day} 00:00:00
+OnCalendar=*-*-${day} 00:15:00
 Persistent=true
 Unit=aicg-research-role@${role}.service
 
@@ -343,11 +352,16 @@ install_per_role_review() {
     day="${entry%%:*}"
     role="${entry##*:}"
     timer_path="$unit_dir/aicg-review-role@${role}.timer"
+    # 00:30 — see the lock-race comment on aicg-research-role above.
+    # Review starts later than research so they don't compete for the
+    # lock on the day-13→14 boundary (research junior-engineer day 14
+    # at 00:15, review junior-engineer day 14 at 00:30 — no overlap
+    # because no role fires on both timers the same night).
     timer_content="[Unit]
 Description=AICG per-role freshness review timer: ${role}
 
 [Timer]
-OnCalendar=*-*-${day} 00:00:00
+OnCalendar=*-*-${day} 00:30:00
 Persistent=true
 Unit=aicg-review-role@${role}.service
 
