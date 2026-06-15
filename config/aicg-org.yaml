@@ -209,6 +209,20 @@
       "level": 48,
       "learning_repo": "ai-infra-agentic-systems-architect-learning",
       "solution_repo": "ai-infra-agentic-systems-architect-solutions"
+    },
+    {
+      "id": "agentic-ai-developer",
+      "title": "Agentic AI Developer",
+      "level": 20,
+      "learning_repo": "ai-infra-agentic-ai-developer-learning",
+      "solution_repo": "ai-infra-agentic-ai-developer-solutions"
+    },
+    {
+      "id": "senior-agentic-ai-engineer",
+      "title": "Senior Agentic AI Engineer",
+      "level": 40,
+      "learning_repo": "ai-infra-senior-agentic-ai-engineer-learning",
+      "solution_repo": "ai-infra-senior-agentic-ai-engineer-solutions"
     }
   ]
 }

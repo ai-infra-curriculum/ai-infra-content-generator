@@ -93,31 +93,35 @@ job_command_review_role() {
 install_cron() {
   local marker_begin="# BEGIN AICG ORG JOBS"
   local marker_end="# END AICG ORG JOBS"
-  # Per-role nightly research at 00:00 on days 1-15, per-role review at
-  # 00:00 on days 16-30. Matches the systemd ordering — lowest-level
-  # role first, chief-ai-officer last. Two-role Agentic track inserted
-  # in level order (agentic-ai-engineer L30, agentic-systems-architect L48).
+  # 17 roles, lowest-level-first. Research at 00:15 on days 1-17; review at
+  # 12:30 on days 15-31 (each role reviewed 14 days after its research).
+  # Research (00:15) and review (12:30) are 12h apart so the days-15-17
+  # overlap never races for the org-job lock. Agentic track: developer L20,
+  # ai-engineer L30, senior-ai-engineer L40, systems-architect L48.
   local per_role_lines=""
   local -a research_slots=(
     "1:junior-engineer"
     "2:engineer"
-    "3:ml-platform"
-    "4:mlops"
-    "5:senior-engineer"
-    "6:agentic-ai-engineer"
-    "7:performance"
-    "8:security"
-    "9:team-lead"
-    "10:architect"
-    "11:agentic-systems-architect"
-    "12:principal-engineer"
-    "13:senior-architect"
-    "14:principal-architect"
-    "15:chief-ai-officer"
+    "3:agentic-ai-developer"
+    "4:ml-platform"
+    "5:mlops"
+    "6:senior-engineer"
+    "7:agentic-ai-engineer"
+    "8:performance"
+    "9:security"
+    "10:team-lead"
+    "11:senior-agentic-ai-engineer"
+    "12:architect"
+    "13:agentic-systems-architect"
+    "14:principal-engineer"
+    "15:senior-architect"
+    "16:principal-architect"
+    "17:chief-ai-officer"
   )
   local -a review_slots=(
-    "16:junior-engineer"
-    "17:engineer"
+    "15:junior-engineer"
+    "16:engineer"
+    "17:agentic-ai-developer"
     "18:ml-platform"
     "19:mlops"
     "20:senior-engineer"
@@ -125,12 +129,13 @@ install_cron() {
     "22:performance"
     "23:security"
     "24:team-lead"
-    "25:architect"
-    "26:agentic-systems-architect"
-    "27:principal-engineer"
-    "28:senior-architect"
-    "29:principal-architect"
-    "30:chief-ai-officer"
+    "25:senior-agentic-ai-engineer"
+    "26:architect"
+    "27:agentic-systems-architect"
+    "28:principal-engineer"
+    "29:senior-architect"
+    "30:principal-architect"
+    "31:chief-ai-officer"
   )
   local entry day role
   for entry in "${research_slots[@]}"; do
@@ -143,7 +148,9 @@ install_cron() {
   for entry in "${review_slots[@]}"; do
     day="${entry%%:*}"
     role="${entry##*:}"
-    per_role_lines+=$'\n'"30 0 $day * * $(job_command_review_role "$role")"
+    # 12:30 — review runs at noon, 12h from the 00:15 research slot, so
+    # the days-15-17 research/review overlap never collides on the lock.
+    per_role_lines+=$'\n'"30 12 $day * * $(job_command_review_role "$role")"
   done
 
   local block
@@ -241,28 +248,30 @@ install_per_role_research() {
       "$template_path"
   )"
 
-  # Roles + their day-of-month slot. Lowest-level-first per the curriculum
-  # config so foundational tracks land their proposals before dependent
-  # tracks could conflict with them. Chief-AI-officer (level 70) anchors
-  # the last research day. Update this list when the org manifest
-  # gains/loses a role. Agentic track (agentic-ai-engineer L30,
-  # agentic-systems-architect L48) inserted in level order.
+  # Roles + their research day-of-month slot (00:15). Lowest-level-first per
+  # the curriculum config so foundational tracks land their proposals before
+  # dependent tracks could conflict with them. Chief-AI-officer (level 70)
+  # anchors the last research day. Update this list AND install_per_role_review
+  # when the org manifest gains/loses a role. 17 roles incl. the Agentic track
+  # (developer L20, ai-engineer L30, senior-ai-engineer L40, systems-architect L48).
   local -a role_slots=(
     "01:junior-engineer"
     "02:engineer"
-    "03:ml-platform"
-    "04:mlops"
-    "05:senior-engineer"
-    "06:agentic-ai-engineer"
-    "07:performance"
-    "08:security"
-    "09:team-lead"
-    "10:architect"
-    "11:agentic-systems-architect"
-    "12:principal-engineer"
-    "13:senior-architect"
-    "14:principal-architect"
-    "15:chief-ai-officer"
+    "03:agentic-ai-developer"
+    "04:ml-platform"
+    "05:mlops"
+    "06:senior-engineer"
+    "07:agentic-ai-engineer"
+    "08:performance"
+    "09:security"
+    "10:team-lead"
+    "11:senior-agentic-ai-engineer"
+    "12:architect"
+    "13:agentic-systems-architect"
+    "14:principal-engineer"
+    "15:senior-architect"
+    "16:principal-architect"
+    "17:chief-ai-officer"
   )
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -329,14 +338,15 @@ install_per_role_review() {
       "$template_path"
   )"
 
-  # Days 16-30 (after the research days 1-15 finish). Same role
-  # order — lowest level first — so the schedule reads as
-  # "research then review the same role 15 days later." Keep this
-  # list in lockstep with install_per_role_research's role_slots
-  # when the org manifest gains or loses a role.
+  # Days 15-31 at 12:30 (each role reviewed 14 days after its 00:15 research).
+  # Review runs at noon, NOT 00:30, so the days-15-17 research/review overlap
+  # is 12h apart and never races for the org-job lock. Same role order —
+  # lowest level first. Keep this list in lockstep with
+  # install_per_role_research's role_slots when the manifest gains/loses a role.
   local -a role_slots=(
-    "16:junior-engineer"
-    "17:engineer"
+    "15:junior-engineer"
+    "16:engineer"
+    "17:agentic-ai-developer"
     "18:ml-platform"
     "19:mlops"
     "20:senior-engineer"
@@ -344,12 +354,13 @@ install_per_role_review() {
     "22:performance"
     "23:security"
     "24:team-lead"
-    "25:architect"
-    "26:agentic-systems-architect"
-    "27:principal-engineer"
-    "28:senior-architect"
-    "29:principal-architect"
-    "30:chief-ai-officer"
+    "25:senior-agentic-ai-engineer"
+    "26:architect"
+    "27:agentic-systems-architect"
+    "28:principal-engineer"
+    "29:senior-architect"
+    "30:principal-architect"
+    "31:chief-ai-officer"
   )
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -372,7 +383,7 @@ install_per_role_review() {
 Description=AICG per-role freshness review timer: ${role}
 
 [Timer]
-OnCalendar=*-*-${day} 00:30:00
+OnCalendar=*-*-${day} 12:30:00
 Persistent=true
 Unit=aicg-review-role@${role}.service
 
