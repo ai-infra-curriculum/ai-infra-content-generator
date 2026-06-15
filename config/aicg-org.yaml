@@ -201,28 +201,32 @@
       "title": "Agentic AI Engineer",
       "level": 30,
       "learning_repo": "ai-infra-agentic-ai-engineer-learning",
-      "solution_repo": "ai-infra-agentic-ai-engineer-solutions"
+      "solution_repo": "ai-infra-agentic-ai-engineer-solutions",
+      "aliases": ["AI Agent Engineer", "Agent Engineer", "Applied AI Engineer", "Generative AI Engineer", "LLM Engineer"]
     },
     {
       "id": "agentic-systems-architect",
       "title": "Agentic Systems Architect",
       "level": 48,
       "learning_repo": "ai-infra-agentic-systems-architect-learning",
-      "solution_repo": "ai-infra-agentic-systems-architect-solutions"
+      "solution_repo": "ai-infra-agentic-systems-architect-solutions",
+      "aliases": ["Agentic AI Architect", "AI Agent Architect", "Solution Architect - Agentic AI", "Multi-Agent Systems Architect", "Principal AI Engineer - Agents"]
     },
     {
       "id": "agentic-ai-developer",
       "title": "Agentic AI Developer",
       "level": 20,
       "learning_repo": "ai-infra-agentic-ai-developer-learning",
-      "solution_repo": "ai-infra-agentic-ai-developer-solutions"
+      "solution_repo": "ai-infra-agentic-ai-developer-solutions",
+      "aliases": ["AI Engineer", "LLM Application Developer", "Generative AI Developer", "Applied AI Developer", "AI Application Engineer"]
     },
     {
       "id": "senior-agentic-ai-engineer",
       "title": "Senior Agentic AI Engineer",
       "level": 40,
       "learning_repo": "ai-infra-senior-agentic-ai-engineer-learning",
-      "solution_repo": "ai-infra-senior-agentic-ai-engineer-solutions"
+      "solution_repo": "ai-infra-senior-agentic-ai-engineer-solutions",
+      "aliases": ["Staff Agentic AI Engineer", "Senior AI Agent Engineer", "Lead Applied AI Engineer", "Agentic Platform Engineer"]
     }
   ]
 }

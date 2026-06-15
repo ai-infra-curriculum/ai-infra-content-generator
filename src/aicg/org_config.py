@@ -20,6 +20,9 @@ class RoleConfig:
     level: int
     learning_repo: str
     solution_repo: str
+    # Alternative/synonym job titles the research cycle should also search,
+    # so sparse-title roles still clear the evidence gate.
+    aliases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -120,6 +123,7 @@ def load_manifest(path: Path | None = None) -> OrgManifest:
             level=int(item["level"]),
             learning_repo=item["learning_repo"],
             solution_repo=item["solution_repo"],
+            aliases=tuple(item.get("aliases", []) or ()),
         )
         for item in raw.get("roles", [])
     )
