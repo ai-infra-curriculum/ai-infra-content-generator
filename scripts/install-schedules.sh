@@ -93,9 +93,10 @@ job_command_review_role() {
 install_cron() {
   local marker_begin="# BEGIN AICG ORG JOBS"
   local marker_end="# END AICG ORG JOBS"
-  # Per-role nightly research at 00:00 on days 1-13, per-role review at
-  # 00:00 on days 14-26. Matches the systemd ordering — lowest-level
-  # role first, chief-ai-officer last.
+  # Per-role nightly research at 00:00 on days 1-15, per-role review at
+  # 00:00 on days 16-30. Matches the systemd ordering — lowest-level
+  # role first, chief-ai-officer last. Two-role Agentic track inserted
+  # in level order (agentic-ai-engineer L30, agentic-systems-architect L48).
   local per_role_lines=""
   local -a research_slots=(
     "1:junior-engineer"
@@ -103,29 +104,33 @@ install_cron() {
     "3:ml-platform"
     "4:mlops"
     "5:senior-engineer"
-    "6:performance"
-    "7:security"
-    "8:team-lead"
-    "9:architect"
-    "10:principal-engineer"
-    "11:senior-architect"
-    "12:principal-architect"
-    "13:chief-ai-officer"
+    "6:agentic-ai-engineer"
+    "7:performance"
+    "8:security"
+    "9:team-lead"
+    "10:architect"
+    "11:agentic-systems-architect"
+    "12:principal-engineer"
+    "13:senior-architect"
+    "14:principal-architect"
+    "15:chief-ai-officer"
   )
   local -a review_slots=(
-    "14:junior-engineer"
-    "15:engineer"
-    "16:ml-platform"
-    "17:mlops"
-    "18:senior-engineer"
-    "19:performance"
-    "20:security"
-    "21:team-lead"
-    "22:architect"
-    "23:principal-engineer"
-    "24:senior-architect"
-    "25:principal-architect"
-    "26:chief-ai-officer"
+    "16:junior-engineer"
+    "17:engineer"
+    "18:ml-platform"
+    "19:mlops"
+    "20:senior-engineer"
+    "21:agentic-ai-engineer"
+    "22:performance"
+    "23:security"
+    "24:team-lead"
+    "25:architect"
+    "26:agentic-systems-architect"
+    "27:principal-engineer"
+    "28:senior-architect"
+    "29:principal-architect"
+    "30:chief-ai-officer"
   )
   local entry day role
   for entry in "${research_slots[@]}"; do
@@ -239,21 +244,25 @@ install_per_role_research() {
   # Roles + their day-of-month slot. Lowest-level-first per the curriculum
   # config so foundational tracks land their proposals before dependent
   # tracks could conflict with them. Chief-AI-officer (level 70) anchors
-  # day 13. Update this list when the org manifest gains/loses a role.
+  # the last research day. Update this list when the org manifest
+  # gains/loses a role. Agentic track (agentic-ai-engineer L30,
+  # agentic-systems-architect L48) inserted in level order.
   local -a role_slots=(
     "01:junior-engineer"
     "02:engineer"
     "03:ml-platform"
     "04:mlops"
     "05:senior-engineer"
-    "06:performance"
-    "07:security"
-    "08:team-lead"
-    "09:architect"
-    "10:principal-engineer"
-    "11:senior-architect"
-    "12:principal-architect"
-    "13:chief-ai-officer"
+    "06:agentic-ai-engineer"
+    "07:performance"
+    "08:security"
+    "09:team-lead"
+    "10:architect"
+    "11:agentic-systems-architect"
+    "12:principal-engineer"
+    "13:senior-architect"
+    "14:principal-architect"
+    "15:chief-ai-officer"
   )
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -320,25 +329,27 @@ install_per_role_review() {
       "$template_path"
   )"
 
-  # Days 14-26 (after the research days 1-13 finish). Same role
+  # Days 16-30 (after the research days 1-15 finish). Same role
   # order — lowest level first — so the schedule reads as
-  # "research then review the same role 13 days later." Keep this
+  # "research then review the same role 15 days later." Keep this
   # list in lockstep with install_per_role_research's role_slots
   # when the org manifest gains or loses a role.
   local -a role_slots=(
-    "14:junior-engineer"
-    "15:engineer"
-    "16:ml-platform"
-    "17:mlops"
-    "18:senior-engineer"
-    "19:performance"
-    "20:security"
-    "21:team-lead"
-    "22:architect"
-    "23:principal-engineer"
-    "24:senior-architect"
-    "25:principal-architect"
-    "26:chief-ai-officer"
+    "16:junior-engineer"
+    "17:engineer"
+    "18:ml-platform"
+    "19:mlops"
+    "20:senior-engineer"
+    "21:agentic-ai-engineer"
+    "22:performance"
+    "23:security"
+    "24:team-lead"
+    "25:architect"
+    "26:agentic-systems-architect"
+    "27:principal-engineer"
+    "28:senior-architect"
+    "29:principal-architect"
+    "30:chief-ai-officer"
   )
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
