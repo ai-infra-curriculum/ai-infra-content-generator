@@ -1951,6 +1951,15 @@ def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -
         output_contract = _v2_output_contract_section(role, month)
     else:
         output_contract = _legacy_output_contract_section()
+    if role.aliases:
+        alias_line = (
+            "- This role's title is emerging/fragmented. ALSO search these equivalent "
+            "titles and count their postings toward the evidence threshold: "
+            + ", ".join(f"`{a}`" for a in role.aliases)
+            + ".\n"
+        )
+    else:
+        alias_line = ""
     return (
         f"# Job Requirements Research Packet - {role.title} - {month}\n\n"
         f"Preferred content agent: {content_generation_label(manifest)}.\n\n"
@@ -1961,6 +1970,7 @@ def build_research_prompt(manifest: OrgManifest, role: RoleConfig, month: str) -
         f"`{role.learning_repo}` requirements without duplicating lower-level coverage.\n\n"
         "## Research Requirements\n\n"
         f"- Analyze at least {manifest.research.get('minimum_postings_per_role', 25)} relevant postings.\n"
+        f"{alias_line}"
         f"- Prefer postings from the last {manifest.research.get('source_window_days', 45)} days.\n"
         "- Capture employer, title, URL, date observed, location, and requirements.\n"
         "- Store raw normalized findings in `.aicg/job-requirements.json`.\n"
