@@ -19,14 +19,14 @@
       "release": true
     },
     {
-      "_comment": "The AICG runner itself. Listed so it gets the maintainer footer + audits like every other repo. release=false so monthly-release does NOT tag it — versions are driven by the runner's own pyproject.",
+      "_comment": "The AICG runner itself. Listed so it gets the maintainer footer + audits like every other repo. release=false so monthly-release does NOT tag it \u2014 versions are driven by the runner's own pyproject.",
       "name": "ai-infra-content-generator",
       "kind": "runner",
       "release": false
     }
   ],
   "maintained_by": {
-    "_comment": "Project maintainership attribution. Used by aicg org rebrand to write the footer, and by the audits to treat references to these orgs as legitimate (not 'orphan'). Distinct from the source policy for curriculum content — those rules are unchanged.",
+    "_comment": "Project maintainership attribution. Used by aicg org rebrand to write the footer, and by the audits to treat references to these orgs as legitimate (not 'orphan'). Distinct from the source policy for curriculum content \u2014 those rules are unchanged.",
     "name": "VeriSwarm.ai",
     "url": "https://veriswarm.ai",
     "phrasing": "Maintained by [VeriSwarm.ai](https://veriswarm.ai)",
@@ -195,6 +195,20 @@
       "level": 70,
       "learning_repo": "ai-infra-chief-ai-officer-learning",
       "solution_repo": "ai-infra-chief-ai-officer-solutions"
+    },
+    {
+      "id": "agentic-ai-engineer",
+      "title": "Agentic AI Engineer",
+      "level": 30,
+      "learning_repo": "ai-infra-agentic-ai-engineer-learning",
+      "solution_repo": "ai-infra-agentic-ai-engineer-solutions"
+    },
+    {
+      "id": "agentic-systems-architect",
+      "title": "Agentic Systems Architect",
+      "level": 48,
+      "learning_repo": "ai-infra-agentic-systems-architect-learning",
+      "solution_repo": "ai-infra-agentic-systems-architect-solutions"
     }
   ]
 }
