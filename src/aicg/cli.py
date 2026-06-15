@@ -326,6 +326,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_execute_plan.set_defaults(func=cmd_org_execute_plan)
 
+    org_generate_learning = org_subparsers.add_parser(
+        "generate-learning",
+        help="Author lecture + exercise content for a role's modules from its curriculum plan (no postings evidence required)",
+    )
+    add_org_args(org_generate_learning)
+    org_generate_learning.add_argument(
+        "--role", required=True, help="Role id whose learning content should be generated."
+    )
+    org_generate_learning.add_argument(
+        "--module",
+        default=None,
+        help="Optional single module id (e.g. mod-101-foundations). Defaults to all modules in the plan.",
+    )
+    org_generate_learning.set_defaults(func=cmd_org_generate_learning)
+
     org_bootstrap = org_subparsers.add_parser(
         "bootstrap-role",
         help="Scaffold a new role's learning + solutions repos and research prompt",
@@ -1231,6 +1246,35 @@ def cmd_org_execute_plan(args: argparse.Namespace) -> int:
             print(f"  - {mod}")
         if len(report["modules_created"]) > 12:
             print(f"  ... {len(report['modules_created']) - 12} more")
+    return 0
+
+
+def cmd_org_generate_learning(args: argparse.Namespace) -> int:
+    from .learning_content import LearningContentError, generate_role_learning_content
+
+    manifest = resolve_manifest(args)
+    try:
+        report = generate_role_learning_content(
+            manifest=manifest,
+            workspace=resolve_workspace(args),
+            role_id=args.role,
+            module=args.module,
+            state_dir=resolve_org_state_dir(args, manifest),
+        )
+    except LearningContentError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(
+        f"Generated learning content for {report['role_id']}: "
+        f"{len(report['modules_generated'])} module(s) authored, "
+        f"{len(report['modules_failed'])} failed"
+        + (f", deferred at {report['deferred_module']} (agent limit)" if report["deferred_module"] else "")
+        + "."
+    )
+    for mod in report["modules_generated"]:
+        print(f"  ✓ {mod}")
+    for mod in report["modules_failed"]:
+        print(f"  ✗ {mod}")
     return 0
 
 
