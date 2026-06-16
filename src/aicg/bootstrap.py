@@ -201,6 +201,12 @@ def _write_learning_skeleton(
             _learning_ci_workflow(),
         )
     )
+    written.append(
+        _write(
+            repo_path / ".markdownlint.jsonc",
+            _markdownlint_config(),
+        )
+    )
     # Empty content directories with placeholder READMEs so they show
     # up under git.
     written.append(
@@ -244,6 +250,12 @@ def _write_solutions_skeleton(
     )
     written.append(
         _write(
+            repo_path / ".markdownlint.jsonc",
+            _markdownlint_config(),
+        )
+    )
+    written.append(
+        _write(
             repo_path / "modules" / "README.md",
             "# Modules\n\nReference solutions per module live here.\n",
         )
@@ -255,6 +267,65 @@ def _write_solutions_skeleton(
         )
     )
     return written
+
+
+def _markdownlint_config() -> str:
+    """Lint config for curriculum repos.
+
+    The CI workflow runs markdownlint over generated lecture/exercise/solution
+    prose. Default markdownlint enforces stylistic rules (line length, fenced-
+    code-language, etc.) that are hostile to heterogeneous AI-authored content,
+    so we disable the style rules and keep only the broken-markdown checks
+    (empty links, malformed tables, spaced code spans). Mirrors the config used
+    by the sibling guidebook and existing curriculum repos.
+    """
+    return """\
+// markdownlint-cli2 config for curriculum content.
+//
+// Lint catches *broken* markdown (malformed tables, empty links, spaced code
+// spans) but does NOT enforce stylistic preferences — strict style is hostile
+// to heterogeneous AI-authored content. Rule reference:
+// https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+{
+  "default": true,
+
+  // === Disabled: style preferences ===
+  "MD001": false,  // heading-increment
+  "MD007": false,  // ul-indent style
+  "MD009": false,  // trailing-spaces
+  "MD010": false,  // hard-tabs (occasional in code blocks)
+  "MD012": false,  // multiple-blanks
+  "MD013": false,  // line-length (prose wraps as written)
+  "MD014": false,  // commands-show-output
+  "MD018": false,  // no-missing-space-atx
+  "MD019": false,  // no-multiple-space-atx
+  "MD022": false,  // blanks-around-headings
+  "MD024": false,  // duplicate-heading
+  "MD025": false,  // multiple-h1
+  "MD026": false,  // trailing-punctuation in headings
+  "MD028": false,  // no-blanks-blockquote
+  "MD029": false,  // ol-prefix style
+  "MD031": false,  // blanks-around-fences
+  "MD032": false,  // blanks-around-lists
+  "MD033": false,  // inline-html (needs-research markers, badges)
+  "MD034": false,  // bare-URL
+  "MD035": false,  // hr-style
+  "MD036": false,  // emphasis-as-heading
+  "MD037": false,  // no-space-in-emphasis
+  "MD040": false,  // fenced-code-language
+  "MD041": false,  // first-line-h1
+  "MD046": false,  // code-block-style
+  "MD047": false,  // single-trailing-newline
+  "MD050": false,  // strong-style
+  "MD051": false,  // link-fragments
+  "MD058": false,  // blanks-around-tables
+  "MD060": false   // table-pipe-spacing
+
+  // Broken-markdown checks remain ON: MD038 (no-space-in-code-spans),
+  // MD039 (no-space-in-links), MD042 (no-empty-links), MD056
+  // (table-column-count), and the rest of the defaults.
+}
+"""
 
 
 def _write(path: Path, content: str) -> str:

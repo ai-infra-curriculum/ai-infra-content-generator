@@ -40,6 +40,7 @@ def test_bootstrap_creates_paired_repos(tmp_path: Path) -> None:
         "lessons/README.md",
         "projects/README.md",
         ".github/workflows/ci.yml",
+        ".markdownlint.jsonc",
     ):
         assert (learning / required).exists(), f"missing {required} in learning"
     for required in (
@@ -50,6 +51,7 @@ def test_bootstrap_creates_paired_repos(tmp_path: Path) -> None:
         "modules/README.md",
         "projects/README.md",
         ".github/workflows/ci.yml",
+        ".markdownlint.jsonc",
     ):
         assert (solutions / required).exists(), f"missing {required} in solutions"
 
