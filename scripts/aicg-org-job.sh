@@ -148,6 +148,10 @@ main() {
       # spreads token usage across 13 nights and bounds blast-radius
       # of any single failure to one role.
       [[ -n "$ROLE" ]] || die "research-role requires ROLE"
+      # Pull every repo to current main first — research reads the role's
+      # curriculum-plan.json and branches from local main, so a stale clone
+      # would analyze old content and base the proposal PR on an old commit.
+      run_aicg_org sync
       run_aicg_org research --apply --role "$ROLE"
       ;;
     review-role)
@@ -160,6 +164,9 @@ main() {
       # No-op when quality_judge.enabled is false (every artifact
       # gets marked 'skipped').
       [[ -n "$ROLE" ]] || die "review-role requires ROLE"
+      # Pull every repo to current main first so freshness review judges
+      # the latest shipped artifacts, not a stale local clone.
+      run_aicg_org sync
       run_aicg_org review --role "$ROLE" --max-artifacts 50
       ;;
     promote-plan)
