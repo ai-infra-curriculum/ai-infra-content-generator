@@ -341,9 +341,20 @@ def _write(path: Path, content: str) -> str:
 # ---------------------------------------------------------------------------
 
 
+_SITE_BANNER = (
+    "<!-- aicg:site-banner -->\n"
+    "> 🎓 Part of the **[AI Infrastructure Curriculum](https://ai-infra-curriculum.github.io/)** — "
+    "a free, open-source ladder of role-based AI-infrastructure programs. "
+    "[Explore the ladder](https://ai-infra-curriculum.github.io/) · "
+    "[Join the first live cohort](https://ai-infra-curriculum.github.io/junior.html)\n"
+    "<!-- /aicg:site-banner -->\n\n"
+)
+
+
 def _learning_readme(role_id: str, title: str, description: str) -> str:
     return (
         f"# AI Infrastructure {title} — Learning Repository\n\n"
+        f"{_SITE_BANNER}"
         f"{description}\n\n"
         "> **Status**: scaffolded by `aicg org bootstrap-role`. The curriculum is "
         "not authored yet. Run `aicg org research` and `aicg org daily` to drive "
@@ -367,6 +378,7 @@ def _learning_readme(role_id: str, title: str, description: str) -> str:
 def _solutions_readme(role_id: str, title: str, description: str) -> str:
     return (
         f"# AI Infrastructure {title} — Solutions Repository\n\n"
+        f"{_SITE_BANNER}"
         "Reference implementations for the paired "
         f"[`ai-infra-{role_id}-learning`](https://github.com/ai-infra-curriculum/ai-infra-{role_id}-learning) "
         "track.\n\n"
