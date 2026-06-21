@@ -184,6 +184,7 @@
       "projects": [],
       "solutions": [
         "modules/mod-104-kubernetes/exercise-01-k8s-fundamentals/README.md",
+        "modules/mod-104-kubernetes/exercise-02-control-plane-tour/SOLUTION.md",
         "modules/mod-104-kubernetes/exercise-03-core-resources-mastery/README.md",
         "modules/mod-104-kubernetes/exercise-04-k8s-cluster-autoscaler/README.md",
         "modules/mod-104-kubernetes/exercise-04-k8s-cluster-autoscaler/STEP_BY_STEP.md",
@@ -193,9 +194,11 @@
         "modules/mod-104-kubernetes/exercise-06-k8s-operator-framework/STEP_BY_STEP.md",
         "modules/mod-104-kubernetes/exercise-07-helm-chart-authoring/README.md",
         "modules/mod-104-kubernetes/exercise-08-gpu-scheduling/README.md",
+        "modules/mod-104-kubernetes/exercise-09-monitoring-troubleshooting/SOLUTION.md",
         "modules/mod-104-kubernetes/exercise-10-multi-cluster-federation/README.md",
         "modules/mod-104-kubernetes/exercise-11-custom-operator/README.md",
         "modules/mod-104-kubernetes/exercise-12-stateful-postgres/README.md",
+        "modules/mod-104-kubernetes/exercise-13-cluster-upgrade/SOLUTION.md",
         "modules/mod-104-kubernetes/exercise-14-resource-quotas-multitenancy/README.md",
         "modules/mod-104-kubernetes/exercise-15-cluster-cost-optimization/README.md"
       ],
@@ -234,6 +237,7 @@
       ],
       "projects": [],
       "solutions": [
+        "modules/mod-105-data-pipelines/exercise-01-pipeline-architecture-design/SOLUTION.md",
         "modules/mod-105-data-pipelines/exercise-02-airflow-fundamentals/README.md",
         "modules/mod-105-data-pipelines/exercise-03-streaming-pipeline-kafka/README.md",
         "modules/mod-105-data-pipelines/exercise-03-streaming-pipeline-kafka/STEP_BY_STEP.md",
@@ -283,6 +287,7 @@
       ],
       "projects": [],
       "solutions": [
+        "modules/mod-106-mlops/exercise-01-mlops-maturity-assessment/SOLUTION.md",
         "modules/mod-106-mlops/exercise-02-mlflow-tracking-deep-dive/README.md",
         "modules/mod-106-mlops/exercise-03-model-registry-promotion/README.md",
         "modules/mod-106-mlops/exercise-04-experiment-tracking-mlflow/README.md",
@@ -297,7 +302,8 @@
         "modules/mod-106-mlops/exercise-10-model-governance/README.md",
         "modules/mod-106-mlops/exercise-11-ml-orchestration-patterns/README.md",
         "modules/mod-106-mlops/exercise-12-model-cost-attribution/README.md",
-        "modules/mod-106-mlops/exercise-13-reproducibility-audit/README.md"
+        "modules/mod-106-mlops/exercise-13-reproducibility-audit/README.md",
+        "modules/mod-106-mlops/exercise-14-ml-platform-operating-model/SOLUTION.md"
       ],
       "tests": [
         "modules/mod-106-mlops/exercise-04-experiment-tracking-mlflow/tests/__init__.py",
@@ -434,6 +440,7 @@
         "modules/mod-109-infrastructure-as-code/exercise-02-pulumi-multicloud-ml/README.md",
         "modules/mod-109-infrastructure-as-code/exercise-02-pulumi-multicloud-ml/STEP_BY_STEP.md",
         "modules/mod-109-infrastructure-as-code/exercise-03-terraform-module-library/README.md",
+        "modules/mod-109-infrastructure-as-code/exercise-04-state-management-at-scale/SOLUTION.md",
         "modules/mod-109-infrastructure-as-code/exercise-05-pulumi-advanced-patterns/README.md",
         "modules/mod-109-infrastructure-as-code/exercise-06-gitops-argocd/README.md",
         "modules/mod-109-infrastructure-as-code/exercise-07-secret-management/README.md",

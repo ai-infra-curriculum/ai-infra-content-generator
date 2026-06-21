@@ -157,7 +157,9 @@
       "projects": [
         "project-01-team-process"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-01-team-process/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-01-team-process`. Replace label + add evidence on next research cycle if confirmed."
@@ -174,7 +176,9 @@
       "projects": [
         "project-02-technical-strategy"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-02-technical-strategy/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-02-technical-strategy`. Replace label + add evidence on next research cycle if confirmed."
@@ -191,7 +195,9 @@
       "projects": [
         "project-03-hiring-onboarding"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-03-hiring-onboarding/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-03-hiring-onboarding`. Replace label + add evidence on next research cycle if confirmed."
@@ -208,7 +214,9 @@
       "projects": [
         "project-04-platform-project"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-04-platform-project/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-04-platform-project`. Replace label + add evidence on next research cycle if confirmed."
@@ -225,7 +233,9 @@
       "projects": [
         "project-05-leadership-capstone"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-05-leadership-capstone/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-05-leadership-capstone`. Replace label + add evidence on next research cycle if confirmed."

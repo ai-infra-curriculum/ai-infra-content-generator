@@ -157,7 +157,9 @@
       "projects": [
         "project-01-distributed-training"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-01-distributed-training/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-01-distributed-training`. Replace label + add evidence on next research cycle if confirmed."
@@ -174,7 +176,9 @@
       "projects": [
         "project-02-platform-integration"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-02-platform-integration/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-02-platform-integration`. Replace label + add evidence on next research cycle if confirmed."
@@ -191,7 +195,9 @@
       "projects": [
         "project-03-performance-optimization"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-03-performance-optimization/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-03-performance-optimization`. Replace label + add evidence on next research cycle if confirmed."
@@ -208,7 +214,9 @@
       "projects": [
         "project-04-innovation-poc"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-04-innovation-poc/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-04-innovation-poc`. Replace label + add evidence on next research cycle if confirmed."
@@ -225,7 +233,9 @@
       "projects": [
         "project-05-technical-leadership"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-05-technical-leadership/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-05-technical-leadership`. Replace label + add evidence on next research cycle if confirmed."

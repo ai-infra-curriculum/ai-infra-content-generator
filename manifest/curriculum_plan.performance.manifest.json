@@ -240,7 +240,9 @@
       "projects": [
         "project-01-model-optimization"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-01-model-optimization/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-01-model-optimization`. Replace label + add evidence on next research cycle if confirmed."
@@ -257,7 +259,9 @@
       "projects": [
         "project-02-gpu-optimization"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-02-gpu-optimization/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-02-gpu-optimization`. Replace label + add evidence on next research cycle if confirmed."
@@ -274,7 +278,9 @@
       "projects": [
         "project-03-distributed-inference"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-03-distributed-inference/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-03-distributed-inference`. Replace label + add evidence on next research cycle if confirmed."

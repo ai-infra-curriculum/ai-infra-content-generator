@@ -1,8 +1,1195 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-04T09:09:59Z",
+  "generated_at": "2026-06-21T20:07:55Z",
   "org": "ai-infra-curriculum",
   "tracks": [
+    {
+      "slug": "agentic-ai-developer",
+      "display_name": "Agentic Ai Developer Track",
+      "level": 0,
+      "learning_repo": "ai-infra-agentic-ai-developer-learning",
+      "solutions_repo": "ai-infra-agentic-ai-developer-solutions",
+      "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning",
+      "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions",
+      "modules": [
+        {
+          "slug": "mod-101-llm-fundamentals",
+          "number": 101,
+          "title": "mod-101-llm-fundamentals: LLM Fundamentals for Application Developers",
+          "path": "lessons/mod-101-llm-fundamentals",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-101-llm-fundamentals",
+          "exercises": [
+            {
+              "slug": "exercise-01-first-llm-api-calls",
+              "number": 1,
+              "title": "mod-101-llm-fundamentals/exercise-01 (First Llm Api Calls) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-llm-fundamentals/exercise-01-first-llm-api-calls",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-101-llm-fundamentals/exercise-01-first-llm-api-calls"
+            },
+            {
+              "slug": "exercise-02-tokens-context-cost",
+              "number": 2,
+              "title": "mod-101-llm-fundamentals/exercise-02 (Tokens Context Cost) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-llm-fundamentals/exercise-02-tokens-context-cost",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-101-llm-fundamentals/exercise-02-tokens-context-cost"
+            },
+            {
+              "slug": "exercise-03-streaming-and-errors",
+              "number": 3,
+              "title": "mod-101-llm-fundamentals/exercise-03 (Streaming And Errors) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-101-llm-fundamentals/exercise-03-streaming-and-errors",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-101-llm-fundamentals/exercise-03-streaming-and-errors"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-102-prompt-engineering",
+          "number": 102,
+          "title": "mod-102-prompt-engineering: Prompt Engineering & Structured Output",
+          "path": "lessons/mod-102-prompt-engineering",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-102-prompt-engineering",
+          "exercises": [
+            {
+              "slug": "exercise-01-prompt-patterns",
+              "number": 1,
+              "title": "mod-102-prompt-engineering/exercise-01 (Prompt Patterns) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-prompt-engineering/exercise-01-prompt-patterns",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-102-prompt-engineering/exercise-01-prompt-patterns"
+            },
+            {
+              "slug": "exercise-02-structured-json-output",
+              "number": 2,
+              "title": "mod-102-prompt-engineering/exercise-02 (Structured Json Output) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-prompt-engineering/exercise-02-structured-json-output",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-102-prompt-engineering/exercise-02-structured-json-output"
+            },
+            {
+              "slug": "exercise-03-output-validation",
+              "number": 3,
+              "title": "mod-102-prompt-engineering/exercise-03 (Output Validation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-102-prompt-engineering/exercise-03-output-validation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-102-prompt-engineering/exercise-03-output-validation"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-103-tool-and-function-calling",
+          "number": 103,
+          "title": "mod-103-tool-and-function-calling: Tool & Function Calling",
+          "path": "lessons/mod-103-tool-and-function-calling",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-103-tool-and-function-calling",
+          "exercises": [
+            {
+              "slug": "exercise-01-first-function-calling",
+              "number": 1,
+              "title": "mod-103-tool-and-function-calling/exercise-01 (First Function Calling) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-01-first-function-calling",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-103-tool-and-function-calling/exercise-01-first-function-calling"
+            },
+            {
+              "slug": "exercise-02-multi-tool-app",
+              "number": 2,
+              "title": "mod-103-tool-and-function-calling/exercise-02 (Multi Tool App) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-02-multi-tool-app",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-103-tool-and-function-calling/exercise-02-multi-tool-app"
+            },
+            {
+              "slug": "exercise-03-tool-error-handling",
+              "number": 3,
+              "title": "mod-103-tool-and-function-calling/exercise-03 (Tool Error Handling) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-03-tool-error-handling",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-103-tool-and-function-calling/exercise-03-tool-error-handling"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-104-retrieval-basics",
+          "number": 104,
+          "title": "mod-104-retrieval-basics: Retrieval Basics (Embeddings & Simple RAG)",
+          "path": "lessons/mod-104-retrieval-basics",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-104-retrieval-basics",
+          "exercises": [
+            {
+              "slug": "exercise-01-embeddings-similarity",
+              "number": 1,
+              "title": "mod-104-retrieval-basics/exercise-01 (Embeddings Similarity) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-retrieval-basics/exercise-01-embeddings-similarity",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-104-retrieval-basics/exercise-01-embeddings-similarity"
+            },
+            {
+              "slug": "exercise-02-simple-rag-pipeline",
+              "number": 2,
+              "title": "mod-104-retrieval-basics/exercise-02 (Simple Rag Pipeline) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-retrieval-basics/exercise-02-simple-rag-pipeline",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-104-retrieval-basics/exercise-02-simple-rag-pipeline"
+            },
+            {
+              "slug": "exercise-03-chunking-and-indexing",
+              "number": 3,
+              "title": "mod-104-retrieval-basics/exercise-03 (Chunking And Indexing) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-104-retrieval-basics/exercise-03-chunking-and-indexing",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-104-retrieval-basics/exercise-03-chunking-and-indexing"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-105-first-agent",
+          "number": 105,
+          "title": "mod-105-first-agent: Your First Agent: The Reason-Act Loop",
+          "path": "lessons/mod-105-first-agent",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-105-first-agent",
+          "exercises": [
+            {
+              "slug": "exercise-01-react-loop-intro",
+              "number": 1,
+              "title": "mod-105-first-agent/exercise-01 (React Loop Intro) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-first-agent/exercise-01-react-loop-intro",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-105-first-agent/exercise-01-react-loop-intro"
+            },
+            {
+              "slug": "exercise-02-tool-using-agent",
+              "number": 2,
+              "title": "mod-105-first-agent/exercise-02 (Tool Using Agent) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-first-agent/exercise-02-tool-using-agent",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-105-first-agent/exercise-02-tool-using-agent"
+            },
+            {
+              "slug": "exercise-03-basic-conversation-memory",
+              "number": 3,
+              "title": "mod-105-first-agent/exercise-03 (Basic Conversation Memory) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-105-first-agent/exercise-03-basic-conversation-memory",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-105-first-agent/exercise-03-basic-conversation-memory"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-106-llm-app-deployment",
+          "number": 106,
+          "title": "mod-106-llm-app-deployment: Shipping an LLM Application",
+          "path": "lessons/mod-106-llm-app-deployment",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/lessons/mod-106-llm-app-deployment",
+          "exercises": [
+            {
+              "slug": "exercise-01-fastapi-llm-endpoint",
+              "number": 1,
+              "title": "mod-106-llm-app-deployment/exercise-01 (Fastapi Llm Endpoint) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint"
+            },
+            {
+              "slug": "exercise-02-secrets-and-config",
+              "number": 2,
+              "title": "mod-106-llm-app-deployment/exercise-02 (Secrets And Config) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-llm-app-deployment/exercise-02-secrets-and-config",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-106-llm-app-deployment/exercise-02-secrets-and-config"
+            },
+            {
+              "slug": "exercise-03-logging-and-usage-guardrail",
+              "number": 3,
+              "title": "mod-106-llm-app-deployment/exercise-03 (Logging And Usage Guardrail) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/modules/mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
+      "projects": [
+        {
+          "slug": "project-101-llm-powered-app",
+          "number": 101,
+          "title": "project-101-llm-powered-app: Capstone: Ship an LLM-Powered Application",
+          "learning_path": "projects/project-101-llm-powered-app",
+          "solutions_path": "projects/project-101-llm-powered-app",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/projects/project-101-llm-powered-app",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/projects/project-101-llm-powered-app",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-102-tool-using-agent",
+          "number": 102,
+          "title": "project-102-tool-using-agent: A Simple Tool-Using Agent",
+          "learning_path": "projects/project-102-tool-using-agent",
+          "solutions_path": "projects/project-102-tool-using-agent",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-learning/blob/main/projects/project-102-tool-using-agent",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-developer-solutions/blob/main/projects/project-102-tool-using-agent",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        }
+      ],
+      "resources": []
+    },
+    {
+      "slug": "agentic-ai-engineer",
+      "display_name": "Agentic Ai Engineer Track",
+      "level": 0,
+      "learning_repo": "ai-infra-agentic-ai-engineer-learning",
+      "solutions_repo": "ai-infra-agentic-ai-engineer-solutions",
+      "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning",
+      "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions",
+      "modules": [
+        {
+          "slug": "mod-201-agent-fundamentals",
+          "number": 201,
+          "title": "mod-201-agent-fundamentals: Agent Fundamentals: The Reason-Act Loop",
+          "path": "lessons/mod-201-agent-fundamentals",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-201-agent-fundamentals",
+          "exercises": [
+            {
+              "slug": "exercise-01-react-loop-from-scratch",
+              "number": 1,
+              "title": "mod-201-agent-fundamentals/exercise-01 (React Loop From Scratch) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch"
+            },
+            {
+              "slug": "exercise-02-function-calling-tools",
+              "number": 2,
+              "title": "mod-201-agent-fundamentals/exercise-02 (Function Calling Tools) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-201-agent-fundamentals/exercise-02-function-calling-tools",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-201-agent-fundamentals/exercise-02-function-calling-tools"
+            },
+            {
+              "slug": "exercise-03-coding-agent-read-write-execute",
+              "number": 3,
+              "title": "mod-201-agent-fundamentals/exercise-03 (Coding Agent Read Write Execute) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute"
+            },
+            {
+              "slug": "exercise-04-planning-agent",
+              "number": 4,
+              "title": "mod-201-agent-fundamentals/exercise-04 (Planning Agent) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-201-agent-fundamentals/exercise-04-planning-agent",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-201-agent-fundamentals/exercise-04-planning-agent"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-202-frameworks",
+          "number": 202,
+          "title": "mod-202-frameworks: Agent Frameworks in Practice",
+          "path": "lessons/mod-202-frameworks",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-202-frameworks",
+          "exercises": [
+            {
+              "slug": "exercise-01-langgraph-stateful-agent",
+              "number": 1,
+              "title": "mod-202-frameworks/exercise-01 (Langgraph Stateful Agent) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-202-frameworks/exercise-01-langgraph-stateful-agent",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-202-frameworks/exercise-01-langgraph-stateful-agent"
+            },
+            {
+              "slug": "exercise-02-crewai-role-based-crew",
+              "number": 2,
+              "title": "mod-202-frameworks/exercise-02 (Crewai Role Based Crew) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-202-frameworks/exercise-02-crewai-role-based-crew",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-202-frameworks/exercise-02-crewai-role-based-crew"
+            },
+            {
+              "slug": "exercise-03-autogen-multi-agent",
+              "number": 3,
+              "title": "mod-202-frameworks/exercise-03 (Autogen Multi Agent) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-202-frameworks/exercise-03-autogen-multi-agent",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-202-frameworks/exercise-03-autogen-multi-agent"
+            },
+            {
+              "slug": "exercise-04-mcp-tool-server",
+              "number": 4,
+              "title": "mod-202-frameworks/exercise-04 (Mcp Tool Server) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-202-frameworks/exercise-04-mcp-tool-server",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-202-frameworks/exercise-04-mcp-tool-server"
+            },
+            {
+              "slug": "exercise-05-framework-tradeoff-bakeoff",
+              "number": 5,
+              "title": "mod-202-frameworks/exercise-05 (Framework Tradeoff Bakeoff) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-202-frameworks/exercise-05-framework-tradeoff-bakeoff",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-202-frameworks/exercise-05-framework-tradeoff-bakeoff"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-203-rag-and-memory",
+          "number": 203,
+          "title": "mod-203-rag-and-memory: RAG & Memory Implementation",
+          "path": "lessons/mod-203-rag-and-memory",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-203-rag-and-memory",
+          "exercises": [
+            {
+              "slug": "exercise-01-rag-pipeline-vector-db",
+              "number": 1,
+              "title": "mod-203-rag-and-memory/exercise-01 (Rag Pipeline Vector Db) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-203-rag-and-memory/exercise-01-rag-pipeline-vector-db",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-203-rag-and-memory/exercise-01-rag-pipeline-vector-db"
+            },
+            {
+              "slug": "exercise-02-agent-long-term-memory",
+              "number": 2,
+              "title": "mod-203-rag-and-memory/exercise-02 (Agent Long Term Memory) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-203-rag-and-memory/exercise-02-agent-long-term-memory",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-203-rag-and-memory/exercise-02-agent-long-term-memory"
+            },
+            {
+              "slug": "exercise-03-advanced-rag-retrieval",
+              "number": 3,
+              "title": "mod-203-rag-and-memory/exercise-03 (Advanced Rag Retrieval) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-203-rag-and-memory/exercise-03-advanced-rag-retrieval",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-203-rag-and-memory/exercise-03-advanced-rag-retrieval"
+            },
+            {
+              "slug": "exercise-04-rag-triad-evaluation",
+              "number": 4,
+              "title": "mod-203-rag-and-memory/exercise-04 (Rag Triad Evaluation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-203-rag-and-memory/exercise-04-rag-triad-evaluation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-203-rag-and-memory/exercise-04-rag-triad-evaluation"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-204-multi-agent-implementation",
+          "number": 204,
+          "title": "mod-204-multi-agent-implementation: Multi-Agent Systems Implementation",
+          "path": "lessons/mod-204-multi-agent-implementation",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-204-multi-agent-implementation",
+          "exercises": [
+            {
+              "slug": "exercise-01-orchestrator-worker-build",
+              "number": 1,
+              "title": "mod-204-multi-agent-implementation/exercise-01 (Orchestrator Worker Build) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-01-orchestrator-worker-build",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-204-multi-agent-implementation/exercise-01-orchestrator-worker-build"
+            },
+            {
+              "slug": "exercise-02-agent-handoffs",
+              "number": 2,
+              "title": "mod-204-multi-agent-implementation/exercise-02 (Agent Handoffs) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-02-agent-handoffs",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-204-multi-agent-implementation/exercise-02-agent-handoffs"
+            },
+            {
+              "slug": "exercise-03-subagent-isolation",
+              "number": 3,
+              "title": "mod-204-multi-agent-implementation/exercise-03 (Subagent Isolation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-03-subagent-isolation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-204-multi-agent-implementation/exercise-03-subagent-isolation"
+            },
+            {
+              "slug": "exercise-04-evaluator-optimizer-loop",
+              "number": 4,
+              "title": "mod-204-multi-agent-implementation/exercise-04 (Evaluator Optimizer Loop) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-04-evaluator-optimizer-loop",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-204-multi-agent-implementation/exercise-04-evaluator-optimizer-loop"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-205-evaluation-observability",
+          "number": 205,
+          "title": "mod-205-evaluation-observability: Evaluation & Observability Instrumentation",
+          "path": "lessons/mod-205-evaluation-observability",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-205-evaluation-observability",
+          "exercises": [
+            {
+              "slug": "exercise-01-trajectory-eval-implementation",
+              "number": 1,
+              "title": "mod-205-evaluation-observability/exercise-01 (Trajectory Eval Implementation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-205-evaluation-observability/exercise-01-trajectory-eval-implementation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-205-evaluation-observability/exercise-01-trajectory-eval-implementation"
+            },
+            {
+              "slug": "exercise-02-otel-tracing-wireup",
+              "number": 2,
+              "title": "mod-205-evaluation-observability/exercise-02 (Otel Tracing Wireup) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-205-evaluation-observability/exercise-02-otel-tracing-wireup",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-205-evaluation-observability/exercise-02-otel-tracing-wireup"
+            },
+            {
+              "slug": "exercise-03-llm-judge-scoring",
+              "number": 3,
+              "title": "mod-205-evaluation-observability/exercise-03 (Llm Judge Scoring) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-205-evaluation-observability/exercise-03-llm-judge-scoring",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-205-evaluation-observability/exercise-03-llm-judge-scoring"
+            },
+            {
+              "slug": "exercise-04-agent-regression-suite",
+              "number": 4,
+              "title": "mod-205-evaluation-observability/exercise-04 (Agent Regression Suite) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-205-evaluation-observability/exercise-04-agent-regression-suite",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-205-evaluation-observability/exercise-04-agent-regression-suite"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-206-guardrails-implementation",
+          "number": 206,
+          "title": "mod-206-guardrails-implementation: Guardrails & Safety Implementation",
+          "path": "lessons/mod-206-guardrails-implementation",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-206-guardrails-implementation",
+          "exercises": [
+            {
+              "slug": "exercise-01-io-moderation-guardrails",
+              "number": 1,
+              "title": "mod-206-guardrails-implementation/exercise-01 (Io Moderation Guardrails) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails"
+            },
+            {
+              "slug": "exercise-02-prompt-injection-defenses",
+              "number": 2,
+              "title": "mod-206-guardrails-implementation/exercise-02 (Prompt Injection Defenses) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses"
+            },
+            {
+              "slug": "exercise-03-tool-permission-enforcement",
+              "number": 3,
+              "title": "mod-206-guardrails-implementation/exercise-03 (Tool Permission Enforcement) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement"
+            },
+            {
+              "slug": "exercise-04-human-approval-checkpoints",
+              "number": 4,
+              "title": "mod-206-guardrails-implementation/exercise-04 (Human Approval Checkpoints) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-207-productionizing-agents",
+          "number": 207,
+          "title": "mod-207-productionizing-agents: Productionizing Agents",
+          "path": "lessons/mod-207-productionizing-agents",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/lessons/mod-207-productionizing-agents",
+          "exercises": [
+            {
+              "slug": "exercise-01-agent-api-deployment",
+              "number": 1,
+              "title": "mod-207-productionizing-agents/exercise-01 (Agent Api Deployment) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-207-productionizing-agents/exercise-01-agent-api-deployment",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-207-productionizing-agents/exercise-01-agent-api-deployment"
+            },
+            {
+              "slug": "exercise-02-durable-execution-temporal",
+              "number": 2,
+              "title": "mod-207-productionizing-agents/exercise-02 (Durable Execution Temporal) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-207-productionizing-agents/exercise-02-durable-execution-temporal",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-207-productionizing-agents/exercise-02-durable-execution-temporal"
+            },
+            {
+              "slug": "exercise-03-caching-and-routing",
+              "number": 3,
+              "title": "mod-207-productionizing-agents/exercise-03 (Caching And Routing) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-207-productionizing-agents/exercise-03-caching-and-routing",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-207-productionizing-agents/exercise-03-caching-and-routing"
+            },
+            {
+              "slug": "exercise-04-hitl-with-persistence",
+              "number": 4,
+              "title": "mod-207-productionizing-agents/exercise-04 (Hitl With Persistence) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-207-productionizing-agents/exercise-04-hitl-with-persistence",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/modules/mod-207-productionizing-agents/exercise-04-hitl-with-persistence"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
+      "projects": [
+        {
+          "slug": "project-201-production-multi-agent-system",
+          "number": 201,
+          "title": "project-201-production-multi-agent-system: Capstone: Build & Deploy a Production Multi-Agent System",
+          "learning_path": "projects/project-201-production-multi-agent-system",
+          "solutions_path": "projects/project-201-production-multi-agent-system",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/projects/project-201-production-multi-agent-system",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/projects/project-201-production-multi-agent-system",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-202-benchmark-agent",
+          "number": 202,
+          "title": "project-202-benchmark-agent: Benchmark Agent (GAIA-style)",
+          "learning_path": "projects/project-202-benchmark-agent",
+          "solutions_path": "projects/project-202-benchmark-agent",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-learning/blob/main/projects/project-202-benchmark-agent",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-ai-engineer-solutions/blob/main/projects/project-202-benchmark-agent",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        }
+      ],
+      "resources": []
+    },
+    {
+      "slug": "agentic-systems-architect",
+      "display_name": "Agentic Systems Architect Track",
+      "level": 0,
+      "learning_repo": "ai-infra-agentic-systems-architect-learning",
+      "solutions_repo": "ai-infra-agentic-systems-architect-solutions",
+      "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning",
+      "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions",
+      "modules": [
+        {
+          "slug": "mod-301-agentic-systems-foundations",
+          "number": 301,
+          "title": "mod-301-agentic-systems-foundations: Agentic Systems Foundations & When NOT to Use an Agent",
+          "path": "lessons/mod-301-agentic-systems-foundations",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-301-agentic-systems-foundations",
+          "exercises": [
+            {
+              "slug": "exercise-01-workflows-vs-agents-decision-matrix",
+              "number": 1,
+              "title": "mod-301-agentic-systems-foundations/exercise-01 (Workflows Vs Agents Decision Matrix) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix"
+            },
+            {
+              "slug": "exercise-02-orchestration-pattern-catalog",
+              "number": 2,
+              "title": "mod-301-agentic-systems-foundations/exercise-02 (Orchestration Pattern Catalog) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog"
+            },
+            {
+              "slug": "exercise-03-tool-vs-subagent-decomposition",
+              "number": 3,
+              "title": "mod-301-agentic-systems-foundations/exercise-03 (Tool Vs Subagent Decomposition) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition"
+            },
+            {
+              "slug": "exercise-04-reference-architecture-teardown",
+              "number": 4,
+              "title": "mod-301-agentic-systems-foundations/exercise-04 (Reference Architecture Teardown) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-302-multi-agent-orchestration",
+          "number": 302,
+          "title": "mod-302-multi-agent-orchestration: Multi-Agent Orchestration Architecture",
+          "path": "lessons/mod-302-multi-agent-orchestration",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-302-multi-agent-orchestration",
+          "exercises": [
+            {
+              "slug": "exercise-01-orchestrator-worker-topology-design",
+              "number": 1,
+              "title": "mod-302-multi-agent-orchestration/exercise-01 (Orchestrator Worker Topology Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-01-orchestrator-worker-topology-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-302-multi-agent-orchestration/exercise-01-orchestrator-worker-topology-design"
+            },
+            {
+              "slug": "exercise-02-handoffs-vs-manager-as-tools",
+              "number": 2,
+              "title": "mod-302-multi-agent-orchestration/exercise-02 (Handoffs Vs Manager As Tools) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-02-handoffs-vs-manager-as-tools",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-302-multi-agent-orchestration/exercise-02-handoffs-vs-manager-as-tools"
+            },
+            {
+              "slug": "exercise-03-mcp-a2a-integration-architecture",
+              "number": 3,
+              "title": "mod-302-multi-agent-orchestration/exercise-03 (Mcp A2A Integration Architecture) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-03-mcp-a2a-integration-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-302-multi-agent-orchestration/exercise-03-mcp-a2a-integration-architecture"
+            },
+            {
+              "slug": "exercise-04-coordination-and-escalation-design",
+              "number": 4,
+              "title": "mod-302-multi-agent-orchestration/exercise-04 (Coordination And Escalation Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-04-coordination-and-escalation-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-302-multi-agent-orchestration/exercise-04-coordination-and-escalation-design"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-303-memory-context-architecture",
+          "number": 303,
+          "title": "mod-303-memory-context-architecture: Memory & Context Architecture",
+          "path": "lessons/mod-303-memory-context-architecture",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-303-memory-context-architecture",
+          "exercises": [
+            {
+              "slug": "exercise-01-context-budget-and-rot-analysis",
+              "number": 1,
+              "title": "mod-303-memory-context-architecture/exercise-01 (Context Budget And Rot Analysis) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-303-memory-context-architecture/exercise-01-context-budget-and-rot-analysis",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-303-memory-context-architecture/exercise-01-context-budget-and-rot-analysis"
+            },
+            {
+              "slug": "exercise-02-memory-tier-placement-design",
+              "number": 2,
+              "title": "mod-303-memory-context-architecture/exercise-02 (Memory Tier Placement Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-303-memory-context-architecture/exercise-02-memory-tier-placement-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-303-memory-context-architecture/exercise-02-memory-tier-placement-design"
+            },
+            {
+              "slug": "exercise-03-compaction-and-notetaking-strategy",
+              "number": 3,
+              "title": "mod-303-memory-context-architecture/exercise-03 (Compaction And Notetaking Strategy) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-303-memory-context-architecture/exercise-03-compaction-and-notetaking-strategy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-303-memory-context-architecture/exercise-03-compaction-and-notetaking-strategy"
+            },
+            {
+              "slug": "exercise-04-rag-architecture-for-agents",
+              "number": 4,
+              "title": "mod-303-memory-context-architecture/exercise-04 (Rag Architecture For Agents) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-303-memory-context-architecture/exercise-04-rag-architecture-for-agents",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-303-memory-context-architecture/exercise-04-rag-architecture-for-agents"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-304-evaluation-harnesses",
+          "number": 304,
+          "title": "mod-304-evaluation-harnesses: Evaluation Harnesses for Agentic Systems",
+          "path": "lessons/mod-304-evaluation-harnesses",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-304-evaluation-harnesses",
+          "exercises": [
+            {
+              "slug": "exercise-01-trajectory-eval-design",
+              "number": 1,
+              "title": "mod-304-evaluation-harnesses/exercise-01 (Trajectory Eval Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design"
+            },
+            {
+              "slug": "exercise-02-tool-call-correctness-harness",
+              "number": 2,
+              "title": "mod-304-evaluation-harnesses/exercise-02 (Tool Call Correctness Harness) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness"
+            },
+            {
+              "slug": "exercise-03-llm-as-judge-rubric",
+              "number": 3,
+              "title": "mod-304-evaluation-harnesses/exercise-03 (Llm As Judge Rubric) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric"
+            },
+            {
+              "slug": "exercise-04-eval-gated-release-pipeline",
+              "number": 4,
+              "title": "mod-304-evaluation-harnesses/exercise-04 (Eval Gated Release Pipeline) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-305-observability-tracing",
+          "number": 305,
+          "title": "mod-305-observability-tracing: Observability & Tracing for Agents",
+          "path": "lessons/mod-305-observability-tracing",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-305-observability-tracing",
+          "exercises": [
+            {
+              "slug": "exercise-01-otel-genai-span-design",
+              "number": 1,
+              "title": "mod-305-observability-tracing/exercise-01 (Otel Genai Span Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-305-observability-tracing/exercise-01-otel-genai-span-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-305-observability-tracing/exercise-01-otel-genai-span-design"
+            },
+            {
+              "slug": "exercise-02-quality-and-drift-signals",
+              "number": 2,
+              "title": "mod-305-observability-tracing/exercise-02 (Quality And Drift Signals) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-305-observability-tracing/exercise-02-quality-and-drift-signals",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-305-observability-tracing/exercise-02-quality-and-drift-signals"
+            },
+            {
+              "slug": "exercise-03-observability-platform-evaluation",
+              "number": 3,
+              "title": "mod-305-observability-tracing/exercise-03 (Observability Platform Evaluation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-305-observability-tracing/exercise-03-observability-platform-evaluation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-305-observability-tracing/exercise-03-observability-platform-evaluation"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-306-guardrails-safety-security",
+          "number": 306,
+          "title": "mod-306-guardrails-safety-security: Guardrails, Safety & Security",
+          "path": "lessons/mod-306-guardrails-safety-security",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-306-guardrails-safety-security",
+          "exercises": [
+            {
+              "slug": "exercise-01-guardrail-placement-architecture",
+              "number": 1,
+              "title": "mod-306-guardrails-safety-security/exercise-01 (Guardrail Placement Architecture) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-01-guardrail-placement-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-01-guardrail-placement-architecture"
+            },
+            {
+              "slug": "exercise-02-prompt-injection-threat-model",
+              "number": 2,
+              "title": "mod-306-guardrails-safety-security/exercise-02 (Prompt Injection Threat Model) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-02-prompt-injection-threat-model",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-02-prompt-injection-threat-model"
+            },
+            {
+              "slug": "exercise-03-least-privilege-tool-permissions",
+              "number": 3,
+              "title": "mod-306-guardrails-safety-security/exercise-03 (Least Privilege Tool Permissions) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-03-least-privilege-tool-permissions",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-03-least-privilege-tool-permissions"
+            },
+            {
+              "slug": "exercise-04-oauth-rbac-token-management-for-toolchains",
+              "number": 4,
+              "title": "mod-306-guardrails-safety-security/exercise-04 (Oauth Rbac Token Management For Toolchains) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-04-oauth-rbac-token-management-for-toolchains",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-04-oauth-rbac-token-management-for-toolchains"
+            },
+            {
+              "slug": "exercise-05-cli-agent-sandboxing-local-and-remote",
+              "number": 5,
+              "title": "mod-306-guardrails-safety-security/exercise-05 (Cli Agent Sandboxing Local And Remote) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-05-cli-agent-sandboxing-local-and-remote",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-05-cli-agent-sandboxing-local-and-remote"
+            },
+            {
+              "slug": "exercise-06-excessive-agency-controls",
+              "number": 6,
+              "title": "mod-306-guardrails-safety-security/exercise-06 (Excessive Agency Controls) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-06-excessive-agency-controls",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-306-guardrails-safety-security/exercise-06-excessive-agency-controls"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-307-cost-latency-architecture",
+          "number": 307,
+          "title": "mod-307-cost-latency-architecture: Cost & Latency Architecture",
+          "path": "lessons/mod-307-cost-latency-architecture",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-307-cost-latency-architecture",
+          "exercises": [
+            {
+              "slug": "exercise-01-token-economics-cost-model",
+              "number": 1,
+              "title": "mod-307-cost-latency-architecture/exercise-01 (Token Economics Cost Model) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model"
+            },
+            {
+              "slug": "exercise-02-caching-and-routing-architecture",
+              "number": 2,
+              "title": "mod-307-cost-latency-architecture/exercise-02 (Caching And Routing Architecture) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture"
+            },
+            {
+              "slug": "exercise-03-cost-latency-quality-budgets",
+              "number": 3,
+              "title": "mod-307-cost-latency-architecture/exercise-03 (Cost Latency Quality Budgets) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-308-deployment-durable-execution",
+          "number": 308,
+          "title": "mod-308-deployment-durable-execution: Deployment, Durable Execution & Human-in-the-Loop",
+          "path": "lessons/mod-308-deployment-durable-execution",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-308-deployment-durable-execution",
+          "exercises": [
+            {
+              "slug": "exercise-01-durable-execution-design",
+              "number": 1,
+              "title": "mod-308-deployment-durable-execution/exercise-01 (Durable Execution Design) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-01-durable-execution-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-308-deployment-durable-execution/exercise-01-durable-execution-design"
+            },
+            {
+              "slug": "exercise-02-hitl-approval-architecture",
+              "number": 2,
+              "title": "mod-308-deployment-durable-execution/exercise-02 (Hitl Approval Architecture) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture"
+            },
+            {
+              "slug": "exercise-03-agent-fleet-deployment-strategy",
+              "number": 3,
+              "title": "mod-308-deployment-durable-execution/exercise-03 (Agent Fleet Deployment Strategy) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy"
+            },
+            {
+              "slug": "exercise-04-failure-recovery-and-resumption",
+              "number": 4,
+              "title": "mod-308-deployment-durable-execution/exercise-04 (Failure Recovery And Resumption) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-309-governance-compliance-domain",
+          "number": 309,
+          "title": "mod-309-governance-compliance-domain: Governance, Compliance & Domain Constraints",
+          "path": "lessons/mod-309-governance-compliance-domain",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-309-governance-compliance-domain",
+          "exercises": [
+            {
+              "slug": "exercise-01-iso-42001-controls-mapping",
+              "number": 1,
+              "title": "mod-309-governance-compliance-domain/exercise-01 (Iso 42001 Controls Mapping) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping"
+            },
+            {
+              "slug": "exercise-02-plugin-lifecycle-governance",
+              "number": 2,
+              "title": "mod-309-governance-compliance-domain/exercise-02 (Plugin Lifecycle Governance) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance"
+            },
+            {
+              "slug": "exercise-03-regulated-domain-architecture-ferpa-coppa",
+              "number": 3,
+              "title": "mod-309-governance-compliance-domain/exercise-03 (Regulated Domain Architecture Ferpa Coppa) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa"
+            },
+            {
+              "slug": "exercise-04-k12-edtech-agentic-constraints",
+              "number": 4,
+              "title": "mod-309-governance-compliance-domain/exercise-04 (K12 Edtech Agentic Constraints) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints"
+            },
+            {
+              "slug": "exercise-05-governance-and-accountability-spec",
+              "number": 5,
+              "title": "mod-309-governance-compliance-domain/exercise-05 (Governance And Accountability Spec) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-310-agentic-developer-platforms",
+          "number": 310,
+          "title": "mod-310-agentic-developer-platforms: Agentic Developer Platforms & SDLC Integration",
+          "path": "lessons/mod-310-agentic-developer-platforms",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-310-agentic-developer-platforms",
+          "exercises": [
+            {
+              "slug": "exercise-01-plugin-architecture-agents-skills-hooks-mcp",
+              "number": 1,
+              "title": "mod-310-agentic-developer-platforms/exercise-01 (Plugin Architecture Agents Skills Hooks Mcp) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp"
+            },
+            {
+              "slug": "exercise-02-ai-for-sdlc-tool-use-patterns",
+              "number": 2,
+              "title": "mod-310-agentic-developer-platforms/exercise-02 (Ai For Sdlc Tool Use Patterns) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns"
+            },
+            {
+              "slug": "exercise-03-context-hydration-strategies",
+              "number": 3,
+              "title": "mod-310-agentic-developer-platforms/exercise-03 (Context Hydration Strategies) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies"
+            },
+            {
+              "slug": "exercise-04-devops-toolchain-integration",
+              "number": 4,
+              "title": "mod-310-agentic-developer-platforms/exercise-04 (Devops Toolchain Integration) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration"
+            },
+            {
+              "slug": "exercise-05-developer-tooling-adoption-and-dx",
+              "number": 5,
+              "title": "mod-310-agentic-developer-platforms/exercise-05 (Developer Tooling Adoption And Dx) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
+      "projects": [
+        {
+          "slug": "project-301-production-agentic-reference-architecture",
+          "number": 301,
+          "title": "project-301-production-agentic-reference-architecture: Capstone: End-to-End Agentic Reference Architecture",
+          "learning_path": "projects/project-301-production-agentic-reference-architecture",
+          "solutions_path": "projects/project-301-production-agentic-reference-architecture",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-301-production-agentic-reference-architecture",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/projects/project-301-production-agentic-reference-architecture",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-302-regulated-domain-agent-architecture",
+          "number": 302,
+          "title": "project-302-regulated-domain-agent-architecture: Regulated-Domain Agentic Architecture (e.g., K-12 EdTech)",
+          "learning_path": "projects/project-302-regulated-domain-agent-architecture",
+          "solutions_path": "projects/project-302-regulated-domain-agent-architecture",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-302-regulated-domain-agent-architecture",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/projects/project-302-regulated-domain-agent-architecture",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-303-agentic-sdlc-platform",
+          "number": 303,
+          "title": "project-303-agentic-sdlc-platform: Agentic AI-for-SDLC Platform (Plugin Architecture)",
+          "learning_path": "projects/project-303-agentic-sdlc-platform",
+          "solutions_path": "projects/project-303-agentic-sdlc-platform",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-303-agentic-sdlc-platform",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/projects/project-303-agentic-sdlc-platform",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        }
+      ],
+      "resources": []
+    },
     {
       "slug": "architect",
       "display_name": "Architect Track",
@@ -575,6 +1762,22 @@
       ],
       "projects": [
         {
+          "slug": "project-301-enterprise-mlops-platform",
+          "number": 301,
+          "title": "Enterprise ML Platform Architecture",
+          "learning_path": "projects/project-301-enterprise-mlops-platform",
+          "solutions_path": null,
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-learning/blob/main/projects/project-301-enterprise-mlops-platform",
+          "solutions_url": null,
+          "docs": [
+            "README.md",
+            "STEP_BY_STEP.md",
+            "architecture.md",
+            "requirements.md"
+          ],
+          "prerequisites": []
+        },
+        {
           "slug": "project-301-enterprise-mlops",
           "number": 301,
           "title": "Project 301: Enterprise MLOps Platform Architecture",
@@ -586,12 +1789,12 @@
           "prerequisites": []
         },
         {
-          "slug": "project-301-enterprise-mlops-platform",
-          "number": 301,
-          "title": "Enterprise ML Platform Architecture",
-          "learning_path": "projects/project-301-enterprise-mlops-platform",
+          "slug": "project-302-multicloud-infrastructure",
+          "number": 302,
+          "title": "Multi-Cloud AI Infrastructure",
+          "learning_path": "projects/project-302-multicloud-infrastructure",
           "solutions_path": null,
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-learning/blob/main/projects/project-301-enterprise-mlops-platform",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-learning/blob/main/projects/project-302-multicloud-infrastructure",
           "solutions_url": null,
           "docs": [
             "README.md",
@@ -610,22 +1813,6 @@
           "learning_url": null,
           "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-302-multicloud-infra",
           "docs": [],
-          "prerequisites": []
-        },
-        {
-          "slug": "project-302-multicloud-infrastructure",
-          "number": 302,
-          "title": "Multi-Cloud AI Infrastructure",
-          "learning_path": "projects/project-302-multicloud-infrastructure",
-          "solutions_path": null,
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-learning/blob/main/projects/project-302-multicloud-infrastructure",
-          "solutions_url": null,
-          "docs": [
-            "README.md",
-            "STEP_BY_STEP.md",
-            "architecture.md",
-            "requirements.md"
-          ],
           "prerequisites": []
         },
         {
@@ -4119,9 +5306,9 @@
           "number": 1,
           "title": "Project 01: Self-Service ML Platform Core",
           "learning_path": "projects/project-01-platform-core",
-          "solutions_path": null,
+          "solutions_path": "projects/project-01-platform-core",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-learning/blob/main/projects/project-01-platform-core",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-solutions/blob/main/projects/project-01-platform-core",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -4135,9 +5322,9 @@
           "number": 2,
           "title": "Project 02: Enterprise Feature Store",
           "learning_path": "projects/project-02-feature-store",
-          "solutions_path": null,
+          "solutions_path": "projects/project-02-feature-store",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-learning/blob/main/projects/project-02-feature-store",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-solutions/blob/main/projects/project-02-feature-store",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -4151,9 +5338,9 @@
           "number": 3,
           "title": "Project 03: ML Workflow Orchestration Engine",
           "learning_path": "projects/project-03-workflow-orchestration",
-          "solutions_path": null,
+          "solutions_path": "projects/project-03-workflow-orchestration",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-learning/blob/main/projects/project-03-workflow-orchestration",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-solutions/blob/main/projects/project-03-workflow-orchestration",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -4167,9 +5354,9 @@
           "number": 4,
           "title": "Project 04: Model Management System",
           "learning_path": "projects/project-04-model-registry",
-          "solutions_path": null,
+          "solutions_path": "projects/project-04-model-registry",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-learning/blob/main/projects/project-04-model-registry",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-solutions/blob/main/projects/project-04-model-registry",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -4183,9 +5370,9 @@
           "number": 5,
           "title": "Project 05: Developer Portal & SDK",
           "learning_path": "projects/project-05-developer-portal",
-          "solutions_path": null,
+          "solutions_path": "projects/project-05-developer-portal",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-learning/blob/main/projects/project-05-developer-portal",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-ml-platform-solutions/blob/main/projects/project-05-developer-portal",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -5345,9 +6532,9 @@
           "number": 1,
           "title": "Project 1: Production Model Optimization Pipeline",
           "learning_path": "projects/project-01-model-optimization",
-          "solutions_path": null,
+          "solutions_path": "projects/project-01-model-optimization",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-learning/blob/main/projects/project-01-model-optimization",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-solutions/blob/main/projects/project-01-model-optimization",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -5362,9 +6549,9 @@
           "number": 2,
           "title": "Project 2: Custom CUDA Kernels for Transformer Optimization",
           "learning_path": "projects/project-02-gpu-optimization",
-          "solutions_path": null,
+          "solutions_path": "projects/project-02-gpu-optimization",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-learning/blob/main/projects/project-02-gpu-optimization",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-solutions/blob/main/projects/project-02-gpu-optimization",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -5379,9 +6566,9 @@
           "number": 3,
           "title": "Project 3: High-Performance LLM Inference System",
           "learning_path": "projects/project-03-distributed-inference",
-          "solutions_path": null,
+          "solutions_path": "projects/project-03-distributed-inference",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-learning/blob/main/projects/project-03-distributed-inference",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-performance-solutions/blob/main/projects/project-03-distributed-inference",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6081,9 +7268,9 @@
           "number": 1,
           "title": "Project 01: Company-Wide Distributed Training Framework",
           "learning_path": "projects/project-01-distributed-training",
-          "solutions_path": null,
+          "solutions_path": "projects/project-01-distributed-training",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-learning/blob/main/projects/project-01-distributed-training",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-solutions/blob/main/projects/project-01-distributed-training",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6098,9 +7285,9 @@
           "number": 2,
           "title": "Project 02: Cross-Team Platform Integration",
           "learning_path": "projects/project-02-platform-integration",
-          "solutions_path": null,
+          "solutions_path": "projects/project-02-platform-integration",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-learning/blob/main/projects/project-02-platform-integration",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-solutions/blob/main/projects/project-02-platform-integration",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6115,9 +7302,9 @@
           "number": 3,
           "title": "Project 03: Performance Optimization Initiative",
           "learning_path": "projects/project-03-performance-optimization",
-          "solutions_path": null,
+          "solutions_path": "projects/project-03-performance-optimization",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-learning/blob/main/projects/project-03-performance-optimization",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-solutions/blob/main/projects/project-03-performance-optimization",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6132,9 +7319,9 @@
           "number": 4,
           "title": "Project 04: Technical Innovation POC",
           "learning_path": "projects/project-04-innovation-poc",
-          "solutions_path": null,
+          "solutions_path": "projects/project-04-innovation-poc",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-learning/blob/main/projects/project-04-innovation-poc",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-solutions/blob/main/projects/project-04-innovation-poc",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6149,9 +7336,9 @@
           "number": 5,
           "title": "Project 05: Technical Leadership Capstone",
           "learning_path": "projects/project-05-technical-leadership",
-          "solutions_path": null,
+          "solutions_path": "projects/project-05-technical-leadership",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-learning/blob/main/projects/project-05-technical-leadership",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-principal-engineer-solutions/blob/main/projects/project-05-technical-leadership",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -6185,7 +7372,53 @@
           "title": "Module 01 \u2014 Foundations of ML Security",
           "path": "lessons/mod-001-ml-security-foundations",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-001-ml-security-foundations",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-threat-model-a-small-ml-system",
+              "number": 1,
+              "title": "Exercise 01 Threat Model A Small Ml System",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-ml-security-foundations/exercise-01-threat-model-a-small-ml-system",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-001-ml-security-foundations/exercise-01-threat-model-a-small-ml-system"
+            },
+            {
+              "slug": "exercise-02-map-system-to-owasp-ml-top-10",
+              "number": 2,
+              "title": "Exercise 02 Map System To Owasp Ml Top 10",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-ml-security-foundations/exercise-02-map-system-to-owasp-ml-top-10",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-001-ml-security-foundations/exercise-02-map-system-to-owasp-ml-top-10"
+            },
+            {
+              "slug": "exercise-03-mitre-atlas-walkthrough",
+              "number": 3,
+              "title": "Exercise 03 Mitre Atlas Walkthrough",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-ml-security-foundations/exercise-03-mitre-atlas-walkthrough",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-001-ml-security-foundations/exercise-03-mitre-atlas-walkthrough"
+            },
+            {
+              "slug": "exercise-04-security-architecture-review",
+              "number": 4,
+              "title": "Exercise 04 Security Architecture Review",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-ml-security-foundations/exercise-04-security-architecture-review",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-001-ml-security-foundations/exercise-04-security-architecture-review"
+            },
+            {
+              "slug": "exercise-05-defense-in-depth-design",
+              "number": 5,
+              "title": "Exercise 05 Defense In Depth Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-001-ml-security-foundations/exercise-05-defense-in-depth-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-001-ml-security-foundations/exercise-05-defense-in-depth-design"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6195,7 +7428,53 @@
           "title": "Module 02 \u2014 Zero-Trust Architecture for ML Systems",
           "path": "lessons/mod-002-zero-trust-architecture",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-002-zero-trust-architecture",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-zero-trust-gap-analysis",
+              "number": 1,
+              "title": "Exercise 01 Zero Trust Gap Analysis",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-zero-trust-architecture/exercise-01-zero-trust-gap-analysis",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-002-zero-trust-architecture/exercise-01-zero-trust-gap-analysis"
+            },
+            {
+              "slug": "exercise-02-workload-identity-design",
+              "number": 2,
+              "title": "Exercise 02 Workload Identity Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-zero-trust-architecture/exercise-02-workload-identity-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-002-zero-trust-architecture/exercise-02-workload-identity-design"
+            },
+            {
+              "slug": "exercise-03-microsegmentation-plan",
+              "number": 3,
+              "title": "Exercise 03 Microsegmentation Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-zero-trust-architecture/exercise-03-microsegmentation-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-002-zero-trust-architecture/exercise-03-microsegmentation-plan"
+            },
+            {
+              "slug": "exercise-04-service-mesh-authz",
+              "number": 4,
+              "title": "Exercise 04 Service Mesh Authz",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-zero-trust-architecture/exercise-04-service-mesh-authz",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-002-zero-trust-architecture/exercise-04-service-mesh-authz"
+            },
+            {
+              "slug": "exercise-05-zero-trust-roadmap",
+              "number": 5,
+              "title": "Exercise 05 Zero Trust Roadmap",
+              "learning_path": null,
+              "solutions_path": "modules/mod-002-zero-trust-architecture/exercise-05-zero-trust-roadmap",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-002-zero-trust-architecture/exercise-05-zero-trust-roadmap"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6205,7 +7484,53 @@
           "title": "Module 03 \u2014 Cryptography for ML Systems",
           "path": "lessons/mod-003-cryptography-for-ml",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-003-cryptography-for-ml",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-key-management-plan",
+              "number": 1,
+              "title": "Exercise 01 Key Management Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-cryptography-for-ml/exercise-01-key-management-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-003-cryptography-for-ml/exercise-01-key-management-plan"
+            },
+            {
+              "slug": "exercise-02-tls-mtls-audit",
+              "number": 2,
+              "title": "Exercise 02 Tls Mtls Audit",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-cryptography-for-ml/exercise-02-tls-mtls-audit",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-003-cryptography-for-ml/exercise-02-tls-mtls-audit"
+            },
+            {
+              "slug": "exercise-03-signed-artifact-rollout",
+              "number": 3,
+              "title": "Exercise 03 Signed Artifact Rollout",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-cryptography-for-ml/exercise-03-signed-artifact-rollout",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-003-cryptography-for-ml/exercise-03-signed-artifact-rollout"
+            },
+            {
+              "slug": "exercise-04-certificate-runbook",
+              "number": 4,
+              "title": "Exercise 04 Certificate Runbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-cryptography-for-ml/exercise-04-certificate-runbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-003-cryptography-for-ml/exercise-04-certificate-runbook"
+            },
+            {
+              "slug": "exercise-05-encryption-in-use-decision",
+              "number": 5,
+              "title": "Exercise 05 Encryption In Use Decision",
+              "learning_path": null,
+              "solutions_path": "modules/mod-003-cryptography-for-ml/exercise-05-encryption-in-use-decision",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-003-cryptography-for-ml/exercise-05-encryption-in-use-decision"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6215,7 +7540,53 @@
           "title": "Module 04 \u2014 Network Security for ML Systems",
           "path": "lessons/mod-004-network-security",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-004-network-security",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-cni-evaluation",
+              "number": 1,
+              "title": "Exercise 01 Cni Evaluation",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-network-security/exercise-01-cni-evaluation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-004-network-security/exercise-01-cni-evaluation"
+            },
+            {
+              "slug": "exercise-02-complete-networkpolicy-set",
+              "number": 2,
+              "title": "Exercise 02 Complete Networkpolicy Set",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-network-security/exercise-02-complete-networkpolicy-set",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-004-network-security/exercise-02-complete-networkpolicy-set"
+            },
+            {
+              "slug": "exercise-03-edge-gateway-hardening",
+              "number": 3,
+              "title": "Exercise 03 Edge Gateway Hardening",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-network-security/exercise-03-edge-gateway-hardening",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-004-network-security/exercise-03-edge-gateway-hardening"
+            },
+            {
+              "slug": "exercise-04-rate-limit-ddos-design",
+              "number": 4,
+              "title": "Exercise 04 Rate Limit Ddos Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-network-security/exercise-04-rate-limit-ddos-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-004-network-security/exercise-04-rate-limit-ddos-design"
+            },
+            {
+              "slug": "exercise-05-network-observability-plan",
+              "number": 5,
+              "title": "Exercise 05 Network Observability Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-004-network-security/exercise-05-network-observability-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-004-network-security/exercise-05-network-observability-plan"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6225,7 +7596,53 @@
           "title": "Module 05 \u2014 Secrets Management for ML Systems",
           "path": "lessons/mod-005-secrets-management",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-005-secrets-management",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-secrets-inventory",
+              "number": 1,
+              "title": "Exercise 01 Secrets Inventory",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-secrets-management/exercise-01-secrets-inventory",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-005-secrets-management/exercise-01-secrets-inventory"
+            },
+            {
+              "slug": "exercise-02-vault-deployment-plan",
+              "number": 2,
+              "title": "Exercise 02 Vault Deployment Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-secrets-management/exercise-02-vault-deployment-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-005-secrets-management/exercise-02-vault-deployment-plan"
+            },
+            {
+              "slug": "exercise-03-secret-rotation-playbook",
+              "number": 3,
+              "title": "Exercise 03 Secret Rotation Playbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-secrets-management/exercise-03-secret-rotation-playbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-005-secrets-management/exercise-03-secret-rotation-playbook"
+            },
+            {
+              "slug": "exercise-04-keyless-ci-design",
+              "number": 4,
+              "title": "Exercise 04 Keyless Ci Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-secrets-management/exercise-04-keyless-ci-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-005-secrets-management/exercise-04-keyless-ci-design"
+            },
+            {
+              "slug": "exercise-05-secret-leak-runbook",
+              "number": 5,
+              "title": "Exercise 05 Secret Leak Runbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-005-secrets-management/exercise-05-secret-leak-runbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-005-secrets-management/exercise-05-secret-leak-runbook"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6235,7 +7652,53 @@
           "title": "Module 06 \u2014 Adversarial Machine Learning",
           "path": "lessons/mod-006-adversarial-ml",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-006-adversarial-ml",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-robustness-assessment",
+              "number": 1,
+              "title": "Exercise 01 Robustness Assessment",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-adversarial-ml/exercise-01-robustness-assessment",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-006-adversarial-ml/exercise-01-robustness-assessment"
+            },
+            {
+              "slug": "exercise-02-defense-plan",
+              "number": 2,
+              "title": "Exercise 02 Defense Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-adversarial-ml/exercise-02-defense-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-006-adversarial-ml/exercise-02-defense-plan"
+            },
+            {
+              "slug": "exercise-03-poisoning-detection",
+              "number": 3,
+              "title": "Exercise 03 Poisoning Detection",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-adversarial-ml/exercise-03-poisoning-detection",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-006-adversarial-ml/exercise-03-poisoning-detection"
+            },
+            {
+              "slug": "exercise-04-dp-sgd-configuration",
+              "number": 4,
+              "title": "Exercise 04 Dp Sgd Configuration",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-adversarial-ml/exercise-04-dp-sgd-configuration",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-006-adversarial-ml/exercise-04-dp-sgd-configuration"
+            },
+            {
+              "slug": "exercise-05-llm-safety-pipeline",
+              "number": 5,
+              "title": "Exercise 05 Llm Safety Pipeline",
+              "learning_path": null,
+              "solutions_path": "modules/mod-006-adversarial-ml/exercise-05-llm-safety-pipeline",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-006-adversarial-ml/exercise-05-llm-safety-pipeline"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6245,7 +7708,53 @@
           "title": "Module 07 \u2014 Compliance and Governance for ML Systems",
           "path": "lessons/mod-007-compliance-and-governance",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-007-compliance-and-governance",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-regulatory-applicability",
+              "number": 1,
+              "title": "Exercise 01 Regulatory Applicability",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-compliance-and-governance/exercise-01-regulatory-applicability",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-007-compliance-and-governance/exercise-01-regulatory-applicability"
+            },
+            {
+              "slug": "exercise-02-gdpr-controls-plan",
+              "number": 2,
+              "title": "Exercise 02 Gdpr Controls Plan",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-compliance-and-governance/exercise-02-gdpr-controls-plan",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-007-compliance-and-governance/exercise-02-gdpr-controls-plan"
+            },
+            {
+              "slug": "exercise-03-soc2-readiness",
+              "number": 3,
+              "title": "Exercise 03 Soc2 Readiness",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-compliance-and-governance/exercise-03-soc2-readiness",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-007-compliance-and-governance/exercise-03-soc2-readiness"
+            },
+            {
+              "slug": "exercise-04-continuous-compliance",
+              "number": 4,
+              "title": "Exercise 04 Continuous Compliance",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-compliance-and-governance/exercise-04-continuous-compliance",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-007-compliance-and-governance/exercise-04-continuous-compliance"
+            },
+            {
+              "slug": "exercise-05-vendor-risk-review",
+              "number": 5,
+              "title": "Exercise 05 Vendor Risk Review",
+              "learning_path": null,
+              "solutions_path": "modules/mod-007-compliance-and-governance/exercise-05-vendor-risk-review",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-007-compliance-and-governance/exercise-05-vendor-risk-review"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6255,7 +7764,53 @@
           "title": "Module 08 \u2014 Runtime Security for ML Systems",
           "path": "lessons/mod-008-runtime-security",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-008-runtime-security",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-pss-baseline",
+              "number": 1,
+              "title": "Exercise 01 Pss Baseline",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-runtime-security/exercise-01-pss-baseline",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-008-runtime-security/exercise-01-pss-baseline"
+            },
+            {
+              "slug": "exercise-02-seccomp-apparmor-profiles",
+              "number": 2,
+              "title": "Exercise 02 Seccomp Apparmor Profiles",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-runtime-security/exercise-02-seccomp-apparmor-profiles",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-008-runtime-security/exercise-02-seccomp-apparmor-profiles"
+            },
+            {
+              "slug": "exercise-03-falco-ruleset",
+              "number": 3,
+              "title": "Exercise 03 Falco Ruleset",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-runtime-security/exercise-03-falco-ruleset",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-008-runtime-security/exercise-03-falco-ruleset"
+            },
+            {
+              "slug": "exercise-04-behavioral-baseline-design",
+              "number": 4,
+              "title": "Exercise 04 Behavioral Baseline Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-runtime-security/exercise-04-behavioral-baseline-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-008-runtime-security/exercise-04-behavioral-baseline-design"
+            },
+            {
+              "slug": "exercise-05-container-escape-runbook",
+              "number": 5,
+              "title": "Exercise 05 Container Escape Runbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-008-runtime-security/exercise-05-container-escape-runbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-008-runtime-security/exercise-05-container-escape-runbook"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6265,7 +7820,53 @@
           "title": "Module 09 \u2014 Policy as Code",
           "path": "lessons/mod-009-policy-as-code",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-009-policy-as-code",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-gatekeeper-vs-kyverno",
+              "number": 1,
+              "title": "Exercise 01 Gatekeeper Vs Kyverno",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-policy-as-code/exercise-01-gatekeeper-vs-kyverno",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-009-policy-as-code/exercise-01-gatekeeper-vs-kyverno"
+            },
+            {
+              "slug": "exercise-02-rego-policy-library",
+              "number": 2,
+              "title": "Exercise 02 Rego Policy Library",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-policy-as-code/exercise-02-rego-policy-library",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-009-policy-as-code/exercise-02-rego-policy-library"
+            },
+            {
+              "slug": "exercise-03-conftest-ci-gate",
+              "number": 3,
+              "title": "Exercise 03 Conftest Ci Gate",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-policy-as-code/exercise-03-conftest-ci-gate",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-009-policy-as-code/exercise-03-conftest-ci-gate"
+            },
+            {
+              "slug": "exercise-04-ml-policy-catalog",
+              "number": 4,
+              "title": "Exercise 04 Ml Policy Catalog",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-policy-as-code/exercise-04-ml-policy-catalog",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-009-policy-as-code/exercise-04-ml-policy-catalog"
+            },
+            {
+              "slug": "exercise-05-policy-testing-distribution",
+              "number": 5,
+              "title": "Exercise 05 Policy Testing Distribution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-009-policy-as-code/exercise-05-policy-testing-distribution",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-009-policy-as-code/exercise-05-policy-testing-distribution"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6275,7 +7876,53 @@
           "title": "Module 10 \u2014 Supply Chain Security for ML Systems",
           "path": "lessons/mod-010-supply-chain-security",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-010-supply-chain-security",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-slsa-self-assessment",
+              "number": 1,
+              "title": "Exercise 01 Slsa Self Assessment",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-supply-chain-security/exercise-01-slsa-self-assessment",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-010-supply-chain-security/exercise-01-slsa-self-assessment"
+            },
+            {
+              "slug": "exercise-02-signed-pipeline-design",
+              "number": 2,
+              "title": "Exercise 02 Signed Pipeline Design",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-supply-chain-security/exercise-02-signed-pipeline-design",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-010-supply-chain-security/exercise-02-signed-pipeline-design"
+            },
+            {
+              "slug": "exercise-03-admission-verification",
+              "number": 3,
+              "title": "Exercise 03 Admission Verification",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-supply-chain-security/exercise-03-admission-verification",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-010-supply-chain-security/exercise-03-admission-verification"
+            },
+            {
+              "slug": "exercise-04-hugging-face-vetting",
+              "number": 4,
+              "title": "Exercise 04 Hugging Face Vetting",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-supply-chain-security/exercise-04-hugging-face-vetting",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-010-supply-chain-security/exercise-04-hugging-face-vetting"
+            },
+            {
+              "slug": "exercise-05-supply-chain-incident-runbook",
+              "number": 5,
+              "title": "Exercise 05 Supply Chain Incident Runbook",
+              "learning_path": null,
+              "solutions_path": "modules/mod-010-supply-chain-security/exercise-05-supply-chain-incident-runbook",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-010-supply-chain-security/exercise-05-supply-chain-incident-runbook"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6285,7 +7932,53 @@
           "title": "Module 11 \u2014 Security Operations for ML Systems",
           "path": "lessons/mod-011-security-operations",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-011-security-operations",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-siem-evaluation",
+              "number": 1,
+              "title": "Exercise 01 Siem Evaluation",
+              "learning_path": null,
+              "solutions_path": "modules/mod-011-security-operations/exercise-01-siem-evaluation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-011-security-operations/exercise-01-siem-evaluation"
+            },
+            {
+              "slug": "exercise-02-ml-detection-ruleset",
+              "number": 2,
+              "title": "Exercise 02 Ml Detection Ruleset",
+              "learning_path": null,
+              "solutions_path": "modules/mod-011-security-operations/exercise-02-ml-detection-ruleset",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-011-security-operations/exercise-02-ml-detection-ruleset"
+            },
+            {
+              "slug": "exercise-03-ml-ir-procedure",
+              "number": 3,
+              "title": "Exercise 03 Ml Ir Procedure",
+              "learning_path": null,
+              "solutions_path": "modules/mod-011-security-operations/exercise-03-ml-ir-procedure",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-011-security-operations/exercise-03-ml-ir-procedure"
+            },
+            {
+              "slug": "exercise-04-tabletop-library",
+              "number": 4,
+              "title": "Exercise 04 Tabletop Library",
+              "learning_path": null,
+              "solutions_path": "modules/mod-011-security-operations/exercise-04-tabletop-library",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-011-security-operations/exercise-04-tabletop-library"
+            },
+            {
+              "slug": "exercise-05-postmortem-template",
+              "number": 5,
+              "title": "Exercise 05 Postmortem Template",
+              "learning_path": null,
+              "solutions_path": "modules/mod-011-security-operations/exercise-05-postmortem-template",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-011-security-operations/exercise-05-postmortem-template"
+            }
+          ],
           "prerequisites": [],
           "related": []
         },
@@ -6295,7 +7988,62 @@
           "title": "Module 12 \u2014 Capstone",
           "path": "lessons/mod-012-capstone",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/lessons/mod-012-capstone",
-          "exercises": [],
+          "exercises": [
+            {
+              "slug": "exercise-01-threat-model-and-risk-register",
+              "number": 1,
+              "title": "Exercise 01 Threat Model And Risk Register",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-01-threat-model-and-risk-register",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-01-threat-model-and-risk-register"
+            },
+            {
+              "slug": "exercise-02-security-architecture",
+              "number": 2,
+              "title": "Exercise 02 Security Architecture",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-02-security-architecture",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-02-security-architecture"
+            },
+            {
+              "slug": "exercise-03-ml-specific-controls",
+              "number": 3,
+              "title": "Exercise 03 Ml Specific Controls",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-03-ml-specific-controls",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-03-ml-specific-controls"
+            },
+            {
+              "slug": "exercise-04-compliance-and-policy",
+              "number": 4,
+              "title": "Exercise 04 Compliance And Policy",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-04-compliance-and-policy",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-04-compliance-and-policy"
+            },
+            {
+              "slug": "exercise-05-secops-program",
+              "number": 5,
+              "title": "Exercise 05 Secops Program",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-05-secops-program",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-05-secops-program"
+            },
+            {
+              "slug": "exercise-06-stakeholder-portfolio",
+              "number": 6,
+              "title": "Exercise 06 Stakeholder Portfolio",
+              "learning_path": null,
+              "solutions_path": "modules/mod-012-capstone/exercise-06-stakeholder-portfolio",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-security-solutions/blob/main/modules/mod-012-capstone/exercise-06-stakeholder-portfolio"
+            }
+          ],
           "prerequisites": [],
           "related": []
         }
@@ -6377,6 +8125,236 @@
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-security-learning/blob/main/resources/README.md"
         }
       ]
+    },
+    {
+      "slug": "senior-agentic-ai-engineer",
+      "display_name": "Senior Agentic Ai Engineer Track",
+      "level": 0,
+      "learning_repo": "ai-infra-senior-agentic-ai-engineer-learning",
+      "solutions_repo": "ai-infra-senior-agentic-ai-engineer-solutions",
+      "learning_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning",
+      "solutions_repo_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions",
+      "modules": [
+        {
+          "slug": "mod-401-agent-systems-in-practice",
+          "number": 401,
+          "title": "mod-401-agent-systems-in-practice: Implementing Agent Systems from an Architecture",
+          "path": "lessons/mod-401-agent-systems-in-practice",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/lessons/mod-401-agent-systems-in-practice",
+          "exercises": [
+            {
+              "slug": "exercise-01-architecture-to-implementation",
+              "number": 1,
+              "title": "mod-401-agent-systems-in-practice/exercise-01 (Architecture To Implementation) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-01-architecture-to-implementation",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-401-agent-systems-in-practice/exercise-01-architecture-to-implementation"
+            },
+            {
+              "slug": "exercise-02-subsystem-ownership",
+              "number": 2,
+              "title": "mod-401-agent-systems-in-practice/exercise-02 (Subsystem Ownership) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-02-subsystem-ownership",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-401-agent-systems-in-practice/exercise-02-subsystem-ownership"
+            },
+            {
+              "slug": "exercise-03-prototype-to-production-refactor",
+              "number": 3,
+              "title": "mod-401-agent-systems-in-practice/exercise-03 (Prototype To Production Refactor) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-03-prototype-to-production-refactor",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-401-agent-systems-in-practice/exercise-03-prototype-to-production-refactor"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-402-eval-observability-infra",
+          "number": 402,
+          "title": "mod-402-eval-observability-infra: Building Eval & Observability Infrastructure",
+          "path": "lessons/mod-402-eval-observability-infra",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/lessons/mod-402-eval-observability-infra",
+          "exercises": [
+            {
+              "slug": "exercise-01-reusable-eval-harness",
+              "number": 1,
+              "title": "mod-402-eval-observability-infra/exercise-01 (Reusable Eval Harness) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-402-eval-observability-infra/exercise-01-reusable-eval-harness",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-402-eval-observability-infra/exercise-01-reusable-eval-harness"
+            },
+            {
+              "slug": "exercise-02-tracing-and-dashboards",
+              "number": 2,
+              "title": "mod-402-eval-observability-infra/exercise-02 (Tracing And Dashboards) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-402-eval-observability-infra/exercise-02-tracing-and-dashboards",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-402-eval-observability-infra/exercise-02-tracing-and-dashboards"
+            },
+            {
+              "slug": "exercise-03-regression-gates",
+              "number": 3,
+              "title": "mod-402-eval-observability-infra/exercise-03 (Regression Gates) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-402-eval-observability-infra/exercise-03-regression-gates",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-402-eval-observability-infra/exercise-03-regression-gates"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-403-multi-agent-at-scale",
+          "number": 403,
+          "title": "mod-403-multi-agent-at-scale: Multi-Agent Systems at Scale",
+          "path": "lessons/mod-403-multi-agent-at-scale",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/lessons/mod-403-multi-agent-at-scale",
+          "exercises": [
+            {
+              "slug": "exercise-01-orchestration-under-load",
+              "number": 1,
+              "title": "mod-403-multi-agent-at-scale/exercise-01 (Orchestration Under Load) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-403-multi-agent-at-scale/exercise-01-orchestration-under-load",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-403-multi-agent-at-scale/exercise-01-orchestration-under-load"
+            },
+            {
+              "slug": "exercise-02-durable-execution-in-production",
+              "number": 2,
+              "title": "mod-403-multi-agent-at-scale/exercise-02 (Durable Execution In Production) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-403-multi-agent-at-scale/exercise-02-durable-execution-in-production",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-403-multi-agent-at-scale/exercise-02-durable-execution-in-production"
+            },
+            {
+              "slug": "exercise-03-token-and-latency-budgets",
+              "number": 3,
+              "title": "mod-403-multi-agent-at-scale/exercise-03 (Token And Latency Budgets) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-403-multi-agent-at-scale/exercise-03-token-and-latency-budgets",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-403-multi-agent-at-scale/exercise-03-token-and-latency-budgets"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-404-reliability-cost-incident",
+          "number": 404,
+          "title": "mod-404-reliability-cost-incident: Reliability, Cost & Incident Response",
+          "path": "lessons/mod-404-reliability-cost-incident",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/lessons/mod-404-reliability-cost-incident",
+          "exercises": [
+            {
+              "slug": "exercise-01-agentic-slos",
+              "number": 1,
+              "title": "mod-404-reliability-cost-incident/exercise-01 (Agentic Slos) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-01-agentic-slos",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-404-reliability-cost-incident/exercise-01-agentic-slos"
+            },
+            {
+              "slug": "exercise-02-cost-controls-in-production",
+              "number": 2,
+              "title": "mod-404-reliability-cost-incident/exercise-02 (Cost Controls In Production) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-02-cost-controls-in-production",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-404-reliability-cost-incident/exercise-02-cost-controls-in-production"
+            },
+            {
+              "slug": "exercise-03-agent-incident-response",
+              "number": 3,
+              "title": "mod-404-reliability-cost-incident/exercise-03 (Agent Incident Response) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-03-agent-incident-response",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-404-reliability-cost-incident/exercise-03-agent-incident-response"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        },
+        {
+          "slug": "mod-405-technical-leadership",
+          "number": 405,
+          "title": "mod-405-technical-leadership: Technical Leadership for Agentic Teams",
+          "path": "lessons/mod-405-technical-leadership",
+          "github_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/lessons/mod-405-technical-leadership",
+          "exercises": [
+            {
+              "slug": "exercise-01-agent-code-review-standards",
+              "number": 1,
+              "title": "mod-405-technical-leadership/exercise-01 (Agent Code Review Standards) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-405-technical-leadership/exercise-01-agent-code-review-standards",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-405-technical-leadership/exercise-01-agent-code-review-standards"
+            },
+            {
+              "slug": "exercise-02-paved-roads-and-standards",
+              "number": 2,
+              "title": "mod-405-technical-leadership/exercise-02 (Paved Roads And Standards) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-405-technical-leadership/exercise-02-paved-roads-and-standards",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-405-technical-leadership/exercise-02-paved-roads-and-standards"
+            },
+            {
+              "slug": "exercise-03-scoping-and-sequencing",
+              "number": 3,
+              "title": "mod-405-technical-leadership/exercise-03 (Scoping And Sequencing) \u2014 Solution",
+              "learning_path": null,
+              "solutions_path": "modules/mod-405-technical-leadership/exercise-03-scoping-and-sequencing",
+              "learning_url": null,
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/modules/mod-405-technical-leadership/exercise-03-scoping-and-sequencing"
+            }
+          ],
+          "prerequisites": [],
+          "related": []
+        }
+      ],
+      "projects": [
+        {
+          "slug": "project-401-production-subsystem",
+          "number": 401,
+          "title": "project-401-production-subsystem: Capstone: Lead-Build a Production Multi-Agent Subsystem",
+          "learning_path": "projects/project-401-production-subsystem",
+          "solutions_path": "projects/project-401-production-subsystem",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/projects/project-401-production-subsystem",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/projects/project-401-production-subsystem",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-402-reliability-hardening",
+          "number": 402,
+          "title": "project-402-reliability-hardening: Reliability & Incident-Response Hardening",
+          "learning_path": "projects/project-402-reliability-hardening",
+          "solutions_path": "projects/project-402-reliability-hardening",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-learning/blob/main/projects/project-402-reliability-hardening",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-agentic-ai-engineer-solutions/blob/main/projects/project-402-reliability-hardening",
+          "docs": [
+            "README.md"
+          ],
+          "prerequisites": []
+        }
+      ],
+      "resources": []
     },
     {
       "slug": "senior-architect",
@@ -6950,17 +8928,6 @@
       ],
       "projects": [
         {
-          "slug": "project-401-transformation-strategy",
-          "number": 401,
-          "title": "Project 401: Enterprise AI Transformation Strategy",
-          "learning_path": null,
-          "solutions_path": "projects/project-401-transformation-strategy",
-          "learning_url": null,
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-architect-solutions/blob/main/projects/project-401-transformation-strategy",
-          "docs": [],
-          "prerequisites": []
-        },
-        {
           "slug": "project-401-ai-transformation-strategy",
           "number": 401,
           "title": "Project 401: Enterprise AI Transformation Strategy",
@@ -6971,6 +8938,17 @@
           "docs": [
             "README.md"
           ],
+          "prerequisites": []
+        },
+        {
+          "slug": "project-401-transformation-strategy",
+          "number": 401,
+          "title": "Project 401: Enterprise AI Transformation Strategy",
+          "learning_path": null,
+          "solutions_path": "projects/project-401-transformation-strategy",
+          "learning_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-senior-architect-solutions/blob/main/projects/project-401-transformation-strategy",
+          "docs": [],
           "prerequisites": []
         },
         {
@@ -7988,9 +9966,9 @@
           "number": 1,
           "title": "Project 01 \u2014 Team Process Implementation",
           "learning_path": "projects/project-01-team-process",
-          "solutions_path": null,
+          "solutions_path": "projects/project-01-team-process",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-learning/blob/main/projects/project-01-team-process",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-solutions/blob/main/projects/project-01-team-process",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -8005,9 +9983,9 @@
           "number": 2,
           "title": "Project 02 \u2014 Technical Strategy & Roadmap",
           "learning_path": "projects/project-02-technical-strategy",
-          "solutions_path": null,
+          "solutions_path": "projects/project-02-technical-strategy",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-learning/blob/main/projects/project-02-technical-strategy",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-solutions/blob/main/projects/project-02-technical-strategy",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -8022,9 +10000,9 @@
           "number": 3,
           "title": "Project 03 \u2014 Hiring & Onboarding Pipeline",
           "learning_path": "projects/project-03-hiring-onboarding",
-          "solutions_path": null,
+          "solutions_path": "projects/project-03-hiring-onboarding",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-learning/blob/main/projects/project-03-hiring-onboarding",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-solutions/blob/main/projects/project-03-hiring-onboarding",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -8039,9 +10017,9 @@
           "number": 4,
           "title": "Project 04 \u2014 Cross-Functional Platform Project",
           "learning_path": "projects/project-04-platform-project",
-          "solutions_path": null,
+          "solutions_path": "projects/project-04-platform-project",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-learning/blob/main/projects/project-04-platform-project",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-solutions/blob/main/projects/project-04-platform-project",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",
@@ -8056,9 +10034,9 @@
           "number": 5,
           "title": "Project 05 \u2014 Leadership Capstone",
           "learning_path": "projects/project-05-leadership-capstone",
-          "solutions_path": null,
+          "solutions_path": "projects/project-05-leadership-capstone",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-learning/blob/main/projects/project-05-leadership-capstone",
-          "solutions_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-team-lead-solutions/blob/main/projects/project-05-leadership-capstone",
           "docs": [
             "README.md",
             "STEP_BY_STEP.md",

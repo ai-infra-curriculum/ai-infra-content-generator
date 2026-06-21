@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "role": "agentic-systems-architect",
+  "role_title": "Agentic Systems Architect Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-301-AGENTIC-SYSTEMS-FOUNDATIONS",
+      "label": "mod-301-agentic-systems-foundations: Agentic Systems Foundations & When NOT to Use an Agent",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix",
+        "mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog",
+        "mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition",
+        "mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix/README.md",
+        "modules/mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog/README.md",
+        "modules/mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition/README.md",
+        "modules/mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-301-agentic-systems-foundations`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-302-MULTI-AGENT-ORCHESTRATION",
+      "label": "mod-302-multi-agent-orchestration: Multi-Agent Orchestration Architecture",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-302-multi-agent-orchestration/exercise-01-orchestrator-worker-topology-design",
+        "mod-302-multi-agent-orchestration/exercise-02-handoffs-vs-manager-as-tools",
+        "mod-302-multi-agent-orchestration/exercise-03-mcp-a2a-integration-architecture",
+        "mod-302-multi-agent-orchestration/exercise-04-coordination-and-escalation-design"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-302-multi-agent-orchestration/exercise-01-orchestrator-worker-topology-design/README.md",
+        "modules/mod-302-multi-agent-orchestration/exercise-02-handoffs-vs-manager-as-tools/README.md",
+        "modules/mod-302-multi-agent-orchestration/exercise-03-mcp-a2a-integration-architecture/README.md",
+        "modules/mod-302-multi-agent-orchestration/exercise-04-coordination-and-escalation-design/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-302-multi-agent-orchestration`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-303-MEMORY-CONTEXT-ARCHITECTURE",
+      "label": "mod-303-memory-context-architecture: Memory & Context Architecture",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-303-memory-context-architecture/exercise-01-context-budget-and-rot-analysis",
+        "mod-303-memory-context-architecture/exercise-02-memory-tier-placement-design",
+        "mod-303-memory-context-architecture/exercise-03-compaction-and-notetaking-strategy",
+        "mod-303-memory-context-architecture/exercise-04-rag-architecture-for-agents"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-303-memory-context-architecture/exercise-01-context-budget-and-rot-analysis/README.md",
+        "modules/mod-303-memory-context-architecture/exercise-02-memory-tier-placement-design/README.md",
+        "modules/mod-303-memory-context-architecture/exercise-03-compaction-and-notetaking-strategy/README.md",
+        "modules/mod-303-memory-context-architecture/exercise-04-rag-architecture-for-agents/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-303-memory-context-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-304-EVALUATION-HARNESSES",
+      "label": "mod-304-evaluation-harnesses: Evaluation Harnesses for Agentic Systems",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design",
+        "mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness",
+        "mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric",
+        "mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design/README.md",
+        "modules/mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness/README.md",
+        "modules/mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric/README.md",
+        "modules/mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-304-evaluation-harnesses`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-305-OBSERVABILITY-TRACING",
+      "label": "mod-305-observability-tracing: Observability & Tracing for Agents",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-305-observability-tracing/exercise-01-otel-genai-span-design",
+        "mod-305-observability-tracing/exercise-02-quality-and-drift-signals",
+        "mod-305-observability-tracing/exercise-03-observability-platform-evaluation"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-305-observability-tracing/exercise-01-otel-genai-span-design/README.md",
+        "modules/mod-305-observability-tracing/exercise-02-quality-and-drift-signals/README.md",
+        "modules/mod-305-observability-tracing/exercise-03-observability-platform-evaluation/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-305-observability-tracing`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-306-GUARDRAILS-SAFETY-SECURITY",
+      "label": "mod-306-guardrails-safety-security: Guardrails, Safety & Security",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-306-guardrails-safety-security/exercise-01-guardrail-placement-architecture",
+        "mod-306-guardrails-safety-security/exercise-02-prompt-injection-threat-model",
+        "mod-306-guardrails-safety-security/exercise-03-least-privilege-tool-permissions",
+        "mod-306-guardrails-safety-security/exercise-04-oauth-rbac-token-management-for-toolchains",
+        "mod-306-guardrails-safety-security/exercise-05-cli-agent-sandboxing-local-and-remote",
+        "mod-306-guardrails-safety-security/exercise-06-excessive-agency-controls"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-306-guardrails-safety-security/exercise-01-guardrail-placement-architecture/README.md",
+        "modules/mod-306-guardrails-safety-security/exercise-02-prompt-injection-threat-model/README.md",
+        "modules/mod-306-guardrails-safety-security/exercise-03-least-privilege-tool-permissions/README.md",
+        "modules/mod-306-guardrails-safety-security/exercise-04-oauth-rbac-token-management-for-toolchains/README.md",
+        "modules/mod-306-guardrails-safety-security/exercise-05-cli-agent-sandboxing-local-and-remote/README.md",
+        "modules/mod-306-guardrails-safety-security/exercise-06-excessive-agency-controls/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-306-guardrails-safety-security`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-307-COST-LATENCY-ARCHITECTURE",
+      "label": "mod-307-cost-latency-architecture: Cost & Latency Architecture",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model",
+        "mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture",
+        "mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model/README.md",
+        "modules/mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture/README.md",
+        "modules/mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-307-cost-latency-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-308-DEPLOYMENT-DURABLE-EXECUTION",
+      "label": "mod-308-deployment-durable-execution: Deployment, Durable Execution & Human-in-the-Loop",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-308-deployment-durable-execution/exercise-01-durable-execution-design",
+        "mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture",
+        "mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy",
+        "mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-308-deployment-durable-execution/exercise-01-durable-execution-design/README.md",
+        "modules/mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture/README.md",
+        "modules/mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy/README.md",
+        "modules/mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-308-deployment-durable-execution`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-309-GOVERNANCE-COMPLIANCE-DOMAIN",
+      "label": "mod-309-governance-compliance-domain: Governance, Compliance & Domain Constraints",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping",
+        "mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance",
+        "mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa",
+        "mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints",
+        "mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-309-governance-compliance-domain`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-310-AGENTIC-DEVELOPER-PLATFORMS",
+      "label": "mod-310-agentic-developer-platforms: Agentic Developer Platforms & SDLC Integration",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp",
+        "mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns",
+        "mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies",
+        "mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration",
+        "mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-310-agentic-developer-platforms`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-PROJECT-301-PRODUCTION-AGENTIC-REFERENCE-ARCHITECTURE",
+      "label": "project-301-production-agentic-reference-architecture: Capstone: End-to-End Agentic Reference Architecture",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-301-production-agentic-reference-architecture"
+      ],
+      "solutions": [
+        "projects/project-301-production-agentic-reference-architecture/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-301-production-agentic-reference-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-PROJECT-302-REGULATED-DOMAIN-AGENT-ARCHITECTURE",
+      "label": "project-302-regulated-domain-agent-architecture: Regulated-Domain Agentic Architecture (e.g., K-12 EdTech)",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-302-regulated-domain-agent-architecture"
+      ],
+      "solutions": [
+        "projects/project-302-regulated-domain-agent-architecture/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-302-regulated-domain-agent-architecture`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICSYSTEMSARCHITECT-PROJECT-303-AGENTIC-SDLC-PLATFORM",
+      "label": "project-303-agentic-sdlc-platform: Agentic AI-for-SDLC Platform (Plugin Architecture)",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-303-agentic-sdlc-platform"
+      ],
+      "solutions": [
+        "projects/project-303-agentic-sdlc-platform/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-303-agentic-sdlc-platform`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}

@@ -30,7 +30,8 @@
         "modules/mod-001-platform-fundamentals/exercise-01/README.md",
         "modules/mod-001-platform-fundamentals/exercise-02/README.md",
         "modules/mod-001-platform-fundamentals/exercise-03/README.md",
-        "modules/mod-001-platform-fundamentals/exercise-04/README.md"
+        "modules/mod-001-platform-fundamentals/exercise-04/README.md",
+        "modules/mod-001-platform-fundamentals/exercise-05/SOLUTION.md"
       ],
       "tests": [],
       "coverage_status": "partial",
@@ -56,7 +57,8 @@
         "modules/mod-002-api-design/exercise-01/README.md",
         "modules/mod-002-api-design/exercise-02/README.md",
         "modules/mod-002-api-design/exercise-03/README.md",
-        "modules/mod-002-api-design/exercise-04/README.md"
+        "modules/mod-002-api-design/exercise-04/README.md",
+        "modules/mod-002-api-design/exercise-05/SOLUTION.md"
       ],
       "tests": [],
       "coverage_status": "partial",
@@ -263,7 +265,11 @@
       "projects": [
         "project-01-platform-core"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-01-platform-core/README.md",
+        "projects/project-01-platform-core/SOLUTION.md",
+        "projects/project-01-platform-core/STEP_BY_STEP.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-01-platform-core`. Replace label + add evidence on next research cycle if confirmed."
@@ -280,7 +286,9 @@
       "projects": [
         "project-02-feature-store"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-02-feature-store/SOLUTION.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-02-feature-store`. Replace label + add evidence on next research cycle if confirmed."
@@ -297,9 +305,15 @@
       "projects": [
         "project-03-workflow-orchestration"
       ],
-      "solutions": [],
-      "tests": [],
-      "coverage_status": "partial",
+      "solutions": [
+        "projects/project-03-workflow-orchestration/README.md",
+        "projects/project-03-workflow-orchestration/SOLUTION.md",
+        "projects/project-03-workflow-orchestration/STEP_BY_STEP.md"
+      ],
+      "tests": [
+        "projects/project-03-workflow-orchestration/tests/test_state_machine.py"
+      ],
+      "coverage_status": "covered",
       "notes": "Backfilled from existing project `project-03-workflow-orchestration`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -314,7 +328,11 @@
       "projects": [
         "project-04-model-registry"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-04-model-registry/README.md",
+        "projects/project-04-model-registry/SOLUTION.md",
+        "projects/project-04-model-registry/STEP_BY_STEP.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-04-model-registry`. Replace label + add evidence on next research cycle if confirmed."
@@ -331,7 +349,11 @@
       "projects": [
         "project-05-developer-portal"
       ],
-      "solutions": [],
+      "solutions": [
+        "projects/project-05-developer-portal/README.md",
+        "projects/project-05-developer-portal/SOLUTION.md",
+        "projects/project-05-developer-portal/STEP_BY_STEP.md"
+      ],
       "tests": [],
       "coverage_status": "partial",
       "notes": "Backfilled from existing project `project-05-developer-portal`. Replace label + add evidence on next research cycle if confirmed."

@@ -18,11 +18,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-001-ml-security-foundations/exercise-01-threat-model-a-small-ml-system",
+        "mod-001-ml-security-foundations/exercise-02-map-system-to-owasp-ml-top-10",
+        "mod-001-ml-security-foundations/exercise-03-mitre-atlas-walkthrough",
+        "mod-001-ml-security-foundations/exercise-04-security-architecture-review",
+        "mod-001-ml-security-foundations/exercise-05-defense-in-depth-design"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-001-ml-security-foundations/exercise-01-threat-model-a-small-ml-system/SOLUTION.md",
+        "modules/mod-001-ml-security-foundations/exercise-02-map-system-to-owasp-ml-top-10/SOLUTION.md",
+        "modules/mod-001-ml-security-foundations/exercise-03-mitre-atlas-walkthrough/SOLUTION.md",
+        "modules/mod-001-ml-security-foundations/exercise-04-security-architecture-review/SOLUTION.md",
+        "modules/mod-001-ml-security-foundations/exercise-05-defense-in-depth-design/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-001-ml-security-foundations`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -33,11 +45,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-002-zero-trust-architecture/exercise-01-zero-trust-gap-analysis",
+        "mod-002-zero-trust-architecture/exercise-02-workload-identity-design",
+        "mod-002-zero-trust-architecture/exercise-03-microsegmentation-plan",
+        "mod-002-zero-trust-architecture/exercise-04-service-mesh-authz",
+        "mod-002-zero-trust-architecture/exercise-05-zero-trust-roadmap"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-002-zero-trust-architecture/exercise-01-zero-trust-gap-analysis/SOLUTION.md",
+        "modules/mod-002-zero-trust-architecture/exercise-02-workload-identity-design/SOLUTION.md",
+        "modules/mod-002-zero-trust-architecture/exercise-03-microsegmentation-plan/SOLUTION.md",
+        "modules/mod-002-zero-trust-architecture/exercise-04-service-mesh-authz/SOLUTION.md",
+        "modules/mod-002-zero-trust-architecture/exercise-05-zero-trust-roadmap/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-002-zero-trust-architecture`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -48,11 +72,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-003-cryptography-for-ml/exercise-01-key-management-plan",
+        "mod-003-cryptography-for-ml/exercise-02-tls-mtls-audit",
+        "mod-003-cryptography-for-ml/exercise-03-signed-artifact-rollout",
+        "mod-003-cryptography-for-ml/exercise-04-certificate-runbook",
+        "mod-003-cryptography-for-ml/exercise-05-encryption-in-use-decision"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-003-cryptography-for-ml/exercise-01-key-management-plan/SOLUTION.md",
+        "modules/mod-003-cryptography-for-ml/exercise-02-tls-mtls-audit/SOLUTION.md",
+        "modules/mod-003-cryptography-for-ml/exercise-03-signed-artifact-rollout/SOLUTION.md",
+        "modules/mod-003-cryptography-for-ml/exercise-04-certificate-runbook/SOLUTION.md",
+        "modules/mod-003-cryptography-for-ml/exercise-05-encryption-in-use-decision/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-003-cryptography-for-ml`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -63,11 +99,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-004-network-security/exercise-01-cni-evaluation",
+        "mod-004-network-security/exercise-02-complete-networkpolicy-set",
+        "mod-004-network-security/exercise-03-edge-gateway-hardening",
+        "mod-004-network-security/exercise-04-rate-limit-ddos-design",
+        "mod-004-network-security/exercise-05-network-observability-plan"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-004-network-security/exercise-01-cni-evaluation/SOLUTION.md",
+        "modules/mod-004-network-security/exercise-02-complete-networkpolicy-set/SOLUTION.md",
+        "modules/mod-004-network-security/exercise-03-edge-gateway-hardening/SOLUTION.md",
+        "modules/mod-004-network-security/exercise-04-rate-limit-ddos-design/SOLUTION.md",
+        "modules/mod-004-network-security/exercise-05-network-observability-plan/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-004-network-security`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -78,11 +126,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-005-secrets-management/exercise-01-secrets-inventory",
+        "mod-005-secrets-management/exercise-02-vault-deployment-plan",
+        "mod-005-secrets-management/exercise-03-secret-rotation-playbook",
+        "mod-005-secrets-management/exercise-04-keyless-ci-design",
+        "mod-005-secrets-management/exercise-05-secret-leak-runbook"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-005-secrets-management/exercise-01-secrets-inventory/SOLUTION.md",
+        "modules/mod-005-secrets-management/exercise-02-vault-deployment-plan/SOLUTION.md",
+        "modules/mod-005-secrets-management/exercise-03-secret-rotation-playbook/SOLUTION.md",
+        "modules/mod-005-secrets-management/exercise-04-keyless-ci-design/SOLUTION.md",
+        "modules/mod-005-secrets-management/exercise-05-secret-leak-runbook/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-005-secrets-management`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -93,11 +153,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-006-adversarial-ml/exercise-01-robustness-assessment",
+        "mod-006-adversarial-ml/exercise-02-defense-plan",
+        "mod-006-adversarial-ml/exercise-03-poisoning-detection",
+        "mod-006-adversarial-ml/exercise-04-dp-sgd-configuration",
+        "mod-006-adversarial-ml/exercise-05-llm-safety-pipeline"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-006-adversarial-ml/exercise-01-robustness-assessment/SOLUTION.md",
+        "modules/mod-006-adversarial-ml/exercise-02-defense-plan/SOLUTION.md",
+        "modules/mod-006-adversarial-ml/exercise-03-poisoning-detection/SOLUTION.md",
+        "modules/mod-006-adversarial-ml/exercise-04-dp-sgd-configuration/SOLUTION.md",
+        "modules/mod-006-adversarial-ml/exercise-05-llm-safety-pipeline/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-006-adversarial-ml`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -108,11 +180,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-007-compliance-and-governance/exercise-01-regulatory-applicability",
+        "mod-007-compliance-and-governance/exercise-02-gdpr-controls-plan",
+        "mod-007-compliance-and-governance/exercise-03-soc2-readiness",
+        "mod-007-compliance-and-governance/exercise-04-continuous-compliance",
+        "mod-007-compliance-and-governance/exercise-05-vendor-risk-review"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-007-compliance-and-governance/exercise-01-regulatory-applicability/SOLUTION.md",
+        "modules/mod-007-compliance-and-governance/exercise-02-gdpr-controls-plan/SOLUTION.md",
+        "modules/mod-007-compliance-and-governance/exercise-03-soc2-readiness/SOLUTION.md",
+        "modules/mod-007-compliance-and-governance/exercise-04-continuous-compliance/SOLUTION.md",
+        "modules/mod-007-compliance-and-governance/exercise-05-vendor-risk-review/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-007-compliance-and-governance`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -123,11 +207,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-008-runtime-security/exercise-01-pss-baseline",
+        "mod-008-runtime-security/exercise-02-seccomp-apparmor-profiles",
+        "mod-008-runtime-security/exercise-03-falco-ruleset",
+        "mod-008-runtime-security/exercise-04-behavioral-baseline-design",
+        "mod-008-runtime-security/exercise-05-container-escape-runbook"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-008-runtime-security/exercise-01-pss-baseline/SOLUTION.md",
+        "modules/mod-008-runtime-security/exercise-02-seccomp-apparmor-profiles/SOLUTION.md",
+        "modules/mod-008-runtime-security/exercise-03-falco-ruleset/SOLUTION.md",
+        "modules/mod-008-runtime-security/exercise-04-behavioral-baseline-design/SOLUTION.md",
+        "modules/mod-008-runtime-security/exercise-05-container-escape-runbook/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-008-runtime-security`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -138,11 +234,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-009-policy-as-code/exercise-01-gatekeeper-vs-kyverno",
+        "mod-009-policy-as-code/exercise-02-rego-policy-library",
+        "mod-009-policy-as-code/exercise-03-conftest-ci-gate",
+        "mod-009-policy-as-code/exercise-04-ml-policy-catalog",
+        "mod-009-policy-as-code/exercise-05-policy-testing-distribution"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-009-policy-as-code/exercise-01-gatekeeper-vs-kyverno/SOLUTION.md",
+        "modules/mod-009-policy-as-code/exercise-02-rego-policy-library/SOLUTION.md",
+        "modules/mod-009-policy-as-code/exercise-03-conftest-ci-gate/SOLUTION.md",
+        "modules/mod-009-policy-as-code/exercise-04-ml-policy-catalog/SOLUTION.md",
+        "modules/mod-009-policy-as-code/exercise-05-policy-testing-distribution/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-009-policy-as-code`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -153,11 +261,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-010-supply-chain-security/exercise-01-slsa-self-assessment",
+        "mod-010-supply-chain-security/exercise-02-signed-pipeline-design",
+        "mod-010-supply-chain-security/exercise-03-admission-verification",
+        "mod-010-supply-chain-security/exercise-04-hugging-face-vetting",
+        "mod-010-supply-chain-security/exercise-05-supply-chain-incident-runbook"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-010-supply-chain-security/exercise-01-slsa-self-assessment/SOLUTION.md",
+        "modules/mod-010-supply-chain-security/exercise-02-signed-pipeline-design/SOLUTION.md",
+        "modules/mod-010-supply-chain-security/exercise-03-admission-verification/SOLUTION.md",
+        "modules/mod-010-supply-chain-security/exercise-04-hugging-face-vetting/SOLUTION.md",
+        "modules/mod-010-supply-chain-security/exercise-05-supply-chain-incident-runbook/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-010-supply-chain-security`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -168,11 +288,23 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-011-security-operations/exercise-01-siem-evaluation",
+        "mod-011-security-operations/exercise-02-ml-detection-ruleset",
+        "mod-011-security-operations/exercise-03-ml-ir-procedure",
+        "mod-011-security-operations/exercise-04-tabletop-library",
+        "mod-011-security-operations/exercise-05-postmortem-template"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-011-security-operations/exercise-01-siem-evaluation/SOLUTION.md",
+        "modules/mod-011-security-operations/exercise-02-ml-detection-ruleset/SOLUTION.md",
+        "modules/mod-011-security-operations/exercise-03-ml-ir-procedure/SOLUTION.md",
+        "modules/mod-011-security-operations/exercise-04-tabletop-library/SOLUTION.md",
+        "modules/mod-011-security-operations/exercise-05-postmortem-template/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-011-security-operations`. Replace label + add evidence on next research cycle if confirmed."
     },
     {
@@ -183,11 +315,25 @@
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
-      "exercises": [],
+      "exercises": [
+        "mod-012-capstone/exercise-01-threat-model-and-risk-register",
+        "mod-012-capstone/exercise-02-security-architecture",
+        "mod-012-capstone/exercise-03-ml-specific-controls",
+        "mod-012-capstone/exercise-04-compliance-and-policy",
+        "mod-012-capstone/exercise-05-secops-program",
+        "mod-012-capstone/exercise-06-stakeholder-portfolio"
+      ],
       "projects": [],
-      "solutions": [],
+      "solutions": [
+        "modules/mod-012-capstone/exercise-01-threat-model-and-risk-register/SOLUTION.md",
+        "modules/mod-012-capstone/exercise-02-security-architecture/SOLUTION.md",
+        "modules/mod-012-capstone/exercise-03-ml-specific-controls/SOLUTION.md",
+        "modules/mod-012-capstone/exercise-04-compliance-and-policy/SOLUTION.md",
+        "modules/mod-012-capstone/exercise-05-secops-program/SOLUTION.md",
+        "modules/mod-012-capstone/exercise-06-stakeholder-portfolio/SOLUTION.md"
+      ],
       "tests": [],
-      "coverage_status": "missing",
+      "coverage_status": "partial",
       "notes": "Backfilled from existing module `mod-012-capstone`. Replace label + add evidence on next research cycle if confirmed."
     },
     {

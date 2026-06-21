@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "role": "agentic-ai-engineer",
+  "role_title": "Agentic Ai Engineer Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-201-AGENT-FUNDAMENTALS",
+      "label": "mod-201-agent-fundamentals: Agent Fundamentals: The Reason-Act Loop",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch",
+        "mod-201-agent-fundamentals/exercise-02-function-calling-tools",
+        "mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute",
+        "mod-201-agent-fundamentals/exercise-04-planning-agent"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch/README.md",
+        "modules/mod-201-agent-fundamentals/exercise-02-function-calling-tools/README.md",
+        "modules/mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute/README.md",
+        "modules/mod-201-agent-fundamentals/exercise-04-planning-agent/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-201-agent-fundamentals`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-202-FRAMEWORKS",
+      "label": "mod-202-frameworks: Agent Frameworks in Practice",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-202-frameworks/exercise-01-langgraph-stateful-agent",
+        "mod-202-frameworks/exercise-02-crewai-role-based-crew",
+        "mod-202-frameworks/exercise-03-autogen-multi-agent",
+        "mod-202-frameworks/exercise-04-mcp-tool-server",
+        "mod-202-frameworks/exercise-05-framework-tradeoff-bakeoff"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-202-frameworks/exercise-01-langgraph-stateful-agent/README.md",
+        "modules/mod-202-frameworks/exercise-02-crewai-role-based-crew/README.md",
+        "modules/mod-202-frameworks/exercise-03-autogen-multi-agent/README.md",
+        "modules/mod-202-frameworks/exercise-04-mcp-tool-server/README.md",
+        "modules/mod-202-frameworks/exercise-05-framework-tradeoff-bakeoff/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-202-frameworks`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-203-RAG-AND-MEMORY",
+      "label": "mod-203-rag-and-memory: RAG & Memory Implementation",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-203-rag-and-memory/exercise-01-rag-pipeline-vector-db",
+        "mod-203-rag-and-memory/exercise-02-agent-long-term-memory",
+        "mod-203-rag-and-memory/exercise-03-advanced-rag-retrieval",
+        "mod-203-rag-and-memory/exercise-04-rag-triad-evaluation"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-203-rag-and-memory/exercise-01-rag-pipeline-vector-db/README.md",
+        "modules/mod-203-rag-and-memory/exercise-02-agent-long-term-memory/README.md",
+        "modules/mod-203-rag-and-memory/exercise-03-advanced-rag-retrieval/README.md",
+        "modules/mod-203-rag-and-memory/exercise-04-rag-triad-evaluation/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-203-rag-and-memory`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-204-MULTI-AGENT-IMPLEMENTATION",
+      "label": "mod-204-multi-agent-implementation: Multi-Agent Systems Implementation",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-204-multi-agent-implementation/exercise-01-orchestrator-worker-build",
+        "mod-204-multi-agent-implementation/exercise-02-agent-handoffs",
+        "mod-204-multi-agent-implementation/exercise-03-subagent-isolation",
+        "mod-204-multi-agent-implementation/exercise-04-evaluator-optimizer-loop"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-204-multi-agent-implementation/exercise-01-orchestrator-worker-build/README.md",
+        "modules/mod-204-multi-agent-implementation/exercise-02-agent-handoffs/README.md",
+        "modules/mod-204-multi-agent-implementation/exercise-03-subagent-isolation/README.md",
+        "modules/mod-204-multi-agent-implementation/exercise-04-evaluator-optimizer-loop/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-204-multi-agent-implementation`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-205-EVALUATION-OBSERVABILITY",
+      "label": "mod-205-evaluation-observability: Evaluation & Observability Instrumentation",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-205-evaluation-observability/exercise-01-trajectory-eval-implementation",
+        "mod-205-evaluation-observability/exercise-02-otel-tracing-wireup",
+        "mod-205-evaluation-observability/exercise-03-llm-judge-scoring",
+        "mod-205-evaluation-observability/exercise-04-agent-regression-suite"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-205-evaluation-observability/exercise-01-trajectory-eval-implementation/README.md",
+        "modules/mod-205-evaluation-observability/exercise-02-otel-tracing-wireup/README.md",
+        "modules/mod-205-evaluation-observability/exercise-03-llm-judge-scoring/README.md",
+        "modules/mod-205-evaluation-observability/exercise-04-agent-regression-suite/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-205-evaluation-observability`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-206-GUARDRAILS-IMPLEMENTATION",
+      "label": "mod-206-guardrails-implementation: Guardrails & Safety Implementation",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails",
+        "mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses",
+        "mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement",
+        "mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails/README.md",
+        "modules/mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses/README.md",
+        "modules/mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement/README.md",
+        "modules/mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-206-guardrails-implementation`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-MOD-207-PRODUCTIONIZING-AGENTS",
+      "label": "mod-207-productionizing-agents: Productionizing Agents",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-207-productionizing-agents/exercise-01-agent-api-deployment",
+        "mod-207-productionizing-agents/exercise-02-durable-execution-temporal",
+        "mod-207-productionizing-agents/exercise-03-caching-and-routing",
+        "mod-207-productionizing-agents/exercise-04-hitl-with-persistence"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-207-productionizing-agents/exercise-01-agent-api-deployment/README.md",
+        "modules/mod-207-productionizing-agents/exercise-02-durable-execution-temporal/README.md",
+        "modules/mod-207-productionizing-agents/exercise-03-caching-and-routing/README.md",
+        "modules/mod-207-productionizing-agents/exercise-04-hitl-with-persistence/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-207-productionizing-agents`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-PROJECT-201-PRODUCTION-MULTI-AGENT-SYSTEM",
+      "label": "project-201-production-multi-agent-system: Capstone: Build & Deploy a Production Multi-Agent System",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-201-production-multi-agent-system"
+      ],
+      "solutions": [
+        "projects/project-201-production-multi-agent-system/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-201-production-multi-agent-system`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIENGINEER-PROJECT-202-BENCHMARK-AGENT",
+      "label": "project-202-benchmark-agent: Benchmark Agent (GAIA-style)",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-202-benchmark-agent"
+      ],
+      "solutions": [
+        "projects/project-202-benchmark-agent/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-202-benchmark-agent`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}

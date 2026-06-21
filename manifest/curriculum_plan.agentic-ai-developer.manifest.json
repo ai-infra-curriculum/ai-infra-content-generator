@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "role": "agentic-ai-developer",
+  "role_title": "Agentic Ai Developer Track",
+  "research": {
+    "window_start": null,
+    "window_end": null,
+    "postings_sampled": 0,
+    "last_refreshed": null,
+    "sources": []
+  },
+  "requirements": [
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-101-LLM-FUNDAMENTALS",
+      "label": "mod-101-llm-fundamentals: LLM Fundamentals for Application Developers",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-101-llm-fundamentals/exercise-01-first-llm-api-calls",
+        "mod-101-llm-fundamentals/exercise-02-tokens-context-cost",
+        "mod-101-llm-fundamentals/exercise-03-streaming-and-errors"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-101-llm-fundamentals/exercise-01-first-llm-api-calls/README.md",
+        "modules/mod-101-llm-fundamentals/exercise-02-tokens-context-cost/README.md",
+        "modules/mod-101-llm-fundamentals/exercise-03-streaming-and-errors/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-101-llm-fundamentals`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-102-PROMPT-ENGINEERING",
+      "label": "mod-102-prompt-engineering: Prompt Engineering & Structured Output",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-102-prompt-engineering/exercise-01-prompt-patterns",
+        "mod-102-prompt-engineering/exercise-02-structured-json-output",
+        "mod-102-prompt-engineering/exercise-03-output-validation"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-102-prompt-engineering/exercise-01-prompt-patterns/README.md",
+        "modules/mod-102-prompt-engineering/exercise-02-structured-json-output/README.md",
+        "modules/mod-102-prompt-engineering/exercise-03-output-validation/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-102-prompt-engineering`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-103-TOOL-AND-FUNCTION-CALLING",
+      "label": "mod-103-tool-and-function-calling: Tool & Function Calling",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-103-tool-and-function-calling/exercise-01-first-function-calling",
+        "mod-103-tool-and-function-calling/exercise-02-multi-tool-app",
+        "mod-103-tool-and-function-calling/exercise-03-tool-error-handling"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-103-tool-and-function-calling/exercise-01-first-function-calling/README.md",
+        "modules/mod-103-tool-and-function-calling/exercise-02-multi-tool-app/README.md",
+        "modules/mod-103-tool-and-function-calling/exercise-03-tool-error-handling/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-103-tool-and-function-calling`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-104-RETRIEVAL-BASICS",
+      "label": "mod-104-retrieval-basics: Retrieval Basics (Embeddings & Simple RAG)",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-104-retrieval-basics/exercise-01-embeddings-similarity",
+        "mod-104-retrieval-basics/exercise-02-simple-rag-pipeline",
+        "mod-104-retrieval-basics/exercise-03-chunking-and-indexing"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-104-retrieval-basics/exercise-01-embeddings-similarity/README.md",
+        "modules/mod-104-retrieval-basics/exercise-02-simple-rag-pipeline/README.md",
+        "modules/mod-104-retrieval-basics/exercise-03-chunking-and-indexing/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-104-retrieval-basics`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-105-FIRST-AGENT",
+      "label": "mod-105-first-agent: Your First Agent: The Reason-Act Loop",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-105-first-agent/exercise-01-react-loop-intro",
+        "mod-105-first-agent/exercise-02-tool-using-agent",
+        "mod-105-first-agent/exercise-03-basic-conversation-memory"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-105-first-agent/exercise-01-react-loop-intro/README.md",
+        "modules/mod-105-first-agent/exercise-02-tool-using-agent/README.md",
+        "modules/mod-105-first-agent/exercise-03-basic-conversation-memory/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-105-first-agent`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-MOD-106-LLM-APP-DEPLOYMENT",
+      "label": "mod-106-llm-app-deployment: Shipping an LLM Application",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [
+        "mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint",
+        "mod-106-llm-app-deployment/exercise-02-secrets-and-config",
+        "mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail"
+      ],
+      "projects": [],
+      "solutions": [
+        "modules/mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint/README.md",
+        "modules/mod-106-llm-app-deployment/exercise-02-secrets-and-config/README.md",
+        "modules/mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing module `mod-106-llm-app-deployment`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-PROJECT-101-LLM-POWERED-APP",
+      "label": "project-101-llm-powered-app: Capstone: Ship an LLM-Powered Application",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-101-llm-powered-app"
+      ],
+      "solutions": [
+        "projects/project-101-llm-powered-app/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-101-llm-powered-app`. Replace label + add evidence on next research cycle if confirmed."
+    },
+    {
+      "id": "REQ-AGENTICAIDEVELOPER-PROJECT-102-TOOL-USING-AGENT",
+      "label": "project-102-tool-using-agent: A Simple Tool-Using Agent",
+      "frequency": null,
+      "provenance": "backfilled",
+      "requires_confirmation": true,
+      "evidence": [],
+      "discussion_topics": [],
+      "exercises": [],
+      "projects": [
+        "project-102-tool-using-agent"
+      ],
+      "solutions": [
+        "projects/project-102-tool-using-agent/README.md"
+      ],
+      "tests": [],
+      "coverage_status": "partial",
+      "notes": "Backfilled from existing project `project-102-tool-using-agent`. Replace label + add evidence on next research cycle if confirmed."
+    }
+  ]
+}
