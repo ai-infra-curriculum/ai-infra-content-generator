@@ -24,10 +24,10 @@ OPEN = "<!-- aicg:site-banner -->"
 CLOSE = "<!-- /aicg:site-banner -->"
 
 BANNER_BODY = (
-    "> 🎓 Part of the **[AI Infrastructure Curriculum](https://ai-infra-curriculum.github.io/)** — "
-    "a free, open-source ladder of role-based AI-infrastructure programs. "
-    "[Explore the ladder](https://ai-infra-curriculum.github.io/) · "
-    "[Join the first live cohort](https://ai-infra-curriculum.github.io/junior.html)"
+    "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
+    "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
+    "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
+    "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**."
 )
 BLOCK = f"{OPEN}\n{BANNER_BODY}\n{CLOSE}"
 
@@ -136,7 +136,7 @@ def main() -> int:
         readme.write_text(updated, encoding="utf-8")
         git(repo, "add", "README.md")
         git(repo, "commit", "-q", "-m",
-            "docs: add AI Infrastructure Curriculum site banner to README")
+            "docs: update AI Infrastructure Curriculum site banner in README")
         push = git(repo, "push", "origin", branch)
         ok = "OK" if push.returncode == 0 else f"PUSH FAILED: {push.stderr.strip()[:80]}"
         print(f"  updated + pushed: {name} [{ok}]")

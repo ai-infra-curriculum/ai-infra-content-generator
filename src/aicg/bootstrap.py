@@ -343,10 +343,10 @@ def _write(path: Path, content: str) -> str:
 
 _SITE_BANNER = (
     "<!-- aicg:site-banner -->\n"
-    "> 🎓 Part of the **[AI Infrastructure Curriculum](https://ai-infra-curriculum.github.io/)** — "
-    "a free, open-source ladder of role-based AI-infrastructure programs. "
-    "[Explore the ladder](https://ai-infra-curriculum.github.io/) · "
-    "[Join the first live cohort](https://ai-infra-curriculum.github.io/junior.html)\n"
+    "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
+    "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
+    "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
+    "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**.\n"
     "<!-- /aicg:site-banner -->\n\n"
 )
 
