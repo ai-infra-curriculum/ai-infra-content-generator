@@ -238,10 +238,11 @@ def test_committed_index_loads() -> None:
     if not path.exists():
         pytest.skip("backfilled index not present in this checkout")
     index = load_curriculum_plan_index(path)
-    # The org currently has 13 roles (12 IC/architect/lead tracks + the
-    # chief-ai-officer executive track). Backfill keeps the index in
-    # sync with the org config, so this should remain accurate.
-    assert len(index.roles) == 13
+    # The org has 17 roles: the 13 core IC/architect/lead/executive tracks
+    # plus the 4-rung Agentic AI vertical (developer, engineer, senior
+    # engineer, systems architect). Backfill keeps the index in sync with
+    # the org config, so this should remain accurate.
+    assert len(index.roles) == 17
     # Every slug listed should have a coverage breakdown summing to the count.
     for entry in index.roles:
         assert sum(entry.coverage.values()) == entry.requirement_count
