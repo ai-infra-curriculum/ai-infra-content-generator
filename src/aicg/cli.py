@@ -18,7 +18,6 @@ from .bootstrap import (
 from .diff import diff_repo
 from .generator import GenerationNotConfigured, generate_all_pending, generate_from_plan
 from .gitops import GitOpsError, prepare_pr
-from .propagate import PropagateError, propagate_repo
 from .inventory import InventoryError, WorkspaceInventory, default_workspace
 from .org_config import ManifestError, load_manifest, state_dir_for_manifest
 from .org_runner import (
@@ -31,6 +30,7 @@ from .org_runner import (
     sync_repositories,
 )
 from .planner import plan_from_audit
+from .propagate import PropagateError, propagate_repo
 from .state import read_state
 from .validator import validate_repo
 from .verify import VerifyError, verify_repo
@@ -551,6 +551,23 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     org_review.set_defaults(func=cmd_org_review)
+
+    org_calibrate = org_subparsers.add_parser(
+        "calibrate-judge",
+        help="Score a labeled good/bad corpus to choose the eval-gate BAR empirically (P0)",
+    )
+    add_org_args(org_calibrate)
+    org_calibrate.add_argument(
+        "--corpus",
+        required=True,
+        help="Path to the calibration corpus dir (contains good/ and bad/ *.md artifacts).",
+    )
+    org_calibrate.add_argument(
+        "--out",
+        default=None,
+        help="Optional path to write the full calibration report as JSON.",
+    )
+    org_calibrate.set_defaults(func=cmd_org_calibrate_judge)
 
     org_plan_delta_apply = org_subparsers.add_parser(
         "plan-delta-apply",
@@ -1465,6 +1482,70 @@ def cmd_org_audit_versions(args: argparse.Namespace) -> int:
     for repo in repo_summaries:
         if repo["finding_count"]:
             print(f"  ! {repo['repo']}: {repo['finding_count']} ref(s)")
+    return 0
+
+
+def cmd_org_calibrate_judge(args: argparse.Namespace) -> int:
+    """Score a labeled known-good/known-bad corpus to choose BAR empirically.
+
+    This is P0 of the autonomous pipeline: the eval-gate's safety case rests
+    on the pass threshold being measured against ground truth, not guessed.
+    It reads the corpus and reports the confusion + a suggested BAR; it makes
+    no autonomous writes. The judge is force-enabled for the run regardless of
+    the live ``quality_judge.enabled`` flag, since calibrating is the explicit
+    point of the command.
+    """
+    import dataclasses
+
+    from .calibration import run_calibration
+    from .judge import JudgeConfig
+    from .state import write_json
+
+    manifest = resolve_manifest(args)
+    judge_config = JudgeConfig.from_manifest(manifest)
+    if not judge_config.agent_command:
+        print(
+            "error: quality_judge.agent_command is not configured; cannot "
+            "calibrate (the judge needs a command to invoke).",
+            file=sys.stderr,
+        )
+        return 1
+
+    corpus = Path(args.corpus)
+    if not corpus.exists():
+        print(f"error: corpus directory not found: {corpus}", file=sys.stderr)
+        return 1
+
+    run_config = dataclasses.replace(judge_config, enabled=True)
+    runner_root = Path(__file__).resolve().parents[2]
+    try:
+        report = run_calibration(corpus, judge_config=run_config, runner_root=runner_root)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+
+    bar = report.threshold
+    print(f"Calibration over {len(report.rows)} artifacts (current BAR={bar}):")
+    print(f"  good scores: {sorted(report.good_scores, reverse=True)}")
+    print(f"  bad scores:  {sorted(report.bad_scores, reverse=True)}")
+    print(
+        f"  confusion @BAR={bar}: true_pass={report.true_pass} "
+        f"false_fail={report.false_fail} true_fail={report.true_fail} "
+        f"false_pass={report.false_pass}"
+    )
+    print(
+        f"  accuracy={report.accuracy:.0%}  separable={report.separable}  "
+        f"suggested_BAR={report.suggested_bar}"
+    )
+    if report.false_pass:
+        print(
+            f"  WARNING: {report.false_pass} bad artifact(s) PASSED at BAR={bar} — "
+            f"raise BAR toward {report.suggested_bar} before trusting the gate.",
+            file=sys.stderr,
+        )
+    if getattr(args, "out", None):
+        write_json(Path(args.out), report.as_dict())
+        print(f"  wrote report → {args.out}")
     return 0
 
 

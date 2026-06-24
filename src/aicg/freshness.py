@@ -480,19 +480,24 @@ def review_existing_artifacts(
             entry["status"] = "stale"
             severity = _review_severity(verdict)
             entry["severity"] = severity
-            work_items.append(
-                {
-                    "id": f"refresh-stale-{artifact_id}",
-                    "repo": repo_path.name,
-                    "type": "refresh_stale",
-                    "severity": severity,
-                    "path": artifact_rel,
-                    "title": f"Refresh stale content in {artifact_rel}",
-                    "score": verdict.score,
-                    "blockers": list(verdict.blockers),
-                    "summary": verdict.summary,
-                }
-            )
+            # Flag-only mode reports the staleness but enqueues no repair —
+            # full visibility, zero autonomous action (design doc P0).
+            if getattr(judge_config, "flag_only", False):
+                entry["flagged_only"] = True
+            else:
+                work_items.append(
+                    {
+                        "id": f"refresh-stale-{artifact_id}",
+                        "repo": repo_path.name,
+                        "type": "refresh_stale",
+                        "severity": severity,
+                        "path": artifact_rel,
+                        "title": f"Refresh stale content in {artifact_rel}",
+                        "score": verdict.score,
+                        "blockers": list(verdict.blockers),
+                        "summary": verdict.summary,
+                    }
+                )
         else:
             entry["status"] = "ok"
         role_findings.append(entry)
