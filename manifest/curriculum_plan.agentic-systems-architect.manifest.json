@@ -212,26 +212,26 @@
     },
     {
       "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-309-GOVERNANCE-COMPLIANCE-DOMAIN",
-      "label": "mod-309-governance-compliance-domain: Governance, Compliance & Domain Constraints",
+      "label": "mod-309-governance-compliance-domain: Governance, Compliance & Regulated-Domain Architecture",
       "frequency": null,
       "provenance": "backfilled",
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
       "exercises": [
-        "mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping",
-        "mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance",
-        "mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa",
-        "mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints",
-        "mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec"
+        "mod-309-governance-compliance-domain/exercise-01-horizontal-framework-controls-mapping",
+        "mod-309-governance-compliance-domain/exercise-02-multi-regime-regulated-domain-architecture",
+        "mod-309-governance-compliance-domain/exercise-03-extension-tool-governance-lifecycle",
+        "mod-309-governance-compliance-domain/exercise-04-governance-accountability-spec",
+        "mod-309-governance-compliance-domain/exercise-05-data-handling-residency-design"
       ],
       "projects": [],
       "solutions": [
-        "modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping/README.md",
-        "modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance/README.md",
-        "modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa/README.md",
-        "modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints/README.md",
-        "modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec/README.md"
+        "modules/mod-309-governance-compliance-domain/exercise-01-horizontal-framework-controls-mapping/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-02-multi-regime-regulated-domain-architecture/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-03-extension-tool-governance-lifecycle/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-04-governance-accountability-spec/README.md",
+        "modules/mod-309-governance-compliance-domain/exercise-05-data-handling-residency-design/README.md"
       ],
       "tests": [],
       "coverage_status": "partial",
@@ -239,26 +239,26 @@
     },
     {
       "id": "REQ-AGENTICSYSTEMSARCHITECT-MOD-310-AGENTIC-DEVELOPER-PLATFORMS",
-      "label": "mod-310-agentic-developer-platforms: Agentic Developer Platforms & SDLC Integration",
+      "label": "mod-310-agentic-developer-platforms: Agentic Developer & Internal Platforms",
       "frequency": null,
       "provenance": "backfilled",
       "requires_confirmation": true,
       "evidence": [],
       "discussion_topics": [],
       "exercises": [
-        "mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp",
-        "mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns",
-        "mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies",
-        "mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration",
-        "mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx"
+        "mod-310-agentic-developer-platforms/exercise-01-extension-model-mapping-across-platforms",
+        "mod-310-agentic-developer-platforms/exercise-02-secure-tool-use-and-context-hydration",
+        "mod-310-agentic-developer-platforms/exercise-03-workflow-toolchain-integration",
+        "mod-310-agentic-developer-platforms/exercise-04-platform-adoption-and-dx-plan",
+        "mod-310-agentic-developer-platforms/exercise-05-non-sdlc-platform-case"
       ],
       "projects": [],
       "solutions": [
-        "modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp/README.md",
-        "modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns/README.md",
-        "modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies/README.md",
-        "modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration/README.md",
-        "modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx/README.md"
+        "modules/mod-310-agentic-developer-platforms/exercise-01-extension-model-mapping-across-platforms/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-02-secure-tool-use-and-context-hydration/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-03-workflow-toolchain-integration/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-04-platform-adoption-and-dx-plan/README.md",
+        "modules/mod-310-agentic-developer-platforms/exercise-05-non-sdlc-platform-case/README.md"
       ],
       "tests": [],
       "coverage_status": "partial",
@@ -285,7 +285,7 @@
     },
     {
       "id": "REQ-AGENTICSYSTEMSARCHITECT-PROJECT-302-REGULATED-DOMAIN-AGENT-ARCHITECTURE",
-      "label": "project-302-regulated-domain-agent-architecture: Regulated-Domain Agentic Architecture (e.g., K-12 EdTech)",
+      "label": "project-302-regulated-domain-agent-architecture: Regulated-Domain Agentic Architecture (Learner-Selected Sector)",
       "frequency": null,
       "provenance": "backfilled",
       "requires_confirmation": true,
@@ -304,7 +304,7 @@
     },
     {
       "id": "REQ-AGENTICSYSTEMSARCHITECT-PROJECT-303-AGENTIC-SDLC-PLATFORM",
-      "label": "project-303-agentic-sdlc-platform: Agentic AI-for-SDLC Platform (Plugin Architecture)",
+      "label": "project-303-extensible-agent-platform: Extensible Agent Platform (Platform-Neutral)",
       "frequency": null,
       "provenance": "backfilled",
       "requires_confirmation": true,
@@ -312,14 +312,14 @@
       "discussion_topics": [],
       "exercises": [],
       "projects": [
-        "project-303-agentic-sdlc-platform"
+        "project-303-extensible-agent-platform"
       ],
       "solutions": [
-        "projects/project-303-agentic-sdlc-platform/README.md"
+        "projects/project-303-extensible-agent-platform/README.md"
       ],
       "tests": [],
       "coverage_status": "partial",
-      "notes": "Backfilled from existing project `project-303-agentic-sdlc-platform`. Replace label + add evidence on next research cycle if confirmed."
+      "notes": "Backfilled from existing project `project-303-extensible-agent-platform`. Replace label + add evidence on next research cycle if confirmed."
     }
   ]
 }
