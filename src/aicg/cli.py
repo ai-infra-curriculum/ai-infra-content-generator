@@ -569,6 +569,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_calibrate.set_defaults(func=cmd_org_calibrate_judge)
 
+    org_pipeline_status = org_subparsers.add_parser(
+        "pipeline-status",
+        help="Show which autonomous-pipeline phases (P0-P6) are enabled (read-only)",
+    )
+    add_org_args(org_pipeline_status)
+    org_pipeline_status.set_defaults(func=cmd_org_pipeline_status)
+
     org_plan_delta_apply = org_subparsers.add_parser(
         "plan-delta-apply",
         help="Apply a curriculum-plan delta to a per-role manifest (validates first; flags large changes for human approval).",
@@ -1482,6 +1489,34 @@ def cmd_org_audit_versions(args: argparse.Namespace) -> int:
     for repo in repo_summaries:
         if repo["finding_count"]:
             print(f"  ! {repo['repo']}: {repo['finding_count']} ref(s)")
+    return 0
+
+
+def cmd_org_pipeline_status(args: argparse.Namespace) -> int:
+    """Report the autonomous pipeline's staged-rollout state (read-only).
+
+    Shows which P0-P6 phases are enabled (all autonomous-write phases default
+    OFF), the budget/rotation knobs, and the P0 quality-judge state. Makes no
+    changes — the operator's at-a-glance view of how 'live' the system is.
+    """
+    from .judge import JudgeConfig
+    from .pipeline_config import PipelineConfig
+
+    manifest = resolve_manifest(args)
+    pc = PipelineConfig.from_manifest(manifest)
+    jc = JudgeConfig.from_manifest(manifest)
+
+    enabled = pc.enabled_phases()
+    print("Autonomous pipeline — staged-rollout status")
+    print(f"  enabled phases : {', '.join(enabled) if enabled else '(none — inert / observe-only)'}")
+    print(f"  daily budget   : {pc.daily_budget} items")
+    print(f"  rotation       : {pc.rotation_days}d   re-audit slice: {pc.reaudit_slice}")
+    print(f"  budget shares  : {pc.budget_shares}")
+    print(f"  heartbeat      : {pc.heartbeat_url or '(not configured — C-B2)'}")
+    print(f"  quality_judge  : enabled={jc.enabled}  flag_only={jc.flag_only}")
+    if not enabled and not jc.enabled:
+        print("\n  Pipeline is fully inert. Next: run `aicg org calibrate-judge` to pick BAR,")
+        print("  then enable quality_judge in flag-only mode (P0).")
     return 0
 
 
