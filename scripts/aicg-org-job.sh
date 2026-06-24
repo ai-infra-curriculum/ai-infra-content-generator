@@ -117,11 +117,31 @@ main() {
   # Lock variable is intentionally global so the EXIT trap, which fires
   # after main() returns, can still see it under `set -u`.
   LOCK_DIR="$STATE_DIR/aicg-org.lock"
+  local lock_ttl="${AICG_LOCK_TTL:-10800}"  # 3h grace before a held lock is suspect
   if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-    log "Another AICG org job is running; exiting."
-    exit 0
+    # Stale-lock recovery (C-M2): break the lock only if its owner PID is dead
+    # AND it has been held past the TTL. A slow-but-live holder is never broken.
+    local broke=0
+    if [[ -f "$LOCK_DIR/owner" ]]; then
+      local lpid lts age
+      lpid="$(sed -n '1p' "$LOCK_DIR/owner" 2>/dev/null || true)"
+      lts="$(sed -n '2p' "$LOCK_DIR/owner" 2>/dev/null || true)"
+      if [[ "$lpid" =~ ^[0-9]+$ && "$lts" =~ ^[0-9]+$ ]]; then
+        age=$(( $(date +%s) - lts ))
+        if (( age > lock_ttl )) && ! kill -0 "$lpid" 2>/dev/null; then
+          log "Breaking stale lock: pid $lpid dead, held ${age}s > ${lock_ttl}s."
+          rm -rf "$LOCK_DIR" 2>/dev/null || true
+          mkdir "$LOCK_DIR" 2>/dev/null && broke=1
+        fi
+      fi
+    fi
+    if (( broke == 0 )); then
+      log "Another AICG org job is running; exiting."
+      exit 0
+    fi
   fi
-  trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
+  printf '%s\n%s\n' "$$" "$(date +%s)" > "$LOCK_DIR/owner" 2>/dev/null || true
+  trap 'rm -rf "$LOCK_DIR" 2>/dev/null || true' EXIT
 
   log "Starting job: $JOB"
   case "$JOB" in
@@ -224,6 +244,13 @@ main() {
       ;;
   esac
   log "Completed job: $JOB"
+
+  # Out-of-band heartbeat (C-B2): ping an external dead-man's-switch on success
+  # so a monitor independent of this host + token alerts if the pipeline goes
+  # silent — the failure mode that bit us before (token expiry, silent stall).
+  if [[ -n "${AICG_HEARTBEAT_URL:-}" ]]; then
+    curl -fsS -m 10 "$AICG_HEARTBEAT_URL" >/dev/null 2>&1 || log "heartbeat ping failed"
+  fi
 }
 
 parse_args "$@"
