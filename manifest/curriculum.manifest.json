@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-21T20:07:55Z",
+  "generated_at": "2026-06-24T23:10:02Z",
   "org": "ai-infra-curriculum",
   "tracks": [
     {
@@ -22,7 +22,7 @@
             {
               "slug": "exercise-01-first-llm-api-calls",
               "number": 1,
-              "title": "mod-101-llm-fundamentals/exercise-01 (First Llm Api Calls) \u2014 Solution",
+              "title": "mod-101-llm-fundamentals/exercise-01-first-llm-api-calls \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-101-llm-fundamentals/exercise-01-first-llm-api-calls",
               "learning_url": null,
@@ -31,7 +31,7 @@
             {
               "slug": "exercise-02-tokens-context-cost",
               "number": 2,
-              "title": "mod-101-llm-fundamentals/exercise-02 (Tokens Context Cost) \u2014 Solution",
+              "title": "mod-101-llm-fundamentals/exercise-02-tokens-context-cost \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-101-llm-fundamentals/exercise-02-tokens-context-cost",
               "learning_url": null,
@@ -40,7 +40,7 @@
             {
               "slug": "exercise-03-streaming-and-errors",
               "number": 3,
-              "title": "mod-101-llm-fundamentals/exercise-03 (Streaming And Errors) \u2014 Solution",
+              "title": "mod-101-llm-fundamentals/exercise-03-streaming-and-errors \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-101-llm-fundamentals/exercise-03-streaming-and-errors",
               "learning_url": null,
@@ -60,7 +60,7 @@
             {
               "slug": "exercise-01-prompt-patterns",
               "number": 1,
-              "title": "mod-102-prompt-engineering/exercise-01 (Prompt Patterns) \u2014 Solution",
+              "title": "mod-102-prompt-engineering/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-102-prompt-engineering/exercise-01-prompt-patterns",
               "learning_url": null,
@@ -69,7 +69,7 @@
             {
               "slug": "exercise-02-structured-json-output",
               "number": 2,
-              "title": "mod-102-prompt-engineering/exercise-02 (Structured Json Output) \u2014 Solution",
+              "title": "mod-102-prompt-engineering/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-102-prompt-engineering/exercise-02-structured-json-output",
               "learning_url": null,
@@ -78,7 +78,7 @@
             {
               "slug": "exercise-03-output-validation",
               "number": 3,
-              "title": "mod-102-prompt-engineering/exercise-03 (Output Validation) \u2014 Solution",
+              "title": "mod-102-prompt-engineering/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-102-prompt-engineering/exercise-03-output-validation",
               "learning_url": null,
@@ -98,7 +98,7 @@
             {
               "slug": "exercise-01-first-function-calling",
               "number": 1,
-              "title": "mod-103-tool-and-function-calling/exercise-01 (First Function Calling) \u2014 Solution",
+              "title": "mod-103-tool-and-function-calling/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-01-first-function-calling",
               "learning_url": null,
@@ -107,7 +107,7 @@
             {
               "slug": "exercise-02-multi-tool-app",
               "number": 2,
-              "title": "mod-103-tool-and-function-calling/exercise-02 (Multi Tool App) \u2014 Solution",
+              "title": "mod-103-tool-and-function-calling/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-02-multi-tool-app",
               "learning_url": null,
@@ -116,7 +116,7 @@
             {
               "slug": "exercise-03-tool-error-handling",
               "number": 3,
-              "title": "mod-103-tool-and-function-calling/exercise-03 (Tool Error Handling) \u2014 Solution",
+              "title": "mod-103-tool-and-function-calling/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-103-tool-and-function-calling/exercise-03-tool-error-handling",
               "learning_url": null,
@@ -136,7 +136,7 @@
             {
               "slug": "exercise-01-embeddings-similarity",
               "number": 1,
-              "title": "mod-104-retrieval-basics/exercise-01 (Embeddings Similarity) \u2014 Solution",
+              "title": "mod-104-retrieval-basics/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-104-retrieval-basics/exercise-01-embeddings-similarity",
               "learning_url": null,
@@ -145,7 +145,7 @@
             {
               "slug": "exercise-02-simple-rag-pipeline",
               "number": 2,
-              "title": "mod-104-retrieval-basics/exercise-02 (Simple Rag Pipeline) \u2014 Solution",
+              "title": "mod-104-retrieval-basics/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-104-retrieval-basics/exercise-02-simple-rag-pipeline",
               "learning_url": null,
@@ -154,7 +154,7 @@
             {
               "slug": "exercise-03-chunking-and-indexing",
               "number": 3,
-              "title": "mod-104-retrieval-basics/exercise-03 (Chunking And Indexing) \u2014 Solution",
+              "title": "mod-104-retrieval-basics/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-104-retrieval-basics/exercise-03-chunking-and-indexing",
               "learning_url": null,
@@ -174,7 +174,7 @@
             {
               "slug": "exercise-01-react-loop-intro",
               "number": 1,
-              "title": "mod-105-first-agent/exercise-01 (React Loop Intro) \u2014 Solution",
+              "title": "mod-105-first-agent/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-105-first-agent/exercise-01-react-loop-intro",
               "learning_url": null,
@@ -183,7 +183,7 @@
             {
               "slug": "exercise-02-tool-using-agent",
               "number": 2,
-              "title": "mod-105-first-agent/exercise-02 (Tool Using Agent) \u2014 Solution",
+              "title": "mod-105-first-agent/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-105-first-agent/exercise-02-tool-using-agent",
               "learning_url": null,
@@ -192,7 +192,7 @@
             {
               "slug": "exercise-03-basic-conversation-memory",
               "number": 3,
-              "title": "mod-105-first-agent/exercise-03 (Basic Conversation Memory) \u2014 Solution",
+              "title": "mod-105-first-agent/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-105-first-agent/exercise-03-basic-conversation-memory",
               "learning_url": null,
@@ -212,7 +212,7 @@
             {
               "slug": "exercise-01-fastapi-llm-endpoint",
               "number": 1,
-              "title": "mod-106-llm-app-deployment/exercise-01 (Fastapi Llm Endpoint) \u2014 Solution",
+              "title": "mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-106-llm-app-deployment/exercise-01-fastapi-llm-endpoint",
               "learning_url": null,
@@ -221,7 +221,7 @@
             {
               "slug": "exercise-02-secrets-and-config",
               "number": 2,
-              "title": "mod-106-llm-app-deployment/exercise-02 (Secrets And Config) \u2014 Solution",
+              "title": "mod-106-llm-app-deployment/exercise-02-secrets-and-config \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-106-llm-app-deployment/exercise-02-secrets-and-config",
               "learning_url": null,
@@ -230,7 +230,7 @@
             {
               "slug": "exercise-03-logging-and-usage-guardrail",
               "number": 3,
-              "title": "mod-106-llm-app-deployment/exercise-03 (Logging And Usage Guardrail) \u2014 Solution",
+              "title": "mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-106-llm-app-deployment/exercise-03-logging-and-usage-guardrail",
               "learning_url": null,
@@ -290,7 +290,7 @@
             {
               "slug": "exercise-01-react-loop-from-scratch",
               "number": 1,
-              "title": "mod-201-agent-fundamentals/exercise-01 (React Loop From Scratch) \u2014 Solution",
+              "title": "mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-201-agent-fundamentals/exercise-01-react-loop-from-scratch",
               "learning_url": null,
@@ -299,7 +299,7 @@
             {
               "slug": "exercise-02-function-calling-tools",
               "number": 2,
-              "title": "mod-201-agent-fundamentals/exercise-02 (Function Calling Tools) \u2014 Solution",
+              "title": "mod-201-agent-fundamentals/exercise-02-function-calling-tools \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-201-agent-fundamentals/exercise-02-function-calling-tools",
               "learning_url": null,
@@ -308,7 +308,7 @@
             {
               "slug": "exercise-03-coding-agent-read-write-execute",
               "number": 3,
-              "title": "mod-201-agent-fundamentals/exercise-03 (Coding Agent Read Write Execute) \u2014 Solution",
+              "title": "mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-201-agent-fundamentals/exercise-03-coding-agent-read-write-execute",
               "learning_url": null,
@@ -317,7 +317,7 @@
             {
               "slug": "exercise-04-planning-agent",
               "number": 4,
-              "title": "mod-201-agent-fundamentals/exercise-04 (Planning Agent) \u2014 Solution",
+              "title": "mod-201-agent-fundamentals/exercise-04-planning-agent \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-201-agent-fundamentals/exercise-04-planning-agent",
               "learning_url": null,
@@ -337,7 +337,7 @@
             {
               "slug": "exercise-01-langgraph-stateful-agent",
               "number": 1,
-              "title": "mod-202-frameworks/exercise-01 (Langgraph Stateful Agent) \u2014 Solution",
+              "title": "mod-202-frameworks/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-202-frameworks/exercise-01-langgraph-stateful-agent",
               "learning_url": null,
@@ -346,7 +346,7 @@
             {
               "slug": "exercise-02-crewai-role-based-crew",
               "number": 2,
-              "title": "mod-202-frameworks/exercise-02 (Crewai Role Based Crew) \u2014 Solution",
+              "title": "mod-202-frameworks/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-202-frameworks/exercise-02-crewai-role-based-crew",
               "learning_url": null,
@@ -355,7 +355,7 @@
             {
               "slug": "exercise-03-autogen-multi-agent",
               "number": 3,
-              "title": "mod-202-frameworks/exercise-03 (Autogen Multi Agent) \u2014 Solution",
+              "title": "mod-202-frameworks/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-202-frameworks/exercise-03-autogen-multi-agent",
               "learning_url": null,
@@ -364,7 +364,7 @@
             {
               "slug": "exercise-04-mcp-tool-server",
               "number": 4,
-              "title": "mod-202-frameworks/exercise-04 (Mcp Tool Server) \u2014 Solution",
+              "title": "mod-202-frameworks/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-202-frameworks/exercise-04-mcp-tool-server",
               "learning_url": null,
@@ -373,7 +373,7 @@
             {
               "slug": "exercise-05-framework-tradeoff-bakeoff",
               "number": 5,
-              "title": "mod-202-frameworks/exercise-05 (Framework Tradeoff Bakeoff) \u2014 Solution",
+              "title": "mod-202-frameworks/exercise-05 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-202-frameworks/exercise-05-framework-tradeoff-bakeoff",
               "learning_url": null,
@@ -393,7 +393,7 @@
             {
               "slug": "exercise-01-rag-pipeline-vector-db",
               "number": 1,
-              "title": "mod-203-rag-and-memory/exercise-01 (Rag Pipeline Vector Db) \u2014 Solution",
+              "title": "mod-203-rag-and-memory/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-203-rag-and-memory/exercise-01-rag-pipeline-vector-db",
               "learning_url": null,
@@ -402,7 +402,7 @@
             {
               "slug": "exercise-02-agent-long-term-memory",
               "number": 2,
-              "title": "mod-203-rag-and-memory/exercise-02 (Agent Long Term Memory) \u2014 Solution",
+              "title": "mod-203-rag-and-memory/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-203-rag-and-memory/exercise-02-agent-long-term-memory",
               "learning_url": null,
@@ -411,7 +411,7 @@
             {
               "slug": "exercise-03-advanced-rag-retrieval",
               "number": 3,
-              "title": "mod-203-rag-and-memory/exercise-03 (Advanced Rag Retrieval) \u2014 Solution",
+              "title": "mod-203-rag-and-memory/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-203-rag-and-memory/exercise-03-advanced-rag-retrieval",
               "learning_url": null,
@@ -420,7 +420,7 @@
             {
               "slug": "exercise-04-rag-triad-evaluation",
               "number": 4,
-              "title": "mod-203-rag-and-memory/exercise-04 (Rag Triad Evaluation) \u2014 Solution",
+              "title": "mod-203-rag-and-memory/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-203-rag-and-memory/exercise-04-rag-triad-evaluation",
               "learning_url": null,
@@ -440,7 +440,7 @@
             {
               "slug": "exercise-01-orchestrator-worker-build",
               "number": 1,
-              "title": "mod-204-multi-agent-implementation/exercise-01 (Orchestrator Worker Build) \u2014 Solution",
+              "title": "mod-204-multi-agent-implementation/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-01-orchestrator-worker-build",
               "learning_url": null,
@@ -449,7 +449,7 @@
             {
               "slug": "exercise-02-agent-handoffs",
               "number": 2,
-              "title": "mod-204-multi-agent-implementation/exercise-02 (Agent Handoffs) \u2014 Solution",
+              "title": "mod-204-multi-agent-implementation/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-02-agent-handoffs",
               "learning_url": null,
@@ -458,7 +458,7 @@
             {
               "slug": "exercise-03-subagent-isolation",
               "number": 3,
-              "title": "mod-204-multi-agent-implementation/exercise-03 (Subagent Isolation) \u2014 Solution",
+              "title": "mod-204-multi-agent-implementation/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-03-subagent-isolation",
               "learning_url": null,
@@ -467,7 +467,7 @@
             {
               "slug": "exercise-04-evaluator-optimizer-loop",
               "number": 4,
-              "title": "mod-204-multi-agent-implementation/exercise-04 (Evaluator Optimizer Loop) \u2014 Solution",
+              "title": "mod-204-multi-agent-implementation/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-204-multi-agent-implementation/exercise-04-evaluator-optimizer-loop",
               "learning_url": null,
@@ -487,7 +487,7 @@
             {
               "slug": "exercise-01-trajectory-eval-implementation",
               "number": 1,
-              "title": "mod-205-evaluation-observability/exercise-01 (Trajectory Eval Implementation) \u2014 Solution",
+              "title": "mod-205-evaluation-observability/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-205-evaluation-observability/exercise-01-trajectory-eval-implementation",
               "learning_url": null,
@@ -496,7 +496,7 @@
             {
               "slug": "exercise-02-otel-tracing-wireup",
               "number": 2,
-              "title": "mod-205-evaluation-observability/exercise-02 (Otel Tracing Wireup) \u2014 Solution",
+              "title": "mod-205-evaluation-observability/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-205-evaluation-observability/exercise-02-otel-tracing-wireup",
               "learning_url": null,
@@ -505,7 +505,7 @@
             {
               "slug": "exercise-03-llm-judge-scoring",
               "number": 3,
-              "title": "mod-205-evaluation-observability/exercise-03 (Llm Judge Scoring) \u2014 Solution",
+              "title": "mod-205-evaluation-observability/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-205-evaluation-observability/exercise-03-llm-judge-scoring",
               "learning_url": null,
@@ -514,7 +514,7 @@
             {
               "slug": "exercise-04-agent-regression-suite",
               "number": 4,
-              "title": "mod-205-evaluation-observability/exercise-04 (Agent Regression Suite) \u2014 Solution",
+              "title": "mod-205-evaluation-observability/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-205-evaluation-observability/exercise-04-agent-regression-suite",
               "learning_url": null,
@@ -534,7 +534,7 @@
             {
               "slug": "exercise-01-io-moderation-guardrails",
               "number": 1,
-              "title": "mod-206-guardrails-implementation/exercise-01 (Io Moderation Guardrails) \u2014 Solution",
+              "title": "mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-206-guardrails-implementation/exercise-01-io-moderation-guardrails",
               "learning_url": null,
@@ -543,7 +543,7 @@
             {
               "slug": "exercise-02-prompt-injection-defenses",
               "number": 2,
-              "title": "mod-206-guardrails-implementation/exercise-02 (Prompt Injection Defenses) \u2014 Solution",
+              "title": "mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-206-guardrails-implementation/exercise-02-prompt-injection-defenses",
               "learning_url": null,
@@ -552,7 +552,7 @@
             {
               "slug": "exercise-03-tool-permission-enforcement",
               "number": 3,
-              "title": "mod-206-guardrails-implementation/exercise-03 (Tool Permission Enforcement) \u2014 Solution",
+              "title": "mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-206-guardrails-implementation/exercise-03-tool-permission-enforcement",
               "learning_url": null,
@@ -561,7 +561,7 @@
             {
               "slug": "exercise-04-human-approval-checkpoints",
               "number": 4,
-              "title": "mod-206-guardrails-implementation/exercise-04 (Human Approval Checkpoints) \u2014 Solution",
+              "title": "mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-206-guardrails-implementation/exercise-04-human-approval-checkpoints",
               "learning_url": null,
@@ -581,7 +581,7 @@
             {
               "slug": "exercise-01-agent-api-deployment",
               "number": 1,
-              "title": "mod-207-productionizing-agents/exercise-01 (Agent Api Deployment) \u2014 Solution",
+              "title": "mod-207-productionizing-agents/exercise-01-agent-api-deployment \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-207-productionizing-agents/exercise-01-agent-api-deployment",
               "learning_url": null,
@@ -590,7 +590,7 @@
             {
               "slug": "exercise-02-durable-execution-temporal",
               "number": 2,
-              "title": "mod-207-productionizing-agents/exercise-02 (Durable Execution Temporal) \u2014 Solution",
+              "title": "mod-207-productionizing-agents/exercise-02-durable-execution-temporal \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-207-productionizing-agents/exercise-02-durable-execution-temporal",
               "learning_url": null,
@@ -599,7 +599,7 @@
             {
               "slug": "exercise-03-caching-and-routing",
               "number": 3,
-              "title": "mod-207-productionizing-agents/exercise-03 (Caching And Routing) \u2014 Solution",
+              "title": "mod-207-productionizing-agents/exercise-03-caching-and-routing \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-207-productionizing-agents/exercise-03-caching-and-routing",
               "learning_url": null,
@@ -608,7 +608,7 @@
             {
               "slug": "exercise-04-hitl-with-persistence",
               "number": 4,
-              "title": "mod-207-productionizing-agents/exercise-04 (Hitl With Persistence) \u2014 Solution",
+              "title": "mod-207-productionizing-agents/exercise-04-hitl-with-persistence \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-207-productionizing-agents/exercise-04-hitl-with-persistence",
               "learning_url": null,
@@ -668,7 +668,7 @@
             {
               "slug": "exercise-01-workflows-vs-agents-decision-matrix",
               "number": 1,
-              "title": "mod-301-agentic-systems-foundations/exercise-01 (Workflows Vs Agents Decision Matrix) \u2014 Solution",
+              "title": "mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-01-workflows-vs-agents-decision-matrix",
               "learning_url": null,
@@ -677,7 +677,7 @@
             {
               "slug": "exercise-02-orchestration-pattern-catalog",
               "number": 2,
-              "title": "mod-301-agentic-systems-foundations/exercise-02 (Orchestration Pattern Catalog) \u2014 Solution",
+              "title": "mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-02-orchestration-pattern-catalog",
               "learning_url": null,
@@ -686,7 +686,7 @@
             {
               "slug": "exercise-03-tool-vs-subagent-decomposition",
               "number": 3,
-              "title": "mod-301-agentic-systems-foundations/exercise-03 (Tool Vs Subagent Decomposition) \u2014 Solution",
+              "title": "mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-03-tool-vs-subagent-decomposition",
               "learning_url": null,
@@ -695,7 +695,7 @@
             {
               "slug": "exercise-04-reference-architecture-teardown",
               "number": 4,
-              "title": "mod-301-agentic-systems-foundations/exercise-04 (Reference Architecture Teardown) \u2014 Solution",
+              "title": "mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-301-agentic-systems-foundations/exercise-04-reference-architecture-teardown",
               "learning_url": null,
@@ -715,7 +715,7 @@
             {
               "slug": "exercise-01-orchestrator-worker-topology-design",
               "number": 1,
-              "title": "mod-302-multi-agent-orchestration/exercise-01 (Orchestrator Worker Topology Design) \u2014 Solution",
+              "title": "mod-302-multi-agent-orchestration/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-01-orchestrator-worker-topology-design",
               "learning_url": null,
@@ -724,7 +724,7 @@
             {
               "slug": "exercise-02-handoffs-vs-manager-as-tools",
               "number": 2,
-              "title": "mod-302-multi-agent-orchestration/exercise-02 (Handoffs Vs Manager As Tools) \u2014 Solution",
+              "title": "mod-302-multi-agent-orchestration/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-02-handoffs-vs-manager-as-tools",
               "learning_url": null,
@@ -733,7 +733,7 @@
             {
               "slug": "exercise-03-mcp-a2a-integration-architecture",
               "number": 3,
-              "title": "mod-302-multi-agent-orchestration/exercise-03 (Mcp A2A Integration Architecture) \u2014 Solution",
+              "title": "mod-302-multi-agent-orchestration/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-03-mcp-a2a-integration-architecture",
               "learning_url": null,
@@ -742,7 +742,7 @@
             {
               "slug": "exercise-04-coordination-and-escalation-design",
               "number": 4,
-              "title": "mod-302-multi-agent-orchestration/exercise-04 (Coordination And Escalation Design) \u2014 Solution",
+              "title": "mod-302-multi-agent-orchestration/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-302-multi-agent-orchestration/exercise-04-coordination-and-escalation-design",
               "learning_url": null,
@@ -762,7 +762,7 @@
             {
               "slug": "exercise-01-context-budget-and-rot-analysis",
               "number": 1,
-              "title": "mod-303-memory-context-architecture/exercise-01 (Context Budget And Rot Analysis) \u2014 Solution",
+              "title": "mod-303-memory-context-architecture/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-303-memory-context-architecture/exercise-01-context-budget-and-rot-analysis",
               "learning_url": null,
@@ -771,7 +771,7 @@
             {
               "slug": "exercise-02-memory-tier-placement-design",
               "number": 2,
-              "title": "mod-303-memory-context-architecture/exercise-02 (Memory Tier Placement Design) \u2014 Solution",
+              "title": "mod-303-memory-context-architecture/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-303-memory-context-architecture/exercise-02-memory-tier-placement-design",
               "learning_url": null,
@@ -780,7 +780,7 @@
             {
               "slug": "exercise-03-compaction-and-notetaking-strategy",
               "number": 3,
-              "title": "mod-303-memory-context-architecture/exercise-03 (Compaction And Notetaking Strategy) \u2014 Solution",
+              "title": "mod-303-memory-context-architecture/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-303-memory-context-architecture/exercise-03-compaction-and-notetaking-strategy",
               "learning_url": null,
@@ -789,7 +789,7 @@
             {
               "slug": "exercise-04-rag-architecture-for-agents",
               "number": 4,
-              "title": "mod-303-memory-context-architecture/exercise-04 (Rag Architecture For Agents) \u2014 Solution",
+              "title": "mod-303-memory-context-architecture/exercise-04 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-303-memory-context-architecture/exercise-04-rag-architecture-for-agents",
               "learning_url": null,
@@ -809,7 +809,7 @@
             {
               "slug": "exercise-01-trajectory-eval-design",
               "number": 1,
-              "title": "mod-304-evaluation-harnesses/exercise-01 (Trajectory Eval Design) \u2014 Solution",
+              "title": "mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-01-trajectory-eval-design",
               "learning_url": null,
@@ -818,7 +818,7 @@
             {
               "slug": "exercise-02-tool-call-correctness-harness",
               "number": 2,
-              "title": "mod-304-evaluation-harnesses/exercise-02 (Tool Call Correctness Harness) \u2014 Solution",
+              "title": "mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-02-tool-call-correctness-harness",
               "learning_url": null,
@@ -827,7 +827,7 @@
             {
               "slug": "exercise-03-llm-as-judge-rubric",
               "number": 3,
-              "title": "mod-304-evaluation-harnesses/exercise-03 (Llm As Judge Rubric) \u2014 Solution",
+              "title": "mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-03-llm-as-judge-rubric",
               "learning_url": null,
@@ -836,7 +836,7 @@
             {
               "slug": "exercise-04-eval-gated-release-pipeline",
               "number": 4,
-              "title": "mod-304-evaluation-harnesses/exercise-04 (Eval Gated Release Pipeline) \u2014 Solution",
+              "title": "mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-304-evaluation-harnesses/exercise-04-eval-gated-release-pipeline",
               "learning_url": null,
@@ -856,7 +856,7 @@
             {
               "slug": "exercise-01-otel-genai-span-design",
               "number": 1,
-              "title": "mod-305-observability-tracing/exercise-01 (Otel Genai Span Design) \u2014 Solution",
+              "title": "mod-305-observability-tracing/exercise-01-otel-genai-span-design \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-305-observability-tracing/exercise-01-otel-genai-span-design",
               "learning_url": null,
@@ -865,7 +865,7 @@
             {
               "slug": "exercise-02-quality-and-drift-signals",
               "number": 2,
-              "title": "mod-305-observability-tracing/exercise-02 (Quality And Drift Signals) \u2014 Solution",
+              "title": "mod-305-observability-tracing/exercise-02-quality-and-drift-signals \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-305-observability-tracing/exercise-02-quality-and-drift-signals",
               "learning_url": null,
@@ -874,7 +874,7 @@
             {
               "slug": "exercise-03-observability-platform-evaluation",
               "number": 3,
-              "title": "mod-305-observability-tracing/exercise-03 (Observability Platform Evaluation) \u2014 Solution",
+              "title": "mod-305-observability-tracing/exercise-03-observability-platform-evaluation \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-305-observability-tracing/exercise-03-observability-platform-evaluation",
               "learning_url": null,
@@ -921,7 +921,7 @@
             {
               "slug": "exercise-04-oauth-rbac-token-management-for-toolchains",
               "number": 4,
-              "title": "mod-306-guardrails-safety-security/exercise-04 (Oauth Rbac Token Management For Toolchains) \u2014 Solution",
+              "title": "mod-306-guardrails-safety-security/exercise-04 (OAuth, RBAC, and Token Management for Toolchains) \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-04-oauth-rbac-token-management-for-toolchains",
               "learning_url": null,
@@ -930,7 +930,7 @@
             {
               "slug": "exercise-05-cli-agent-sandboxing-local-and-remote",
               "number": 5,
-              "title": "mod-306-guardrails-safety-security/exercise-05 (Cli Agent Sandboxing Local And Remote) \u2014 Solution",
+              "title": "mod-306-guardrails-safety-security/exercise-05 (CLI Agent Sandboxing, Local and Remote) \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-306-guardrails-safety-security/exercise-05-cli-agent-sandboxing-local-and-remote",
               "learning_url": null,
@@ -959,7 +959,7 @@
             {
               "slug": "exercise-01-token-economics-cost-model",
               "number": 1,
-              "title": "mod-307-cost-latency-architecture/exercise-01 (Token Economics Cost Model) \u2014 Solution",
+              "title": "mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-01-token-economics-cost-model",
               "learning_url": null,
@@ -968,7 +968,7 @@
             {
               "slug": "exercise-02-caching-and-routing-architecture",
               "number": 2,
-              "title": "mod-307-cost-latency-architecture/exercise-02 (Caching And Routing Architecture) \u2014 Solution",
+              "title": "mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-02-caching-and-routing-architecture",
               "learning_url": null,
@@ -977,7 +977,7 @@
             {
               "slug": "exercise-03-cost-latency-quality-budgets",
               "number": 3,
-              "title": "mod-307-cost-latency-architecture/exercise-03 (Cost Latency Quality Budgets) \u2014 Solution",
+              "title": "mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-307-cost-latency-architecture/exercise-03-cost-latency-quality-budgets",
               "learning_url": null,
@@ -997,7 +997,7 @@
             {
               "slug": "exercise-01-durable-execution-design",
               "number": 1,
-              "title": "mod-308-deployment-durable-execution/exercise-01 (Durable Execution Design) \u2014 Solution",
+              "title": "mod-308-deployment-durable-execution/exercise-01-durable-execution-design \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-01-durable-execution-design",
               "learning_url": null,
@@ -1006,7 +1006,7 @@
             {
               "slug": "exercise-02-hitl-approval-architecture",
               "number": 2,
-              "title": "mod-308-deployment-durable-execution/exercise-02 (Hitl Approval Architecture) \u2014 Solution",
+              "title": "mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-02-hitl-approval-architecture",
               "learning_url": null,
@@ -1015,7 +1015,7 @@
             {
               "slug": "exercise-03-agent-fleet-deployment-strategy",
               "number": 3,
-              "title": "mod-308-deployment-durable-execution/exercise-03 (Agent Fleet Deployment Strategy) \u2014 Solution",
+              "title": "mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-03-agent-fleet-deployment-strategy",
               "learning_url": null,
@@ -1024,7 +1024,7 @@
             {
               "slug": "exercise-04-failure-recovery-and-resumption",
               "number": 4,
-              "title": "mod-308-deployment-durable-execution/exercise-04 (Failure Recovery And Resumption) \u2014 Solution",
+              "title": "mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-308-deployment-durable-execution/exercise-04-failure-recovery-and-resumption",
               "learning_url": null,
@@ -1037,54 +1037,54 @@
         {
           "slug": "mod-309-governance-compliance-domain",
           "number": 309,
-          "title": "mod-309-governance-compliance-domain: Governance, Compliance & Domain Constraints",
+          "title": "mod-309-governance-compliance-domain: Governance, Compliance & Regulated-Domain Architecture",
           "path": "lessons/mod-309-governance-compliance-domain",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-309-governance-compliance-domain",
           "exercises": [
             {
-              "slug": "exercise-01-iso-42001-controls-mapping",
+              "slug": "exercise-01-horizontal-framework-controls-mapping",
               "number": 1,
-              "title": "mod-309-governance-compliance-domain/exercise-01 (Iso 42001 Controls Mapping) \u2014 Solution",
+              "title": "mod-309-governance-compliance-domain/exercise-01-horizontal-framework-controls-mapping \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping",
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-01-horizontal-framework-controls-mapping",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-01-iso-42001-controls-mapping"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-01-horizontal-framework-controls-mapping"
             },
             {
-              "slug": "exercise-02-plugin-lifecycle-governance",
+              "slug": "exercise-02-multi-regime-regulated-domain-architecture",
               "number": 2,
-              "title": "mod-309-governance-compliance-domain/exercise-02 (Plugin Lifecycle Governance) \u2014 Solution",
+              "title": "mod-309-governance-compliance-domain/exercise-02-multi-regime-regulated-domain-architecture \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance",
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-02-multi-regime-regulated-domain-architecture",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-02-plugin-lifecycle-governance"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-02-multi-regime-regulated-domain-architecture"
             },
             {
-              "slug": "exercise-03-regulated-domain-architecture-ferpa-coppa",
+              "slug": "exercise-03-extension-tool-governance-lifecycle",
               "number": 3,
-              "title": "mod-309-governance-compliance-domain/exercise-03 (Regulated Domain Architecture Ferpa Coppa) \u2014 Solution",
+              "title": "mod-309-governance-compliance-domain/exercise-03-extension-tool-governance-lifecycle \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa",
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-03-extension-tool-governance-lifecycle",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-03-regulated-domain-architecture-ferpa-coppa"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-03-extension-tool-governance-lifecycle"
             },
             {
-              "slug": "exercise-04-k12-edtech-agentic-constraints",
+              "slug": "exercise-04-governance-accountability-spec",
               "number": 4,
-              "title": "mod-309-governance-compliance-domain/exercise-04 (K12 Edtech Agentic Constraints) \u2014 Solution",
+              "title": "mod-309-governance-compliance-domain/exercise-04-governance-accountability-spec \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints",
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-04-governance-accountability-spec",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-04-k12-edtech-agentic-constraints"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-04-governance-accountability-spec"
             },
             {
-              "slug": "exercise-05-governance-and-accountability-spec",
+              "slug": "exercise-05-data-handling-residency-design",
               "number": 5,
-              "title": "mod-309-governance-compliance-domain/exercise-05 (Governance And Accountability Spec) \u2014 Solution",
+              "title": "mod-309-governance-compliance-domain/exercise-05-data-handling-residency-design \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec",
+              "solutions_path": "modules/mod-309-governance-compliance-domain/exercise-05-data-handling-residency-design",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-05-governance-and-accountability-spec"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-309-governance-compliance-domain/exercise-05-data-handling-residency-design"
             }
           ],
           "prerequisites": [],
@@ -1093,54 +1093,54 @@
         {
           "slug": "mod-310-agentic-developer-platforms",
           "number": 310,
-          "title": "mod-310-agentic-developer-platforms: Agentic Developer Platforms & SDLC Integration",
+          "title": "mod-310-agentic-developer-platforms: Agentic Developer & Internal Platforms",
           "path": "lessons/mod-310-agentic-developer-platforms",
           "github_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/lessons/mod-310-agentic-developer-platforms",
           "exercises": [
             {
-              "slug": "exercise-01-plugin-architecture-agents-skills-hooks-mcp",
+              "slug": "exercise-01-extension-model-mapping-across-platforms",
               "number": 1,
-              "title": "mod-310-agentic-developer-platforms/exercise-01 (Plugin Architecture Agents Skills Hooks Mcp) \u2014 Solution",
+              "title": "mod-310-agentic-developer-platforms/exercise-01-extension-model-mapping-across-platforms \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp",
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-01-extension-model-mapping-across-platforms",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-01-plugin-architecture-agents-skills-hooks-mcp"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-01-extension-model-mapping-across-platforms"
             },
             {
-              "slug": "exercise-02-ai-for-sdlc-tool-use-patterns",
+              "slug": "exercise-02-secure-tool-use-and-context-hydration",
               "number": 2,
-              "title": "mod-310-agentic-developer-platforms/exercise-02 (Ai For Sdlc Tool Use Patterns) \u2014 Solution",
+              "title": "mod-310-agentic-developer-platforms/exercise-02-secure-tool-use-and-context-hydration \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns",
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-02-secure-tool-use-and-context-hydration",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-02-ai-for-sdlc-tool-use-patterns"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-02-secure-tool-use-and-context-hydration"
             },
             {
-              "slug": "exercise-03-context-hydration-strategies",
+              "slug": "exercise-03-workflow-toolchain-integration",
               "number": 3,
-              "title": "mod-310-agentic-developer-platforms/exercise-03 (Context Hydration Strategies) \u2014 Solution",
+              "title": "mod-310-agentic-developer-platforms/exercise-03-workflow-toolchain-integration \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies",
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-03-workflow-toolchain-integration",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-03-context-hydration-strategies"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-03-workflow-toolchain-integration"
             },
             {
-              "slug": "exercise-04-devops-toolchain-integration",
+              "slug": "exercise-04-platform-adoption-and-dx-plan",
               "number": 4,
-              "title": "mod-310-agentic-developer-platforms/exercise-04 (Devops Toolchain Integration) \u2014 Solution",
+              "title": "mod-310-agentic-developer-platforms/exercise-04-platform-adoption-and-dx-plan \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration",
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-04-platform-adoption-and-dx-plan",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-04-devops-toolchain-integration"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-04-platform-adoption-and-dx-plan"
             },
             {
-              "slug": "exercise-05-developer-tooling-adoption-and-dx",
+              "slug": "exercise-05-non-sdlc-platform-case",
               "number": 5,
-              "title": "mod-310-agentic-developer-platforms/exercise-05 (Developer Tooling Adoption And Dx) \u2014 Solution",
+              "title": "mod-310-agentic-developer-platforms/exercise-05-non-sdlc-platform-case \u2014 Solution",
               "learning_path": null,
-              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx",
+              "solutions_path": "modules/mod-310-agentic-developer-platforms/exercise-05-non-sdlc-platform-case",
               "learning_url": null,
-              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-05-developer-tooling-adoption-and-dx"
+              "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/modules/mod-310-agentic-developer-platforms/exercise-05-non-sdlc-platform-case"
             }
           ],
           "prerequisites": [],
@@ -1151,7 +1151,7 @@
         {
           "slug": "project-301-production-agentic-reference-architecture",
           "number": 301,
-          "title": "project-301-production-agentic-reference-architecture: Capstone: End-to-End Agentic Reference Architecture",
+          "title": "Capstone: End-to-End Agentic Reference Architecture",
           "learning_path": "projects/project-301-production-agentic-reference-architecture",
           "solutions_path": "projects/project-301-production-agentic-reference-architecture",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-301-production-agentic-reference-architecture",
@@ -1164,7 +1164,7 @@
         {
           "slug": "project-302-regulated-domain-agent-architecture",
           "number": 302,
-          "title": "project-302-regulated-domain-agent-architecture: Regulated-Domain Agentic Architecture (e.g., K-12 EdTech)",
+          "title": "Regulated-Domain Agentic Architecture (Learner-Selected Sector)",
           "learning_path": "projects/project-302-regulated-domain-agent-architecture",
           "solutions_path": "projects/project-302-regulated-domain-agent-architecture",
           "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-302-regulated-domain-agent-architecture",
@@ -1175,13 +1175,13 @@
           "prerequisites": []
         },
         {
-          "slug": "project-303-agentic-sdlc-platform",
+          "slug": "project-303-extensible-agent-platform",
           "number": 303,
-          "title": "project-303-agentic-sdlc-platform: Agentic AI-for-SDLC Platform (Plugin Architecture)",
-          "learning_path": "projects/project-303-agentic-sdlc-platform",
-          "solutions_path": "projects/project-303-agentic-sdlc-platform",
-          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-303-agentic-sdlc-platform",
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/projects/project-303-agentic-sdlc-platform",
+          "title": "Extensible Agent Platform (Platform-Neutral)",
+          "learning_path": "projects/project-303-extensible-agent-platform",
+          "solutions_path": "projects/project-303-extensible-agent-platform",
+          "learning_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-learning/blob/main/projects/project-303-extensible-agent-platform",
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-agentic-systems-architect-solutions/blob/main/projects/project-303-extensible-agent-platform",
           "docs": [
             "README.md"
           ],
@@ -1762,6 +1762,17 @@
       ],
       "projects": [
         {
+          "slug": "project-301-enterprise-mlops",
+          "number": 301,
+          "title": "Project 301: Enterprise MLOps Platform Architecture",
+          "learning_path": null,
+          "solutions_path": "projects/project-301-enterprise-mlops",
+          "learning_url": null,
+          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-301-enterprise-mlops",
+          "docs": [],
+          "prerequisites": []
+        },
+        {
           "slug": "project-301-enterprise-mlops-platform",
           "number": 301,
           "title": "Enterprise ML Platform Architecture",
@@ -1775,17 +1786,6 @@
             "architecture.md",
             "requirements.md"
           ],
-          "prerequisites": []
-        },
-        {
-          "slug": "project-301-enterprise-mlops",
-          "number": 301,
-          "title": "Project 301: Enterprise MLOps Platform Architecture",
-          "learning_path": null,
-          "solutions_path": "projects/project-301-enterprise-mlops",
-          "learning_url": null,
-          "solutions_url": "https://github.com/ai-infra-curriculum/ai-infra-architect-solutions/blob/main/projects/project-301-enterprise-mlops",
-          "docs": [],
           "prerequisites": []
         },
         {
@@ -8145,7 +8145,7 @@
             {
               "slug": "exercise-01-architecture-to-implementation",
               "number": 1,
-              "title": "mod-401-agent-systems-in-practice/exercise-01 (Architecture To Implementation) \u2014 Solution",
+              "title": "mod-401-agent-systems-in-practice/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-01-architecture-to-implementation",
               "learning_url": null,
@@ -8154,7 +8154,7 @@
             {
               "slug": "exercise-02-subsystem-ownership",
               "number": 2,
-              "title": "mod-401-agent-systems-in-practice/exercise-02 (Subsystem Ownership) \u2014 Solution",
+              "title": "mod-401-agent-systems-in-practice/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-02-subsystem-ownership",
               "learning_url": null,
@@ -8163,7 +8163,7 @@
             {
               "slug": "exercise-03-prototype-to-production-refactor",
               "number": 3,
-              "title": "mod-401-agent-systems-in-practice/exercise-03 (Prototype To Production Refactor) \u2014 Solution",
+              "title": "mod-401-agent-systems-in-practice/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-401-agent-systems-in-practice/exercise-03-prototype-to-production-refactor",
               "learning_url": null,
@@ -8183,7 +8183,7 @@
             {
               "slug": "exercise-01-reusable-eval-harness",
               "number": 1,
-              "title": "mod-402-eval-observability-infra/exercise-01 (Reusable Eval Harness) \u2014 Solution",
+              "title": "mod-402-eval-observability-infra/exercise-01-reusable-eval-harness \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-402-eval-observability-infra/exercise-01-reusable-eval-harness",
               "learning_url": null,
@@ -8192,7 +8192,7 @@
             {
               "slug": "exercise-02-tracing-and-dashboards",
               "number": 2,
-              "title": "mod-402-eval-observability-infra/exercise-02 (Tracing And Dashboards) \u2014 Solution",
+              "title": "mod-402-eval-observability-infra/exercise-02-tracing-and-dashboards \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-402-eval-observability-infra/exercise-02-tracing-and-dashboards",
               "learning_url": null,
@@ -8201,7 +8201,7 @@
             {
               "slug": "exercise-03-regression-gates",
               "number": 3,
-              "title": "mod-402-eval-observability-infra/exercise-03 (Regression Gates) \u2014 Solution",
+              "title": "mod-402-eval-observability-infra/exercise-03-regression-gates \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-402-eval-observability-infra/exercise-03-regression-gates",
               "learning_url": null,
@@ -8259,7 +8259,7 @@
             {
               "slug": "exercise-01-agentic-slos",
               "number": 1,
-              "title": "mod-404-reliability-cost-incident/exercise-01 (Agentic Slos) \u2014 Solution",
+              "title": "mod-404-reliability-cost-incident/exercise-01 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-01-agentic-slos",
               "learning_url": null,
@@ -8268,7 +8268,7 @@
             {
               "slug": "exercise-02-cost-controls-in-production",
               "number": 2,
-              "title": "mod-404-reliability-cost-incident/exercise-02 (Cost Controls In Production) \u2014 Solution",
+              "title": "mod-404-reliability-cost-incident/exercise-02 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-02-cost-controls-in-production",
               "learning_url": null,
@@ -8277,7 +8277,7 @@
             {
               "slug": "exercise-03-agent-incident-response",
               "number": 3,
-              "title": "mod-404-reliability-cost-incident/exercise-03 (Agent Incident Response) \u2014 Solution",
+              "title": "mod-404-reliability-cost-incident/exercise-03 \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-404-reliability-cost-incident/exercise-03-agent-incident-response",
               "learning_url": null,
@@ -8297,7 +8297,7 @@
             {
               "slug": "exercise-01-agent-code-review-standards",
               "number": 1,
-              "title": "mod-405-technical-leadership/exercise-01 (Agent Code Review Standards) \u2014 Solution",
+              "title": "mod-405-technical-leadership/exercise-01-agent-code-review-standards \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-405-technical-leadership/exercise-01-agent-code-review-standards",
               "learning_url": null,
@@ -8306,7 +8306,7 @@
             {
               "slug": "exercise-02-paved-roads-and-standards",
               "number": 2,
-              "title": "mod-405-technical-leadership/exercise-02 (Paved Roads And Standards) \u2014 Solution",
+              "title": "mod-405-technical-leadership/exercise-02-paved-roads-and-standards \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-405-technical-leadership/exercise-02-paved-roads-and-standards",
               "learning_url": null,
@@ -8315,7 +8315,7 @@
             {
               "slug": "exercise-03-scoping-and-sequencing",
               "number": 3,
-              "title": "mod-405-technical-leadership/exercise-03 (Scoping And Sequencing) \u2014 Solution",
+              "title": "mod-405-technical-leadership/exercise-03-scoping-and-sequencing \u2014 Solution",
               "learning_path": null,
               "solutions_path": "modules/mod-405-technical-leadership/exercise-03-scoping-and-sequencing",
               "learning_url": null,
