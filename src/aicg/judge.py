@@ -85,6 +85,11 @@ class JudgeConfig:
     # 90 days = quarterly, which matches how slowly staleness develops
     # (deprecations, version bumps, dead vendor links).
     freshness_cooldown_days: int = 90
+    # Flag-only mode: the judge scores and reports staleness but the review
+    # loop enqueues NO repair work item (no autonomous regeneration). This is
+    # the safe first activation (design doc P0) — full visibility, zero action,
+    # until the judge has earned trust on live content.
+    flag_only: bool = False
 
     @classmethod
     def from_manifest(cls, manifest: OrgManifest) -> "JudgeConfig":
@@ -102,6 +107,7 @@ class JudgeConfig:
             thresholds=thresholds,
             timeout_seconds=cfg.get("timeout_seconds"),
             freshness_cooldown_days=int(cfg.get("freshness_cooldown_days", 90)),
+            flag_only=bool(cfg.get("flag_only", False)),
         )
 
     def threshold_for(self, work_type: str) -> int:
