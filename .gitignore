@@ -6,3 +6,6 @@
 __pycache__/
 *.py[cod]
 manifest/.cache/
+
+# calibration run output (transient; BAR lives in config)
+calibration/last-report.json
