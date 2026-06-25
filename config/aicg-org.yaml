@@ -15,6 +15,12 @@
     "timeout_seconds": 300,
     "freshness_cooldown_days": 90
   },
+  "pipeline": {
+    "phases": { "author": true, "reaudit_autofix": false, "research_autopromote": false, "retire": false, "package": false },
+    "daily_budget": 8,
+    "rotation_days": 90,
+    "reaudit_slice": 30
+  },
   "extra_repos": [
     {
       "name": ".github",
