@@ -1,0 +1,44 @@
+"""Tests for multi-tenant domain resolution (§2.2)."""
+
+from pathlib import Path
+
+from aicg.domains import (
+    DEFAULT_DOMAIN,
+    domain_config_path,
+    domain_exists,
+    list_domains,
+)
+
+
+def test_default_domain_maps_to_legacy_config(tmp_path: Path) -> None:
+    # None and the default name both resolve to the legacy single-org config.
+    assert domain_config_path(None, tmp_path) == tmp_path / "config" / "aicg-org.yaml"
+    assert domain_config_path(DEFAULT_DOMAIN, tmp_path) == tmp_path / "config" / "aicg-org.yaml"
+
+
+def test_named_domain_maps_under_domains_dir(tmp_path: Path) -> None:
+    assert (
+        domain_config_path("nursing", tmp_path)
+        == tmp_path / "config" / "domains" / "nursing.yaml"
+    )
+
+
+def test_list_domains_includes_default_plus_registered(tmp_path: Path) -> None:
+    d = tmp_path / "config" / "domains"
+    d.mkdir(parents=True)
+    (d / "nursing.yaml").write_text("{}", encoding="utf-8")
+    (d / "accounting.yaml").write_text("{}", encoding="utf-8")
+    assert list_domains(tmp_path) == ["ai-infra", "accounting", "nursing"]
+
+
+def test_list_domains_default_only_when_no_dir(tmp_path: Path) -> None:
+    assert list_domains(tmp_path) == ["ai-infra"]
+
+
+def test_domain_exists(tmp_path: Path) -> None:
+    d = tmp_path / "config" / "domains"
+    d.mkdir(parents=True)
+    (d / "nursing.yaml").write_text("{}", encoding="utf-8")
+    assert domain_exists("ai-infra", tmp_path) is True  # always
+    assert domain_exists("nursing", tmp_path) is True
+    assert domain_exists("law", tmp_path) is False

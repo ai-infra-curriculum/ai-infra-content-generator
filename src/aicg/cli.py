@@ -586,6 +586,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_pipeline_tick.set_defaults(func=cmd_org_pipeline_tick)
 
+    org_list_domains = org_subparsers.add_parser(
+        "list-domains",
+        help="List registered domains/tenants (multi-tenant §2.2)",
+    )
+    org_list_domains.set_defaults(func=cmd_org_list_domains)
+
     org_plan_delta_apply = org_subparsers.add_parser(
         "plan-delta-apply",
         help="Apply a curriculum-plan delta to a per-role manifest (validates first; flags large changes for human approval).",
@@ -716,7 +722,13 @@ def add_org_args(parser: argparse.ArgumentParser) -> None:
         "--manifest",
         type=Path,
         default=None,
-        help="Org manifest path. Defaults to config/aicg-org.yaml.",
+        help="Org manifest path. Overrides --domain. Defaults to config/aicg-org.yaml.",
+    )
+    parser.add_argument(
+        "--domain",
+        default=None,
+        help="Domain/tenant to operate on (default: ai-infra). Resolves to "
+        "config/domains/<domain>.yaml. See `aicg org list-domains`.",
     )
     parser.add_argument(
         "--state-dir",
@@ -735,7 +747,11 @@ def target_repo_path(workspace: Path, repo_name: str) -> Path:
 
 
 def resolve_manifest(args: argparse.Namespace):
-    return load_manifest(args.manifest)
+    if getattr(args, "manifest", None):
+        return load_manifest(args.manifest)
+    from .domains import domain_config_path
+
+    return load_manifest(domain_config_path(getattr(args, "domain", None)))
 
 
 def resolve_org_state_dir(args: argparse.Namespace, manifest):
@@ -1499,6 +1515,19 @@ def cmd_org_audit_versions(args: argparse.Namespace) -> int:
     for repo in repo_summaries:
         if repo["finding_count"]:
             print(f"  ! {repo['repo']}: {repo['finding_count']} ref(s)")
+    return 0
+
+
+def cmd_org_list_domains(args: argparse.Namespace) -> int:
+    """List registered domains/tenants (the default plus config/domains/*)."""
+    from .domains import domain_config_path, list_domains
+
+    domains = list_domains()
+    print(f"Registered domains ({len(domains)}):")
+    for d in domains:
+        path = domain_config_path(d)
+        mark = "✓" if path.exists() else "✗ missing"
+        print(f"  {d:<28} {mark}  {path}")
     return 0
 
 
