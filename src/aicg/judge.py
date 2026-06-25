@@ -55,16 +55,54 @@ DEFAULT_DIMENSIONS = ("correctness", "clarity", "source_quality", "depth")
 DEFAULT_DIMENSION_MAX = 25  # 4 dimensions × 25 == 100
 DEFAULT_THRESHOLD = 70
 
-FRESHNESS_DIMENSIONS = (
-    "api_currency",         # deprecated APIs, removed methods
-    "version_currency",     # references to old versions of libraries / tools
-    "citation_validity",    # broken links, dead vendors, outdated docs
-    "hardware_currency",    # superseded hardware (V100, etc.)
+# Freshness dimensions are (name, description) pairs so they are fully
+# domain-configurable (roadmap §2.1). The default set is AI/tech-shaped; a
+# non-tech domain supplies its own via quality_judge.freshness_dimensions
+# (e.g. nursing: guideline_currency / regulation_currency).
+DEFAULT_FRESHNESS_DIMENSIONS = (
+    (
+        "api_currency",
+        "deprecated APIs, removed methods, idioms that have been superseded in "
+        "the current library release.",
+    ),
+    (
+        "version_currency",
+        "references to old versions of libraries, tools, or platforms where a "
+        "current release is materially different.",
+    ),
+    (
+        "citation_validity",
+        "broken links, dead vendors, docs at URLs that have moved, blog posts "
+        "older than 3 years cited as 'current'.",
+    ),
+    (
+        "hardware_currency",
+        "references to hardware that has been superseded (e.g. V100, A100 cited "
+        "as 'latest').",
+    ),
 )
-FRESHNESS_DIMENSION_MAX = 25  # 4 dims × 25 == 100
 FRESHNESS_DEFAULT_THRESHOLD = 75
 
 _JSON_BLOCK_RE = re.compile(r"```(?:json)?\s*(\{.*?\})\s*```", re.DOTALL)
+
+
+def _parse_freshness_dimensions(raw: Any) -> tuple[tuple[str, str], ...]:
+    """Parse manifest ``freshness_dimensions`` into (name, description) pairs."""
+    if not raw:
+        return DEFAULT_FRESHNESS_DIMENSIONS
+    parsed: list[tuple[str, str]] = []
+    for entry in raw:
+        if isinstance(entry, dict):
+            name = str(entry.get("name", "")).strip()
+            if name:
+                parsed.append((name, str(entry.get("description", name))))
+        elif isinstance(entry, (list, tuple)) and entry:
+            name = str(entry[0])
+            parsed.append((name, str(entry[1]) if len(entry) > 1 else name))
+        else:
+            name = str(entry)
+            parsed.append((name, name))
+    return tuple(parsed) if parsed else DEFAULT_FRESHNESS_DIMENSIONS
 
 
 class JudgeError(RuntimeError):
@@ -90,6 +128,9 @@ class JudgeConfig:
     # the safe first activation (design doc P0) — full visibility, zero action,
     # until the judge has earned trust on live content.
     flag_only: bool = False
+    # Domain-configurable freshness rubric (roadmap §2.1): (name, description)
+    # pairs. Defaults to the AI/tech set; override per domain in the manifest.
+    freshness_dimensions: tuple[tuple[str, str], ...] = DEFAULT_FRESHNESS_DIMENSIONS
 
     @classmethod
     def from_manifest(cls, manifest: OrgManifest) -> "JudgeConfig":
@@ -108,6 +149,7 @@ class JudgeConfig:
             timeout_seconds=cfg.get("timeout_seconds"),
             freshness_cooldown_days=int(cfg.get("freshness_cooldown_days", 90)),
             flag_only=bool(cfg.get("flag_only", False)),
+            freshness_dimensions=_parse_freshness_dimensions(cfg.get("freshness_dimensions")),
         )
 
     def threshold_for(self, work_type: str) -> int:
@@ -244,20 +286,13 @@ def judge_artifact_freshness(
         return None
 
     threshold = config.freshness_threshold()
-    # Freshness-specific config: same agent_command, different rubric.
-    freshness_config = JudgeConfig(
-        enabled=config.enabled,
-        agent_command=config.agent_command,
-        dimensions=FRESHNESS_DIMENSIONS,
-        thresholds={"default": threshold, "freshness": threshold},
-        timeout_seconds=config.timeout_seconds,
-        freshness_cooldown_days=config.freshness_cooldown_days,
-    )
+    # The freshness rubric comes from config.freshness_dimensions (domain-
+    # configurable, §2.1); the prompt reads them directly.
     prompt_path = _write_freshness_prompt(
         repo_path=repo_path,
         artifact_path=artifact_path,
         artifact_id=artifact_id,
-        config=freshness_config,
+        config=config,
     )
     output_dir = repo_path / ".aicg" / "review" / _safe_slug(artifact_id)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -279,7 +314,7 @@ def judge_artifact_freshness(
     if result.limit_reached:
         return JudgeVerdict(
             score=0,
-            dimensions={dim: 0 for dim in FRESHNESS_DIMENSIONS},
+            dimensions={name: 0 for name, _ in config.freshness_dimensions},
             blockers=[
                 f"Judge subscription limit reached ({result.limit_scope}); "
                 f"retry after {result.retry_after}."
@@ -292,7 +327,7 @@ def judge_artifact_freshness(
     if result.returncode != 0:
         return JudgeVerdict(
             score=0,
-            dimensions={dim: 0 for dim in FRESHNESS_DIMENSIONS},
+            dimensions={name: 0 for name, _ in config.freshness_dimensions},
             blockers=[f"Freshness judge failed with exit {result.returncode}."],
             summary="Freshness judge command failed.",
             passed=False,
@@ -305,9 +340,7 @@ def judge_artifact_freshness(
         if response_path.exists()
         else result.stdout
     )
-    return parse_judge_response(
-        raw_text=raw_text, config=freshness_config, threshold=threshold
-    )
+    return parse_judge_response(raw_text=raw_text, config=config, threshold=threshold)
 
 
 def parse_judge_response(
@@ -395,28 +428,12 @@ def _write_freshness_prompt(
         if artifact_path.is_absolute()
         else str(artifact_path)
     )
+    dims = config.freshness_dimensions or DEFAULT_FRESHNESS_DIMENSIONS
+    per_dim_max = 100 // len(dims)
     dimension_rubric = "\n".join(
-        f"- `{dim}` (0-{FRESHNESS_DIMENSION_MAX}): "
-        + {
-            "api_currency": (
-                "deprecated APIs, removed methods, idioms that have been "
-                "superseded in the current library release."
-            ),
-            "version_currency": (
-                "references to old versions of libraries, tools, or platforms "
-                "where a current release is materially different."
-            ),
-            "citation_validity": (
-                "broken links, dead vendors, docs at URLs that have moved, "
-                "blog posts older than 3 years cited as 'current'."
-            ),
-            "hardware_currency": (
-                "references to hardware that has been superseded "
-                "(e.g. V100, A100 cited as 'latest')."
-            ),
-        }.get(dim, dim)
-        for dim in config.dimensions
+        f"- `{name}` (0-{per_dim_max}): {description}" for name, description in dims
     )
+    dims_json = ", ".join('"' + name + '": 0' for name, _ in dims)
     content = (
         f"# Freshness review: {artifact_id}\n\n"
         f"You are reviewing a committed curriculum artifact for staleness.\n"
@@ -435,7 +452,7 @@ def _write_freshness_prompt(
         f"```json\n"
         f"{{\n"
         f"  \"total\": 0-100,\n"
-        f"  \"dimensions\": {{{', '.join(f'\"{d}\": 0' for d in config.dimensions)}}},\n"
+        f"  \"dimensions\": {{{dims_json}}},\n"
         f"  \"blockers\": [\"description of any stale claim\"],\n"
         f"  \"summary\": \"one-paragraph note explaining specific stale references\"\n"
         f"}}\n"
