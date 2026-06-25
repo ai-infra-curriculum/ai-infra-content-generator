@@ -577,8 +577,9 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_calibrate)
     org_calibrate.add_argument(
         "--corpus",
-        required=True,
-        help="Path to the calibration corpus dir (contains good/ and bad/ *.md artifacts).",
+        default=None,
+        help="Path to the calibration corpus dir (contains good/ and bad/ *.md artifacts). "
+        "Defaults to calibration/<domain>/corpus (calibration/corpus for ai-infra).",
     )
     org_calibrate.add_argument(
         "--out",
@@ -1783,9 +1784,18 @@ def cmd_org_calibrate_judge(args: argparse.Namespace) -> int:
         )
         return 1
 
-    corpus = Path(args.corpus)
+    if args.corpus:
+        corpus = Path(args.corpus)
+    else:
+        from .domains import calibration_corpus_path
+
+        corpus = calibration_corpus_path(getattr(args, "domain", None))
     if not corpus.exists():
         print(f"error: corpus directory not found: {corpus}", file=sys.stderr)
+        print(
+            "  (author good/ and bad/ exemplar artifacts there, or pass --corpus)",
+            file=sys.stderr,
+        )
         return 1
 
     run_config = dataclasses.replace(judge_config, enabled=True)

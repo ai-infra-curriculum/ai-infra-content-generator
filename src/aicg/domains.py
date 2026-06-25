@@ -45,3 +45,17 @@ def list_domains(runner_root: Path | None = None) -> list[str]:
 
 def domain_exists(domain: str, runner_root: Path | None = None) -> bool:
     return domain == DEFAULT_DOMAIN or domain_config_path(domain, runner_root).exists()
+
+
+def calibration_corpus_path(domain: str | None, runner_root: Path | None = None) -> Path:
+    """Resolve a domain's calibration corpus dir (roadmap §2.3).
+
+    The default domain keeps the legacy ``calibration/corpus`` so the AI-infra
+    BAR calibration is unchanged; any other domain uses
+    ``calibration/<domain>/corpus`` so each tenant picks its own BAR from its
+    own good/bad exemplars.
+    """
+    root = _runner_root(runner_root)
+    if not domain or domain == DEFAULT_DOMAIN:
+        return root / "calibration" / "corpus"
+    return root / "calibration" / domain / "corpus"

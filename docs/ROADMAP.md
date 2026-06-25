@@ -63,11 +63,14 @@ tool" into a curriculum engine that works for any profession. Ordered by leverag
    `aicg fleet status` rolls them up. "Domain" is the tenancy boundary above
    "role."
 
-3. **Per-domain calibration corpus** ⏳
-   Each domain needs its own good/bad exemplars to pick its own BAR. Structure
-   `calibration/<domain>/corpus/`; `calibrate-judge` runs per domain. (Engine
-   supports per-domain BAR via `quality_judge.thresholds`; the remaining work
-   is authoring each domain's exemplar corpus.)
+3. **Per-domain calibration corpus** 🟡 *(mechanism done; corpora to author)*
+   `domains.calibration_corpus_path` resolves `calibration/<domain>/corpus/`
+   (legacy `calibration/corpus/` for ai-infra), and `calibrate-judge` defaults
+   to it per `--domain` — so each tenant picks its own BAR from its own good/bad
+   exemplars, and `quality_judge.thresholds` already carries the per-domain BAR.
+   The only remaining work is **authoring** each sibling domain's exemplar
+   corpus (content, not engineering) — deferred while those domains are
+   observe-only with the judge off.
 
 4. **Per-domain research source + role titles** ✅ *(done 2026-06-25)*
    Each domain config carries its own `research` block (postings minimum,

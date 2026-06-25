@@ -42,3 +42,11 @@ def test_domain_exists(tmp_path: Path) -> None:
     assert domain_exists("ai-infra", tmp_path) is True  # always
     assert domain_exists("nursing", tmp_path) is True
     assert domain_exists("law", tmp_path) is False
+
+
+def test_calibration_corpus_path_default_vs_domain(tmp_path):
+    from aicg.domains import calibration_corpus_path
+    # ai-infra (default) keeps the legacy path; siblings get a per-domain dir.
+    assert calibration_corpus_path("ai-infra", tmp_path) == tmp_path / "calibration" / "corpus"
+    assert calibration_corpus_path(None, tmp_path) == tmp_path / "calibration" / "corpus"
+    assert calibration_corpus_path("ml-engineering", tmp_path) == tmp_path / "calibration" / "ml-engineering" / "corpus"
