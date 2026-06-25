@@ -697,6 +697,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_discussions_refresh.set_defaults(func=cmd_org_discussions_refresh)
 
+    # Fleet: cross-domain roll-up (roadmap §4 control-plane, read-only).
+    fleet_parser = subparsers.add_parser(
+        "fleet", help="Cross-domain fleet operations (read-only roll-up)"
+    )
+    fleet_subparsers = fleet_parser.add_subparsers(dest="fleet_command", required=True)
+    fleet_status = fleet_subparsers.add_parser(
+        "status", help="Status roll-up across every registered domain"
+    )
+    fleet_status.set_defaults(func=cmd_fleet_status)
+
     return parser
 
 
@@ -1528,6 +1538,35 @@ def cmd_org_list_domains(args: argparse.Namespace) -> int:
         path = domain_config_path(d)
         mark = "✓" if path.exists() else "✗ missing"
         print(f"  {d:<28} {mark}  {path}")
+    return 0
+
+
+def cmd_fleet_status(args: argparse.Namespace) -> int:
+    """Read-only liveness roll-up across every registered domain.
+
+    Roadmap §4 (control plane) observability slice: one pane answering
+    "how live is each domain?" — mode (ACT/OBSERVE/INERT), enabled phases,
+    judge state + BAR, daily budget, and best-effort work-queue depth.
+    Makes no writes and no network calls.
+    """
+    from .domains import domain_config_path, list_domains
+    from .fleet import build_domain_status, read_queue_depth, render_fleet_table
+    from .org_config import load_manifest, state_dir_for_manifest
+
+    statuses = []
+    for domain in list_domains():
+        path = domain_config_path(domain)
+        if not path.exists():
+            continue
+        manifest = load_manifest(path)
+        queue = None
+        try:
+            queue = read_queue_depth(state_dir_for_manifest(manifest))
+        except Exception:
+            queue = None
+        statuses.append(build_domain_status(domain, manifest, queue_depth=queue))
+
+    print(render_fleet_table(statuses))
     return 0
 
 
