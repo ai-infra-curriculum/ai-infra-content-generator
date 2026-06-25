@@ -222,6 +222,13 @@ main() {
     daily-remediate)
       run_aicg_org daily
       ;;
+    daily-pipeline-tick)
+      # Observe-mode tick: run every P2-P5 phase's decision on real data and
+      # report what it WOULD do — writes nothing (the design's staged first
+      # form). Promote a phase to act-mode by flipping its pipeline.phases flag.
+      run_aicg_org sync
+      run_aicg_org pipeline-tick
+      ;;
     daily-issues)
       run_aicg_org issues --apply
       ;;
