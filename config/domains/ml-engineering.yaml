@@ -131,47 +131,48 @@
       "aliases": [
         "Machine Learning Engineer",
         "ML Engineer",
-        "Model Training Engineer",
-        "Deep Learning Engineer"
+        "Deep Learning Engineer",
+        "Model Training Engineer"
       ]
     },
     {
-      "id": "applied-ml-engineer",
-      "title": "Applied ML Engineer",
+      "id": "senior-ml-engineer",
+      "title": "Senior Machine Learning Engineer",
       "level": 30,
-      "learning_repo": "applied-ml-engineer-learning",
-      "solution_repo": "applied-ml-engineer-solutions",
+      "learning_repo": "senior-ml-engineer-learning",
+      "solution_repo": "senior-ml-engineer-solutions",
       "aliases": [
-        "Applied Machine Learning Engineer",
-        "Fine-tuning Engineer",
-        "Applied Scientist",
-        "ML Engineer - Fine-tuning"
+        "Senior Machine Learning Engineer",
+        "Senior ML Engineer",
+        "ML Engineer II",
+        "Fine-tuning Engineer"
       ]
     },
     {
-      "id": "ml-research-engineer",
-      "title": "ML Research Engineer",
+      "id": "staff-ml-engineer",
+      "title": "Staff Machine Learning Engineer",
       "level": 40,
-      "learning_repo": "ml-research-engineer-learning",
-      "solution_repo": "ml-research-engineer-solutions",
+      "learning_repo": "staff-ml-engineer-learning",
+      "solution_repo": "staff-ml-engineer-solutions",
       "aliases": [
-        "Machine Learning Research Engineer",
-        "Research Engineer",
-        "Applied Research Scientist",
-        "Deep Learning Research Engineer"
+        "Staff Machine Learning Engineer",
+        "Staff ML Engineer",
+        "Lead ML Engineer",
+        "ML Tech Lead",
+        "ML Research Engineer"
       ]
     },
     {
-      "id": "foundation-model-engineer",
-      "title": "Foundation Model Engineer",
+      "id": "principal-ml-engineer",
+      "title": "Principal Machine Learning Engineer",
       "level": 48,
-      "learning_repo": "foundation-model-engineer-learning",
-      "solution_repo": "foundation-model-engineer-solutions",
+      "learning_repo": "principal-ml-engineer-learning",
+      "solution_repo": "principal-ml-engineer-solutions",
       "aliases": [
-        "Foundation Model Engineer",
-        "Research Scientist - Pretraining",
-        "LLM Training Engineer",
-        "Member of Technical Staff - Pretraining"
+        "Principal Machine Learning Engineer",
+        "Principal ML Engineer",
+        "Distinguished ML Engineer",
+        "Applied ML Architect"
       ]
     }
   ]
