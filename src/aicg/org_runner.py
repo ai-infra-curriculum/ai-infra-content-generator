@@ -889,7 +889,7 @@ def _quality_gate_passed(
     so a gate bug can never block the production author flow.
     """
     try:
-        from .eval_gate_runner import panel_median
+        from .agent_cli import classify_limit_scope
         from .judge import JudgeConfig, judge_artifact_freshness
         from .pipeline_config import PipelineConfig
 
@@ -906,17 +906,20 @@ def _quality_gate_passed(
             return True
 
         artifact_id = "".join(c if c.isalnum() else "-" for c in rel).strip("-").lower()
-        median = panel_median(
-            judge=judge_artifact_freshness,
-            repo_path=repo_path,
-            artifact_path=artifact,
-            artifact_id=artifact_id,
-            config=jc,
-            panel_size=1,
+        verdict = judge_artifact_freshness(
+            repo_path=repo_path, artifact_path=artifact, artifact_id=artifact_id, config=jc
         )
+        if verdict is None:
+            return True
+        # Never quarantine good content because the judge was rate-limited: a
+        # limited call returns a bogus 0. Pass on a limit; gate only on a real score.
+        limit_text = f"{verdict.raw or ''}\n" + "\n".join(verdict.blockers or [])
+        if classify_limit_scope(limit_text) is not None:
+            result["quality_gate"] = {"skipped": "rate_limited"}
+            return True
         bar = jc.freshness_threshold()
-        passed = median >= bar
-        result["quality_gate"] = {"score": median, "bar": bar, "passed": passed}
+        passed = verdict.score >= bar
+        result["quality_gate"] = {"score": verdict.score, "bar": bar, "passed": passed}
         return passed
     except Exception:  # noqa: BLE001 - a gate error must never block the author flow
         return True
