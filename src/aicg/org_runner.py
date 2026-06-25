@@ -691,7 +691,14 @@ def _process_one_item(
         result["verify"] = verify_outcome["verify"]
         result["self_heal_attempts"] = verify_outcome["attempts"]
 
-        if verify_outcome["status"] == "verified":
+        if verify_outcome["status"] == "verified" and not _quality_gate_passed(
+            manifest, repo_path, item, result
+        ):
+            # Eval-gate quarantine (P1, config-gated): structurally valid but
+            # below the calibrated quality bar — do not propagate/PR/merge.
+            item["status"] = "quarantined"
+            item["verified_at"] = utc_now()
+        elif verify_outcome["status"] == "verified":
             item["status"] = "verified"
             from .propagate import propagate_repo
 
@@ -867,6 +874,54 @@ def _verify_with_self_heal(
     }
 
 
+def _quality_gate_passed(
+    manifest: OrgManifest,
+    repo_path: Path,
+    item: dict[str, Any],
+    result: dict[str, Any],
+) -> bool:
+    """P1 eval-gate: score a just-authored artifact with the calibrated judge.
+
+    Returns True to proceed to PR/merge, False to quarantine. This gates the
+    *existing* autonomous author loop by quality. It is OFF unless the pipeline's
+    ``author`` phase is enabled AND the judge is enabled — so default behavior is
+    unchanged. Defensive by construction: any missing path or error returns True,
+    so a gate bug can never block the production author flow.
+    """
+    try:
+        from .eval_gate_runner import panel_median
+        from .judge import JudgeConfig, judge_artifact_freshness
+        from .pipeline_config import PipelineConfig
+
+        pc = PipelineConfig.from_manifest(manifest)
+        jc = JudgeConfig.from_manifest(manifest)
+        if not pc.author_enabled or not jc.enabled:
+            return True  # gate disabled -> preserve current behavior exactly
+
+        rel = item.get("path")
+        if not rel:
+            return True  # no scoreable artifact path on this item
+        artifact = repo_path / rel
+        if not artifact.exists():
+            return True
+
+        artifact_id = "".join(c if c.isalnum() else "-" for c in rel).strip("-").lower()
+        median = panel_median(
+            judge=judge_artifact_freshness,
+            repo_path=repo_path,
+            artifact_path=artifact,
+            artifact_id=artifact_id,
+            config=jc,
+            panel_size=1,
+        )
+        bar = jc.freshness_threshold()
+        passed = median >= bar
+        result["quality_gate"] = {"score": median, "bar": bar, "passed": passed}
+        return passed
+    except Exception:  # noqa: BLE001 - a gate error must never block the author flow
+        return True
+
+
 def _collect_verify_findings(verify_report: dict[str, Any]) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     for wi in verify_report.get("work_items", []):
@@ -996,6 +1051,7 @@ def _drive_pr_to_merge(
       3. CI passes (or no_ci_present) → guardrails → reviews → merge
     """
     from .steward import (
+        _owner_repo_from_url,
         classify_review_state,
         enable_auto_merge,
         evaluate_pr_guardrails,
@@ -1003,7 +1059,6 @@ def _drive_pr_to_merge(
         fetch_review_state,
         pr_view,
         wait_for_ci,
-        _owner_repo_from_url,
     )
 
     pr_number = _pr_number_from_url(pr_url)
