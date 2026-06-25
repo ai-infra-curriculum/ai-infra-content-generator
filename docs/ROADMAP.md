@@ -5,21 +5,31 @@ is built and live for the AI-infra curriculum. This roadmap tracks where it goes
 next: finishing the staged rollout, generalizing it into a domain-neutral engine,
 and putting a control plane in front of it.
 
-> Status legend: ✅ done · 🔄 in progress · ⏳ planned
+> Status legend: ✅ done · 🔄 in progress · 🟡 partial · ⏳ planned
+
+**Status @ 2026-06-25.** The engineering spine is complete: §2.1 ✅, §2.2 ✅
+(four live domains), §2.3 🟡 (mechanism done; corpora to author), §2.4 ✅, §3 ✅
+(`bootstrap-domain`), §4 🟡 (CLI fleet view done; web UI pending), §1 🟡 (P4
+executor built; P2/P3/P5 promotion is operational — see below). What's left is by
+design human-gated: promoting write-phases to ACT requires watching a live cycle
+(flipping `pipeline.phases.*` is the act step, not a code gap), authoring
+per-domain corpora is content, creating a GitHub org needs `admin:org`, and the
+web control plane is its own build. 486 tests.
 
 ---
 
 ## 0. Current state (✅)
 
-All P0–P6 phases are implemented, tested (19 pipeline modules, 463 tests), and
-live on the runner:
+All P0–P6 phases are implemented, tested, and live on the runner:
 
 - **P0** eval-gate — flag-only judge, calibrated BAR=76 (ACT)
 - **P1** author loop — autonomous authoring quality-gated before merge (ACT)
-- **P2–P5** re-audit / research-add / retire / package — running in OBSERVE
-  (dry-run) mode via `aicg org pipeline-tick`, deciding on real data, writing
-  nothing
-- **P6** fan-out — applies across all 17 roles / 34 repos
+- **P2–P5** re-audit / research-add / retire / package — deciding on real data in
+  OBSERVE (dry-run) mode via `aicg org pipeline-tick`, writing nothing. The P4
+  retire *executor* is now built (`retire_executor.py`); promoting any of
+  P2–P5 to ACT is a watched flag-flip.
+- **P6** fan-out — applies across every role / repo in every domain
+- **Fleet** — `aicg fleet status` rolls up all four domains (read-only)
 
 ---
 
