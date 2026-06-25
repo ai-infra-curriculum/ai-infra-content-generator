@@ -23,10 +23,17 @@ SITE = "https://ai-infra-curriculum.github.io/"
 OPEN = "<!-- aicg:site-banner -->"
 CLOSE = "<!-- /aicg:site-banner -->"
 
+# NOTE: superseded by scripts/apply-ecosystem-banner.py, which applies the
+# unified banner across ALL FOUR curriculum orgs via the GitHub API. This
+# single-org local-clone script is kept for offline use; BANNER_BODY mirrors
+# the unified ecosystem banner so the two converge.
 BANNER_BODY = (
-    "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
-    "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
-    "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
+    "> 🎓 Part of the free, open-source **AI Career Curriculum** ecosystem — "
+    "[Infrastructure](https://github.com/ai-infra-curriculum) · "
+    "[ML Engineering](https://github.com/ml-engineering-curriculum) · "
+    "[AI Engineering](https://github.com/ai-engineering-curriculum) · "
+    "[Governance](https://github.com/ai-governance-curriculum). "
+    "Live cohorts &amp; team programs: "
     "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**."
 )
 BLOCK = f"{OPEN}\n{BANNER_BODY}\n{CLOSE}"

@@ -235,15 +235,18 @@ def _resolve_repo_names(manifest: OrgManifest, role_id: str) -> tuple[str, str]:
 
 
 def _site_banner(org: str) -> str:
-    """The cohort/teams site banner — only ai-infra has a landing site, so
-    sibling orgs get no banner (an empty string drops cleanly)."""
-    if org.lower() != "ai-infra-curriculum":
-        return ""
+    """The unified AI Career Curriculum ecosystem banner — same across all four
+    orgs (it establishes the federation and keeps the only live landing site,
+    ai-infra's cohorts/teams, reachable). Kept in sync with
+    scripts/apply-ecosystem-banner.py."""
     return (
         "<!-- aicg:site-banner -->\n"
-        "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
-        "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
-        "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
+        "> 🎓 Part of the free, open-source **AI Career Curriculum** ecosystem — "
+        "[Infrastructure](https://github.com/ai-infra-curriculum) · "
+        "[ML Engineering](https://github.com/ml-engineering-curriculum) · "
+        "[AI Engineering](https://github.com/ai-engineering-curriculum) · "
+        "[Governance](https://github.com/ai-governance-curriculum). "
+        "Live cohorts &amp; team programs: "
         "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**.\n"
         "<!-- /aicg:site-banner -->\n\n"
     )
