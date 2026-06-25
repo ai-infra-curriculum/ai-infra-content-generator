@@ -47,13 +47,13 @@ little act-mode wiring. Do these one at a time, watching each for a cycle.
 The pipeline core is already domain-agnostic. Four changes turn "AI curriculum
 tool" into a curriculum engine that works for any profession. Ordered by leverage.
 
-1. **Domain-configurable freshness rubric** *(highest leverage — the seam)*
-   Pull `FRESHNESS_DIMENSIONS` out of `judge.py` into the `quality_judge` config
-   (the quality dimensions are already configurable). Then the same pipeline
-   grades nursing on `guideline_currency` / `regulation_currency`, law on
-   `statute_currency` / `caselaw_currency`, etc. — instead of `api_currency` /
-   `version_currency` / `hardware_currency`. This one refactor proves the engine
-   is domain-neutral without provisioning anything.
+1. **Domain-configurable freshness rubric** ✅ *(highest leverage — the seam; done 2026-06-25)*
+   `quality_judge.freshness_dimensions` is now a list of `{name, description}`
+   pairs (defaults to the AI set, so the AI curriculum is unchanged). A non-tech
+   domain supplies its own — nursing grades `guideline_currency` /
+   `regulation_currency`, law `statute_currency` / `caselaw_currency` — and the
+   same pipeline grades it. The engine is now provably domain-neutral. (Also
+   fixed a latent bug: the freshness prompt was iterating the *quality* dims.)
 
 2. **Multi-tenant config + git/gh plumbing**
    `config/aicg-org.yaml` hardcodes one org, remote, and role list. Make the
