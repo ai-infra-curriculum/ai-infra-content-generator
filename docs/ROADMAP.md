@@ -71,17 +71,28 @@ tool" into a curriculum engine that works for any profession. Ordered by leverag
 
 ---
 
-## 3. Multi-tenancy & provisioning — `bootstrap-domain` (⏳)
+## 3. Multi-tenancy & provisioning — `bootstrap-domain` (🟡 partial)
 
 A provisioning capability above the existing per-role `bootstrap-role`:
 
-- Create the GitHub org (or target an existing one).
+- Create the GitHub org (or target an existing one). — **manual** (needs
+  `admin:org`/web UI; org creation isn't in the runner's token scope).
 - Seed the domain's role ladder (entry → senior → architect/lead → exec, or the
-  domain's equivalent).
-- Scaffold the paired `-learning` / `-solutions` repos per role.
-- Drop in the domain rubric (§2.1) + a starter calibration corpus (§2.3).
-- Wire the per-role timers + register the domain config.
-- Hand off to the same P0–P6 pipeline.
+  domain's equivalent). — ✅ via `config/domains/<name>.yaml`.
+- Scaffold the paired `-learning` / `-solutions` repos per role. — ✅
+  **`bootstrap-role` is now domain-aware** (`--domain` + `--create-remotes`);
+  repo names/branding resolve from the manifest, not a hardcoded `ai-infra-`
+  prefix. Proven end-to-end standing up **ml-engineering-curriculum**
+  (2026-06-25): 8 role repos + `.github` profile created & pushed.
+- Drop in the domain rubric (§2.1) + a starter calibration corpus (§2.3). — ⏳
+- Wire the per-role timers + register the domain config. — register ✅; timers
+  are manifest-driven (`install-schedules.sh`) but ai-infra-only so far
+  (sibling orgs are observe-only, phases off).
+- Hand off to the same P0–P6 pipeline. — ⏳ (gated on enabling phases per domain).
+
+Remaining for a true one-command `bootstrap-domain`: wrap org creation +
+`.github` profile generation + 4-way cross-link wiring (all done by hand for the
+first three sibling orgs) around the now-domain-aware `bootstrap-role`.
 
 Outcome: standing up a new domain is a configuration + provisioning exercise, not
 a rewrite.
