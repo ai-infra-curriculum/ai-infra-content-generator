@@ -126,8 +126,8 @@ for cand in balanced_objects(raw):
         obj = json.loads(cand)
     except Exception:
         continue
-    if isinstance(obj, dict) and "score" in obj:
-        best = obj  # keep the last valid verdict
+    if isinstance(obj, dict) and ("total" in obj or "score" in obj) and "dimensions" in obj:
+        best = obj  # keep the last valid verdict (freshness schema uses "total")
 if best is not None:
     with open(sys.argv[2], "w", encoding="utf-8") as f:
         json.dump(best, f)
