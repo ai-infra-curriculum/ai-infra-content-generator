@@ -43,6 +43,36 @@ ORG = "ai-infra-curriculum"
 # Track-slug discovery: ``ai-infra-X-learning`` -> ``X``.
 TRACK_FROM_REPO_RE = re.compile(r"^ai-infra-(.+)-(?:learning|solutions)$")
 
+# Sibling-org domain configs live next to the org manifest. Their role
+# ids name tracks that have LEFT the ai-infra org (the agentic +
+# governance split). The workspace may still hold stale local clones of
+# those repos under their old ``ai-infra-<slug>-*`` directory names, so
+# the slug-based walk would wrongly re-emit them as ai-infra tracks with
+# ai-infra-curriculum GitHub URLs. Exclude them by slug.
+DOMAINS_DIR = Path(__file__).resolve().parent.parent / "config" / "domains"
+
+
+def moved_slugs() -> set[str]:
+    """Role ids that belong to a sibling-org domain config, not ai-infra."""
+    slugs: set[str] = set()
+    if not DOMAINS_DIR.is_dir():
+        return slugs
+    for cfg in sorted(DOMAINS_DIR.glob("*.yaml")):
+        try:
+            data = json.loads(cfg.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            try:
+                import yaml  # optional; configs are JSON-compatible
+            except ImportError:
+                LOGGER.warning("skipping %s: not JSON and PyYAML unavailable", cfg.name)
+                continue
+            data = yaml.safe_load(cfg.read_text(encoding="utf-8"))
+        for role in data.get("roles", []):
+            slug = role.get("id")
+            if slug:
+                slugs.add(slug)
+    return slugs
+
 # Hierarchy (used to fill `level` field — higher = more senior).
 TRACK_LEVEL = {
     "junior-engineer": 1,
@@ -264,7 +294,12 @@ def build_resource(path: Path, repo_path: Path, repo: str) -> dict:
 
 
 def discover_tracks(workspace: Path) -> dict[str, dict]:
-    """Pair learning + solutions repos by track slug."""
+    """Pair learning + solutions repos by track slug.
+
+    Tracks that have moved to a sibling org (see ``moved_slugs``) are
+    skipped so the ai-infra manifest stays scoped to its own 11 roles.
+    """
+    excluded = moved_slugs()
     pairs: dict[str, dict[str, str]] = defaultdict(dict)
     for entry in sorted(workspace.iterdir()):
         if not entry.is_dir():
@@ -273,6 +308,8 @@ def discover_tracks(workspace: Path) -> dict[str, dict]:
         if match is None:
             continue
         track_slug = match.group(1)
+        if track_slug in excluded:
+            continue
         kind = "learning" if entry.name.endswith("-learning") else "solutions"
         pairs[track_slug][kind] = entry.name
     return dict(pairs)

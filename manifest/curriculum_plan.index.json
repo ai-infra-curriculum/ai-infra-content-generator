@@ -1,55 +1,11 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-06-21T20:08:02Z",
+  "generated_at": "2026-06-25T22:16:48Z",
   "roles": [
-    {
-      "slug": "agentic-ai-developer",
-      "file": "curriculum_plan.agentic-ai-developer.manifest.json",
-      "role_title": "Agentic Ai Developer Track",
-      "requirement_count": 8,
-      "coverage": {
-        "covered": 0,
-        "partial": 8,
-        "missing": 0
-      }
-    },
-    {
-      "slug": "agentic-ai-engineer",
-      "file": "curriculum_plan.agentic-ai-engineer.manifest.json",
-      "role_title": "Agentic Ai Engineer Track",
-      "requirement_count": 9,
-      "coverage": {
-        "covered": 0,
-        "partial": 9,
-        "missing": 0
-      }
-    },
-    {
-      "slug": "agentic-systems-architect",
-      "file": "curriculum_plan.agentic-systems-architect.manifest.json",
-      "role_title": "Agentic Systems Architect Track",
-      "requirement_count": 13,
-      "coverage": {
-        "covered": 0,
-        "partial": 13,
-        "missing": 0
-      }
-    },
     {
       "slug": "architect",
       "file": "curriculum_plan.architect.manifest.json",
       "role_title": "Architect Track",
-      "requirement_count": 17,
-      "coverage": {
-        "covered": 0,
-        "partial": 17,
-        "missing": 0
-      }
-    },
-    {
-      "slug": "chief-ai-officer",
-      "file": "curriculum_plan.chief-ai-officer.manifest.json",
-      "role_title": "Chief Ai Officer Track",
       "requirement_count": 17,
       "coverage": {
         "covered": 0,
@@ -131,28 +87,6 @@
       "coverage": {
         "covered": 0,
         "partial": 10,
-        "missing": 0
-      }
-    },
-    {
-      "slug": "security",
-      "file": "curriculum_plan.security.manifest.json",
-      "role_title": "Security Track",
-      "requirement_count": 17,
-      "coverage": {
-        "covered": 1,
-        "partial": 16,
-        "missing": 0
-      }
-    },
-    {
-      "slug": "senior-agentic-ai-engineer",
-      "file": "curriculum_plan.senior-agentic-ai-engineer.manifest.json",
-      "role_title": "Senior Agentic Ai Engineer Track",
-      "requirement_count": 7,
-      "coverage": {
-        "covered": 0,
-        "partial": 7,
         "missing": 0
       }
     },
