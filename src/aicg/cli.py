@@ -377,6 +377,24 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_bootstrap.set_defaults(func=cmd_org_bootstrap_role)
 
+    org_bootstrap_domain = org_subparsers.add_parser(
+        "bootstrap-domain",
+        help="Scaffold a whole domain: every role's repos + the org-profile README",
+    )
+    add_org_args(org_bootstrap_domain)
+    org_bootstrap_domain.add_argument(
+        "--tagline",
+        default=None,
+        help="One-line tagline for the org-profile README (defaults to a generated one).",
+    )
+    org_bootstrap_domain.add_argument(
+        "--create-remotes",
+        action="store_true",
+        help="Create the GitHub repos (roles + .github profile) via `gh repo create --push`. "
+        "The org itself must already exist.",
+    )
+    org_bootstrap_domain.set_defaults(func=cmd_org_bootstrap_domain)
+
     org_issues = org_subparsers.add_parser(
         "issues",
         help="Reconcile GitHub issues with the work-queue state (open / comment / close)",
@@ -1371,6 +1389,73 @@ def cmd_org_bootstrap_role(args: argparse.Namespace) -> int:
         for action in remotes.get("actions", []):
             outcome = "ok" if action["returncode"] == 0 else "failed"
             print(f"- gh repo create {action['repo']}: {outcome}")
+    return 0
+
+
+def cmd_org_bootstrap_domain(args: argparse.Namespace) -> int:
+    """Scaffold an entire domain: every role's repos + the org-profile README.
+
+    The one-command form of standing up a sibling org (roadmap §3). The GitHub
+    org must already exist (org creation needs admin:org / the web UI). Roles
+    come from the resolved domain manifest; each is scaffolded via the
+    domain-aware bootstrap_role. With --create-remotes, repos and the .github
+    profile are created and pushed; otherwise everything is written locally for
+    review. Authoring CAREER_PROGRESSION.md is left as a follow-up (printed).
+    """
+    import subprocess
+
+    from .bootstrap import _git_init_commit, bootstrap_role
+    from .domain_provision import render_org_profile
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    state_dir = resolve_org_state_dir(args, manifest)
+
+    print(f"Provisioning domain → org '{manifest.org}' ({len(manifest.roles)} roles)")
+    for role in sorted(manifest.roles, key=lambda r: r.level):
+        report = bootstrap_role(
+            manifest=manifest,
+            workspace=workspace,
+            role_id=role.id,
+            title=role.title,
+            level=role.level,
+            description=None,
+            overwrite=False,
+            write_manifest=False,  # role already in the domain config
+            create_remotes=args.create_remotes,
+            state_dir=state_dir,
+        )
+        remotes = report.get("remotes") or {}
+        outcome = ""
+        if args.create_remotes:
+            oks = sum(1 for a in remotes.get("actions", []) if a["returncode"] == 0)
+            outcome = f"  [remotes: {oks}/{len(remotes.get('actions', []))} ok]"
+        print(f"  ✓ {role.id} (L{role.level}){outcome}")
+
+    # Org-profile README under a local .github/profile/ tree.
+    profile = render_org_profile(manifest, tagline=args.tagline)
+    dotgithub = workspace / f"{manifest.org}-dotgithub"
+    profile_path = dotgithub / "profile" / "README.md"
+    profile_path.parent.mkdir(parents=True, exist_ok=True)
+    profile_path.write_text(profile, encoding="utf-8")
+    print(f"  ✓ org profile written: {profile_path}")
+
+    if args.create_remotes:
+        init_err = _git_init_commit(dotgithub)
+        if init_err is None:
+            res = subprocess.run(
+                ["gh", "repo", "create", f"{manifest.org}/.github", "--public",
+                 "--source", str(dotgithub), "--remote", "origin", "--push"],
+                capture_output=True, text=True, check=False,
+            )
+            print(f"  {'✓' if res.returncode == 0 else '✗'} gh repo create {manifest.org}/.github")
+        else:
+            print(f"  ✗ git init for .github failed: {init_err.stderr[-200:]}")
+
+    print("\nNext steps:")
+    print(f"  • Author {manifest.org}/.github/CAREER_PROGRESSION.md (the central ladder doc).")
+    print("  • Add a per-domain calibration corpus to enable the quality judge (§2.3).")
+    print("  • Leave pipeline phases OFF (observe-only) until the content settles.")
     return 0
 
 

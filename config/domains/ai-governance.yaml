@@ -124,7 +124,7 @@
   "roles": [
     {
       "id": "security",
-      "title": "AI Infrastructure Security Engineer",
+      "title": "AI/ML Security & Governance Engineer",
       "level": 35,
       "learning_repo": "security-learning",
       "solution_repo": "security-solutions",

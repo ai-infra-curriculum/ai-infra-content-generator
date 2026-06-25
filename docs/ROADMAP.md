@@ -77,7 +77,7 @@ tool" into a curriculum engine that works for any profession. Ordered by leverag
 
 ---
 
-## 3. Multi-tenancy & provisioning — `bootstrap-domain` (🟡 partial)
+## 3. Multi-tenancy & provisioning — `bootstrap-domain` (✅ — org creation aside)
 
 A provisioning capability above the existing per-role `bootstrap-role`:
 
@@ -96,12 +96,17 @@ A provisioning capability above the existing per-role `bootstrap-role`:
   (sibling orgs are observe-only, phases off).
 - Hand off to the same P0–P6 pipeline. — ⏳ (gated on enabling phases per domain).
 
-Remaining for a true one-command `bootstrap-domain`: wrap org creation +
-`.github` profile generation + 4-way cross-link wiring (all done by hand for the
-first three sibling orgs) around the now-domain-aware `bootstrap-role`.
+**`aicg org bootstrap-domain` now does this end-to-end** (2026-06-25): reads the
+domain manifest, scaffolds every role via the domain-aware `bootstrap-role`
+(`--create-remotes` creates + pushes), renders the `.github` org-profile README
+(role-ladder table + 4-way ecosystem cross-links, via `domain_provision.py`'s
+pure `render_org_profile`), and creates the `.github` repo. The only manual step
+left is **creating the empty GitHub org** (needs `admin:org`/web UI). Authoring
+`CAREER_PROGRESSION.md` + the per-domain calibration corpus (§2.3) are printed as
+follow-ups.
 
 Outcome: standing up a new domain is a configuration + provisioning exercise, not
-a rewrite.
+a rewrite — verified by ml-engineering (provisioned by hand, then codified).
 
 ---
 
