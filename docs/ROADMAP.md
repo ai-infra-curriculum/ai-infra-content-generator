@@ -34,9 +34,11 @@ little act-mode wiring. Do these one at a time, watching each for a cycle.
 - **P3 research auto-promote** — wire `research_cycle` promotion into the research
   job (auto-apply qualifying deltas instead of proposing); flip
   `research_autopromote`.
-- **P4 retire** — build the retire executor (git rm + tombstone + reconciliation
-  + dangling-ref scan), validate as a real dry-run to a branch, then flip
-  `retire`. Consumes the evidence research already gathers.
+- **P4 retire** — ✅ **executor built** (`retire_executor.py`: `plan_retirement`
+  + `scan_dangling_refs` pure, `execute_plan` through injectable seams,
+  `git_fs_seams` for production, `dry_run` honored; 5 tests). Remaining: assemble
+  `RetiredNode` details + paths in the tick, validate as a real dry-run to a
+  branch, then flip `retire` — the operational watch-a-cycle step.
 - **P5 package** — wire `plan_monthly_package` into `monthly-release` (tag changed
   repos + build Release tarballs + `ARCHIVE_INDEX.md`); flip `package`.
 
