@@ -1,13 +1,13 @@
 {
-  "org": "AI-Infra-Curriculum",
-  "default_remote": "git@github.com:AI-Infra-Curriculum/{repo}.git",
+  "org": "ai-engineering-curriculum",
+  "default_remote": "git@github.com:ai-engineering-curriculum/{repo}.git",
   "release": {
     "tag_format": "v%Y.%m",
     "branch": "main",
     "package_workflow": "release-package.yml"
   },
   "quality_judge": {
-    "enabled": true,
+    "enabled": false,
     "flag_only": true,
     "agent_command": "{runner}/scripts/run-claude-judge.sh --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id} --artifact {artifact}",
     "thresholds": {
@@ -25,7 +25,7 @@
   },
   "pipeline": {
     "phases": {
-      "author": true,
+      "author": false,
       "reaudit_autofix": false,
       "research_autopromote": false,
       "retire": false,
@@ -39,18 +39,6 @@
     {
       "name": ".github",
       "kind": "org-profile",
-      "release": false
-    },
-    {
-      "_comment": "Standalone guidebook repo; carries author guidance but not curriculum modules. Released alongside the curriculum to keep version pins coherent.",
-      "name": "ai-agent-guidebook",
-      "kind": "guidebook",
-      "release": true
-    },
-    {
-      "_comment": "The AICG runner itself. Listed so it gets the maintainer footer + audits like every other repo. release=false so monthly-release does NOT tag it \u2014 versions are driven by the runner's own pyproject.",
-      "name": "ai-infra-content-generator",
-      "kind": "runner",
       "release": false
     }
   ],
@@ -135,81 +123,59 @@
   },
   "roles": [
     {
-      "id": "junior-engineer",
-      "title": "Junior AI Infrastructure Engineer",
-      "level": 10,
-      "learning_repo": "ai-infra-junior-engineer-learning",
-      "solution_repo": "ai-infra-junior-engineer-solutions"
+      "id": "agentic-ai-engineer",
+      "title": "Agentic AI Engineer",
+      "level": 30,
+      "learning_repo": "agentic-ai-engineer-learning",
+      "solution_repo": "agentic-ai-engineer-solutions",
+      "aliases": [
+        "AI Agent Engineer",
+        "Agent Engineer",
+        "Applied AI Engineer",
+        "Generative AI Engineer",
+        "LLM Engineer"
+      ]
     },
     {
-      "id": "engineer",
-      "title": "AI Infrastructure Engineer",
+      "id": "agentic-systems-architect",
+      "title": "Agentic Systems Architect",
+      "level": 48,
+      "learning_repo": "agentic-systems-architect-learning",
+      "solution_repo": "agentic-systems-architect-solutions",
+      "aliases": [
+        "Agentic AI Architect",
+        "AI Agent Architect",
+        "Solution Architect - Agentic AI",
+        "Multi-Agent Systems Architect",
+        "Principal AI Engineer - Agents"
+      ]
+    },
+    {
+      "id": "agentic-ai-developer",
+      "title": "Agentic AI Developer",
       "level": 20,
-      "learning_repo": "ai-infra-engineer-learning",
-      "solution_repo": "ai-infra-engineer-solutions"
+      "learning_repo": "agentic-ai-developer-learning",
+      "solution_repo": "agentic-ai-developer-solutions",
+      "aliases": [
+        "AI Engineer",
+        "LLM Application Developer",
+        "Generative AI Developer",
+        "Applied AI Developer",
+        "AI Application Engineer"
+      ]
     },
     {
-      "id": "senior-engineer",
-      "title": "Senior AI Infrastructure Engineer",
-      "level": 30,
-      "learning_repo": "ai-infra-senior-engineer-learning",
-      "solution_repo": "ai-infra-senior-engineer-solutions"
-    },
-    {
-      "id": "ml-platform",
-      "title": "AI/ML Platform Engineer",
-      "level": 30,
-      "learning_repo": "ai-infra-ml-platform-learning",
-      "solution_repo": "ai-infra-ml-platform-solutions"
-    },
-    {
-      "id": "mlops",
-      "title": "MLOps Engineer",
-      "level": 30,
-      "learning_repo": "ai-infra-mlops-learning",
-      "solution_repo": "ai-infra-mlops-solutions"
-    },
-    {
-      "id": "performance",
-      "title": "AI Infrastructure Performance Engineer",
-      "level": 35,
-      "learning_repo": "ai-infra-performance-learning",
-      "solution_repo": "ai-infra-performance-solutions"
-    },
-    {
-      "id": "team-lead",
-      "title": "AI Infrastructure Team Lead",
+      "id": "senior-agentic-ai-engineer",
+      "title": "Senior Agentic AI Engineer",
       "level": 40,
-      "learning_repo": "ai-infra-team-lead-learning",
-      "solution_repo": "ai-infra-team-lead-solutions"
-    },
-    {
-      "id": "architect",
-      "title": "AI Infrastructure Architect",
-      "level": 45,
-      "learning_repo": "ai-infra-architect-learning",
-      "solution_repo": "ai-infra-architect-solutions"
-    },
-    {
-      "id": "principal-engineer",
-      "title": "Principal AI Infrastructure Engineer",
-      "level": 50,
-      "learning_repo": "ai-infra-principal-engineer-learning",
-      "solution_repo": "ai-infra-principal-engineer-solutions"
-    },
-    {
-      "id": "senior-architect",
-      "title": "Senior AI Infrastructure Architect",
-      "level": 55,
-      "learning_repo": "ai-infra-senior-architect-learning",
-      "solution_repo": "ai-infra-senior-architect-solutions"
-    },
-    {
-      "id": "principal-architect",
-      "title": "Principal AI Infrastructure Architect",
-      "level": 60,
-      "learning_repo": "ai-infra-principal-architect-learning",
-      "solution_repo": "ai-infra-principal-architect-solutions"
+      "learning_repo": "senior-agentic-ai-engineer-learning",
+      "solution_repo": "senior-agentic-ai-engineer-solutions",
+      "aliases": [
+        "Staff Agentic AI Engineer",
+        "Senior AI Agent Engineer",
+        "Lead Applied AI Engineer",
+        "Agentic Platform Engineer"
+      ]
     }
   ]
 }
