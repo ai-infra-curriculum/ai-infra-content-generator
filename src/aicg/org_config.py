@@ -44,6 +44,7 @@ class OrgManifest:
     automation: dict[str, Any]
     content_generation: dict[str, Any]
     quality_judge: dict[str, Any]
+    pipeline: dict[str, Any]
     job_requirements: dict[str, Any]
     research: dict[str, Any]
     maintained_by: dict[str, Any]
@@ -148,6 +149,7 @@ def load_manifest(path: Path | None = None) -> OrgManifest:
         automation=raw.get("automation", {}),
         content_generation=raw.get("content_generation", {}),
         quality_judge=raw.get("quality_judge", {}),
+        pipeline=raw.get("pipeline", {}),
         job_requirements=raw.get("job_requirements", {}),
         research=raw.get("research", {}),
         maintained_by=raw.get("maintained_by", {}),
