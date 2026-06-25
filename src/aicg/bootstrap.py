@@ -701,11 +701,65 @@ def _append_role_to_manifest(
     }
 
 
+def _git_init_commit(repo_path: Path) -> subprocess.CompletedProcess | None:
+    """Init a git repo + initial commit so ``gh repo create --push`` works.
+
+    Returns None on success, or the first failed CompletedProcess. Skips
+    init when ``.git`` already exists; skips commit when nothing changed.
+    """
+    steps: list[list[str]] = []
+    if not (repo_path / ".git").is_dir():
+        steps.append(["git", "init", "-b", "main"])
+    steps.append(["git", "add", "-A"])
+    for step in steps:
+        proc = subprocess.run(
+            step, cwd=str(repo_path), capture_output=True, text=True, check=False
+        )
+        if proc.returncode != 0:
+            return proc
+    # Commit only when there's something staged (idempotent on re-run).
+    staged = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=str(repo_path),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if staged.returncode != 0:
+        proc = subprocess.run(
+            ["git", "commit", "-m", "chore: initial scaffold via aicg org bootstrap-role"],
+            cwd=str(repo_path),
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if proc.returncode != 0:
+            return proc
+    return None
+
+
 def _create_github_repos(
     manifest: OrgManifest, plan: BootstrapPlan
 ) -> dict[str, Any]:
     results: list[dict[str, Any]] = []
     for repo_name in (plan.learning_repo, plan.solution_repo):
+        repo_path = (
+            plan.learning_path if repo_name.endswith("-learning") else plan.solution_path
+        )
+        # `gh repo create --source --push` requires an initialized git repo
+        # with at least one commit; the scaffold is just files on disk, so
+        # init + commit first. Idempotent: skip init if already a repo.
+        init_err = _git_init_commit(repo_path)
+        if init_err is not None:
+            results.append(
+                {
+                    "repo": repo_name,
+                    "returncode": init_err.returncode,
+                    "stdout": init_err.stdout[-2000:],
+                    "stderr": init_err.stderr[-2000:],
+                }
+            )
+            continue
         completed = subprocess.run(
             [
                 "gh",
@@ -714,7 +768,7 @@ def _create_github_repos(
                 f"{manifest.org}/{repo_name}",
                 "--public",
                 "--source",
-                str(plan.learning_path if repo_name.endswith("-learning") else plan.solution_path),
+                str(repo_path),
                 "--remote",
                 "origin",
                 "--push",
