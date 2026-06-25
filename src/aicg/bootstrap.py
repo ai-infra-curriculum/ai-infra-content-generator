@@ -5,21 +5,24 @@ generates the skeleton on disk so subsequent ``aicg`` cycles
 (research -> plan -> generate -> verify -> PR -> steward) can fill
 the curriculum in without any further human bootstrapping.
 
+Repo names + branding are domain-aware: they come from the manifest
+(``<id>-learning`` for a sibling org, ``ai-infra-<id>-learning`` for
+ai-infra), so bootstrap works across the whole curriculum-org family.
+
 Phase A (this module) writes:
 
-- ``ai-infra-<id>-learning/``: README.md, LICENSE, .gitignore, CI
-  workflow, CURRICULUM.md placeholder, empty ``lessons/`` and
-  ``projects/`` directories.
-- ``ai-infra-<id>-solutions/``: README.md, LICENSE, .gitignore, CI
-  workflow, ``modules/`` and ``projects/`` directories, plus
-  ``SOLUTIONS_INDEX.md``.
+- ``<learning-repo>/``: README.md, LICENSE, .gitignore, CI workflow,
+  CURRICULUM.md placeholder, empty ``lessons/`` and ``projects/``
+  directories.
+- ``<solutions-repo>/``: README.md, LICENSE, .gitignore, CI workflow,
+  ``modules/`` and ``projects/`` directories, plus ``SOLUTIONS_INDEX.md``.
 - A role entry appended to the org manifest (if the manifest is JSON
   the file is rewritten; YAML is left for the user to update
   manually with the printed snippet).
 - A prompt packet at ``<state-dir>/bootstrap/<id>.md`` that asks the
   content agent to (a) research the role's job requirements and (b)
   draft the initial curriculum plan as
-  ``ai-infra-<id>-learning/.aicg/curriculum-plan.json``.
+  ``<learning-repo>/.aicg/curriculum-plan.json``.
 
 Phase B (out of scope for now): execute the curriculum plan, create
 per-module skeletons, mark them as ready in the org queue.
@@ -93,8 +96,11 @@ def bootstrap_role(
             "with hyphens (e.g. 'data-engineer')."
         )
 
-    learning_repo = f"ai-infra-{role_id}-learning"
-    solution_repo = f"ai-infra-{role_id}-solutions"
+    learning_repo, solution_repo = _resolve_repo_names(manifest, role_id)
+    org = manifest.org
+    org_display = _org_display(org)
+    site_banner = _site_banner(org)
+    maintained_footer = _maintained_footer(manifest)
     workspace = workspace.resolve()
     learning_path = workspace / learning_repo
     solution_path = workspace / solution_repo
@@ -113,11 +119,19 @@ def bootstrap_role(
     description = description or f"Curriculum for the {title} role."
     files_written: list[str] = []
 
-    files_written.extend(
-        _write_learning_skeleton(learning_path, role_id, title, description)
+    ctx = _SkeletonContext(
+        org=org,
+        org_display=org_display,
+        learning_repo=learning_repo,
+        solution_repo=solution_repo,
+        site_banner=site_banner,
+        maintained_footer=maintained_footer,
     )
     files_written.extend(
-        _write_solutions_skeleton(solution_path, role_id, title, description)
+        _write_learning_skeleton(learning_path, role_id, title, description, ctx)
+    )
+    files_written.extend(
+        _write_solutions_skeleton(solution_path, role_id, title, description, ctx)
     )
 
     state_root = state_dir_for_manifest(manifest, state_dir)
@@ -125,7 +139,10 @@ def bootstrap_role(
     bootstrap_dir.mkdir(parents=True, exist_ok=True)
     prompt_path = bootstrap_dir / f"{role_id}.md"
     prompt_path.write_text(
-        _build_bootstrap_prompt(role_id, title, level, description), encoding="utf-8"
+        _build_bootstrap_prompt(
+            role_id, title, level, description, learning_repo, solution_repo
+        ),
+        encoding="utf-8",
     )
 
     plan = BootstrapPlan(
@@ -161,21 +178,106 @@ def bootstrap_role(
 
 
 # ---------------------------------------------------------------------------
+# Domain-aware naming + branding
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class _SkeletonContext:
+    """Per-domain branding threaded through every skeleton builder.
+
+    Keeps bootstrap output correct across the org family: repo names and
+    URLs come from the manifest (``ml-engineer-learning`` for a sibling
+    org, ``ai-infra-data-engineer-learning`` for ai-infra), not a
+    hardcoded ``ai-infra-`` prefix.
+    """
+
+    org: str
+    org_display: str
+    learning_repo: str
+    solution_repo: str
+    site_banner: str
+    maintained_footer: str
+
+
+# Display names for the curriculum-family orgs. Falls back to a title-cased
+# slug for any future org so a new domain still renders a sane heading.
+_ORG_DISPLAY = {
+    "ai-infra": "AI Infrastructure",
+    "ai-engineering": "AI Engineering",
+    "ai-governance": "AI Governance",
+    "ml-engineering": "ML Engineering",
+}
+
+
+def _org_base(org: str) -> str:
+    base = org
+    if base.lower().endswith("-curriculum"):
+        base = base[: -len("-curriculum")]
+    return base
+
+
+def _org_display(org: str) -> str:
+    base = _org_base(org)
+    return _ORG_DISPLAY.get(base.lower(), base.replace("-", " ").title())
+
+
+def _resolve_repo_names(manifest: OrgManifest, role_id: str) -> tuple[str, str]:
+    """Repo names for ``role_id`` — from the manifest if present, else by
+    the org's naming convention (ai-infra keeps its legacy prefix; sibling
+    orgs drop it)."""
+    for role in manifest.roles:
+        if role.id == role_id:
+            return role.learning_repo, role.solution_repo
+    if manifest.org.lower() == "ai-infra-curriculum":
+        return f"ai-infra-{role_id}-learning", f"ai-infra-{role_id}-solutions"
+    return f"{role_id}-learning", f"{role_id}-solutions"
+
+
+def _site_banner(org: str) -> str:
+    """The cohort/teams site banner — only ai-infra has a landing site, so
+    sibling orgs get no banner (an empty string drops cleanly)."""
+    if org.lower() != "ai-infra-curriculum":
+        return ""
+    return (
+        "<!-- aicg:site-banner -->\n"
+        "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
+        "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
+        "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
+        "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**.\n"
+        "<!-- /aicg:site-banner -->\n\n"
+    )
+
+
+def _maintained_footer(manifest: OrgManifest) -> str:
+    mb = manifest.maintained_by or {}
+    marker = mb.get("footer_marker", "<!-- aicg:maintained-by -->")
+    phrasing = mb.get("phrasing")
+    if not phrasing:
+        name = mb.get("name")
+        url = mb.get("url")
+        phrasing = f"Maintained by [{name}]({url})" if name and url else ""
+    if not phrasing:
+        return ""
+    return f"\n---\n\n{marker}\n{phrasing}\n"
+
+
+# ---------------------------------------------------------------------------
 # Skeleton writers
 # ---------------------------------------------------------------------------
 
 
 def _write_learning_skeleton(
-    repo_path: Path, role_id: str, title: str, description: str
+    repo_path: Path, role_id: str, title: str, description: str, ctx: _SkeletonContext
 ) -> list[str]:
     written: list[str] = []
     written.append(
         _write(
             repo_path / "README.md",
-            _learning_readme(role_id, title, description),
+            _learning_readme(title, description, ctx),
         )
     )
-    written.append(_write(repo_path / "LICENSE", _mit_license()))
+    written.append(_write(repo_path / "LICENSE", _mit_license(ctx)))
     written.append(_write(repo_path / ".gitignore", _gitignore()))
     written.append(
         _write(
@@ -192,7 +294,7 @@ def _write_learning_skeleton(
     written.append(
         _write(
             repo_path / "VERSIONS.md",
-            _versions_placeholder(role_id),
+            _versions_placeholder(ctx),
         )
     )
     written.append(
@@ -225,21 +327,21 @@ def _write_learning_skeleton(
 
 
 def _write_solutions_skeleton(
-    repo_path: Path, role_id: str, title: str, description: str
+    repo_path: Path, role_id: str, title: str, description: str, ctx: _SkeletonContext
 ) -> list[str]:
     written: list[str] = []
     written.append(
         _write(
             repo_path / "README.md",
-            _solutions_readme(role_id, title, description),
+            _solutions_readme(title, description, ctx),
         )
     )
-    written.append(_write(repo_path / "LICENSE", _mit_license()))
+    written.append(_write(repo_path / "LICENSE", _mit_license(ctx)))
     written.append(_write(repo_path / ".gitignore", _gitignore_solutions()))
     written.append(
         _write(
             repo_path / "SOLUTIONS_INDEX.md",
-            _solutions_index_placeholder(role_id, title),
+            _solutions_index_placeholder(title, ctx),
         )
     )
     written.append(
@@ -341,27 +443,18 @@ def _write(path: Path, content: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-_SITE_BANNER = (
-    "<!-- aicg:site-banner -->\n"
-    "> 🎓 Part of the **free, open-source AI Infrastructure Curriculum**. "
-    "For live, instructor-led **[cohorts](https://ai-infra-curriculum.github.io/junior.html)** "
-    "and **[team programs](https://ai-infra-curriculum.github.io/teams.html)**, visit "
-    "**[ai-infra-curriculum.github.io](https://ai-infra-curriculum.github.io/)**.\n"
-    "<!-- /aicg:site-banner -->\n\n"
-)
-
-
-def _learning_readme(role_id: str, title: str, description: str) -> str:
+def _learning_readme(title: str, description: str, ctx: _SkeletonContext) -> str:
+    sol_url = f"https://github.com/{ctx.org}/{ctx.solution_repo}"
     return (
-        f"# AI Infrastructure {title} — Learning Repository\n\n"
-        f"{_SITE_BANNER}"
+        f"# {ctx.org_display} · {title} — Learning Repository\n\n"
+        f"{ctx.site_banner}"
         f"{description}\n\n"
         "> **Status**: scaffolded by `aicg org bootstrap-role`. The curriculum is "
         "not authored yet. Run `aicg org research` and `aicg org daily` to drive "
         "the autonomous fill-in loop.\n\n"
         "## Layout\n\n"
         "```\n"
-        f"ai-infra-{role_id}-learning/\n"
+        f"{ctx.learning_repo}/\n"
         "├── lessons/mod-XXX-*/        modules with lectures, exercises, labs, quizzes\n"
         "├── projects/project-XXX-*/   multi-module capstones\n"
         "├── CURRICULUM.md             role-level coverage map\n"
@@ -370,28 +463,31 @@ def _learning_readme(role_id: str, title: str, description: str) -> str:
         "└── README.md                 this file\n"
         "```\n\n"
         "## Paired Solutions Repo\n\n"
-        f"[`ai-infra-{role_id}-solutions`](https://github.com/ai-infra-curriculum/ai-infra-{role_id}-solutions) "
+        f"[`{ctx.solution_repo}`]({sol_url}) "
         "carries the reference implementations.\n"
+        f"{ctx.maintained_footer}"
     )
 
 
-def _solutions_readme(role_id: str, title: str, description: str) -> str:
+def _solutions_readme(title: str, description: str, ctx: _SkeletonContext) -> str:
+    learn_url = f"https://github.com/{ctx.org}/{ctx.learning_repo}"
     return (
-        f"# AI Infrastructure {title} — Solutions Repository\n\n"
-        f"{_SITE_BANNER}"
+        f"# {ctx.org_display} · {title} — Solutions Repository\n\n"
+        f"{ctx.site_banner}"
         "Reference implementations for the paired "
-        f"[`ai-infra-{role_id}-learning`](https://github.com/ai-infra-curriculum/ai-infra-{role_id}-learning) "
+        f"[`{ctx.learning_repo}`]({learn_url}) "
         "track.\n\n"
         "> **Status**: scaffolded by `aicg org bootstrap-role`. Module and "
         "project solutions arrive over subsequent autonomous cycles.\n\n"
         "## Layout\n\n"
         "```\n"
-        f"ai-infra-{role_id}-solutions/\n"
+        f"{ctx.solution_repo}/\n"
         "├── modules/mod-XXX-*/                 module-level rationale + per-exercise solutions\n"
         "├── projects/project-XXX-*/            capstone walkthroughs\n"
         "├── SOLUTIONS_INDEX.md                 inventory + completion map\n"
         "└── README.md                          this file\n"
         "```\n"
+        f"{ctx.maintained_footer}"
     )
 
 
@@ -416,19 +512,19 @@ def _learning_prerequisites_placeholder(title: str) -> str:
     )
 
 
-def _versions_placeholder(role_id: str) -> str:
+def _versions_placeholder(ctx: _SkeletonContext) -> str:
     return (
-        f"# Versions — ai-infra-{role_id}-learning\n\n"
+        f"# Versions — {ctx.learning_repo}\n\n"
         "| Tag | Date | Highlights |\n"
         "|---|---|---|\n"
         "| (unreleased) | TBD | initial scaffold |\n"
     )
 
 
-def _solutions_index_placeholder(role_id: str, title: str) -> str:
+def _solutions_index_placeholder(title: str, ctx: _SkeletonContext) -> str:
     return (
         f"# Solutions Index — {title}\n\n"
-        f"Reference implementations for `ai-infra-{role_id}-learning`.\n\n"
+        f"Reference implementations for `{ctx.learning_repo}`.\n\n"
         "## Coverage\n\n"
         "| Module | Solution Status |\n"
         "|---|---|\n"
@@ -436,10 +532,10 @@ def _solutions_index_placeholder(role_id: str, title: str) -> str:
     )
 
 
-def _mit_license() -> str:
+def _mit_license(ctx: _SkeletonContext) -> str:
     return (
         "MIT License\n\n"
-        "Copyright (c) 2026 AI Infrastructure Curriculum\n\n"
+        f"Copyright (c) 2026 {ctx.org_display} Curriculum\n\n"
         "Permission is hereby granted, free of charge, to any person obtaining a copy "
         'of this software and associated documentation files (the "Software"), to deal '
         "in the Software without restriction, including without limitation the rights "
@@ -644,11 +740,16 @@ def _create_github_repos(
 
 
 def _build_bootstrap_prompt(
-    role_id: str, title: str, level: int, description: str
+    role_id: str,
+    title: str,
+    level: int,
+    description: str,
+    learning_repo: str,
+    solution_repo: str,
 ) -> str:
     return (
         f"# Bootstrap Curriculum Packet — {title} (level {level})\n\n"
-        f"`ai-infra-{role_id}-learning` and `ai-infra-{role_id}-solutions` were "
+        f"`{learning_repo}` and `{solution_repo}` were "
         "scaffolded with empty curriculum directories. Your job is to research "
         "the role and produce the initial curriculum plan.\n\n"
         "## Phase 1 — Research\n\n"
@@ -657,13 +758,13 @@ def _build_bootstrap_prompt(
         "- Capture employer, posting URL, date, location, required skills, "
         "preferred skills, salary range.\n"
         "- Normalise findings into "
-        f"`ai-infra-{role_id}-learning/.aicg/job-requirements.json`.\n"
+        f"`{learning_repo}/.aicg/job-requirements.json`.\n"
         "- Write a readable summary to "
-        f"`ai-infra-{role_id}-learning/JOB_REQUIREMENTS.md`.\n"
+        f"`{learning_repo}/JOB_REQUIREMENTS.md`.\n"
         "- Cite official sources where claims need backing.\n\n"
         "## Phase 2 — Curriculum Plan\n\n"
         "Author "
-        f"`ai-infra-{role_id}-learning/.aicg/curriculum-plan.json` with this shape:\n\n"
+        f"`{learning_repo}/.aicg/curriculum-plan.json` with this shape:\n\n"
         "```json\n"
         "{\n"
         "  \"schema_version\": 1,\n"
