@@ -67,8 +67,9 @@ mkdir -p "$OUTPUT_DIR"
 # response.json under OUTPUT_DIR.
 PROMPT_BODY="$(cat "$PROMPT")
 ---
-Write your verdict as JSON to: $OUTPUT_DIR/response.json
-Follow the schema described in the prompt above."
+You are READ-ONLY and cannot write any files. Output your verdict as a single
+JSON object inside a \`\`\`json code block as the final part of your reply.
+Do NOT attempt to write a file. Follow the schema described in the prompt above."
 
 # Judge is read-only by contract; deny write tools to ensure it cannot
 # mutate the artifact it is grading.
@@ -88,10 +89,47 @@ printf '%s' "$PROMPT_BODY" | claude \
   --disallowedTools "$DISALLOWED_TOOLS" \
   >"$OUTPUT_DIR/raw-output.md"
 
-# If the agent wrote raw JSON to stdout instead of response.json,
-# attempt a permissive extraction.
+# The judge is read-only and emits its verdict JSON to stdout (raw-output.md).
+# Robustly extract the last balanced JSON object that has a "score" field —
+# handles a fenced ```json block or a verdict embedded in prose.
 if [[ ! -f "$OUTPUT_DIR/response.json" ]]; then
-  if grep -q '^{' "$OUTPUT_DIR/raw-output.md" 2>/dev/null; then
-    awk '/^{/,/^}/' "$OUTPUT_DIR/raw-output.md" >"$OUTPUT_DIR/response.json"
-  fi
+  python3 - "$OUTPUT_DIR/raw-output.md" "$OUTPUT_DIR/response.json" <<'PYEOF'
+import json
+import sys
+
+raw = open(sys.argv[1], encoding="utf-8", errors="replace").read()
+
+
+def balanced_objects(s):
+    objs, i, n = [], 0, len(s)
+    while i < n:
+        if s[i] == "{":
+            depth, j = 0, i
+            while j < n:
+                if s[j] == "{":
+                    depth += 1
+                elif s[j] == "}":
+                    depth -= 1
+                    if depth == 0:
+                        objs.append(s[i : j + 1])
+                        break
+                j += 1
+            i = j + 1
+        else:
+            i += 1
+    return objs
+
+
+best = None
+for cand in balanced_objects(raw):
+    try:
+        obj = json.loads(cand)
+    except Exception:
+        continue
+    if isinstance(obj, dict) and "score" in obj:
+        best = obj  # keep the last valid verdict
+if best is not None:
+    with open(sys.argv[2], "w", encoding="utf-8") as f:
+        json.dump(best, f)
+PYEOF
 fi
