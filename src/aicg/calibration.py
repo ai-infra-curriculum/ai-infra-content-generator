@@ -27,6 +27,15 @@ JudgeFn = Callable[..., JudgeVerdict | None]
 _LABELS = ("good", "bad")
 
 
+class CalibrationLimitError(RuntimeError):
+    """Raised when a judge call is rate-limited during calibration.
+
+    A rate-limited call returns a bogus 0 score; deriving BAR from that would
+    produce a dangerously wrong threshold, so calibration aborts and asks for a
+    retry after the limit resets.
+    """
+
+
 @dataclass(frozen=True)
 class CalibrationRow:
     """One scored corpus artifact."""
@@ -161,6 +170,16 @@ def run_calibration(
             raise ValueError(
                 "judge returned None during calibration — enable quality_judge "
                 "before calibrating (a disabled judge has nothing to measure)"
+            )
+        # A rate-limited judge call returns a bogus 0 — refuse to derive a BAR
+        # from it. A bad BAR is worse than no BAR.
+        from .agent_cli import classify_limit_scope
+
+        limit_text = f"{verdict.raw or ''}\n" + "\n".join(verdict.blockers or [])
+        if classify_limit_scope(limit_text) is not None:
+            raise CalibrationLimitError(
+                f"judge hit a subscription/rate limit while scoring {rel}; "
+                "scores are invalid — retry calibration after the limit resets"
             )
         rows.append(CalibrationRow(rel, label, verdict.score, verdict.passed))
 

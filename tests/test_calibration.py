@@ -117,3 +117,27 @@ def test_calibration_raises_on_empty_corpus(tmp_path: Path) -> None:
         run_calibration(
             corpus, judge_config=_config(), artifact_judge=_scoring_judge({"good": 90, "bad": 10})
         )
+
+
+def test_calibration_aborts_on_rate_limit(tmp_path: Path) -> None:
+    # A rate-limited judge returns a bogus 0 with a limit message in `raw`;
+    # calibration must refuse to derive a BAR from it.
+    import pytest
+
+    from aicg.calibration import CalibrationLimitError
+
+    corpus = _corpus(tmp_path, good=["a"], bad=["x"])
+
+    def limited_judge(*, repo_path, artifact_path, artifact_id, config, runner_root=None):
+        return JudgeVerdict(
+            score=0,
+            dimensions={},
+            blockers=[],
+            summary="",
+            passed=False,
+            threshold=config.freshness_threshold(),
+            raw="You've hit your session limit · resets 6:20pm (America/Phoenix)",
+        )
+
+    with pytest.raises(CalibrationLimitError):
+        run_calibration(corpus, judge_config=_config(), artifact_judge=limited_judge)

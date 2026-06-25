@@ -1532,7 +1532,7 @@ def cmd_org_calibrate_judge(args: argparse.Namespace) -> int:
     """
     import dataclasses
 
-    from .calibration import run_calibration
+    from .calibration import CalibrationLimitError, run_calibration
     from .judge import JudgeConfig
     from .state import write_json
 
@@ -1555,6 +1555,9 @@ def cmd_org_calibrate_judge(args: argparse.Namespace) -> int:
     runner_root = Path(__file__).resolve().parents[2]
     try:
         report = run_calibration(corpus, judge_config=run_config, runner_root=runner_root)
+    except CalibrationLimitError as exc:
+        print(f"rate-limited: {exc}", file=sys.stderr)
+        return 2  # distinct code: transient, retry after the limit resets
     except ValueError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
