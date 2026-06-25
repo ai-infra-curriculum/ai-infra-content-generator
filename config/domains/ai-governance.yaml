@@ -127,14 +127,28 @@
       "title": "AI Infrastructure Security Engineer",
       "level": 35,
       "learning_repo": "security-learning",
-      "solution_repo": "security-solutions"
+      "solution_repo": "security-solutions",
+      "aliases": [
+        "AI Security Engineer",
+        "ML Security Engineer",
+        "AI/ML Security & Governance Engineer",
+        "MLSecOps Engineer",
+        "AI Security & Compliance Engineer"
+      ]
     },
     {
       "id": "chief-ai-officer",
       "title": "Chief AI Officer",
       "level": 70,
       "learning_repo": "chief-ai-officer-learning",
-      "solution_repo": "chief-ai-officer-solutions"
+      "solution_repo": "chief-ai-officer-solutions",
+      "aliases": [
+        "Chief AI Officer",
+        "Head of AI",
+        "VP of AI",
+        "Head of AI Governance",
+        "Director of AI Strategy"
+      ]
     }
   ]
 }

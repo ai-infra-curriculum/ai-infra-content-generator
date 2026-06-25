@@ -42,7 +42,7 @@ little act-mode wiring. Do these one at a time, watching each for a cycle.
 
 ---
 
-## 2. Domain-neutral engine — generalize beyond AI (⏳)
+## 2. Domain-neutral engine — generalize beyond AI (🔄 — 2.1/2.2/2.4 done; 2.3 remaining)
 
 The pipeline core is already domain-agnostic. Four changes turn "AI curriculum
 tool" into a curriculum engine that works for any profession. Ordered by leverage.
@@ -55,19 +55,25 @@ tool" into a curriculum engine that works for any profession. Ordered by leverag
    same pipeline grades it. The engine is now provably domain-neutral. (Also
    fixed a latent bug: the freshness prompt was iterating the *quality* dims.)
 
-2. **Multi-tenant config + git/gh plumbing**
-   `config/aicg-org.yaml` hardcodes one org, remote, and role list. Make the
-   harness run N domain configs, each pointing at its own GitHub org + repos +
-   role ladder. "Domain" becomes the tenancy boundary above "role."
+2. **Multi-tenant config + git/gh plumbing** ✅ *(done 2026-06-25)*
+   `config/domains/<name>.yaml` + `aicg.domains` resolution run N domain
+   configs, each its own GitHub org + repos + role ladder. **Four domains
+   live:** ai-infra (11 roles), ml-engineering (4), ai-engineering (4),
+   ai-governance (2). `--domain` flows through every `aicg org` command;
+   `aicg fleet status` rolls them up. "Domain" is the tenancy boundary above
+   "role."
 
-3. **Per-domain calibration corpus**
+3. **Per-domain calibration corpus** ⏳
    Each domain needs its own good/bad exemplars to pick its own BAR. Structure
-   `calibration/<domain>/corpus/`; `calibrate-judge` runs per domain.
+   `calibration/<domain>/corpus/`; `calibrate-judge` runs per domain. (Engine
+   supports per-domain BAR via `quality_judge.thresholds`; the remaining work
+   is authoring each domain's exemplar corpus.)
 
-4. **Per-domain research source + role titles**
-   The evidence gate / aliases / frequency are already generic — just point them
-   at the domain's titles + posting source. (Postings exist for every
-   profession; the easy one.)
+4. **Per-domain research source + role titles** ✅ *(done 2026-06-25)*
+   Each domain config carries its own `research` block (postings minimum,
+   window, caps) and titled roles with `aliases`; the research prompt and the
+   promotion add-threshold consume aliases per role. Every sibling-org role now
+   has domain-specific titles + aliases. Mechanism is fully per-domain.
 
 ---
 
@@ -99,18 +105,20 @@ a rewrite.
 
 ---
 
-## 4. Web UI / control plane (⏳)
+## 4. Web UI / control plane (🟡 — CLI fleet view done; UI pending)
 
-Today's surfaces are CLI (`pipeline-status`, `pipeline-tick`, `calibrate-judge`)
-and GitHub-native (status issues, PRs, the heartbeat). A control plane puts a
-single pane over the multi-domain fleet.
+Today's surfaces are CLI (`fleet status`, `pipeline-status`, `pipeline-tick`,
+`calibrate-judge`) and GitHub-native (status issues, PRs, the heartbeat). A
+control plane puts a single pane over the multi-domain fleet.
 
 **Observability**
 
-- Fleet dashboard: per-domain / per-role phase state (observe vs act), queue
-  depth, daily budget usage, quarantine flags, calibration status (BAR per
-  domain), heartbeat health.
-- Activity feed: recent merges, retirements, promotions, monthly changelogs.
+- ✅ **`aicg fleet status`** — read-only roll-up across all domains: mode
+  (ACT/OBSERVE/INERT), enabled phases, judge state + BAR, daily budget, and
+  best-effort work-queue depth. The CLI form of the fleet dashboard
+  (`src/aicg/fleet.py`, pure read model). A web dashboard would render this
+  same model.
+- Activity feed: recent merges, retirements, promotions, monthly changelogs. ⏳
 
 **Control**
 
