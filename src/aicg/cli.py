@@ -576,6 +576,16 @@ def build_parser() -> argparse.ArgumentParser:
     add_org_args(org_pipeline_status)
     org_pipeline_status.set_defaults(func=cmd_org_pipeline_status)
 
+    org_pipeline_tick = org_subparsers.add_parser(
+        "pipeline-tick",
+        help="Run every pipeline phase (P2-P5) in OBSERVE mode on real data — writes nothing",
+    )
+    add_org_args(org_pipeline_tick)
+    org_pipeline_tick.add_argument(
+        "--role", default=None, help="Role to load plan nodes from for the P2 re-audit slice."
+    )
+    org_pipeline_tick.set_defaults(func=cmd_org_pipeline_tick)
+
     org_plan_delta_apply = org_subparsers.add_parser(
         "plan-delta-apply",
         help="Apply a curriculum-plan delta to a per-role manifest (validates first; flags large changes for human approval).",
@@ -1489,6 +1499,80 @@ def cmd_org_audit_versions(args: argparse.Namespace) -> int:
     for repo in repo_summaries:
         if repo["finding_count"]:
             print(f"  ! {repo['repo']}: {repo['finding_count']} ref(s)")
+    return 0
+
+
+def cmd_org_pipeline_tick(args: argparse.Namespace) -> int:
+    """Run every pipeline phase's decision in OBSERVE mode (writes nothing).
+
+    Loads real data (plan nodes, git changes) and reports what each phase WOULD
+    do — the design's staged first form for the write phases (P4 is explicitly
+    dry-run-first). Safe to run anytime; makes no autonomous changes.
+    """
+    import datetime
+    import subprocess
+
+    from .packager import RepoChange
+    from .pipeline_config import PipelineConfig
+    from .pipeline_tick import TickInputs, run_pipeline_tick
+    from .rotation import ScanNode
+
+    manifest = resolve_manifest(args)
+    workspace = resolve_workspace(args)
+    pc = PipelineConfig.from_manifest(manifest)
+    today = datetime.date.today().isoformat()
+    version = "v" + datetime.date.today().strftime("%Y.%m")
+
+    # P2 scan nodes: a role's plan modules (last_scan not tracked yet -> all eligible).
+    scan_nodes: list[ScanNode] = []
+    role_id = getattr(args, "role", None)
+    if role_id:
+        role = next((r for r in manifest.roles if r.id == role_id), None)
+        if role is not None:
+            plan_path = workspace / role.learning_repo / ".aicg" / "curriculum-plan.json"
+            if plan_path.exists():
+                import json
+
+                plan = json.loads(plan_path.read_text(encoding="utf-8"))
+                scan_nodes = [ScanNode(m.get("id", ""), None) for m in plan.get("modules", [])]
+
+    # P5 repo changes: changed-since-last-tag across all manifest repos.
+    repo_changes: list[RepoChange] = []
+    repos = list(manifest.learning_repo_names) + list(manifest.solution_repo_names)
+    for repo in repos:
+        repo_path = workspace / repo
+        if not repo_path.exists():
+            continue
+        try:
+            tag = subprocess.run(
+                ["git", "-C", str(repo_path), "describe", "--tags", "--abbrev=0"],
+                capture_output=True, text=True, check=False,
+            ).stdout.strip()
+            if not tag:
+                changed = True
+            else:
+                count = subprocess.run(
+                    ["git", "-C", str(repo_path), "rev-list", f"{tag}..HEAD", "--count"],
+                    capture_output=True, text=True, check=False,
+                ).stdout.strip()
+                changed = count not in ("", "0")
+        except Exception:  # noqa: BLE001
+            changed = False
+        repo_changes.append(RepoChange(repo, changed_since_last_tag=changed))
+
+    inputs = TickInputs(
+        scan_nodes=scan_nodes, repo_changes=repo_changes, today=today, version=version
+    )
+    report = run_pipeline_tick(config=pc, inputs=inputs)
+
+    print(f"Pipeline tick (OBSERVE — no writes) — {today}")
+    for name, ph in report["phases"].items():
+        flag = "ON" if ph.get("enabled") else "observe"
+        print(f"  {name} [{flag}]")
+        for k, v in ph.items():
+            if k == "enabled":
+                continue
+            print(f"      {k}: {v}")
     return 0
 
 
