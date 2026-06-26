@@ -25,7 +25,7 @@
   },
   "pipeline": {
     "phases": {
-      "author": false,
+      "author": true,
       "reaudit_autofix": false,
       "research_autopromote": false,
       "retire": false,
