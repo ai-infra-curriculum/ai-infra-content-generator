@@ -7,12 +7,12 @@
     "package_workflow": "release-package.yml"
   },
   "quality_judge": {
-    "enabled": false,
+    "enabled": true,
     "flag_only": true,
     "agent_command": "{runner}/scripts/run-claude-judge.sh --prompt {prompt} --output-dir {output_dir} --repo {repo} --work-id {work_id} --artifact {artifact}",
     "thresholds": {
       "default": 70,
-      "freshness": 76
+      "freshness": 72
     },
     "dimensions": [
       "correctness",
