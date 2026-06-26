@@ -123,6 +123,45 @@
   },
   "roles": [
     {
+      "id": "ai-governance-analyst",
+      "title": "AI Governance Analyst",
+      "level": 15,
+      "learning_repo": "ai-governance-analyst-learning",
+      "solution_repo": "ai-governance-analyst-solutions",
+      "aliases": [
+        "AI Governance Analyst",
+        "AI Policy Analyst",
+        "Responsible AI Analyst",
+        "AI Compliance Analyst"
+      ]
+    },
+    {
+      "id": "ai-risk-engineer",
+      "title": "AI Risk Engineer",
+      "level": 25,
+      "learning_repo": "ai-risk-engineer-learning",
+      "solution_repo": "ai-risk-engineer-solutions",
+      "aliases": [
+        "AI Risk Engineer",
+        "ML Risk Engineer",
+        "Responsible AI Engineer",
+        "AI Assurance Engineer"
+      ]
+    },
+    {
+      "id": "ai-evaluation-engineer",
+      "title": "AI Evaluation Engineer",
+      "level": 35,
+      "learning_repo": "ai-evaluation-engineer-learning",
+      "solution_repo": "ai-evaluation-engineer-solutions",
+      "aliases": [
+        "AI Evaluation Engineer",
+        "Model Evaluation Engineer",
+        "LLM Evaluation Engineer",
+        "AI Test & Evaluation Engineer"
+      ]
+    },
+    {
       "id": "security",
       "title": "AI/ML Security & Governance Engineer",
       "level": 35,
@@ -134,6 +173,45 @@
         "AI/ML Security & Governance Engineer",
         "MLSecOps Engineer",
         "AI Security & Compliance Engineer"
+      ]
+    },
+    {
+      "id": "agentic-safety-engineer",
+      "title": "Agentic Safety & Red-Team Engineer",
+      "level": 40,
+      "learning_repo": "agentic-safety-engineer-learning",
+      "solution_repo": "agentic-safety-engineer-solutions",
+      "aliases": [
+        "Agentic Safety Engineer",
+        "AI Red-Team Engineer",
+        "AI Safety Engineer",
+        "LLM Red Team"
+      ]
+    },
+    {
+      "id": "senior-ai-governance-architect",
+      "title": "Senior AI Governance / Risk Architect",
+      "level": 50,
+      "learning_repo": "senior-ai-governance-architect-learning",
+      "solution_repo": "senior-ai-governance-architect-solutions",
+      "aliases": [
+        "Senior AI Governance Architect",
+        "AI Risk Architect",
+        "Principal AI Governance Engineer",
+        "AI Assurance Architect"
+      ]
+    },
+    {
+      "id": "head-of-ai-governance",
+      "title": "Head of AI Governance",
+      "level": 60,
+      "learning_repo": "head-of-ai-governance-learning",
+      "solution_repo": "head-of-ai-governance-solutions",
+      "aliases": [
+        "Head of AI Governance",
+        "Director of AI Governance",
+        "Head of Responsible AI",
+        "AI Risk & Governance Lead"
       ]
     },
     {

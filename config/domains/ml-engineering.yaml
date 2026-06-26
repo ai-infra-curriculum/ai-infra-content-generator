@@ -136,6 +136,45 @@
       ]
     },
     {
+      "id": "fine-tuning-engineer",
+      "title": "Fine-Tuning Engineer",
+      "level": 30,
+      "learning_repo": "fine-tuning-engineer-learning",
+      "solution_repo": "fine-tuning-engineer-solutions",
+      "aliases": [
+        "Fine-Tuning Engineer",
+        "LLM Fine-tuning Engineer",
+        "Model Adaptation Engineer",
+        "Post-training Engineer"
+      ]
+    },
+    {
+      "id": "model-evaluation-engineer",
+      "title": "Model Evaluation Engineer",
+      "level": 30,
+      "learning_repo": "model-evaluation-engineer-learning",
+      "solution_repo": "model-evaluation-engineer-solutions",
+      "aliases": [
+        "Model Evaluation Engineer",
+        "ML Evaluation Engineer",
+        "Benchmark Engineer",
+        "Eval Engineer"
+      ]
+    },
+    {
+      "id": "nlp-engineer",
+      "title": "NLP Engineer",
+      "level": 30,
+      "learning_repo": "nlp-engineer-learning",
+      "solution_repo": "nlp-engineer-solutions",
+      "aliases": [
+        "NLP Engineer",
+        "Natural Language Processing Engineer",
+        "Applied NLP Engineer",
+        "Language Model Engineer"
+      ]
+    },
+    {
       "id": "senior-ml-engineer",
       "title": "Senior Machine Learning Engineer",
       "level": 30,
@@ -146,6 +185,19 @@
         "Senior ML Engineer",
         "ML Engineer II",
         "Fine-tuning Engineer"
+      ]
+    },
+    {
+      "id": "training-pipeline-engineer",
+      "title": "Training Pipeline Engineer",
+      "level": 35,
+      "learning_repo": "training-pipeline-engineer-learning",
+      "solution_repo": "training-pipeline-engineer-solutions",
+      "aliases": [
+        "Training Pipeline Engineer",
+        "ML Training Infrastructure Engineer",
+        "Distributed Training Engineer",
+        "Training Systems Engineer"
       ]
     },
     {

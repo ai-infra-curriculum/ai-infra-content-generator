@@ -123,34 +123,6 @@
   },
   "roles": [
     {
-      "id": "agentic-ai-engineer",
-      "title": "Agentic AI Engineer",
-      "level": 30,
-      "learning_repo": "agentic-ai-engineer-learning",
-      "solution_repo": "agentic-ai-engineer-solutions",
-      "aliases": [
-        "AI Agent Engineer",
-        "Agent Engineer",
-        "Applied AI Engineer",
-        "Generative AI Engineer",
-        "LLM Engineer"
-      ]
-    },
-    {
-      "id": "agentic-systems-architect",
-      "title": "Agentic Systems Architect",
-      "level": 48,
-      "learning_repo": "agentic-systems-architect-learning",
-      "solution_repo": "agentic-systems-architect-solutions",
-      "aliases": [
-        "Agentic AI Architect",
-        "AI Agent Architect",
-        "Solution Architect - Agentic AI",
-        "Multi-Agent Systems Architect",
-        "Principal AI Engineer - Agents"
-      ]
-    },
-    {
       "id": "agentic-ai-developer",
       "title": "Agentic AI Developer",
       "level": 20,
@@ -165,6 +137,72 @@
       ]
     },
     {
+      "id": "llm-application-developer",
+      "title": "LLM Application Developer",
+      "level": 20,
+      "learning_repo": "llm-application-developer-learning",
+      "solution_repo": "llm-application-developer-solutions",
+      "aliases": [
+        "LLM Application Developer",
+        "Generative AI Developer",
+        "AI Application Engineer",
+        "LLM App Engineer"
+      ]
+    },
+    {
+      "id": "agentic-ai-engineer",
+      "title": "Agentic AI Engineer",
+      "level": 30,
+      "learning_repo": "agentic-ai-engineer-learning",
+      "solution_repo": "agentic-ai-engineer-solutions",
+      "aliases": [
+        "AI Agent Engineer",
+        "Agent Engineer",
+        "Applied AI Engineer",
+        "Generative AI Engineer",
+        "LLM Engineer"
+      ]
+    },
+    {
+      "id": "ai-eval-engineer",
+      "title": "AI Evaluation Engineer",
+      "level": 30,
+      "learning_repo": "ai-eval-engineer-learning",
+      "solution_repo": "ai-eval-engineer-solutions",
+      "aliases": [
+        "AI Eval Engineer",
+        "LLM Evaluation Engineer",
+        "Agent Evaluation Engineer",
+        "AI QA Engineer"
+      ]
+    },
+    {
+      "id": "applied-ai-engineer",
+      "title": "Applied AI Engineer",
+      "level": 30,
+      "learning_repo": "applied-ai-engineer-learning",
+      "solution_repo": "applied-ai-engineer-solutions",
+      "aliases": [
+        "Applied AI Engineer",
+        "Applied LLM Engineer",
+        "Product AI Engineer",
+        "AI Software Engineer"
+      ]
+    },
+    {
+      "id": "rag-engineer",
+      "title": "RAG & Retrieval Engineer",
+      "level": 30,
+      "learning_repo": "rag-engineer-learning",
+      "solution_repo": "rag-engineer-solutions",
+      "aliases": [
+        "RAG Engineer",
+        "Retrieval Engineer",
+        "Search & Retrieval Engineer",
+        "Knowledge Retrieval Engineer"
+      ]
+    },
+    {
       "id": "senior-agentic-ai-engineer",
       "title": "Senior Agentic AI Engineer",
       "level": 40,
@@ -175,6 +213,20 @@
         "Senior AI Agent Engineer",
         "Lead Applied AI Engineer",
         "Agentic Platform Engineer"
+      ]
+    },
+    {
+      "id": "agentic-systems-architect",
+      "title": "Agentic Systems Architect",
+      "level": 48,
+      "learning_repo": "agentic-systems-architect-learning",
+      "solution_repo": "agentic-systems-architect-solutions",
+      "aliases": [
+        "Agentic AI Architect",
+        "AI Agent Architect",
+        "Solution Architect - Agentic AI",
+        "Multi-Agent Systems Architect",
+        "Principal AI Engineer - Agents"
       ]
     }
   ]
