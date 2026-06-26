@@ -21,7 +21,25 @@
       "depth"
     ],
     "timeout_seconds": 300,
-    "freshness_cooldown_days": 90
+    "freshness_cooldown_days": 90,
+    "freshness_dimensions": [
+      {
+        "name": "regulation_currency",
+        "description": "outdated regulatory status (e.g. a law described as 'proposed' when it has been adopted), superseded compliance obligations, or repealed rules presented as current."
+      },
+      {
+        "name": "framework_currency",
+        "description": "superseded versions of governance frameworks or standards (NIST AI RMF, ISO/IEC 42001, EU AI Act timeline), or withdrawn/replaced guidance presented as the standard to follow."
+      },
+      {
+        "name": "citation_validity",
+        "description": "broken or fabricated links to regulations/standards, or references to repealed/superseded policy documents cited as authoritative."
+      },
+      {
+        "name": "threat_currency",
+        "description": "outdated threat models or controls that ignore current AI-specific risks (prompt injection, agentic misuse, model/data poisoning, model exfiltration)."
+      }
+    ]
   },
   "pipeline": {
     "phases": {
