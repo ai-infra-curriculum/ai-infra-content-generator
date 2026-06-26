@@ -196,8 +196,13 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
         log "plan already exists for $ROLE; skipping seed"
       else
         PROMPT=$(run_aicg_org bootstrap-prompt --role "$ROLE" | tail -1)
+        case "$PROMPT" in /*) ;; *) PROMPT="$RUNNER_DIR/$PROMPT" ;; esac
         [[ -f "$PROMPT" ]] || die "bootstrap prompt not written: $PROMPT"
-        SEED_OUT="$STATE_DIR/seed/$ROLE"; mkdir -p "$SEED_OUT"
+        # Absolute output dir: run-claude-content.sh cd's into --repo before
+        # writing response.md, so a relative path would resolve under the repo.
+        SEED_OUT="$STATE_DIR/seed/$ROLE"
+        case "$SEED_OUT" in /*) ;; *) SEED_OUT="$RUNNER_DIR/$SEED_OUT" ;; esac
+        mkdir -p "$SEED_OUT"
         log "seeding plan for $ROLE via content agent (prompt=$PROMPT)"
         "$RUNNER_DIR/scripts/run-claude-content.sh" \
           --prompt "$PROMPT" --repo "$WORKSPACE" --output-dir "$SEED_OUT" \
