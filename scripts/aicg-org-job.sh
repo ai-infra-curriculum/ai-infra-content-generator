@@ -237,6 +237,21 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
       # No-op-safe: execute-plan + generate-learning are idempotent per module.
       [[ -n "$ROLE" ]] || die "generate-role requires ROLE"
       run_aicg_org sync
+      # Self-seed: generate-learning authors from curriculum-plan.json, which a
+      # fresh role lacks (plan changes are human-gated by design). Seed it first
+      # if missing — seed-role no-ops when a plan already exists, so this is the
+      # autonomous full chain: seed (once) -> author. Heavy LLM steps; the
+      # shared-subscription session cap naturally spreads them across the
+      # staggered per-role schedule.
+      GR_LREPO=$(PYTHONPATH="$RUNNER_DIR/src" python3 -c "
+import json
+d=json.load(open('$MANIFEST'))
+print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>/dev/null || true)
+      if [[ -n "$GR_LREPO" && ! -s "$WORKSPACE/$GR_LREPO/.aicg/curriculum-plan.json" ]]; then
+        log "no plan for $ROLE; seeding before generate"
+        bash "$0" seed-role "$ROLE" --workspace "$WORKSPACE" \
+          --manifest "$MANIFEST" --state-dir "$STATE_DIR" || log "seed step failed/limited for $ROLE"
+      fi
       run_aicg_org execute-plan --role "$ROLE" 2>&1 | tail -3 || true
       run_aicg_org generate-learning --role "$ROLE"
       ;;
