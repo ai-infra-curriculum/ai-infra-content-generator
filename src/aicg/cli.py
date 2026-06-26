@@ -395,6 +395,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     org_bootstrap_domain.set_defaults(func=cmd_org_bootstrap_domain)
 
+    org_bootstrap_prompt = org_subparsers.add_parser(
+        "bootstrap-prompt",
+        help="(Re)write a role's research+plan prompt packet (no scaffold) for seeding",
+    )
+    add_org_args(org_bootstrap_prompt)
+    org_bootstrap_prompt.add_argument("--role", required=True, help="Role id (must be in the manifest).")
+    org_bootstrap_prompt.set_defaults(func=cmd_org_bootstrap_prompt)
+
     org_issues = org_subparsers.add_parser(
         "issues",
         help="Reconcile GitHub issues with the work-queue state (open / comment / close)",
@@ -1390,6 +1398,18 @@ def cmd_org_bootstrap_role(args: argparse.Namespace) -> int:
         for action in remotes.get("actions", []):
             outcome = "ok" if action["returncode"] == 0 else "failed"
             print(f"- gh repo create {action['repo']}: {outcome}")
+    return 0
+
+
+def cmd_org_bootstrap_prompt(args: argparse.Namespace) -> int:
+    """(Re)write a role's bootstrap research+plan prompt packet (no scaffold)."""
+    from .bootstrap import write_bootstrap_prompt
+
+    manifest = resolve_manifest(args)
+    path = write_bootstrap_prompt(
+        manifest, args.role, state_dir=resolve_org_state_dir(args, manifest)
+    )
+    print(str(path))
     return 0
 
 

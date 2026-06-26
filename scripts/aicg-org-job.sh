@@ -60,7 +60,7 @@ parse_args() {
   # it before the option loop so the rest of parsing stays uniform.
   ROLE=""
   case "$JOB" in
-    research-role|review-role|generate-role)
+    research-role|review-role|generate-role|seed-role)
       if [[ $# -eq 0 || "$1" == --* ]]; then
         die "$JOB requires a ROLE argument (e.g. junior-engineer)"
       fi
@@ -173,6 +173,47 @@ main() {
       # would analyze old content and base the proposal PR on an old commit.
       run_aicg_org sync
       run_aicg_org research --apply --role "$ROLE"
+      ;;
+    seed-role)
+      # One-time plan SEEDING for a fresh role. Curriculum-plan changes are
+      # human-gated by design (research opens proposal PRs; the runner never
+      # auto-merges curriculum-plan.json), so a brand-new repo has no plan for
+      # generate-role to author from. This bypasses that gate for the INITIAL
+      # seed only: (re)write the role's bootstrap prompt, run the content agent
+      # to research + author curriculum-plan.json + JOB_REQUIREMENTS.md into the
+      # learning repo, then commit + push just those plan files. Idempotent:
+      # skips if a non-empty plan already exists.
+      [[ -n "$ROLE" ]] || die "seed-role requires ROLE"
+      run_aicg_org sync
+      LREPO=$(PYTHONPATH="$RUNNER_DIR/src" python3 -c "
+import json,sys
+d=json.load(open('$MANIFEST'))
+print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>/dev/null || true)
+      [[ -n "$LREPO" ]] || die "no learning repo for role $ROLE in $MANIFEST"
+      LPATH="$WORKSPACE/$LREPO"
+      [[ -d "$LPATH" ]] || die "learning repo not cloned: $LPATH (run sync)"
+      if [[ -s "$LPATH/.aicg/curriculum-plan.json" ]]; then
+        log "plan already exists for $ROLE; skipping seed"
+      else
+        PROMPT=$(run_aicg_org bootstrap-prompt --role "$ROLE" | tail -1)
+        [[ -f "$PROMPT" ]] || die "bootstrap prompt not written: $PROMPT"
+        SEED_OUT="$STATE_DIR/seed/$ROLE"; mkdir -p "$SEED_OUT"
+        log "seeding plan for $ROLE via content agent (prompt=$PROMPT)"
+        "$RUNNER_DIR/scripts/run-claude-content.sh" \
+          --prompt "$PROMPT" --repo "$WORKSPACE" --output-dir "$SEED_OUT" \
+          --work-id "seed-$ROLE" || log "content agent returned non-zero for $ROLE"
+        if [[ -s "$LPATH/.aicg/curriculum-plan.json" ]]; then
+          ( cd "$LPATH" \
+            && git add .aicg/curriculum-plan.json JOB_REQUIREMENTS.md \
+                   .aicg/job-requirements.json supplemental 2>/dev/null || true
+            git -c user.email="aicg@veriswarm.ai" -c user.name="AICG Runner" \
+                commit -m "seed: initial curriculum plan + job requirements" \
+            && git push origin HEAD ) || log "seed commit/push failed for $ROLE"
+          log "seeded plan committed for $ROLE"
+        else
+          log "seed produced NO plan for $ROLE (see $SEED_OUT/response.md)"
+        fi
+      fi
       ;;
     generate-role)
       # Per-role nightly CONTENT AUTHORING — the autonomous fill step that

@@ -252,6 +252,35 @@ def _site_banner(org: str) -> str:
     )
 
 
+def write_bootstrap_prompt(
+    manifest: OrgManifest,
+    role_id: str,
+    state_dir: Path | None = None,
+) -> Path:
+    """Write only the bootstrap research+plan prompt for a role (no scaffold).
+
+    Used by the seeding flow to (re)generate a role's prompt packet on the
+    runner without touching the repo's existing files (READMEs, banners). The
+    role must already be in the manifest. Returns the prompt path.
+    """
+    role = next((r for r in manifest.roles if r.id == role_id), None)
+    if role is None:
+        raise BootstrapError(f"role {role_id!r} not in manifest {manifest.org}")
+    description = f"Curriculum for the {role.title} role."
+    state_root = state_dir_for_manifest(manifest, state_dir)
+    bootstrap_dir = state_root / "bootstrap"
+    bootstrap_dir.mkdir(parents=True, exist_ok=True)
+    prompt_path = bootstrap_dir / f"{role_id}.md"
+    prompt_path.write_text(
+        _build_bootstrap_prompt(
+            role_id, role.title, role.level, description,
+            role.learning_repo, role.solution_repo,
+        ),
+        encoding="utf-8",
+    )
+    return prompt_path
+
+
 def _maintained_footer(manifest: OrgManifest) -> str:
     mb = manifest.maintained_by or {}
     marker = mb.get("footer_marker", "<!-- aicg:maintained-by -->")
