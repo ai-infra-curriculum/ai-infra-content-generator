@@ -60,7 +60,7 @@ parse_args() {
   # it before the option loop so the rest of parsing stays uniform.
   ROLE=""
   case "$JOB" in
-    research-role|review-role)
+    research-role|review-role|generate-role)
       if [[ $# -eq 0 || "$1" == --* ]]; then
         die "$JOB requires a ROLE argument (e.g. junior-engineer)"
       fi
@@ -173,6 +173,20 @@ main() {
       # would analyze old content and base the proposal PR on an old commit.
       run_aicg_org sync
       run_aicg_org research --apply --role "$ROLE"
+      ;;
+    generate-role)
+      # Per-role nightly CONTENT AUTHORING — the autonomous fill step that
+      # research/daily-remediate alone don't cover for a fresh repo. Reads the
+      # role's seeded curriculum-plan.json, scaffolds any missing module/project
+      # skeletons, then authors the learning content for those modules directly
+      # (learning_content.generate_role_learning_content bypasses the
+      # evidence-gated research-PR flow — it authors from the plan). Solutions
+      # are filled by daily-remediate from audit-queued solution gaps afterward.
+      # No-op-safe: execute-plan + generate-learning are idempotent per module.
+      [[ -n "$ROLE" ]] || die "generate-role requires ROLE"
+      run_aicg_org sync
+      run_aicg_org execute-plan --role "$ROLE" 2>&1 | tail -3 || true
+      run_aicg_org generate-learning --role "$ROLE"
       ;;
     review-role)
       # Per-role nightly freshness review. One role per night, days
