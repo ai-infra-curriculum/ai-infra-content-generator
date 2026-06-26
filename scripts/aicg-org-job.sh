@@ -208,13 +208,19 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
           --prompt "$PROMPT" --repo "$WORKSPACE" --output-dir "$SEED_OUT" \
           --work-id "seed-$ROLE" || log "content agent returned non-zero for $ROLE"
         if [[ -s "$LPATH/.aicg/curriculum-plan.json" ]]; then
-          ( cd "$LPATH" \
-            && git add .aicg/curriculum-plan.json JOB_REQUIREMENTS.md \
-                   .aicg/job-requirements.json supplemental 2>/dev/null || true
-            git -c user.email="aicg@veriswarm.ai" -c user.name="AICG Runner" \
-                commit -m "seed: initial curriculum plan + job requirements" \
-            && git push origin HEAD ) || log "seed commit/push failed for $ROLE"
-          log "seeded plan committed for $ROLE"
+          # The plan lives at .aicg/ which is gitignored by design (per-repo
+          # runner state, never pushed — generate-role reads it locally). So
+          # success = the local plan exists. Only the PUBLIC artifacts the
+          # agent may also write (JOB_REQUIREMENTS.md, supplemental/) get
+          # committed; git add'ing the ignored plan would fail the whole add.
+          log "seeded plan present for $ROLE ($(wc -c <"$LPATH/.aicg/curriculum-plan.json") bytes, local runner state)"
+          ( cd "$LPATH"
+            git add JOB_REQUIREMENTS.md supplemental 2>/dev/null || true
+            if ! git diff --cached --quiet 2>/dev/null; then
+              git -c user.email="aicg@veriswarm.ai" -c user.name="AICG Runner" \
+                  commit -m "seed: job requirements from initial research" \
+              && git push origin HEAD && echo "  pushed public seed artifacts"
+            fi ) || log "seed: public-artifact commit skipped for $ROLE"
         else
           log "seed produced NO plan for $ROLE (see $SEED_OUT/response.md)"
         fi
