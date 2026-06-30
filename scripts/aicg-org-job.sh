@@ -303,6 +303,30 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
     daily-remediate)
       run_aicg_org daily
       ;;
+    fill-next)
+      # Continuous initial-fill: pick the FIRST role in this domain whose
+      # learning repo has no authored modules yet and run the self-seeding
+      # generate-role for just that one. Meant to run DAILY (not day-of-month),
+      # so a fresh fleet fills one role per domain per day — within the shared
+      # session cap — instead of stalling between the day-1-8 per-role timers.
+      # Self-terminating: once every role has modules, this is a no-op.
+      run_aicg_org sync
+      FILL_PICK=$(PYTHONPATH="$RUNNER_DIR/src" python3 -c "
+import json, os, glob, sys
+d=json.load(open('$MANIFEST'))
+ws='$WORKSPACE'
+for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
+    lr=os.path.join(ws, r['learning_repo'])
+    if not glob.glob(os.path.join(lr,'lessons','mod-*')) and not glob.glob(os.path.join(lr,'modules','mod-*')):
+        print(r['id']); break" 2>/dev/null || true)
+      if [[ -z "$FILL_PICK" ]]; then
+        log "fill-next: every role has modules; nothing to fill"
+      else
+        log "fill-next: filling next unfilled role -> $FILL_PICK"
+        bash "$0" generate-role "$FILL_PICK" --workspace "$WORKSPACE" \
+          --manifest "$MANIFEST" --state-dir "$STATE_DIR"
+      fi
+      ;;
     daily-pipeline-tick)
       # Observe-mode tick: run every P2-P5 phase's decision on real data and
       # report what it WOULD do — writes nothing (the design's staged first

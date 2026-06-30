@@ -8,7 +8,9 @@
 # Each domain gets:
 #   - aicg-<domain>-research-role@<role>.timer  (seed curriculum plan; day=role index)
 #   - aicg-<domain>-review-role@<role>.timer    (freshness review; day=14+index)
+#   - aicg-<domain>-generate-role@<role>.timer  (author content from the plan; day=index)
 #   - aicg-<domain>-daily.timer                 (daily authoring tick from the queue)
+#   - aicg-<domain>-fill.timer                  (daily: fill the next unfilled role)
 # all pointing at the domain's manifest + a per-domain state dir, and offset by
 # --hour-offset so 4 domains don't hit the shared Claude subscription at once.
 #
@@ -135,6 +137,13 @@ done
 # One daily authoring tick for the domain (drains the work queue within budget).
 write_unit "$DOMAIN-daily" "$(job_cmd_noarg daily-remediate)" "*-*-* $DHOUR:40:00"
 
+# Daily continuous-fill tick: author the next unfilled role (self-seeding), so a
+# fresh fleet fills one role/day instead of stalling between the day-1-8 per-role
+# timers. Self-terminating once every role has modules. Offset 1h from the daily
+# tick so they don't overlap on the session cap.
+FHOUR=$(printf '%02d' $(( (4 + HOUR_OFFSET) % 24 )))
+write_unit "$DOMAIN-fill" "$(job_cmd_noarg fill-next)" "*-*-* $FHOUR:40:00"
+
 if [[ "$DRY_RUN" -eq 0 ]]; then
   systemctl --user daemon-reload
   # Tear down stale per-role timers for roles no longer in the manifest.
@@ -149,5 +158,5 @@ if [[ "$DRY_RUN" -eq 0 ]]; then
     systemctl --user disable --now "$base" 2>/dev/null || true
     rm -f "$t"
   done
-  log "Installed $DOMAIN timers (${#ROLES[@]} research + ${#ROLES[@]} generate + ${#ROLES[@]} review + 1 daily)."
+  log "Installed $DOMAIN timers (${#ROLES[@]} research + ${#ROLES[@]} generate + ${#ROLES[@]} review + 1 daily + 1 fill)."
 fi
