@@ -289,7 +289,9 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
       if [[ "${GR_MODS:-0}" -gt 0 ]]; then
         notify_ntfy "✅ $GR_DOM · $ROLE authored" "white_check_mark,books" "default" \
           "$GR_MODS module(s) now in $GR_LREPO"
-      else
+      elif [[ -z "${AICG_FILL_QUIET:-}" ]]; then
+        # Only push the "not filled" notice for direct/scheduled generate runs,
+        # not the high-frequency off-peak fill attempts (which cap routinely).
         notify_ntfy "⏸️ $GR_DOM · $ROLE not filled" "hourglass" "default" \
           "generate-role produced no modules (likely the Claude usage cap; retries next cycle)"
       fi
@@ -362,7 +364,9 @@ for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
         log "fill-next: every role has modules; nothing to fill"
       else
         log "fill-next: filling next unfilled role -> $FILL_PICK"
-        bash "$0" generate-role "$FILL_PICK" --workspace "$WORKSPACE" \
+        # AICG_FILL_QUIET: fill runs several times/night, so a capped no-op is
+        # expected — suppress the per-attempt ⏸️ push (✅ on success still fires).
+        AICG_FILL_QUIET=1 bash "$0" generate-role "$FILL_PICK" --workspace "$WORKSPACE" \
           --manifest "$MANIFEST" --state-dir "$STATE_DIR"
       fi
       ;;

@@ -74,9 +74,12 @@ done < <(manifest_roles)
 log "Domain '$DOMAIN': ${#ROLES[@]} roles, hour-offset=$HOUR_OFFSET, state=$STATE_DIR"
 
 # minute 15 keeps clear of any top-of-hour jobs; offset shifts the whole domain.
-RHOUR=$(printf '%02d' $(( (0 + HOUR_OFFSET) % 24 )))   # research base 00:15 + offset
-VHOUR=$(printf '%02d' $(( (12 + HOUR_OFFSET) % 24 )))  # review base 12:30 + offset
-DHOUR=$(printf '%02d' $(( (3 + HOUR_OFFSET) % 24 )))   # daily author tick 03:40 + offset
+# All content/judge timers run OFF-PEAK (Anthropic eases subscription limits
+# overnight, and the session quota resets at midnight local). Each job type gets
+# a distinct off-peak hour (MST/MDT); the three domains are separated by a
+# per-domain minute (FMIN) so they never hit the shared subscription on the same
+# second. Any rare same-domain overlap bails gracefully on the org-job lock.
+FMIN=$(printf '%02d' $(( (HOUR_OFFSET * 9 + 5) % 60 )))   # offset 2/4/6 -> :23/:41/:59
 
 job_cmd() {  # job role
   printf '%q %q %q --workspace %q --manifest %q --state-dir %q' \
@@ -121,28 +124,29 @@ WantedBy=timers.target
 [[ "$DRY_RUN" -eq 1 ]] || mkdir -p "$UNIT_DIR" "$STATE_DIR"
 
 # Per-role research -> generate -> review, day = role index (research+generate)
-# / 14+index (review). Generate runs 3h after research the same day so the plan
-# it authors from is already seeded.
-GHOUR=$(printf '%02d' $(( (3 + HOUR_OFFSET) % 24 )))  # generate, after research
+# / 14+index (review). All off-peak: research 01:FMIN, generate 04:FMIN (3h
+# later, same day, so the plan is seeded), review 23:FMIN.
 i=0
 for role in "${ROLES[@]}"; do
   i=$((i + 1))
   rday=$(printf '%02d' "$i")
   vday=$(printf '%02d' "$((i + 14))")
-  write_unit "$DOMAIN-research-role@$role" "$(job_cmd research-role "$role")" "*-*-$rday $RHOUR:15:00"
-  write_unit "$DOMAIN-generate-role@$role" "$(job_cmd generate-role "$role")" "*-*-$rday $GHOUR:15:00"
-  write_unit "$DOMAIN-review-role@$role"   "$(job_cmd review-role "$role")"   "*-*-$vday $VHOUR:30:00"
+  write_unit "$DOMAIN-research-role@$role" "$(job_cmd research-role "$role")" "*-*-$rday 01:$FMIN:00"
+  write_unit "$DOMAIN-generate-role@$role" "$(job_cmd generate-role "$role")" "*-*-$rday 04:$FMIN:00"
+  write_unit "$DOMAIN-review-role@$role"   "$(job_cmd review-role "$role")"   "*-*-$vday 23:$FMIN:00"
 done
 
-# One daily authoring tick for the domain (drains the work queue within budget).
-write_unit "$DOMAIN-daily" "$(job_cmd_noarg daily-remediate)" "*-*-* $DHOUR:40:00"
+# One daily authoring tick for the domain (queue drain) — off-peak, 22:FMIN.
+write_unit "$DOMAIN-daily" "$(job_cmd_noarg daily-remediate)" "*-*-* 22:$FMIN:00"
 
-# Daily continuous-fill tick: author the next unfilled role (self-seeding), so a
-# fresh fleet fills one role/day instead of stalling between the day-1-8 per-role
-# timers. Self-terminating once every role has modules. Offset 1h from the daily
-# tick so they don't overlap on the session cap.
-FHOUR=$(printf '%02d' $(( (4 + HOUR_OFFSET) % 24 )))
-write_unit "$DOMAIN-fill" "$(job_cmd_noarg fill-next)" "*-*-* $FHOUR:40:00"
+# Off-peak continuous fill: author the next unfilled role (self-seeding),
+# several times overnight. Anthropic's subscription limits ease off-peak and the
+# session quota resets at midnight local, so concentrate heavy runs in the
+# 00:00-06:00 window to fill more roles/day than a single daytime tick. Each run
+# does one more role within the session cap; capped runs no-op quietly (the
+# ⏸️ push is suppressed for fill-driven runs — see AICG_FILL_QUIET). Hours avoid
+# 01/04 (per-role research/generate) to reduce same-domain lock contention.
+write_unit "$DOMAIN-fill" "$(job_cmd_noarg fill-next)" "*-*-* 00,02,03,05,06:$FMIN:00"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
   systemctl --user daemon-reload
