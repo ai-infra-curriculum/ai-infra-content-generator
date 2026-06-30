@@ -58,26 +58,30 @@ class WorkspaceInventory:
         return repos[name]
 
     def paired_repo(self, repo: RepositoryInfo) -> RepositoryInfo | None:
+        # Swap the suffix on the repo's own name (prefix-agnostic), so this
+        # pairs both ai-infra-X-learning <-> ai-infra-X-solutions and the
+        # sibling-org X-learning <-> X-solutions.
         if repo.kind == "learning":
-            paired_name = f"ai-infra-{repo.track}{SOLUTIONS_SUFFIX}"
+            paired_name = repo.name.removesuffix(LEARNING_SUFFIX) + SOLUTIONS_SUFFIX
         elif repo.kind == "solutions":
-            paired_name = f"ai-infra-{repo.track}{LEARNING_SUFFIX}"
+            paired_name = repo.name.removesuffix(SOLUTIONS_SUFFIX) + LEARNING_SUFFIX
         else:
             return None
         return self.by_name().get(paired_name)
 
 
 def parse_repository(path: Path) -> RepositoryInfo | None:
+    # Recognize any curriculum repo by its -learning/-solutions suffix, across
+    # all orgs (ai-infra-X-* and the sibling-org X-*). Repos are resolved by
+    # exact name (require/by_name), so making sibling repos discoverable does
+    # not cause an org's manifest-driven flow to pick up another org's repos.
     name = path.name
-    if not name.startswith("ai-infra-"):
-        return None
-
     if name.endswith(LEARNING_SUFFIX):
         kind = "learning"
-        track = name.removeprefix("ai-infra-").removesuffix(LEARNING_SUFFIX)
+        track = name.removesuffix(LEARNING_SUFFIX).removeprefix("ai-infra-")
     elif name.endswith(SOLUTIONS_SUFFIX):
         kind = "solutions"
-        track = name.removeprefix("ai-infra-").removesuffix(SOLUTIONS_SUFFIX)
+        track = name.removesuffix(SOLUTIONS_SUFFIX).removeprefix("ai-infra-")
     else:
         return None
 
