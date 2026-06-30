@@ -11,6 +11,20 @@ STATE_DIR="${AICG_STATE_DIR:-$RUNNER_DIR/.aicg/org}"
 LOG_DIR="${AICG_LOG_DIR:-$RUNNER_DIR/.aicg/logs}"
 AICG_BIN="${AICG_BIN:-$RUNNER_DIR/.venv/bin/aicg}"
 
+# ntfy observability (optional). Topic comes from an env file so it stays out
+# of git; if unset, every notify is a no-op.
+[[ -f "$HOME/.config/aicg/ntfy.env" ]] && . "$HOME/.config/aicg/ntfy.env"
+NTFY_TOPIC="${AICG_NTFY_TOPIC:-}"
+NTFY_BASE="${AICG_NTFY_URL:-https://ntfy.sh}"
+
+# notify_ntfy <title> <tags> <priority> <message>  — best-effort; never fails the job.
+notify_ntfy() {
+  [[ -n "$NTFY_TOPIC" ]] || return 0
+  curl -fsS -m 10 \
+    -H "Title: $1" -H "Tags: $2" -H "Priority: $3" \
+    -d "$4" "$NTFY_BASE/$NTFY_TOPIC" >/dev/null 2>&1 || true
+}
+
 usage() {
   cat <<EOF
 Usage: $SCRIPT_NAME JOB [OPTIONS]
@@ -141,7 +155,19 @@ main() {
     fi
   fi
   printf '%s\n%s\n' "$$" "$(date +%s)" > "$LOCK_DIR/owner" 2>/dev/null || true
-  trap 'rm -rf "$LOCK_DIR" 2>/dev/null || true' EXIT
+  # On exit: drop the lock, and (on a hard failure) push an ntfy alert so a
+  # silent crash is visible. A clean exit or the "already running" path (rc 0)
+  # stays quiet.
+  _on_exit() {
+    local rc=$?
+    rm -rf "$LOCK_DIR" 2>/dev/null || true
+    if [[ "$rc" -ne 0 ]]; then
+      notify_ntfy "🔴 AICG job failed: $JOB${ROLE:+ ($ROLE)}" "rotating_light" "high" \
+        "domain=$(basename "$MANIFEST" .yaml) job=$JOB exit=$rc host=$(hostname 2>/dev/null)"
+    fi
+    return "$rc"
+  }
+  trap _on_exit EXIT
 
   log "Starting job: $JOB"
   case "$JOB" in
@@ -253,7 +279,20 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
           --manifest "$MANIFEST" --state-dir "$STATE_DIR" || log "seed step failed/limited for $ROLE"
       fi
       run_aicg_org execute-plan --role "$ROLE" 2>&1 | tail -3 || true
-      run_aicg_org generate-learning --role "$ROLE"
+      run_aicg_org generate-learning --role "$ROLE" || true
+      # Observability: report the outcome by observable state (modules present
+      # or not) — no agent-output parsing. One push per role-fill, so the
+      # daily fill timer yields ~1 notify/domain/day, not spam.
+      GR_DOM=$(basename "$MANIFEST" .yaml)
+      GR_MODS=0
+      [[ -n "$GR_LREPO" ]] && GR_MODS=$(ls -d "$WORKSPACE/$GR_LREPO"/lessons/mod-* 2>/dev/null | wc -l | tr -d ' ')
+      if [[ "${GR_MODS:-0}" -gt 0 ]]; then
+        notify_ntfy "✅ $GR_DOM · $ROLE authored" "white_check_mark,books" "default" \
+          "$GR_MODS module(s) now in $GR_LREPO"
+      else
+        notify_ntfy "⏸️ $GR_DOM · $ROLE not filled" "hourglass" "default" \
+          "generate-role produced no modules (likely the Claude usage cap; retries next cycle)"
+      fi
       ;;
     review-role)
       # Per-role nightly freshness review. One role per night, days
