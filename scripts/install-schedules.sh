@@ -427,6 +427,8 @@ install_systemd() {
   # running" every day. 5 min is comfortably past remediate's typical
   # runtime (~1-100s).
   write_systemd_pair "$unit_dir" "daily-discussions" "daily-discussions" "*-*-* 05:05:00"
+  # Project-wide daily fleet digest -> ntfy (read-only; covers all domains).
+  write_systemd_pair "$unit_dir" "fleet-digest" "fleet-digest" "*-*-* 09:00:00"
 
   install_per_role_research "$unit_dir"
   install_per_role_review "$unit_dir"
@@ -448,7 +450,8 @@ install_systemd() {
       aicg-daily-remediate.timer \
       aicg-daily-issues.timer \
       aicg-daily-steward.timer \
-      aicg-daily-discussions.timer
+      aicg-daily-discussions.timer \
+      aicg-fleet-digest.timer
     local slug
     for slug in "${PER_ROLE_SLUGS[@]}"; do
       systemctl --user enable --now "aicg-research-role@${slug}.timer"

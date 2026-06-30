@@ -390,6 +390,15 @@ for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
     daily-discussions)
       run_aicg_org discussions
       ;;
+    fleet-digest)
+      # Project-wide daily observability: one ntfy push summarizing fill
+      # progress across all domains (N/total roles authored, mode, BAR).
+      # Reads all domain manifests + the workspace; ignores --manifest.
+      DIGEST=$("$AICG_BIN" --workspace "$WORKSPACE" fleet digest \
+        --date "$(date +%Y-%m-%d)" 2>/dev/null || echo "fleet digest failed")
+      log "$DIGEST"
+      notify_ntfy "📊 AICG fleet digest" "bar_chart" "default" "$DIGEST"
+      ;;
     *)
       die "Unknown job: $JOB"
       ;;

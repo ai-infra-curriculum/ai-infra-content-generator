@@ -95,3 +95,16 @@ def test_render_table_includes_every_domain(tmp_path: Path) -> None:
     assert "ml-engineering" in out
     assert "2 domains · 15 roles" in out
     assert "1 ACT / 1 OBSERVE / 0 INERT" in out
+
+
+def test_render_fleet_digest_totals():
+    from aicg.fleet import DigestRow, render_fleet_digest
+    rows = [
+        DigestRow("ai-infra", "ACT", 76, 11, 11),
+        DigestRow("ml-engineering", "ACT", 52, 2, 8),
+    ]
+    out = render_fleet_digest(rows, date="2026-06-30")
+    assert "AICG fleet — 2026-06-30" in out
+    assert "ai-infra: 11/11 filled · ACT · BAR 76" in out
+    assert "ml-engineering: 2/8 filled" in out
+    assert "Total: 13/19 roles (68%) authored" in out

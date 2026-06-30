@@ -733,6 +733,11 @@ def build_parser() -> argparse.ArgumentParser:
         "status", help="Status roll-up across every registered domain"
     )
     fleet_status.set_defaults(func=cmd_fleet_status)
+    fleet_digest = fleet_subparsers.add_parser(
+        "digest", help="Compact daily fill-progress summary (for an ntfy push)"
+    )
+    fleet_digest.add_argument("--date", default="", help="Date label for the digest header.")
+    fleet_digest.set_defaults(func=cmd_fleet_digest)
 
     return parser
 
@@ -1673,6 +1678,42 @@ def cmd_fleet_status(args: argparse.Namespace) -> int:
         statuses.append(build_domain_status(domain, manifest, queue_depth=queue))
 
     print(render_fleet_table(statuses))
+    return 0
+
+
+def cmd_fleet_digest(args: argparse.Namespace) -> int:
+    """Compact fill-progress digest across all domains (one line per domain).
+
+    Counts roles whose learning repo has authored modules (lessons/mod-* or
+    modules/mod-*). Read-only; meant to be pushed once daily via ntfy.
+    """
+    from .domains import domain_config_path, list_domains
+    from .fleet import DigestRow, build_domain_status, render_fleet_digest
+    from .org_config import load_manifest
+
+    workspace = resolve_workspace(args)
+    rows: list = []
+    for domain in list_domains():
+        path = domain_config_path(domain)
+        if not path.exists():
+            continue
+        manifest = load_manifest(path)
+        status = build_domain_status(domain, manifest)
+        filled = 0
+        for role in manifest.roles:
+            lr = workspace / role.learning_repo
+            if list(lr.glob("lessons/mod-*")) or list(lr.glob("modules/mod-*")):
+                filled += 1
+        rows.append(
+            DigestRow(
+                domain=domain,
+                mode=status.mode,
+                bar=status.freshness_bar,
+                filled=filled,
+                total=len(manifest.roles),
+            )
+        )
+    print(render_fleet_digest(rows, date=args.date))
     return 0
 
 
