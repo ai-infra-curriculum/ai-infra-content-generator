@@ -128,39 +128,47 @@ main() {
   [[ -x "$AICG_BIN" ]] || die "aicg executable not found or not executable: $AICG_BIN"
   [[ -f "$MANIFEST" ]] || die "manifest not found: $MANIFEST"
 
-  # Lock variable is intentionally global so the EXIT trap, which fires
-  # after main() returns, can still see it under `set -u`.
+  # Lock + OWN_LOCK are intentionally global so the EXIT trap, which fires
+  # after main() returns, can still see them under `set -u`.
   LOCK_DIR="$STATE_DIR/aicg-org.lock"
+  # A nested invocation (fill-next -> generate-role -> seed-role) inherits
+  # AICG_LOCK_HELD from the parent that already owns the org-job lock. It must
+  # NOT re-acquire (that self-deadlocked the fill timers) or remove the parent's
+  # lock on exit.
+  OWN_LOCK=1
+  [[ -n "${AICG_LOCK_HELD:-}" ]] && OWN_LOCK=""
   local lock_ttl="${AICG_LOCK_TTL:-10800}"  # 3h grace before a held lock is suspect
-  if ! mkdir "$LOCK_DIR" 2>/dev/null; then
-    # Stale-lock recovery (C-M2): break the lock only if its owner PID is dead
-    # AND it has been held past the TTL. A slow-but-live holder is never broken.
-    local broke=0
-    if [[ -f "$LOCK_DIR/owner" ]]; then
-      local lpid lts age
-      lpid="$(sed -n '1p' "$LOCK_DIR/owner" 2>/dev/null || true)"
-      lts="$(sed -n '2p' "$LOCK_DIR/owner" 2>/dev/null || true)"
-      if [[ "$lpid" =~ ^[0-9]+$ && "$lts" =~ ^[0-9]+$ ]]; then
-        age=$(( $(date +%s) - lts ))
-        if (( age > lock_ttl )) && ! kill -0 "$lpid" 2>/dev/null; then
-          log "Breaking stale lock: pid $lpid dead, held ${age}s > ${lock_ttl}s."
-          rm -rf "$LOCK_DIR" 2>/dev/null || true
-          mkdir "$LOCK_DIR" 2>/dev/null && broke=1
+  if [[ -n "$OWN_LOCK" ]]; then
+    if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+      # Stale-lock recovery (C-M2): break the lock only if its owner PID is dead
+      # AND it has been held past the TTL. A slow-but-live holder is never broken.
+      local broke=0
+      if [[ -f "$LOCK_DIR/owner" ]]; then
+        local lpid lts age
+        lpid="$(sed -n '1p' "$LOCK_DIR/owner" 2>/dev/null || true)"
+        lts="$(sed -n '2p' "$LOCK_DIR/owner" 2>/dev/null || true)"
+        if [[ "$lpid" =~ ^[0-9]+$ && "$lts" =~ ^[0-9]+$ ]]; then
+          age=$(( $(date +%s) - lts ))
+          if (( age > lock_ttl )) && ! kill -0 "$lpid" 2>/dev/null; then
+            log "Breaking stale lock: pid $lpid dead, held ${age}s > ${lock_ttl}s."
+            rm -rf "$LOCK_DIR" 2>/dev/null || true
+            mkdir "$LOCK_DIR" 2>/dev/null && broke=1
+          fi
         fi
       fi
+      if (( broke == 0 )); then
+        log "Another AICG org job is running; exiting."
+        exit 0
+      fi
     fi
-    if (( broke == 0 )); then
-      log "Another AICG org job is running; exiting."
-      exit 0
-    fi
+    printf '%s\n%s\n' "$$" "$(date +%s)" > "$LOCK_DIR/owner" 2>/dev/null || true
   fi
-  printf '%s\n%s\n' "$$" "$(date +%s)" > "$LOCK_DIR/owner" 2>/dev/null || true
-  # On exit: drop the lock, and (on a hard failure) push an ntfy alert so a
-  # silent crash is visible. A clean exit or the "already running" path (rc 0)
-  # stays quiet.
+  # On exit: drop the lock IF we own it, and (on a hard failure) push an ntfy
+  # alert so a silent crash is visible. A clean exit or the "already running"
+  # path (rc 0) stays quiet.
   _on_exit() {
     local rc=$?
-    rm -rf "$LOCK_DIR" 2>/dev/null || true
+    [[ -n "$OWN_LOCK" ]] && rm -rf "$LOCK_DIR" 2>/dev/null
     if [[ "$rc" -ne 0 ]]; then
       notify_ntfy "🔴 AICG job failed: $JOB${ROLE:+ ($ROLE)}" "rotating_light" "high" \
         "domain=$(basename "$MANIFEST" .yaml) job=$JOB exit=$rc host=$(hostname 2>/dev/null)"
@@ -275,7 +283,9 @@ d=json.load(open('$MANIFEST'))
 print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>/dev/null || true)
       if [[ -n "$GR_LREPO" && ! -s "$WORKSPACE/$GR_LREPO/.aicg/curriculum-plan.json" ]]; then
         log "no plan for $ROLE; seeding before generate"
-        bash "$0" seed-role "$ROLE" --workspace "$WORKSPACE" \
+        # generate-role holds the org-job lock here, so tell the nested
+        # seed-role not to re-acquire it (else it bails and no plan is written).
+        AICG_LOCK_HELD=1 bash "$0" seed-role "$ROLE" --workspace "$WORKSPACE" \
           --manifest "$MANIFEST" --state-dir "$STATE_DIR" || log "seed step failed/limited for $ROLE"
       fi
       run_aicg_org execute-plan --role "$ROLE" 2>&1 | tail -3 || true
@@ -364,10 +374,13 @@ for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
         log "fill-next: every role has modules; nothing to fill"
       else
         log "fill-next: filling next unfilled role -> $FILL_PICK"
+        # AICG_LOCK_HELD: this fill-next already holds the org-job lock; tell the
+        # nested generate-role (and its seed-role) not to re-acquire it (that
+        # deadlocked the fill timers) — env propagates to grandchildren.
         # AICG_FILL_QUIET: fill runs several times/night, so a capped no-op is
         # expected — suppress the per-attempt ⏸️ push (✅ on success still fires).
-        AICG_FILL_QUIET=1 bash "$0" generate-role "$FILL_PICK" --workspace "$WORKSPACE" \
-          --manifest "$MANIFEST" --state-dir "$STATE_DIR"
+        AICG_LOCK_HELD=1 AICG_FILL_QUIET=1 bash "$0" generate-role "$FILL_PICK" \
+          --workspace "$WORKSPACE" --manifest "$MANIFEST" --state-dir "$STATE_DIR"
       fi
       ;;
     daily-pipeline-tick)
