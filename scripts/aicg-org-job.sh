@@ -25,6 +25,23 @@ notify_ntfy() {
     -d "$4" "$NTFY_BASE/$NTFY_TOPIC" >/dev/null 2>&1 || true
 }
 
+# If an agent output shows the CLI token lapsed, fire a distinct, urgent 🔑
+# alert (debounced to once/day so a down token doesn't spam every run) and
+# return 1 so callers can skip the rest. This is the recurring failure mode:
+# the subscription token gets invalidated and every content run silently caps.
+notify_reauth_if_needed() {
+  local out="$1"
+  [[ -f "$out" ]] || return 0
+  grep -qiE "Not logged in|Please run /login" "$out" 2>/dev/null || return 0
+  local marker="${AICG_LOG_DIR:-$RUNNER_DIR/.aicg/logs}/.reauth-alerted-$(date +%F)"
+  if [[ ! -f "$marker" ]]; then
+    : > "$marker" 2>/dev/null || true
+    notify_ntfy "🔑 AICG: re-auth needed on $(hostname 2>/dev/null)" "key,warning" "urgent" \
+      "The Claude CLI token is invalid/expired — content is stalled. Fix: run 'claude setup-token' and replace CLAUDE_CODE_OAUTH_TOKEN in ~/.config/aicg/claude-auth.env."
+  fi
+  return 1
+}
+
 usage() {
   cat <<EOF
 Usage: $SCRIPT_NAME JOB [OPTIONS]
@@ -241,6 +258,8 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
         "$RUNNER_DIR/scripts/run-claude-content.sh" \
           --prompt "$PROMPT" --repo "$WORKSPACE" --output-dir "$SEED_OUT" \
           --work-id "seed-$ROLE" || log "content agent returned non-zero for $ROLE"
+        # Surface an expired/invalid token loudly (recurring failure mode).
+        notify_reauth_if_needed "$SEED_OUT/response.md" || log "re-auth needed (token lapsed)"
         if [[ -s "$LPATH/.aicg/curriculum-plan.json" ]]; then
           # The plan lives at .aicg/ which is gitignored by design (per-repo
           # runner state, never pushed — generate-role reads it locally). So
@@ -413,6 +432,13 @@ for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
       # Reads all domain manifests + the workspace; ignores --manifest.
       DIGEST=$("$AICG_BIN" --workspace "$WORKSPACE" fleet digest \
         --date "$(date +%Y-%m-%d)" 2>/dev/null || echo "fleet digest failed")
+      # Append CLI-token age so a soon-to-lapse token is visible before it
+      # stalls the fleet (the subscription token gets invalidated periodically).
+      AUTH_FILE="$HOME/.config/aicg/claude-auth.env"
+      if [[ -f "$AUTH_FILE" ]]; then
+        TOK_AGE=$(( ( $(date +%s) - $(stat -c %Y "$AUTH_FILE" 2>/dev/null || echo 0) ) / 86400 ))
+        DIGEST="$DIGEST"$'\n'"token: ${TOK_AGE}d old$( ((TOK_AGE >= 10)) && printf ' — 🔑 refresh soon (setup-token)' )"
+      fi
       log "$DIGEST"
       notify_ntfy "📊 AICG fleet digest" "bar_chart" "default" "$DIGEST"
       ;;

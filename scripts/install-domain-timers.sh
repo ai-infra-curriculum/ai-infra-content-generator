@@ -139,14 +139,14 @@ done
 # One daily authoring tick for the domain (queue drain) — off-peak, 22:FMIN.
 write_unit "$DOMAIN-daily" "$(job_cmd_noarg daily-remediate)" "*-*-* 22:$FMIN:00"
 
-# Off-peak continuous fill: author the next unfilled role (self-seeding),
-# several times overnight. Anthropic's subscription limits ease off-peak and the
-# session quota resets at midnight local, so concentrate heavy runs in the
-# 00:00-06:00 window to fill more roles/day than a single daytime tick. Each run
-# does one more role within the session cap; capped runs no-op quietly (the
-# ⏸️ push is suppressed for fill-driven runs — see AICG_FILL_QUIET). Hours avoid
-# 01/04 (per-role research/generate) to reduce same-domain lock contention.
-write_unit "$DOMAIN-fill" "$(job_cmd_noarg fill-next)" "*-*-* 00,02,03,05,06:$FMIN:00"
+# Off-peak fill: author the next unfilled role (self-seeding), ONCE per night.
+# Deliberately throttled to a single deep-off-peak run per domain (03:FMIN) to
+# keep the runner's footprint low on the subscription token (heavy automation
+# patterns trigger token invalidation). ~3 roles/night across the fleet fills
+# the remaining roles in a few nights, then it's a quiet daily no-op. Capped or
+# auth-failed runs no-op quietly (⏸️ suppressed via AICG_FILL_QUIET; a 🔑 re-auth
+# alert fires separately on "Not logged in").
+write_unit "$DOMAIN-fill" "$(job_cmd_noarg fill-next)" "*-*-* 03:$FMIN:00"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
   systemctl --user daemon-reload
