@@ -85,12 +85,22 @@ mkdir -p "$OUTPUT_DIR"
 ALLOWED_TOOLS="Edit Write Read Glob Grep Bash(mkdir:*) Bash(ls:*) Bash(cat:*) Bash(git status:*) Bash(git diff:*)"
 
 cd "$REPO"
+# Hard timeout so a hung/stalled agent call can't wedge the job for hours (a
+# missing timeout here let one authoring run hang ~10h). --kill-after sends
+# SIGKILL if it ignores SIGTERM. Override with AICG_AGENT_TIMEOUT.
+AGENT_TIMEOUT="${AICG_AGENT_TIMEOUT:-1200}"
 # Feed the prompt via stdin so positional-arg parsing can't mangle it.
-claude \
+# `|| rc=$?` so set -e doesn't abort before we can report a timeout.
+rc=0
+timeout --kill-after=30 "$AGENT_TIMEOUT" claude \
   --model "$MODEL" \
   --print \
   --permission-mode acceptEdits \
   --add-dir "$REPO" \
   --allowedTools "$ALLOWED_TOOLS" \
   <"$PROMPT" \
-  >"$OUTPUT_DIR/response.md"
+  >"$OUTPUT_DIR/response.md" || rc=$?
+if [[ "$rc" -eq 124 || "$rc" -eq 137 ]]; then
+  echo "[run-claude-content] agent timed out after ${AGENT_TIMEOUT}s" >&2
+fi
+exit "$rc"
