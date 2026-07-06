@@ -309,6 +309,20 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
       fi
       run_aicg_org execute-plan --role "$ROLE" 2>&1 | tail -3 || true
       run_aicg_org generate-learning --role "$ROLE" || true
+      # Commit + push the authored content. generate-learning edits the working
+      # tree in place and leaves committing to the caller — without this the
+      # content never reaches GitHub (the "no commits" symptom) and the dirty
+      # tree makes the next sync dirty_skip. .aicg/ is gitignored, so add -A
+      # only stages public curriculum files.
+      if [[ -n "$GR_LREPO" && -d "$WORKSPACE/$GR_LREPO/.git" ]]; then
+        ( cd "$WORKSPACE/$GR_LREPO"
+          git add -A 2>/dev/null || true
+          if ! git diff --cached --quiet 2>/dev/null; then
+            git -c user.email="aicg@veriswarm.ai" -c user.name="AICG Runner" \
+              commit -q -m "content: author $ROLE learning modules (aicg generate-role)" \
+              && git push origin HEAD && echo "  pushed authored content for $ROLE"
+          fi ) || log "content commit/push failed for $ROLE"
+      fi
       # Observability: report the outcome by observable state (modules present
       # or not) — no agent-output parsing. One push per role-fill, so the
       # daily fill timer yields ~1 notify/domain/day, not spam.
