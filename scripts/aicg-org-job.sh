@@ -459,7 +459,13 @@ for r in sorted(d['roles'], key=lambda x: x.get('level',0)):
       AUTH_FILE="$HOME/.config/aicg/claude-auth.env"
       if [[ -f "$AUTH_FILE" ]]; then
         TOK_AGE=$(( ( $(date +%s) - $(stat -c %Y "$AUTH_FILE" 2>/dev/null || echo 0) ) / 86400 ))
-        DIGEST="$DIGEST"$'\n'"token: ${TOK_AGE}d old$( ((TOK_AGE >= 10)) && printf ' — 🔑 refresh soon (setup-token)' )"
+        # Use an `if` (exempt from set -e) rather than `(( ... )) && printf`
+        # inline: the arithmetic command returns exit 1 when the comparison is
+        # false, which poisons the assignment's status and — under set -e —
+        # crashed the whole digest silently whenever the token was <10d old.
+        TOK_WARN=""
+        if (( TOK_AGE >= 10 )); then TOK_WARN=' — 🔑 refresh soon (setup-token)'; fi
+        DIGEST="$DIGEST"$'\n'"token: ${TOK_AGE}d old${TOK_WARN}"
       fi
       log "$DIGEST"
       notify_ntfy "📊 AICG fleet digest" "bar_chart" "default" "$DIGEST"
