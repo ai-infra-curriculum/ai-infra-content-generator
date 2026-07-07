@@ -11,6 +11,14 @@ STATE_DIR="${AICG_STATE_DIR:-$RUNNER_DIR/.aicg/org}"
 LOG_DIR="${AICG_LOG_DIR:-$RUNNER_DIR/.aicg/logs}"
 AICG_BIN="${AICG_BIN:-$RUNNER_DIR/.venv/bin/aicg}"
 
+# Claude CLI auth. The systemd timers run with a bare environment (no
+# CLAUDE_CODE_OAUTH_TOKEN), so timer-driven content runs saw "Not logged in"
+# even with a valid token — only hand-sourced manual runs worked. Source +
+# EXPORT the token here (set -a) so every run, timer or manual, is authed.
+if [[ -f "$HOME/.config/aicg/claude-auth.env" ]]; then
+  set -a; . "$HOME/.config/aicg/claude-auth.env"; set +a
+fi
+
 # ntfy observability (optional). Topic comes from an env file so it stays out
 # of git; if unset, every notify is a no-op.
 [[ -f "$HOME/.config/aicg/ntfy.env" ]] && . "$HOME/.config/aicg/ntfy.env"
