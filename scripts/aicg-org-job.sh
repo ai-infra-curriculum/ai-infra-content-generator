@@ -320,10 +320,15 @@ print(next((r['learning_repo'] for r in d['roles'] if r['id']=='$ROLE'),''))" 2>
       # Commit + push the authored content. generate-learning edits the working
       # tree in place and leaves committing to the caller — without this the
       # content never reaches GitHub (the "no commits" symptom) and the dirty
-      # tree makes the next sync dirty_skip. .aicg/ is gitignored, so add -A
-      # only stages public curriculum files.
+      # tree makes the next sync dirty_skip.
       if [[ -n "$GR_LREPO" && -d "$WORKSPACE/$GR_LREPO/.git" ]]; then
         ( cd "$WORKSPACE/$GR_LREPO"
+          # Guarantee runner scratch is never committed: older repos don't
+          # gitignore .aicg/, so add -A would otherwise stage local state.
+          # Self-heal the ignore rule so add -A only stages curriculum files.
+          if [[ -e .aicg ]] && ! grep -qE '^\.aicg/?$' .gitignore 2>/dev/null; then
+            echo ".aicg/" >>.gitignore
+          fi
           git add -A 2>/dev/null || true
           if ! git diff --cached --quiet 2>/dev/null; then
             git -c user.email="aicg@veriswarm.ai" -c user.name="AICG Runner" \
